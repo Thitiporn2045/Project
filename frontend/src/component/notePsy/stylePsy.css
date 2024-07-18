@@ -1,0 +1,258 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+:root{
+    --color-backgroun-main1: #9BA5F6;
+    --color-backgroun-main2: #BABDF6;
+    --color-backgroun-secondary1: #EEEEF8;
+    --color-backgroun-secondary2: #FFFFFF;
+    --color-backgroun-secondary3: #FCFCFF;
+
+    --color-secondary1: #C1C4F8;
+    --color-secondary2: #EAD7F8;
+    --color-secondary3: #EFCDF3;
+
+    --color-popup-main: #F3F3FE;
+    --color-popup-secondary: #EEEEF8;
+
+    --color-buttoon-secondary: #DBDDEC;
+
+    --color-font1: #17374E;
+    --color-font2: #CCCCE3;
+    --color-font3: #585858;
+    --color-font4: #868686;
+
+    --color-hover: rgba(255, 255, 255, .2)
+    --color-light: rgba(132, 139, 200, 0.18);
+
+    --card-border-radius: 2rem;
+    --border-radius-1: 0.4rem;
+    --border-radius-2: 0.8rem;
+    --border-radius-3: 1.2rem;
+    --card-padding: 1.8rem;
+    --padding-1: 1.2rem;
+    --box-shadow: 0 2rem 3rem var(--color-light)
+}
+
+.noteboardPsy{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.noteboardPsy .popup{
+    width: 500px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #17374E;
+}
+
+
+.notePsy {
+    font-family: 'Poppins', sans-serif;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.notePsy #container {
+    background-color: var(--color-backgroun-secondary2);
+    border-radius: var(--border-radius-3);
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(79, 77, 77, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;    width: 827px;
+    height: 600px;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    overflow-y: scroll;
+}
+
+.notePsy #list-header {
+    display: flex;
+    align-items: left;
+    justify-content: left;
+}
+
+.notePsy #addNoteDiv {
+    background-color: var(--color-backgroun-secondary3);
+    border: 1px solid var(--color-popup-secondary);
+    padding: 20px;
+    border-radius: var(--border-radius-2);
+    height: 200px;
+    width: 200px;
+    margin: 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.notePsy #addNoteDiv:hover {
+    transition: 0.25s;
+    background-color: var(--color-backgroun-secondary2);
+}
+
+
+.notePsy #addNoteDiv i {
+    font-size: 70px;
+    color: var(--color-backgroun-secondary1);
+}
+
+
+/* List CSS */
+.notePsy #list-container {
+    display: flex;
+    align-items: left;
+    justify-content: left;
+}
+
+.notePsy ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+.notePsy li {
+    background-color: #fff385;
+    margin: 5px 0;
+    padding: 20px;
+    border-radius: 8px; /* Rounded corners */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between; /* Added to align buttons to the right */
+    height: 200px;
+    width: 200px;
+    margin: 10px;
+    border-radius: 10px;
+    box-shadow:  9px 9px 18px #b3b3b3,
+                -9px -9px 18px #ffffff;
+}
+
+.notePsy li span {
+    font-size: 12px;
+    flex-grow: 1;
+    word-wrap: break-word;
+    overflow-y: scroll;
+}
+
+.notePsy #editBtn,
+.notePsy #deleteBtn {
+    background-color: #c6aaff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    margin: 0 5px; /* Adjusted margin for spacing */
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 12px;
+    width: 60px;
+}
+
+.notePsy #editBtn {
+    background-color: gainsboro;
+}
+
+.notePsy #deleteBtn:hover {
+    background-color: #8c53ff;
+}
+
+.notePsy #editBtn:hover {
+    background-color: gray;
+}
+
+
+/* Create Note Popup CSS */
+.notePsy #popupContainer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 300px;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.notePsy textarea {
+    width: 300px;
+    height: 200px;
+    margin: 10px 0;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    border: 2px solid #8c53ff;
+}
+
+.notePsy #btn-container {
+    display: flex;
+}
+
+.notePsy #submitBtn, #closeBtn {
+    width: 100px;
+    background-color: #8c53ff;
+    color: #fff;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.notePsy #closeBtn {
+    background-color: gainsboro;
+}
+
+
+/* Editing Popup CSS */
+.notePsy #editing-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 300px;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.notePsy #submitBtn, #closeBtn {
+    width: 100px;
+    background-color: #8c53ff;
+    color: #fff;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.notePsy #closeBtn {
+    background-color: gainsboro;
+}
