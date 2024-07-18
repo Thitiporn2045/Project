@@ -1,0 +1,281 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family:'Noto Sans Thai',sans-serif;
+}
+
+body{
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100vh;
+}
+.bg-reg{
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100vh; 
+}
+/* .logo-reg{
+    position: absolute;
+    top: 3%;
+    left: 40%;
+    width: 20%;
+    height: 15%;
+    background-image: url("../../assets/logo1.png");
+    background-size: cover;  
+    background-position: center;
+} */
+.container{
+    background-color: rgb(255, 255, 255);
+    border-radius: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+    position: relative;
+    overflow: hidden;
+    width: 818px;
+    max-width: 100%;
+    min-height: 590px;
+}
+
+.container p{
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.3px;
+    margin: 20px 0;
+}
+
+.container button{
+    background-color: #9BA5F6;
+    color: white;
+    font-size: 12px;
+    letter-spacing: 1px;
+    padding: 10px 35px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.container button.hidden{
+    background-color: transparent;
+    border-color: white;
+}
+
+.container .form-login{
+    background-color: rgb(255, 255, 255);
+    display:flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    padding: 0 40px;
+    height: 100%;
+}
+.container .form-register{
+    background-color: rgb(255, 255, 255);
+    display:flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    width: 75%;    
+    height: 100%;
+}
+
+.header-text-reg{
+    position: absolute;
+    top: 6%;
+}
+
+.firstName-reg{
+    position: relative;
+    top: 17%;}
+.lastName-reg{
+    position: relative;
+    top: 14%;
+
+}
+.date-reg{
+    position: relative;
+    top: 11%;
+}
+
+.gender-reg{
+    position: relative;
+    top: 11%;
+}
+.tel-reg{
+    position: relative;
+    top: 8%;
+ 
+    
+}
+.email-reg{
+    position: relative;
+    top: 5%;
+   
+
+}
+.password-reg{
+    position: relative;
+    top: 2%;
+ 
+}
+.confirm-password-reg{
+    position: relative;
+    top: -1%;
+   
+
+}
+.btn-reg{
+    position: relative;
+    top: -3%;
+    left: 25%;
+}
+
+.header-text-login{
+    position: relative;
+    top: 20%;
+}
+
+.email-login{
+    position: relative;
+    top: 10%;
+}
+.password-login{
+    position: relative;
+    top: -6%;
+}
+.btn-login{
+    position: relative;
+    bottom: 22%;
+}
+
+
+.container select{
+    background-color: #eee;
+    border: none;
+    margin: 8px 0;
+    padding: 10px 15px;
+    font-size: 13px;
+    border-radius: 8px;
+    width: 100%;
+    outline: none;
+}
+
+.form-container{
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: all 0.6s ease-in-out;
+}
+
+.login{
+    left: 0;
+    width: 50%;
+    z-index: 2;
+}
+
+.container.active .login{
+    transform: translateX(100%);
+}
+
+.register{
+    left: 0;
+    width: 50%;
+    opacity: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction:column;
+
+}
+
+@keyframes move{
+    0%, 49.99%{
+        opacity: 0;
+        z-index: 1;
+    }
+    50%, 100%{
+        opacity: 1;
+        z-index: 5;
+    }
+    
+}
+
+.container.active .register{
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+    animation: move 0.6s;
+}
+
+.toggle-container{
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    transition: all 0.6s ease-in-out;
+    border-radius: 130px 0 0 100px;
+    z-index: 1000;
+}
+
+.container.active .toggle-container{
+    transform: translateX(-100%);
+    border-radius: 0 130px 100px 0;
+}
+
+.toggle{
+    background-color: #9BA5F6;
+    height: 100%;
+    color: white;
+    position: relative;
+    left: -100%;
+    height: 100%;
+    width: 200%;
+    transform: translateX(0);
+    transition: all o.6s ease-in-out;
+}
+
+.container.active .toggle{
+    transform: translateX(50%);
+}
+
+.toggle-panel{
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 30px;
+    text-align: center;
+    top: 0;
+    transform: translateX(0);
+    transition: all 0.6s ease-in-out;
+}
+
+.toggle-left{
+    transform: translateX(-200%);
+}
+
+.container.active .toggle-left{
+    transform: translateX(0);
+}
+
+.toggle-right{
+    right: 0;
+    transform: translateX(0);
+}
+
+.container.active .toggle-right{
+    transform: translateX(200%);
+}
+
