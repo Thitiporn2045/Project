@@ -33,13 +33,13 @@
     --box-shadow: 0 2rem 3rem var(--color-light)
 }
 
-.noteboardPsy{
+.noteboardPat{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-.noteboardPsy .popup{
+.noteboardPat .popup{
     width: 500px;
     height: 80px;
     display: flex;
@@ -49,7 +49,7 @@
 }
 
 
-.notePsy {
+.notePat {
     font-family: 'Poppins', sans-serif;
     padding: 0;
     margin: 0;
@@ -59,7 +59,7 @@
     min-height: 100vh;
 }
 
-.notePsy #container {
+.notePat #container {
     background-color: var(--color-backgroun-secondary2);
     border-radius: var(--border-radius-3);
     box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(79, 77, 77, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;    width: 827px;
@@ -72,13 +72,13 @@
     overflow-y: scroll;
 }
 
-.notePsy #list-header {
+.notePat #list-header {
     display: flex;
     align-items: left;
     justify-content: left;
 }
 
-.notePsy #addNoteDiv {
+.notePat #addNoteDiv {
     background-color: var(--color-backgroun-secondary3);
     border: 1px solid var(--color-popup-secondary);
     padding: 20px;
@@ -92,26 +92,26 @@
     align-items: center;
 }
 
-.notePsy #addNoteDiv:hover {
+.notePat #addNoteDiv:hover {
     transition: 0.25s;
     background-color: var(--color-backgroun-secondary2);
 }
 
 
-.notePsy #addNoteDiv i {
+.notePat #addNoteDiv i {
     font-size: 70px;
     color: var(--color-backgroun-secondary1);
 }
 
 
 /* List CSS */
-.notePsy #list-container {
+.notePat #list-container {
     display: flex;
     align-items: left;
     justify-content: left;
 }
 
-.notePsy ul {
+.notePat ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
@@ -120,7 +120,7 @@
     text-align: center;
 }
 
-.notePsy li {
+.notePat li {
     background-color: #fff385;
     margin: 5px 0;
     padding: 20px;
@@ -137,15 +137,15 @@
                 -9px -9px 18px #ffffff;
 }
 
-.notePsy li span {
+.notePat li span {
     font-size: 12px;
     flex-grow: 1;
     word-wrap: break-word;
     overflow-y: scroll;
 }
 
-.notePsy #editBtn,
-.notePsy #deleteBtn {
+.notePat #editBtn,
+.notePat #deleteBtn {
     background-color: #c6aaff;
     color: #fff;
     border: none;
@@ -157,21 +157,21 @@
     width: 60px;
 }
 
-.notePsy #editBtn {
+.notePat #editBtn {
     background-color: gainsboro;
 }
 
-.notePsy #deleteBtn:hover {
+.notePat #deleteBtn:hover {
     background-color: #8c53ff;
 }
 
-.notePsy #editBtn:hover {
+.notePat #editBtn:hover {
     background-color: gray;
 }
 
 
 /* Create Note Popup CSS */
-.notePsy #popupContainer {
+.notePat #popupContainer {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -190,7 +190,7 @@
     justify-content: center;
 }
 
-.notePsy textarea {
+.notePat textarea {
     width: 300px;
     height: 200px;
     margin: 10px 0;
@@ -200,11 +200,11 @@
     border: 2px solid #8c53ff;
 }
 
-.notePsy #btn-container {
+.notePat #btn-container {
     display: flex;
 }
 
-.notePsy #submitBtn, #closeBtn {
+.notePat #submitBtn, #closeBtn {
     width: 100px;
     background-color: #8c53ff;
     color: #fff;
@@ -216,13 +216,13 @@
     margin: 10px;
 }
 
-.notePsy #closeBtn {
+.notePat #closeBtn {
     background-color: gainsboro;
 }
 
 
 /* Editing Popup CSS */
-.notePsy #editing-container {
+.notePat #editing-container {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -241,7 +241,7 @@
     justify-content: center;
 }
 
-.notePsy #submitBtn, #closeBtn {
+.notePat #submitBtn, #closeBtn {
     width: 100px;
     background-color: #8c53ff;
     color: #fff;
@@ -253,6 +253,6 @@
     margin: 10px;
 }
 
-.notePsy #closeBtn {
+.notePat #closeBtn {
     background-color: gainsboro;
 }

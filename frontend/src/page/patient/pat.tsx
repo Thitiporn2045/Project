@@ -1,21 +1,21 @@
 import React, { useState } from 'react'
-import NavbarPsy from '../../component/navbarPsy/navbarPsy'
-import SearchPsy from '../../component/searchPsy/searchPsy'
-import './stylePsy.css'
+import NavbarPat from '../../component/navbarPat/navbarPat'
+import SearchPat from '../../component/searchPat/searchPat'
+import './stylePat.css'
 
 import { ImSearch } from "react-icons/im";
 import { FaBell } from "react-icons/fa";
-import NotePsy from '../../component/notePsy/notePsy';
-import NoteboardPsy from '../../component/notePsy/noteboardPsy';
+import NotePat from '../../component/notePat/notePat';
+import NoteboardPat from '../../component/notePat/noteboardPat';
 
 const userLogin = {
     name: "Anna"
 }
 
-function Psy() {
+function Pat() {
 
 //Note
-function addNotePsy() {
+function addNotePat() {
     const blur = document.getElementById('blur') as HTMLElement;
     blur.classList.toggle('active');
 
@@ -25,11 +25,11 @@ function addNotePsy() {
 
 const handleSave = (text: string) => {
     console.log('Note saved:', text);
-    addNotePsy();
+    addNotePat();
 };
 
 const handleClose = () => {
-    addNotePsy();
+    addNotePat();
 };
 
 //popup
@@ -42,12 +42,12 @@ function toggle() {
 }
 
     return (
-        <div className='psy'>
+        <div className='Pat'>
             <div id='blur'>
                 <div className="befor-main">
                     <div className='main-body'>
                         <div className='sidebar'>
-                            <NavbarPsy></NavbarPsy>
+                            <NavbarPat></NavbarPat>
                         </div>
                         <div className="main-background">
                             <header>
@@ -80,7 +80,7 @@ function toggle() {
                                         <h2>Note Board</h2>
                                         <button 
                                             className="btn-add-co2" 
-                                            onClick={addNotePsy}>Add</button>
+                                            onClick={addNotePat}>Add</button>
                                     </div>
 
                                     <div className='note-board'>
@@ -116,18 +116,18 @@ function toggle() {
 
             <div id='popup'>
                     <div className='compo-search'>
-                        <SearchPsy></SearchPsy>
+                        <SearchPat></SearchPat>
                         <a href="#" className='btn-close' onClick={toggle}>Close</a>
                     </div>
             </div>
             <div id='popupNote'>
                     <div className='compo-search'>
-                        <NoteboardPsy onSave={handleSave} onClose={handleClose} />
-                        <a href="#" className='btn-close' onClick={addNotePsy}>Close</a>
+                        <NoteboardPat onSave={handleSave} onClose={handleClose} />
+                        <a href="#" className='btn-close' onClick={addNotePat}>Close</a>
                     </div>
             </div>
         </div>
     )
 }
 
-export default Psy
+export default Pat

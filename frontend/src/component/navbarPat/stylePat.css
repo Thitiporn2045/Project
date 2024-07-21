@@ -23,14 +23,14 @@
     
 }
 
-.navbarPsy{
+.navbarPat{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: "Poppins", sans-serif;
 }
 
-.navbarPsy .sidebarPsy{
+.navbarPat .sidebarPat{
     position: fixed;
     top: 0;
     left: 0;
@@ -45,19 +45,19 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, .2);
 }
 
-.navbarPsy .sidebarPsy.active{
+.navbarPat .sidebarPat.active{
     width: 260px;
     transition: .5s;
 }
 
-.navbarPsy .sidebarPsy .logo-menu{
+.navbarPat .sidebarPat .logo-menu{
     display: flex;
     align-items: center;
     width: 100%;
     height: 70px;
 }
 
-.navbarPsy .sidebarPsy .logo-menu .logo{
+.navbarPat .sidebarPat .logo-menu .logo{
     width: 70%;
     height: 70px;
     object-fit: cover;
@@ -65,7 +65,7 @@
     transition: .3s;
 }
 
-/* .navbarPsy .sidebarPsy .logo-menu .logo{
+/* .navbarPat .sidebarPat .logo-menu .logo{
     font-size: 1.5rem;
     color: var(--color-backgroun-secondary2);
     white-space: nowrap;
@@ -74,12 +74,12 @@
     transition: .3s;
 } */
 
-.navbarPsy .sidebarPsy.active .logo-menu .logo{
+.navbarPat .sidebarPat.active .logo-menu .logo{
     opacity: 1;
     transition-delay: .3s;
 }
 
-.navbarPsy .sidebarPsy .logo-menu .toggle-btn{
+.navbarPat .sidebarPat .logo-menu .toggle-btn{
     color: var(--color-backgroun-secondary2);
     position: absolute;
     left: 50%;
@@ -93,12 +93,12 @@
     transition: .5s;
 }
 
-.navbarPsy .sidebarPsy.active .logo-menu .toggle-btn{
+.navbarPat .sidebarPat.active .logo-menu .toggle-btn{
     left: 90%;
     transition: .5s;
 }
 
-.navbarPsy .sidebarPsy .list{
+.navbarPat .sidebarPat .list{
     position: absolute;
     left: 0;
     top: 50%;
@@ -112,13 +112,13 @@
     transition: .5s;
 }
 
-.navbarPsy .sidebarPsy.active .list{
+.navbarPat .sidebarPat.active .list{
     align-items: flex-start;
     padding-left: 15px;
     transition: .5s;
 }
 
-.navbarPsy .sidebarPsy .list .list-item{
+.navbarPat .sidebarPat .list .list-item{
     width: 100%;
     height: 50px;
     list-style: none;
@@ -126,7 +126,7 @@
     line-height: 50px;
 }
 
-.navbarPsy .sidebarPsy .list .list-item:last-child{
+.navbarPat .sidebarPat .list .list-item:last-child{
     position: absolute;
     bottom: -140px;
     left: 0;
@@ -134,7 +134,7 @@
     margin-bottom: 0;
 }
 
-.navbarPsy .sidebarPsy .list .list-item a{
+.navbarPat .sidebarPat .list .list-item a{
     display: flex;
     align-items: center;
     font-size: 1.3rem;
@@ -146,20 +146,20 @@
     transition: .5s;
 }
 
-.navbarPsy .sidebarPsy .list .list-item.active a{    
+.navbarPat .sidebarPat .list .list-item.active a{    
     width: 90%;
     background: rgba(255, 255, 255, 0.423);
     transition: .5s;
 }
 
-.navbarPsy .sidebarPsy .list .list-item a:hover{
+.navbarPat .sidebarPat .list .list-item a:hover{
     width: 90%;
     background: rgba(255, 255, 255, 0.423);
     transform: scale(1.05);
     transition: .5s;
 }
 
-.navbarPsy .sidebarPsy .list .list-item a i{
+.navbarPat .sidebarPat .list .list-item a i{
     font-size: 1.5rem;
     min-width: 50px;
     height: 50px;
@@ -167,13 +167,13 @@
     line-height: 50px;
 }
 
-.navbarPsy .sidebarPsy .link-name{
+.navbarPat .sidebarPat .link-name{
     opacity: 0;
     pointer-events: none;
     transition: opacity .3s;
 }
 
-.navbarPsy .sidebarPsy.active .link-name{
+.navbarPat .sidebarPat.active .link-name{
     opacity: 1;
     pointer-events: auto;
 }

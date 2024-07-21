@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './stylePsy.css';
+import './stylePat.css';
 import { FaCirclePlus } from "react-icons/fa6";
 
 interface Note {
@@ -7,7 +7,7 @@ interface Note {
     text: string;
 }
 
-const NotePsy: React.FC = () => {
+const NotePat: React.FC = () => {
 const [notes, setNotes] = useState<Note[]>([]);
 const [isPopupOpen, setIsPopupOpen] = useState(false);
 const [editingNote, setEditingNote] = useState<Note | null>(null);
@@ -79,7 +79,7 @@ const EditNotePopup: React.FC<{ note: Note; onSave: (id: number, text: string) =
 };
 
 return (
-    <div className='notePsy'>
+    <div className='notePat'>
         <div id='blur'>
             <div id="container">
                 <div id="list-header">
@@ -123,4 +123,4 @@ return (
 );
 };
 
-export default NotePsy;
+export default NotePat;

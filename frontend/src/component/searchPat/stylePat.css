@@ -32,13 +32,13 @@
     --padding-1: 1.2rem;
     --box-shadow: 0 2rem 3rem var(--color-light)
 }
-.searchPsy {
+.searchPat {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-.searchPsy .search {
+.searchPat .search {
     width: 500px;
     height: 80px;
     display: flex;
@@ -46,7 +46,7 @@
     justify-content: center;
 }
 
-.searchPsy .search .labelSearch {
+.searchPat .search .labelSearch {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -57,7 +57,7 @@
     border-radius: var(--border-radius-2);
 }
 
-.searchPsy .search .labelSearch input {
+.searchPat .search .labelSearch input {
     color: var(--color-font3);
     background: transparent;
     border: none;
@@ -68,11 +68,11 @@
     margin: 5px;
 }
 
-.searchPsy .search .labelSearch input:focus {
+.searchPat .search .labelSearch input:focus {
     outline: none;
 }
 
-.searchPsy .search .searchIcon {
+.searchPat .search .searchIcon {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -81,12 +81,12 @@
     color: var(--color-backgroun-main1);
 }
 
-.searchPsy .body-search {
+.searchPat .body-search {
     width: 500px;
     height: 400px;
     overflow-y: auto;
 }
-.searchPsy .body-search .item {
+.searchPat .body-search .item {
     display: grid;
     grid-template-columns: 80px auto 80px; /* ลดขนาดคอลัมน์แรกลงเล็กน้อย */
     gap: 10px;
@@ -99,11 +99,11 @@
     box-shadow: rgba(114, 114, 145, 0.25) 0px 6px 12px -2px, 
                 rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;}
 
-.searchPsy .body-search .item:hover{
+.searchPat .body-search .item:hover{
     box-shadow: none;
 }
 
-.searchPsy .body-search .item .image-content {
+.searchPat .body-search .item .image-content {
     width: 80px; /* ลดขนาดลงให้สอดคล้องกับ grid-template-columns */
     height: 70px; /* ลดความสูงลง */
     border-radius: var(--border-radius-2);
@@ -113,36 +113,36 @@
     overflow: hidden;
 }
 
-.searchPsy .body-search .item .image-content img{
+.searchPat .body-search .item .image-content img{
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.searchPsy .body-search .item .content {
+.searchPat .body-search .item .content {
     padding: 2px; /* ลด padding */
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-.searchPsy .body-search .item .content h3 {
+.searchPat .body-search .item .content h3 {
     color: var(--color-font1);
     margin: 0 0 5px 0; /* ปรับ margin ของหัวข้อ */
     font-size: 1rem; /* ลดขนาดตัวอักษร */
 }
 
-.searchPsy .body-search .item .content p {
+.searchPat .body-search .item .content p {
     color: var(--color-font4);
     margin: .5px 0; /* ลด margin ระหว่างย่อหน้า */
     font-size: 0.9rem; /* ลดขนาดตัวอักษร */
 }
 
-.searchPsy .body-search .item .content p i{
+.searchPat .body-search .item .content p i{
     margin-right: 5px;
 }
 
-.searchPsy .body-search .item .btn-book{
+.searchPat .body-search .item .btn-book{
     width: 100%;
     height: 100%;
     display: flex;
@@ -151,7 +151,7 @@
     margin-bottom: 20px;
 }
 
-.searchPsy .body-search .item .btn-book button {
+.searchPat .body-search .item .btn-book button {
     position: relative;
     color: var(--color-backgroun-secondary2);
     background: var(--color-secondary1);
@@ -161,7 +161,7 @@
     font-size: 0.9rem; /* ลดขนาดตัวอักษรของปุ่ม */
 }
 
-.searchPsy .body-search .item .btn-book button:hover{
+.searchPat .body-search .item .btn-book button:hover{
     background: var(--color-backgroun-main1);
     transform: scale(1.05);
     transition: .5s;

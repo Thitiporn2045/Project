@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 
-interface NoteboardPsyProps {
+interface NoteboardPatProps {
     onSave: (text: string) => void;
     onClose: () => void;
 }
 
-const NoteboardPsy: React.FC<NoteboardPsyProps> = ({ onSave, onClose }) => {
+const NoteboardPat: React.FC<NoteboardPatProps> = ({ onSave, onClose }) => {
     const [text, setText] = useState('');
 
     return (
-        <div className='noteboardPsy'>
+        <div className='noteboardPat'>
             <div className="popup">
                 <h2>New Note</h2>
                 <textarea
@@ -24,4 +24,4 @@ const NoteboardPsy: React.FC<NoteboardPsyProps> = ({ onSave, onClose }) => {
     );
 }
 
-export default NoteboardPsy;
+export default NoteboardPat;

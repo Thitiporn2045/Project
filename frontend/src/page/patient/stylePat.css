@@ -53,7 +53,7 @@ small{
     font-size: 0.75rem;
 }
 
-.psy{
+.Pat{
     margin: 0;
     padding: 0;
     width: 100vw;
@@ -62,14 +62,14 @@ small{
     font-family: "Poppins", sans-serif;
 }
 
-.psy .befor-main{
+.Pat .befor-main{
     margin: 0;
     padding: 0;
     width: 100vw;
     height: 100vh;
 }
 
-.psy .main-body{
+.Pat .main-body{
     width: 100%;
     height: 100%;
     display: grid;
@@ -78,7 +78,7 @@ small{
     background: var(--color-backgroun-secondary1);
 }
 
-.psy .main-body .sidebar {
+.Pat .main-body .sidebar {
     width: 100%;
     height: 100%;
     background: var(--color-backgroun-main1);
@@ -87,12 +87,12 @@ small{
 
 /* ------------  main-background   ------------------- */
 
-.psy .main-body .main-background{
+.Pat .main-body .main-background{
     width: 100%;
     height: 100%;
 }
 
-.psy .main-body .main-background header{
+.Pat .main-body .main-background header{
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -101,7 +101,7 @@ small{
     background: var(--color-backgroun-secondary1);
 }
 
-.psy .main-body .main-background header h1{
+.Pat .main-body .main-background header h1{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -111,7 +111,7 @@ small{
     color: var(--color-font1);
 }
 
-.psy .main-body .main-background header .search-bar{
+.Pat .main-body .main-background header .search-bar{
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -121,7 +121,7 @@ small{
     gap: 10px;
 }
 
-.psy .main-body .main-background header .search-bar .labelSearch {
+.Pat .main-body .main-background header .search-bar .labelSearch {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -132,7 +132,7 @@ small{
     border-radius: var(--border-radius-3);
 }
 
-.psy .main-body .main-background header .search-bar .labelSearch input {
+.Pat .main-body .main-background header .search-bar .labelSearch input {
     color: var(--color-font3);
     background: transparent;
     border: none;
@@ -143,16 +143,16 @@ small{
     margin: 5px;
 }
 
-.psy .main-body .main-background header .search-bar .labelSearch input:focus {
+.Pat .main-body .main-background header .search-bar .labelSearch input:focus {
     outline: none;
 }
 
-.psy .main-body .main-background header .search-bar .warm{
+.Pat .main-body .main-background header .search-bar .warm{
     width: 15%;
     height: 100%;
 }
 
-.psy .main-body .main-background header .search-bar .warm .bg-warm{
+.Pat .main-body .main-background header .search-bar .warm .bg-warm{
     margin: 5px;
     width: calc(100px -10px);
     height: 78%;
@@ -160,7 +160,7 @@ small{
     background: var(--color-backgroun-secondary2);
 }
 
-.psy .main-body .main-background header .search-bar .searchIcon {
+.Pat .main-body .main-background header .search-bar .searchIcon {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -169,7 +169,7 @@ small{
     color: var(--color-backgroun-main1);
 }
 
-.psy .main-body .main-background .main-content{
+.Pat .main-body .main-background .main-content{
     position: relative;
     margin-top: 5px;
     width: 100%;
@@ -182,9 +182,9 @@ small{
     overflow-y: auto;
 }
 
-.psy .main-body .main-background .main-content .content1,
-.psy .main-body .main-background .main-content .content2,
-.psy .main-body .main-background .main-content .content3 {
+.Pat .main-body .main-background .main-content .content1,
+.Pat .main-body .main-background .main-content .content2,
+.Pat .main-body .main-background .main-content .content3 {
     width: calc(100% - 20px);
     height: calc(100% - 20px);
     margin: 10px;
@@ -192,19 +192,19 @@ small{
 
 /* ------------  content1   ------------------- */
 
-.psy .main-body .main-background .main-content .content1{
+.Pat .main-body .main-background .main-content .content1{
     position: relative;
     background: var(--color-backgroun-secondary1);
     border-radius: var(--border-radius-2);
 }
 
 /* ------------  content2   ------------------- */
-.psy .main-body .main-background .main-content .content2{
+.Pat .main-body .main-background .main-content .content2{
     display: flex;
     flex-direction: column;
 }
 
-.psy .main-body .main-background .main-content .content2 .header{
+.Pat .main-body .main-background .main-content .content2 .header{
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -213,7 +213,7 @@ small{
     height: 40px;
 }
 
-.psy .main-body .main-background .main-content .content2 .header .btn-add-co2{
+.Pat .main-body .main-background .main-content .content2 .header .btn-add-co2{
     top: 0;
     display: flex;
     justify-content: center;
@@ -224,7 +224,7 @@ small{
     border-radius: var(--border-radius-1);
 }
 
-.psy .main-body .main-background .main-content .content2 .note-board{
+.Pat .main-body .main-background .main-content .content2 .note-board{
     position: relative;
     width: 100%;
     height: 100%;
@@ -235,7 +235,7 @@ small{
 
 /* ------------  content3   ------------------- */
 
-.psy .main-body .main-background .main-content .content3{
+.Pat .main-body .main-background .main-content .content3{
     position: relative;
     background: var(--color-backgroun-secondary1);
     border-radius: var(--border-radius-2);
@@ -244,14 +244,14 @@ small{
 
 /* ------------  main-bg-right   ------------------- */
 
-.psy .main-body .main-bg-right{
+.Pat .main-body .main-bg-right{
     width: 100%;
     height: 100%;
     overflow-y: auto;
 }
 
 
-.psy .main-body .main-bg-right .main-content{
+.Pat .main-body .main-bg-right .main-content{
     position: relative;
     width: 100%;
     height: 100%;
@@ -261,14 +261,14 @@ small{
     overflow-y: auto;
 }
 
-.psy .main-body .main-bg-right .main-content .content1{
+.Pat .main-body .main-bg-right .main-content .content1{
     position: relative;
     width: 100%;
     height: 100%;
     background: var(--color-backgroun-main2);
 }
 
-.psy .main-body .main-bg-right .main-content .content1 .box{
+.Pat .main-body .main-bg-right .main-content .content1 .box{
     position: relative;
     margin: 10px;
     width: calc(100% - 20px);
@@ -277,7 +277,7 @@ small{
     border-radius: var(--border-radius-2);
 }
 
-.psy .main-body .main-bg-right .main-content .content2{
+.Pat .main-body .main-bg-right .main-content .content2{
     position: relative;
     width: calc(100% - 20px);
     height: calc(100% - 13px);
@@ -286,7 +286,7 @@ small{
     border-radius: var(--border-radius-2);
 }
 
-.psy .main-body .main-bg-right .main-content .content3{
+.Pat .main-body .main-bg-right .main-content .content3{
     position: relative;
     width: calc(100% - 20px);
     height: calc(100% - 30px);
@@ -360,7 +360,7 @@ small{
 
 
 /* 
-.psy #container {
+.Pat #container {
     background-color: var(--color-backgroun-secondary2);
     border-radius: var(--border-radius-3);
     box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(79, 77, 77, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;    width: 827px;
@@ -373,13 +373,13 @@ small{
     overflow-y: scroll;
 }
 
-.psy .note-board #list-header {
+.Pat .note-board #list-header {
     display: flex;
     align-items: left;
     justify-content: left;
 }
 
-.notePsy #addNoteDiv {
+.notePat #addNoteDiv {
     background-color: var(--color-backgroun-secondary3);
     border: 1px solid var(--color-popup-secondary);
     padding: 20px;
@@ -393,26 +393,26 @@ small{
     align-items: center;
 }
 
-.psy #addNoteDiv:hover {
+.Pat #addNoteDiv:hover {
     transition: 0.25s;
     background-color: var(--color-backgroun-secondary2);
 }
 
 
-.psy #addNoteDiv i {
+.Pat #addNoteDiv i {
     font-size: 70px;
     color: var(--color-backgroun-secondary1);
 }
  */
 
 /* List CSS
-.psy #list-container {
+.Pat #list-container {
     display: flex;
     align-items: left;
     justify-content: left;
 }
 
-.psy ul {
+.Pat ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
@@ -421,7 +421,7 @@ small{
     text-align: center;
 }
 
-.psy li {
+.Pat li {
     background-color: #fff385;
     margin: 5px 0;
     padding: 20px;
@@ -438,15 +438,15 @@ small{
                 -9px -9px 18px #ffffff;
 }
 
-.psy li span {
+.Pat li span {
     font-size: 12px;
     flex-grow: 1;
     word-wrap: break-word;
     overflow-y: scroll;
 }
 
-.psy #editBtn,
-.psy #deleteBtn {
+.Pat #editBtn,
+.Pat #deleteBtn {
     background-color: #c6aaff;
     color: #fff;
     border: none;
@@ -458,21 +458,21 @@ small{
     width: 60px;
 }
 
-.psy #editBtn {
+.Pat #editBtn {
     background-color: gainsboro;
 }
 
-.psy #deleteBtn:hover {
+.Pat #deleteBtn:hover {
     background-color: #8c53ff;
 }
 
-.psy #editBtn:hover {
+.Pat #editBtn:hover {
     background-color: gray;
 } */
 
 
 /* Create Note Popup CSS */
-/* .psy #popupContainer {
+/* .Pat #popupContainer {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -491,7 +491,7 @@ small{
     justify-content: center;
 }
 
-.psy textarea {
+.Pat textarea {
     width: 300px;
     height: 200px;
     margin: 10px 0;
@@ -501,11 +501,11 @@ small{
     border: 2px solid #8c53ff;
 }
 
-.psy #btn-container {
+.Pat #btn-container {
     display: flex;
 }
 
-.psy #submitBtn, #closeBtn {
+.Pat #submitBtn, #closeBtn {
     width: 100px;
     background-color: #8c53ff;
     color: #fff;
@@ -517,13 +517,13 @@ small{
     margin: 10px;
 }
 
-.psy #closeBtn {
+.Pat #closeBtn {
     background-color: gainsboro;
 }
  */
 
 /* Editing Popup CSS
-.psy #editing-container {
+.Pat #editing-container {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -542,7 +542,7 @@ small{
     justify-content: center;
 }
 
-.psy #submitBtn, #closeBtn {
+.Pat #submitBtn, #closeBtn {
     width: 100px;
     background-color: #8c53ff;
     color: #fff;
@@ -554,6 +554,6 @@ small{
     margin: 10px;
 }
 
-.psy #closeBtn {
+.Pat #closeBtn {
     background-color: gainsboro;
 } */

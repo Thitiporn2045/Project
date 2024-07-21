@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import './stylePsy.css';
+import './stylePat.css';
 import { ImSearch } from "react-icons/im";
 import { FaRegCalendarAlt } from "react-icons/fa";
 
-function SearchPsy() {
+function SearchPat() {
     const initialBooks = [
         { image: 'https://i.pinimg.com/736x/ae/b3/0b/aeb30b5e52ee5578af71b98312c67055.jpg', name: 'Syket', date: '9/07/2024', statusBook: 'lock' },
         { image: 'https://i.pinimg.com/564x/41/89/54/418954fe97bd1e8d2822a2d39c128c76.jpg', name: 'Sakib', date: '10/07/2024', statusBook: 'lock' },
@@ -29,7 +29,7 @@ function SearchPsy() {
     };
 
     return (
-        <div className='searchPsy'>
+        <div className='searchPat'>
             <div className="search">
                 <div className="labelSearch">
                     <input
@@ -70,4 +70,4 @@ function SearchPsy() {
     );
 }
 
-export default SearchPsy;
+export default SearchPat;

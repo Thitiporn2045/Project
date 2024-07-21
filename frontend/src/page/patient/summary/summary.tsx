@@ -1,10 +1,10 @@
 import React from 'react'
-import NavbarPsy from '../../../component/navbarPsy/navbarPsy'
+import NavbarPat from '../../../component/navbarPat/navbarPat'
 
 function Summary() {
     return (
         <div>
-            <NavbarPsy></NavbarPsy>
+            <NavbarPat></NavbarPat>
             Summary
         </div>
     )
