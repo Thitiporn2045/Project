@@ -120,11 +120,24 @@ function toggle() {
                         <a href="#" className='btn-close' onClick={toggle}>Close</a>
                     </div>
             </div>
+
             <div id='popupNote'>
-                    <div className='compo-search'>
-                        <NoteboardPat onSave={handleSave} onClose={handleClose} />
-                        <a href="#" className='btn-close' onClick={addNotePat}>Close</a>
+                <div className="head">
+                    <h2>New Note</h2>
+                </div>
+                <div className='noteBoard'>
+                    <div className="head">
+                        <input className='titleNote' placeholder="หัวข้อ" type="text"/>
+                        <div className='border'></div>
                     </div>
+                    <div className="content">
+                        <textarea className='contentNote' placeholder="เนื้อหา..."></textarea>
+                    </div>
+                </div>
+                <div className="buttons">
+                    <button className="btn-cancel" onClick={addNotePat}>ยกเลิก</button>
+                    <button className="btn-create">สร้างโน้ต</button>
+                </div>
             </div>
         </div>
     )

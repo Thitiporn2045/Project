@@ -68,6 +68,10 @@
     margin: 5px;
 }
 
+.searchPat .search .labelSearch .searchBook::placeholder{
+    color: var(--color-font2);
+}
+
 .searchPat .search .labelSearch input:focus {
     outline: none;
 }
