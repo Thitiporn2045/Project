@@ -6,7 +6,6 @@ import './stylePat.css'
 import { ImSearch } from "react-icons/im";
 import { FaBell } from "react-icons/fa";
 import NotePat from '../../component/notePat/notePat';
-import NoteboardPat from '../../component/notePat/noteboardPat';
 
 const userLogin = {
     name: "Anna"
@@ -82,14 +81,23 @@ function toggle() {
                                             className="btn-add-co2" 
                                             onClick={addNotePat}>Add</button>
                                     </div>
-
                                     <div className='note-board'>
-
+                                        <div className="content">
+                                            <NotePat></NotePat>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className='content3'>
                                     <div className='header'>
                                         <h2>My Book</h2>
+                                        <button 
+                                            className="btn-add-co2" 
+                                            onClick={addNotePat}>Show</button>
+                                    </div>
+                                    <div className='book-board'>
+                                        <div className="content">
+                                            
+                                        </div>
                                     </div>
                                 </div>
                             </div>
