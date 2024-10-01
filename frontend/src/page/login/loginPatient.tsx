@@ -58,14 +58,14 @@ function LoginPatient() {
                     onFinish={handleSubmitLogin}
                     style={{width:300}}>
                         <div style={{display:'flex',flexDirection:'column',}}>
+                            <label>อีเมล</label>
                             <Form.Item
                             name="Email"
                             rules={[{required:true,message:'กรุณากรอกอีเมล!'},
                                 { type: 'email', message: 'รูปแบบอีเมลไม่ถูกต้อง!' },
                             ]}
                             > 
-                                    <label>อีเมล</label>
-                                    <Input/>
+                                <Input/>
                             </Form.Item>
                             
                             <label>รหัสผ่าน</label>
