@@ -1,0 +1,16 @@
+.ant-menu {
+    font-family: 'Noto Sans Thai', sans-serif;
+    box-shadow: 0px 0px 10px 0px rgba(132, 132, 132, 0.716)!important;
+    position: relative;
+  }
+  
+  .ant-btn {
+    font-family: 'Noto Sans Thai', sans-serif;
+  }
+
+  .ant-tooltip {
+    font-family: 'Noto Sans Thai', sans-serif;
+    font-size: 14px;
+  }
+  
+
