@@ -45,7 +45,7 @@ return (
                     
                     <a href="/Pat">
                         <i><AiFillHome /></i>
-                        <span className="link-name" >Home</span>
+                        <span className="link-name" >หน้าหลัก</span>
                     </a>
                 </li>
                 <li
@@ -55,7 +55,7 @@ return (
 
                     <a href="/Worksheets">
                         <i><IoDocumentText /></i>
-                        <span className="link-name" >CBT Worksheets</span>
+                        <span className="link-name" >CBT เวิร์คชีท</span>
                     </a>
                 </li>
                 <li
@@ -64,7 +64,7 @@ return (
                 >
                     <a href="/Summary">
                         <i><IoBarChart /></i>
-                        <span className="link-name" >Summary</span>
+                        <span className="link-name" >สรุปผล</span>
                     </a>
                 </li>
                 <li
@@ -73,16 +73,16 @@ return (
                 >
                     <a href="/Profile">
                         <i><IoPerson /></i>
-                        <span className="link-name" >Profile</span>
+                        <span className="link-name" >โปรไฟล์</span>
                     </a>
                 </li>
                 <li
                     className={`list-item ${activeItem === 'outline' ? 'active' : ''}`}
-                    data-name="profile"
+                    data-name="outline"
                 >
                     <a href="/">
                         <i><FaSignOutAlt /></i>
-                        <span className="link-name" >Logout</span>
+                        <span className="link-name" >ออกจากระบบ</span>
                     </a>
                 </li>
             </ul>

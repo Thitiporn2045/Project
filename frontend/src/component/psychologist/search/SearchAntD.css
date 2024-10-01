@@ -1,0 +1,12 @@
+.ant-input{
+    font-family: 'Noto Sans Thai', sans-serif !important;
+
+}
+.Search-main{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+
+
+}

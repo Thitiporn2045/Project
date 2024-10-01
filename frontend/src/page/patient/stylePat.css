@@ -1,11 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&display=swap');
 :root{
     --color-backgroun-main1: #9BA5F6;
     --color-backgroun-main2: #BABDF6;
     --color-backgroun-secondary1: #EEEEF8;
     --color-backgroun-secondary2: #FFFFFF;
     --color-backgroun-secondary3: #FCFCFF;
+    --color-backgroun-secondary4: #F3F3FE;
 
     --color-secondary1: #C1C4F8;
     --color-secondary2: #EAD7F8;
@@ -14,7 +15,7 @@
     --color-popup-main: #F3F3FE;
     --color-popup-secondary: #EEEEF8;
 
-    --color-buttoon-secondary: #DBDDEC;
+    --color-buttoon-secondary: #E3E3E3;
 
     --color-font1: #17374E;
     --color-font2: #CCCCE3;
@@ -34,22 +35,28 @@
 }
 
 h1{
+    color: var(--color-font1);
     font-weight: 700;
     font-size: 1.8rem;
 }
 h2{
+    color: var(--color-font1);
     font-size: 1.4rem;
 }
 h3{
+    color: var(--color-font1);
     font-size: 0.87rem;
 }
 h4{
+    color: var(--color-font1);
     font-size: 0.8rem;
 }
 h5{
+    color: var(--color-font1);
     font-size: 0.77rem;
 }
 small{
+    color: var(--color-font1);
     font-size: 0.75rem;
 }
 
@@ -143,6 +150,13 @@ small{
     margin: 5px;
 }
 
+
+.Pat .main-body .main-background header .search-bar .labelSearch input::placeholder{
+    color: var(--color-backgroun-main1);
+    font-family:'Noto Sans Thai',sans-serif;
+    font-weight: 400;
+}
+
 .Pat .main-body .main-background header .search-bar .labelSearch input:focus {
     outline: none;
 }
@@ -175,7 +189,7 @@ small{
     width: 100%;
     height: calc(97% - 50px); /* ลบความสูงของ header */
     display: grid;
-    grid-template-rows: 8rem auto auto;
+    grid-template-rows: 6rem 18rem auto;
     margin-inline: auto;
     background: var(--color-backgroun-secondary2);
     border-radius: var(--border-radius-3);
@@ -208,7 +222,7 @@ small{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin:10px;
+    margin: 0 10px;
     width: calc(100px -10px);
     height: 40px;
 }
@@ -220,6 +234,7 @@ small{
     padding: 6px 30px;
     color: var(--color-backgroun-secondary2);
     background: #9BA5F6;
+    font-weight: 600;
     border: none;
     border-radius: var(--border-radius-1);
 }
@@ -233,14 +248,48 @@ small{
 
 }
 
+.Pat .main-body .main-background .main-content .content2 .note-board .content{
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
 /* ------------  content3   ------------------- */
 
 .Pat .main-body .main-background .main-content .content3{
-    position: relative;
-    background: var(--color-backgroun-secondary1);
+    display: flex;
+    flex-direction: column;
+    background: var(--color-backgroun-secondary4);
     border-radius: var(--border-radius-2);
 }
 
+.Pat .main-body .main-background .main-content .content3 .header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px;
+    width: calc(100px -10px);
+    height: 40px;
+}
+
+.Pat .main-body .main-background .main-content .content3 .header .btn-add-co2{
+    top: 0;
+    display: flex;
+    justify-content: center;
+    padding: 6px 30px;
+    color: var(--color-backgroun-secondary2);
+    background: #9BA5F6;
+    font-weight: 600;
+    border: none;
+    border-radius: var(--border-radius-1);
+}
+
+.Pat .main-body .main-background .main-content .content3 .book-boar .content{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: #17374E;
+}
 
 /* ------------  main-bg-right   ------------------- */
 
@@ -357,203 +406,136 @@ small{
     transition: 0.5s;
 }
 
-
-
-/* 
-.Pat #container {
-    background-color: var(--color-backgroun-secondary2);
+#popupNote {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 500px;
+    padding: 0 30px;
+    background: var(--color-backgroun-secondary2);
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.5s;
+    display: flex;
+    flex-direction: column;
     border-radius: var(--border-radius-3);
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(79, 77, 77, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;    width: 827px;
-    height: 600px;
-    padding: 20px;
-    box-sizing: border-box;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
+}
+
+#popupNote .head {
+    width: 100%;
     text-align: center;
-    align-items: center;
-    justify-content: center;
-    overflow-y: scroll;
 }
 
-.Pat .note-board #list-header {
-    display: flex;
-    align-items: left;
-    justify-content: left;
+#popupNote .head h2 {
+    color: var(--color-backgroun-main1);
+    font-size: 2rem;
+    font-weight: 700;
 }
 
-.notePat #addNoteDiv {
-    background-color: var(--color-backgroun-secondary3);
-    border: 1px solid var(--color-popup-secondary);
-    padding: 20px;
+#popupNote .noteBoard {
+    width: calc(100px -20px);
+    height: 100%;
+    background: var(--color-backgroun-secondary1);
     border-radius: var(--border-radius-2);
-    height: 200px;
-    width: 200px;
-    margin: 10px;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    padding: 15px;
+    margin-bottom: 20px;
 }
 
-.Pat #addNoteDiv:hover {
-    transition: 0.25s;
-    background-color: var(--color-backgroun-secondary2);
+#popupNote .noteBoard .head {
+    width: 100%;
+    height: 15%;
+    margin-bottom: 20px;
 }
 
-
-.Pat #addNoteDiv i {
-    font-size: 70px;
-    color: var(--color-backgroun-secondary1);
-}
- */
-
-/* List CSS
-.Pat #list-container {
-    display: flex;
-    align-items: left;
-    justify-content: left;
-}
-
-.Pat ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    text-align: center;
-}
-
-.Pat li {
-    background-color: #fff385;
-    margin: 5px 0;
-    padding: 20px;
-    border-radius: 8px; Rounded corners */
-    /* display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between; Added to align buttons to the right */
-    /* height: 200px;
-    width: 200px;
-    margin: 10px;
-    border-radius: 10px;
-    box-shadow:  9px 9px 18px #b3b3b3,
-                -9px -9px 18px #ffffff;
-}
-
-.Pat li span {
-    font-size: 12px;
-    flex-grow: 1;
-    word-wrap: break-word;
-    overflow-y: scroll;
-}
-
-.Pat #editBtn,
-.Pat #deleteBtn {
-    background-color: #c6aaff;
-    color: #fff;
+#popupNote .noteBoard .head .titleNote {
+    width: 100%;
+    height: 100%;
+    padding: 0 10px;
     border: none;
-    padding: 5px 10px;
-    margin: 0 5px; Adjusted margin for spacing */
-    /* cursor: pointer;
-    border-radius: 4px;
-    font-size: 12px;
-    width: 60px;
+    outline: none;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-backgroun-main1);
+    margin-bottom: 5px;
+    background: transparent;
 }
 
-.Pat #editBtn {
-    background-color: gainsboro;
+#popupNote .noteBoard .head .titleNote.titleNote::placeholder {
+    color: var(--color-font2);
 }
 
-.Pat #deleteBtn:hover {
-    background-color: #8c53ff;
+#popupNote .noteBoard .head .border {
+    width: 100%;
+    border-bottom: 2px solid var(--color-font2);
 }
 
-.Pat #editBtn:hover {
-    background-color: gray;
-} */
-
-
-/* Create Note Popup CSS */
-/* .Pat #popupContainer {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 400px;
-    height: 300px;
-    background-color: white;
-    border: 1px solid #ccc;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    align-items: center;
-    justify-content: center;
+#popupNote .noteBoard .content  {
+    width: 100%;
+    height: 80%;
 }
 
-.Pat textarea {
-    width: 300px;
-    height: 200px;
-    margin: 10px 0;
+#popupNote .noteBoard .content .contentNote{
     padding: 10px;
-    box-sizing: border-box;
-    border-radius: 4px;
-    border: 2px solid #8c53ff;
+    width: 100%;
+    height: 100%;
+    color: var(--color-font1);
+    font-size: 1rem;
+    border: none;
+    resize: none;
+    outline: none; 
+    background: transparent;
 }
 
-.Pat #btn-container {
+#popupNote .noteBoard .content .contentNote::placeholder{
+    color: var(--color-font2);
+}
+
+#popupNote .buttons {
     display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding-bottom: 20px;
 }
 
-.Pat #submitBtn, #closeBtn {
-    width: 100px;
-    background-color: #8c53ff;
-    color: #fff;
-    font-size: 14px;
+#popupNote .buttons button {
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    padding: 10px;
     cursor: pointer;
-    margin: 10px;
 }
 
-.Pat #closeBtn {
-    background-color: gainsboro;
-}
- */
-
-/* Editing Popup CSS
-.Pat #editing-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 400px;
-    height: 300px;
-    background-color: white;
-    border: 1px solid #ccc;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    align-items: center;
-    justify-content: center;
+#popupNote .buttons .btn-cancel {
+    padding: 5px 30px;
+    font-size: 1rem;
+    background: var(--color-buttoon-secondary);
+    color: var(--color-backgroun-secondary2);
 }
 
-.Pat #submitBtn, #closeBtn {
-    width: 100px;
-    background-color: #8c53ff;
-    color: #fff;
-    font-size: 14px;
-    border: none;
-    border-radius: 5px;
-    padding: 10px;
-    cursor: pointer;
-    margin: 10px;
+#popupNote .buttons .btn-cancel:hover{
+    background: var(--color-backgroun-secondary3);
+    color: var(--color-buttoon-secondary);
+    text-shadow: 0 0 10px var(--color-backgroun-main2), 0 0 40px var(--color-backgroun-main2), 0 0 80px var(--color-backgroun-main2);
+    transition: .5s;
 }
 
-.Pat #closeBtn {
-    background-color: gainsboro;
-} */
+#popupNote .buttons .btn-create {
+    padding: 5px 30px;
+    background: var(--color-backgroun-main1);
+    color: var(--color-backgroun-secondary2);
+}
+
+#popupNote .buttons .btn-create:hover{
+    transform: scale(1.2);
+    background: var(--color-backgroun-main2);
+    color: var(--color-backgroun-secondary2);
+    text-shadow: 0 0 10px var(--color-backgroun-main2), 0 0 40px var(--color-backgroun-main2), 0 0 80px var(--color-backgroun-main2);
+    transition: .5s;
+}
+
+#popupNote.active {
+    visibility: visible;
+    opacity: 1;
+}
