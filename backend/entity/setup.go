@@ -169,6 +169,7 @@ func SetupDatabase() (*gorm.DB, error) {
 			Email: "psy@gmail.com",
 			Password: string(hashedPassword6) ,
 			WorkingNumber: "1234567890123",
+			IsApproved: true,
 		},
 		{	
 			FirstName: "หมอ",
@@ -177,6 +178,7 @@ func SetupDatabase() (*gorm.DB, error) {
 			Email: "mhopla@gmail.com",
 			Password: string(hashedPassword7) ,
 			WorkingNumber: "1234567890123",
+			IsApproved: false,
 		},
 	}
 	for _, psychologists := range Psychologists {
