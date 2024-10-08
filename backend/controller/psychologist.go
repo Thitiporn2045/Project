@@ -27,6 +27,7 @@ func CreatePsychologist(c *gin.Context){
 		Tel: psychologist.Tel,
 		Email: psychologist.Email,
 		Password: psychologist.Password,
+		Picture: psychologist.Picture,
 		WorkingNumber: psychologist.WorkingNumber,
 		CertificateFile: psychologist.CertificateFile,
 		IsApproved: false,
@@ -67,9 +68,8 @@ func ListPsychologists(c *gin.Context) {
 }
 
 func DeletePsychologist(c *gin.Context) {
-
 	id := c.Param("id")
-	
+
 	if tx := entity.DB().Exec("DELETE FROM psychologists WHERE id = ?", id); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "psychologist not found"})
 		return
@@ -81,12 +81,13 @@ func DeletePsychologist(c *gin.Context) {
 func UpdatePsychologist(c *gin.Context) {
 
 	var psychologist entity.Psychologist
-	
+	var result entity.Psychologist
+
 	if err := c.ShouldBindJSON(&psychologist); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	if tx := entity.DB().Where("id = ?", psychologist.ID).First(&psychologist); tx.RowsAffected == 0 {
+	if tx := entity.DB().Where("id = ?", psychologist.ID).First(&result); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "psychologist not found"})
 		return
 	}

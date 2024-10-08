@@ -3,18 +3,26 @@ import './login.css';
 import thTH from 'antd/lib/locale/th_TH';
 import { PatientInterface } from '../../interfaces/patient/IPatient';
 import { GenderInterface } from '../../interfaces/patient/IGender';
-import { CreatePatient,ListGender } from '../../services/https/patient';
+import { CreatePatient,ListGender, ListPatients } from '../../services/https/patient';
 import { Button, Form, Input, ConfigProvider, Steps, message, DatePicker, Select } from 'antd';
-import { useNavigate } from 'react-router-dom';
 import TestCompo from '../../component/psychologist/testCompo';
 
 function RegisterPatient() {
     const [currentStep, setCurrentStep] = useState(0);
     const [formValues, setFormValues] = useState({});
     const [gender,setGender] = useState<GenderInterface[]>([]);
+    const [pat,setPat] = useState<PatientInterface[]>([]);
     
     const [form] = Form.useForm();
 //=========================================================================
+const listPatients = async () => {
+    let res = await ListPatients();
+    if(res){
+        setPat(res);
+    }
+}
+//=========================================================================
+
     const [sliderValue, setSliderValue] = useState<number>();
     const handleSliderChange = (value: number) => {
         setSliderValue(value);
@@ -24,9 +32,23 @@ function RegisterPatient() {
     
     const { Step } = Steps;
 
+    const checkEmailExists = (email: string) => {
+        //มีตัวไหนเข้าเงื่อนไข ถ้ามี:True
+        return pat.some((patient) => patient.Email === email);
+      };
+
     const next = () => {
         form.validateFields()
             .then(values => {
+                if (currentStep === 1) {
+                    const email = values.Email;
+
+                    // ตรวจสอบว่าอีเมลมีอยู่ในระบบแล้วหรือไม่
+                    if (checkEmailExists(email)) {
+                        message.error("ไม่สามารถใช้อีเมลดังกล่าวได้");
+                        return; // หยุดการทำงานถ้าอีเมลซ้ำ
+                    }
+                    }
                 // Save form values from the current step
                 setFormValues(prev => ({ ...prev, ...values }));
                 setCurrentStep(currentStep + 1);
@@ -40,6 +62,7 @@ function RegisterPatient() {
     const prev = () => {
         setCurrentStep(currentStep - 1);
     };
+//=========================================================================
 
     const listGender = async () =>{
         let res = await ListGender();
@@ -47,6 +70,7 @@ function RegisterPatient() {
             setGender(res);
         }
     }
+//=========================================================================
 
     const handleSubmitReg = async (values: any) => {
        // Combine the current step values with the accumulated form values
@@ -74,10 +98,14 @@ function RegisterPatient() {
 
        console.log("Registration Values: ", allValues);
     };
+//=========================================================================
 
     useEffect(() =>{
         listGender();
+        listPatients();
     },[]);
+//=========================================================================
+
   return (
     <ConfigProvider
             locale={thTH}
