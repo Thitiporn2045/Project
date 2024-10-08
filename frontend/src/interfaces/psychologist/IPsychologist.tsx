@@ -6,6 +6,9 @@ export interface PsychologistInterface{
     LastName?: string;
     Tel?: string;
     Email?: string;
+    Password?: string;
+    Picture?: string;
     WorkingNumber?: string;
     CertificateFile?: string;
+    IsApproved?: boolean;
 }

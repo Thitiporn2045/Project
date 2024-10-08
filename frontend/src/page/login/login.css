@@ -73,7 +73,7 @@
 }
 
 
-.loginPatient{
+.loginPatient, .loginPsychologist{
     width: 100vw;
     height: 100vh;
     display: flex;
@@ -85,7 +85,7 @@
 
 }
 
-.registerPatient{
+.registerPatient, .registerPsychologist{
     width: 100vw;
     height: 100vh;
     display: flex;

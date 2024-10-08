@@ -1,0 +1,99 @@
+table {
+    width: 80%;
+    border-collapse: collapse;
+    font-family:'Noto Sans Thai', sans-serif;
+    color: #585858;
+
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    text-align: middle;
+    padding: 8px;
+  }
+  
+  thead th {
+    background-color: #525252;
+  }
+  
+  tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .col-first-name { width: 10%; }
+  .col-last-name { width: 10%; }
+  .col-tel { width: 10%; }
+  .col-email { width: 10%; }
+  .col-certificate { width: 5%; }
+  .col-working-number {width: 5%;}
+  .col-is-approved { width: 5%; }
+  .col-actions { width: 5%; }
+
+/* ปรับสีพื้นหลังของแถว */
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* สีของส่วนหัวตาราง */
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* ปุ่ม Not Approved */
+button.not-approved {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+/* ปุ่ม Approved */
+button.approved {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+/* ปุ่ม Delete */
+button.delete {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+/* สไตล์ของลิงก์สำหรับดูไฟล์ */
+a.file-link {
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+/* ปรับขนาดปุ่มและจัดให้อยู่ตรงกลาง */
+td > button {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* กำหนดสีของสถานะ Approved */
+.approved {
+    color: #28a745;
+}
+
+/* ปุ่ม Not Approved */
+.not-approved {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+}

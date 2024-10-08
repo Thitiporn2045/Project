@@ -15,11 +15,14 @@ import LoginPatient from './page/login/loginPatient';
 import LoginPsychologist from './page/login/LoginPsychologist';
 import RegisterPsychologist from './page/login/RegisterPsychologist';
 import HomePage from './page/login/HomePage';
+import Admin from './page/admin/Admin'
 export default function App() {
 
   return (
     <BrowserRouter>
       <Routes>
+        <Route path='admin' element={<Admin/>}/>
+        {/* ========================================================================= */}
         <Route path='/' element={<HomePage/>}/>
         <Route path='/login/psychologist' element={<LoginPsychologist/>}/>
         <Route path='/reg/psychologist' element={<RegisterPsychologist/>}/>
@@ -30,7 +33,7 @@ export default function App() {
         <Route path='/PsyWorksheet' element={<PsyWorksheet/>}/>
         <Route path='/PsyWorksheet/ShowWorksheet' element={<PsyShowWSh/>}/>
         <Route path='/PsyAccount' element={<PsyAccount/>}/>
-{/* ========================================================================= */}
+        {/* ========================================================================= */}
         <Route path="/Pat" element={<Pat />} />
         <Route path="/Worksheets" element={<Worksheets />} />
         <Route path="/Summary" element={<Summary />} />

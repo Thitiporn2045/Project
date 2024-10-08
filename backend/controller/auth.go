@@ -81,6 +81,16 @@ func LoginPsychologist(c *gin.Context){
 		c.JSON(http.StatusBadRequest, gin.H{"error":err.Error() + "ไม่พบอีเมล"})
 		return
 	}
+	// Check if psychologist record was found
+	if psychologist.ID == 0 {
+   	 	c.JSON(http.StatusBadRequest, gin.H{"error": "ไม่พบอีเมลในระบบ"})
+   	 	return
+	}
+
+	if !psychologist.IsApproved {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "บัญชีของคุณยังไม่ได้รับการอนุมัติจากแอดมิน โปรดรอการตรวจสอบ"})
+		return
+	}
 
 	// Check password
 	err := bcrypt.CompareHashAndPassword([]byte(psychologist.Password), []byte(payload.Password))

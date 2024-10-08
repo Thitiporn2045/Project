@@ -11,6 +11,7 @@ type Psychologist struct{
 	Tel string
 	Email string `gorm:"uniqueIndex"`
 	Password string
+	Picture string
 	WorkingNumber string
 	CertificateFile string
 	IsApproved bool

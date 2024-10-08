@@ -5,7 +5,7 @@ import(
 
 type EmotionScore struct{
 	gorm.Model
-	Score int 
+	Score int `gorm:"uniqueIndex"`
 
 	ActivityDiary []ActivityDiary `gorm:"foreignKey:EmotionID"`
 	ActivityPlanning []ActivityPlanning `gorm:"foreignKey:EmotionID"`
