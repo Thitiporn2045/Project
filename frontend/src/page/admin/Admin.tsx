@@ -163,14 +163,14 @@ const showModalDel = (val: PsychologistInterface) => {
             visible={isModalVisible}
             onCancel={handleCancel}
             footer={null}
-            style={{top:0,paddingTop:20}} 
-            width="100%" // ตั้งกว้างเต็ม
+            style={{top:0,paddingTop:20,paddingBottom:0}} 
+            width="50%" // ตั้งกว้างเต็ม
             height="100%" // ตั้งสูงเต็ม
         >
             <iframe
                 src={`${selectedCertificate}`}
                 width="100%"
-                height="600px"
+                height="640px"
                 style={{marginTop:25,border:'none',borderRadius:'10px'}}
             />
         </Modal>

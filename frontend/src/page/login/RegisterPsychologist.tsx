@@ -224,7 +224,7 @@ return(
                 </Form.Item>
                 <Form.Item
                   name="Certificate"
-                  label="อัปโหลดใบรับรอง (ไฟล์ PDF หรือรูปภาพ)"
+                  label="อัปโหลดใบรับรอง (ไฟล์ pdf, png, jpeg)"
                   rules={[{ required: true, message: 'กรุณาอัปโหลดใบรับรอง!' }]}
                   >
                   <input type="file" accept="application/pdf, image/*" onChange={handleFileChange} />
