@@ -37,7 +37,7 @@ const listPsychologist = async () => {
                 // ตรวจสอบว่าอีเมลมีอยู่ในระบบแล้วหรือไม่
                 if (checkEmailExists(email)) {
                   message.error("ไม่สามารถใช้อีเมลดังกล่าวได้");
-                  return; // หยุดการทำงานถ้าอีเมลซ้ำ
+                  return; 
                 }
               }
               // Save form values from the current step
