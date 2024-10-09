@@ -1,4 +1,4 @@
-table {
+.Admin table {
     width: 80%;
     border-collapse: collapse;
     font-family:'Noto Sans Thai', sans-serif;
@@ -6,17 +6,17 @@ table {
 
   }
   
-  th, td {
+  .Admin th,.Admin td {
     border: 1px solid #ddd;
     text-align: middle;
     padding: 8px;
   }
   
-  thead th {
+  .Admin thead th {
     background-color: #525252;
   }
   
-  tbody tr:nth-child(even) {
+  .Admin tbody tr:nth-child(even) {
     background-color: #f9f9f9;
   }
   
@@ -30,18 +30,18 @@ table {
   .col-actions { width: 5%; }
 
 /* ปรับสีพื้นหลังของแถว */
-tr:nth-child(even) {
+.Admin tr:nth-child(even) {
     background-color: #f2f2f2;
 }
 
 /* สีของส่วนหัวตาราง */
-th {
+.Admin th {
     background-color: #4CAF50;
     color: white;
 }
 
 /* ปุ่ม Not Approved */
-button.not-approved {
+.Admin button.not-approved {
     background-color: #007bff;
     color: white;
     border: none;
@@ -51,7 +51,7 @@ button.not-approved {
 }
 
 /* ปุ่ม Approved */
-button.approved {
+.Admin button.approved {
     background-color: #28a745;
     color: white;
     border: none;
@@ -61,7 +61,7 @@ button.approved {
 }
 
 /* ปุ่ม Delete */
-button.delete {
+.Admin button.delete {
     background-color: #ff4d4d;
     color: white;
     border: none;
@@ -71,25 +71,25 @@ button.delete {
 }
 
 /* สไตล์ของลิงก์สำหรับดูไฟล์ */
-a.file-link {
+.Admin a.file-link {
     color: blue;
     cursor: pointer;
     text-decoration: underline;
 }
 
 /* ปรับขนาดปุ่มและจัดให้อยู่ตรงกลาง */
-td > button {
+.Admin td > button {
     width: 100%;
     box-sizing: border-box;
 }
 
 /* กำหนดสีของสถานะ Approved */
-.approved {
+.Admin .approved {
     color: #28a745;
 }
 
 /* ปุ่ม Not Approved */
-.not-approved {
+.Admin .not-approved {
     background-color: #007bff;
     color: white;
     border: none;
