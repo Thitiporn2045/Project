@@ -1,29 +1,35 @@
-import { Button, ConfigProvider, Form, Input } from 'antd'
+import { Button, ConfigProvider, Form, Input, message } from 'antd'
 import thTH from 'antd/lib/locale/th_TH';
 import React, { useEffect, useState } from 'react'
+import { PsychologistInterface } from '../../../interfaces/psychologist/IPsychologist';
+import { GetPsychologistById, UpdatePsychologist } from '../../../services/https/psychologist/psy';
 
-const initialPsychologist = {
-  firstname:'ศุภชลิตา',
-  lastname:'พลนงค์',
-  tel:'0812345678',
-  email:'note.psy@gmail.com',
-  password:'note1234',
-  profilepic:'https://via.placeholder.com/150?text=Psy'
-}
 
 function PsyProfile() {
-  const [psychologist, setPsychologist] = useState(initialPsychologist);
-  const [isChanged, setIsChanged] = useState(false); // สถานะสำหรับปุ่มบันทึก
+  const [messageApi, contextHolder] = message.useMessage();
 
+  const [psychologist, setPsychologist] = useState<PsychologistInterface>();
+  const [isChanged, setIsChanged] = useState(false); // สถานะสำหรับปุ่มบันทึก
+  const psyID = localStorage.getItem('psychologistID') 
+  
   const [form] = Form.useForm();
-  useEffect(() => {
-    form.setFieldsValue({
-      firstname: psychologist.firstname,
-      lastname: psychologist.lastname,
-      tel: psychologist.tel,
-      email: psychologist.email,
-    });
-  }, [psychologist, form]);
+
+  const getPsychologist = async () => {
+    let res = await GetPsychologistById(Number(psyID));
+    if(res){
+      setPsychologist(res);
+
+      form.setFieldsValue({
+        firstname: res.FirstName,
+        lastname: res.LastName,
+        tel: res.Tel,
+        email: res.Email,
+        picture: res.Picture
+      });
+    }
+  }
+ 
+
 
 
 
@@ -34,9 +40,8 @@ function PsyProfile() {
       reader.onload = (e) => {
         if (e.target) {
           const base64String = e.target.result as string;
-          setPsychologist({ ...psychologist, profilepic: base64String });
+          setPsychologist({ ...psychologist, Picture: base64String });
           setIsChanged(true); // เปลี่ยนสถานะเมื่อมีการเปลี่ยนแปลงรูป          
-          console.log('Base64:', base64String); // ทำการ console.log ที่นี่หลังจากแปลงเป็น Base64
         }
       };
       reader.readAsDataURL(file); // อ่านไฟล์เป็น Base64
@@ -44,18 +49,36 @@ function PsyProfile() {
   };
 
   useEffect(() => {
-    // ตรวจสอบเมื่อ profilepic ถูกอัปเดต
-    console.log('Updated profilepic:', psychologist.profilepic);
-  }, [psychologist.profilepic]);
+    getPsychologist();
+  }, []);
 
   const handleInputChange = (field: string, value: string) => {
     setPsychologist({ ...psychologist, [field]: value });
     setIsChanged(true); // เปลี่ยนสถานะเมื่อมีการเปลี่ยนแปลงข้อมูลในอินพุต
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // ป้องกันการรีเฟรชหน้าเมื่อส่งฟอร์ม
-    console.log('Form values:', psychologist);
+  const handleSubmit = async(allValues: PsychologistInterface) => {
+    allValues.ID = psychologist?.ID;
+    allValues.Picture = psychologist?.Picture;
+    allValues.IsApproved = psychologist?.IsApproved;
+    allValues.Password = psychologist?.Password;
+    allValues.WorkingNumber = psychologist?.WorkingNumber;
+    allValues.CertificateFile = psychologist?.CertificateFile;
+    let res = await UpdatePsychologist(allValues);
+    if (res.status) {
+      messageApi.open({
+        type: "success",
+        content: "แก้ไขข้อมูลสำเร็จ",
+      });
+      console.log(psychologist?.Picture)
+      
+    } else {
+      messageApi.open({
+        type: "error",
+        content: res.message,
+      });
+    }
+
     // ดำเนินการส่งข้อมูลหรืออื่น ๆ ตามต้องการ
   };
 
@@ -81,7 +104,9 @@ function PsyProfile() {
         }
       }}
     >
+      {contextHolder}
       <div style={{width:'100%',height:'100%',display:'flex',alignItems:'center',marginLeft:'6%'}}>
+      
         <div style={{width:'45%',height:'70%',background:'transparent',display:'flex',flexDirection:'column'}}>
           <Form 
             form={form}
@@ -90,9 +115,9 @@ function PsyProfile() {
           >
             <div className='profile-pic-container' style={{position:'relative',width:'100%',height:'40%',display:'flex',flexDirection:'column'}}>
               <span style={{fontSize:'20px',fontWeight:'bold'}}>รูปโปรไฟล์</span>
-              <Form.Item>
+              <Form.Item name={'picture'}>
               <div style={{display:'flex',flexDirection:'row',alignItems:'center',gap:'1rem',marginTop:'2%'}}>
-                <div><img src={psychologist.profilepic} alt='อิอิ' style={{width:'100px',height:'100px',borderRadius:'50%'}}></img></div>
+                <div><img src={psychologist?.Picture} style={{width:'100px',height:'100px',borderRadius:'50%'}}></img></div>
                 <input
                   type="file"
                   accept="image/*"
@@ -117,6 +142,7 @@ function PsyProfile() {
                   >
                   <Input 
                     style={{width:240}}
+                    value={psychologist?.FirstName}
                     onChange={(e) =>
                     handleInputChange('firstname', e.target.value)}
                   />
@@ -131,7 +157,7 @@ function PsyProfile() {
                   >
                     <Input 
                       style={{width:240}}
-                      value={psychologist.lastname}
+                      value={psychologist?.LastName}
                       onChange={(e) =>
                       handleInputChange('lastname', e.target.value)}
                     />
@@ -147,7 +173,7 @@ function PsyProfile() {
                   >
                     <Input 
                       style={{width:240}}
-                      value={psychologist.tel}
+                      value={psychologist?.Tel}
                       onChange={(e) => 
                       handleInputChange('tel', e.target.value)}
                     />
@@ -171,14 +197,14 @@ function PsyProfile() {
                   >
                     <Input 
                       style={{width:240}}
-                      value={psychologist.email}
+                      value={psychologist?.Email}
                       onChange={(e) => 
                       handleInputChange('email', e.target.value)}
                     />
                   </Form.Item>
                 </div>
               </div>
-              <div style={{display:'flex',justifyContent:'end'}}>
+              <div style={{width:504, display:'flex',justifyContent:'end',}}>
                 <Form.Item>
                   <Button 
                     type='primary' 

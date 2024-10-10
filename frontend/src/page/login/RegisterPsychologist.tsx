@@ -4,7 +4,7 @@ import './login.css';
 import thTH from 'antd/lib/locale/th_TH';
 import { PsychologistInterface } from '../../interfaces/psychologist/IPsychologist';
 import { CreatePsychologist,ListPsychologists } from '../../services/https/psychologist/psy';
-import { Button, Form, Input, ConfigProvider, Steps, message, DatePicker, Select, Modal } from 'antd';
+import { Button, Form, Input, ConfigProvider, Steps, message} from 'antd';
 
 
 function RegisterPsychologist() {
@@ -86,7 +86,8 @@ const handleSubmitReg = async (values: any) => {
         Email: allValues.Email,
         Password: allValues.Password,
         WorkingNumber: allValues.WorkingNumber,
-        CertificateFile: fileUrl
+        CertificateFile: fileUrl,
+        IsApproved: false
     }
 
     const res = await CreatePsychologist(psychologistData);
