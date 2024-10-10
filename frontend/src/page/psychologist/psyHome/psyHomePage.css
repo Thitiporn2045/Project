@@ -126,7 +126,7 @@
     margin-top: 1.2%;
     left: 68%;
     border:none;
-    background-image: url('D:\Project\frontend\src\assets\Doctors-resize.png');
+    background-image: url('../../../assets/Doctors-resize.png');
     background-size: cover;
     background-position: center;
 }
