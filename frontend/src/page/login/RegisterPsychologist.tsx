@@ -168,7 +168,7 @@ return(
                       <Input/>
                   </Form.Item>
 
-                  <div style={{display:'flex',justifyContent:'center',marginTop:'1rem'}}>มีบัญชีผู้ใช้แล้ว?<a href='/login/patient'><b>เข้าสู่ระบบ</b></a></div>   
+                  <div style={{display:'flex',justifyContent:'center',marginTop:'1rem'}}>มีบัญชีผู้ใช้แล้ว?<a href='/login/psychologist'><b>เข้าสู่ระบบ</b></a></div>   
               </div>
               
           )}
