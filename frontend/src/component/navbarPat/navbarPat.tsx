@@ -22,6 +22,8 @@ function NavbarPat() {
             setActiveItem('summary');
         } else if (currentPath === '/Profile') {
             setActiveItem('profile');
+        }else if (currentPath === '/EditProfile'){
+            setActiveItem('editProfile')
         }
     }, [location]);
 

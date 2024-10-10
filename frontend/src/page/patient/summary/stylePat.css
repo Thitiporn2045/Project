@@ -1,42 +1,3 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&display=swap');
 :root{
@@ -74,29 +35,50 @@
     --box-shadow1: #dcdcf3 1px 1px 10px 0px inset;
     --box-shadow-1: rgb(255, 255, 255) -2px -2px 10px 1px inset;
 }
+.summary{
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    max-height: 100vh;
+    box-sizing: border-box;
+    font-family: 'Noto Sans Thai', sans-serif;
+}
 
-h1{
-    color: var(--color-font1);
-    font-weight: 700;
-    font-size: 1.8rem;
+.summary .befor-main{
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
 }
-h2{
-    color: var(--color-font1);
-    font-size: 1.4rem;
+
+.summary .main-body{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 3.2rem auto;
+    background: var(--color-backgroun-secondary2);
 }
-h3{
-    color: var(--color-font1);
-    font-size: 0.87rem;
+
+.summary .main-body .sidebar {
+    width: 100%;
+    height: 100%;
+    background: var(--color-backgroun-main1);
+    z-index: 1;
 }
-h4{
-    color: var(--color-font1);
-    font-size: 0.8rem;
+
+/* ------------  main-background   ------------------- */
+
+.Pat .main-body .main-background{
+    width: 100%;
+    height: 100%;
 }
-h5{
-    color: var(--color-font1);
-    font-size: 0.77rem;
-}
-small{
-    color: var(--color-font1);
-    font-size: 0.75rem;
+
+.summary .main-body .main-background header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: #fbfbff;
+    font-family: "Poppins", sans-serif;
+    font-family:'Noto Sans Thai',sans-serif;
 }

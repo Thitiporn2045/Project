@@ -1,0 +1,144 @@
+.selectDayPat {
+    font-family: "Poppins", sans-serif;
+    width: 100%;
+    border-radius: var(--border-radius-3);
+    padding: 0 20px;
+}
+
+.selectDayPat .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.selectDayPat .schedule-icon {
+    gap: 10px;
+    font-size: 1.5rem;
+    color: var(--color-font1);
+}
+
+.selectDayPat .see-all {
+    background: none;
+    border: none;
+    background-color: var(--color-backgroun-main1);
+    color: var(--color-backgroun-secondary2);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 4px 8px;
+    border-radius: var(--border-radius-1);
+}
+
+.selectDayPat .month-selector {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    color: var(--color-font1);
+    margin-bottom: 20px;
+    padding: 6px 0;
+    border-radius: var(--border-radius-1);
+    background-color: var(--color-backgroun-secondary2);
+}
+
+.selectDayPat .month-selector button {
+    background: transparent;
+    border: none;
+    border-radius: var(--border-radius-1);
+    cursor: pointer;
+    font-size: 1.3rem;
+    color: var(--color-font2);
+}
+
+.selectDayPat .week-view {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.selectDayPat .week-view button {
+    border: none;
+    border-radius: var(--border-radius-1);
+    cursor: pointer;
+    font-size: 1.3rem;
+    color: var(--color-font2);
+    background: #ffffff;
+}
+
+.selectDayPat .day {
+    text-align: center;
+    padding: 8px;
+    border-radius: var(--border-radius-1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.selectDayPat .day:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--box-shadow);
+    background-color: var(--color-backgroun-secondary2);
+}
+
+.selectDayPat .day.selected {
+    transform: scale(1.1);
+    background-color: var(--color-backgroun-main1);
+    color: #ffffff;
+}
+
+.selectDayPat .day.selected-date {
+    background-color: var(--color-backgroun-secondary1);
+    color: var(--color-font1);
+}
+
+.selectDayPat .day-name {
+    font-size: 0.8rem;
+}
+
+.selectDayPat .day-number {
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.selectDayPat .full-calendar {
+    display: flex;
+    flex-direction: column;
+    font-size: 1rem;
+    color: #333f60;
+}
+
+.selectDayPat .weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    color: var(--color-font1);
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.selectDayPat .days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.selectDayPat .days-grid .day {
+    padding: 8px;
+    text-align: center;
+}
+
+.selectDayPat .days-grid .other-month {
+    color: #ccc;
+}
+
+.bg-summaryEmojiPat{
+    width: 100%;
+    height: 100%;
+    background: #333f60;
+}
+
+.bg-emoji{
+    margin-top: 50px;
+    padding: 20px;
+    width: calc(100% -20px);
+    height: 500px;
+}

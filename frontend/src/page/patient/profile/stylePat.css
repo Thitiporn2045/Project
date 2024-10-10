@@ -1,0 +1,655 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&display=swap');
+:root{
+    --color-backgroun-main1: #9BA5F6;
+    --color-backgroun-main2: #BABDF6;
+    --color-backgroun-secondary1: #EEEEF8;
+    --color-backgroun-secondary2: #FFFFFF;
+    --color-backgroun-secondary3: #FCFCFF;
+    --color-backgroun-secondary4: #F3F3FE;
+
+    --color-secondary1: #C1C4F8;
+    --color-secondary2: #EAD7F8;
+    --color-secondary3: #EFCDF3;
+
+    --color-popup-main: #F3F3FE;
+    --color-popup-secondary: #EEEEF8;
+
+    --color-buttoon-secondary: #E3E3E3;
+
+    --color-font1: #333f60;
+    --color-font2: #CCCCE3;
+    --color-font3: #585858;
+    --color-font4: #868686;
+
+    --color-hover: rgba(255, 255, 255, .2);
+    --color-light: rgba(132, 139, 200, 0.18);
+
+    --card-border-radius: 2rem;
+    --border-radius-1: 0.4rem;
+    --border-radius-2: 0.8rem;
+    --border-radius-3: 1.2rem;
+    --card-padding: 1.8rem;
+    --padding-1: 1.2rem;
+    --box-shadow: 0 2rem 3rem var(--color-light);
+    --box-shadow1: #dcdcf3 1px 1px 10px 0px inset;
+    --box-shadow-1: rgb(255, 255, 255) -2px -2px 10px 1px inset;
+}
+.profilePat{
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    max-height: 100vh;
+    box-sizing: border-box;
+    font-family: 'Noto Sans Thai', sans-serif;
+}
+
+.profilePat .befor-main{
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+.profilePat .main-body{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 3.2rem auto;
+    gap: 1.5rem;
+    background: var(--color-backgroun-secondary1);
+}
+
+.profilePat .main-body .sidebar {
+    width: 100%;
+    height: 100%;
+    background: var(--color-backgroun-main1);
+    z-index: 1;
+}
+
+/* ------------  main-background   ------------------- */
+
+.profilePat .main-body .main-background{
+    display: grid;
+    grid-template-columns: 15rem auto;
+    align-items: center;
+    gap: 20px;
+    width: calc(100% -20px);
+    height: calc(100% -20px);
+    margin:  20px;
+    margin-right:  40px;
+    border-radius: var(--border-radius-3);
+    background: var(--color-backgroun-secondary2);
+}
+
+.profilePat .main-body .main-background .content1{
+    width: 100%;
+    height: 90%;
+    padding: 40px 0;
+    border-right: 3px solid var(--color-backgroun-secondary1);
+    box-shadow: var(--box-shadow);
+}
+
+.profilePat .main-body .main-background .content1 .header h2{
+    margin: 20px;
+    color: var(--color-font1);
+}
+
+.profilePat .main-body .main-background .content1 .list{
+    align-items: flex-start;
+    transition: .5s;
+}
+
+.profilePat .main-body .main-background .content1  .list .list-item{
+    width: 100%;
+    height: 40px;
+    font-size: 1rem;
+    font-weight: 500;
+    list-style: none;
+    color: var(--color-font1);
+}
+
+.profilePat .main-body .main-background .content1 .list .list-item:hover{
+    width: 90%;
+    color: var(--color-backgroun-main2);
+    background: rgba(255, 255, 255, 0.423);
+    transform: scale(1.05);
+    transition: .5s;
+}
+
+.profilePat .main-body .main-background .content1 .list .list-item a{
+    display: flex;
+    align-items: center;
+    color: var(--color-font1);
+    /* color: #9696a5; */
+    text-decoration: none;
+    border-radius: 6px;
+    white-space: nowrap;
+    transition: .5s;
+}
+
+.profilePat .main-body .main-background .content1 .list .list-item a:hover{
+    width: 90%;
+    color: var(--color-backgroun-main2);
+    background: rgba(255, 255, 255, 0.423);
+    transform: scale(1.05);
+    transition: .5s;
+}
+
+/* .profilePat .main-body .main-background .content1 .list .list-item i{
+    text-align: center;
+    margin-right: 5px;
+} */
+
+.profilePat .main-body .main-background .content1 .link-name{
+    pointer-events: none;
+    transition: opacity .3s;
+}
+
+.profilePat .main-body .main-background .content2{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 0rem 0.8rem 0.8rem 0rem;
+}
+
+.profilePat .main-body .main-background .content2 .previwe .content3 .card {
+    position: relative;
+    width: 450px;
+    height: 650px;
+    background: #babdf6f2;
+    box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease;
+    cursor: pointer;
+}
+
+.profilePat .main-body .main-background .content2 .previwe .content3 .card .imgBox {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    transform-origin: left;
+    transform-style: preserve-3d;
+    background: #babdf6f2;
+    box-shadow: 10px 20px 40px rgba(0, 0, 0, 0.25);
+    transition: transform 0.5s ease;
+}
+
+.profilePat .main-body .main-background .content2 .previwe .content3 .card .imgBox .profile{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profilePat .main-body .main-background .content2 .previwe .content3 .profile .cardbg{
+    position: absolute;
+    width: 85%;
+    height: 90%;
+    display: block;
+    justify-content: center;
+    align-items: center;
+    background: var(--color-backgroun-secondary3);
+    border-radius: var(--border-radius-1);
+    text-align: center;
+}
+
+.profilePat .main-body .main-background .content2 .previwe .content3 .cardbg .name{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: 800;
+    gap: 10px;
+    margin-top: 130px;
+    margin-bottom: 10px;
+    color: var(--color-font1);
+}
+
+.profilePat .main-body .main-background .content2 .previwe .content3 .profile .cardbg img.pro{
+    position: relative;
+    width: 45%;
+    height: 50%;
+    border-radius: var(--border-radius-3);
+    margin-top: 20px;
+    margin-bottom: 30px;
+    object-fit: cover;
+    border-bottom: 3px solid #DADDFA;
+}
+
+.profilePat .main-body .main-background .content2 .previwe .content3 .profile .cardbg label{
+    display: block;
+    width: 43%;
+    padding: 10px;
+    margin: 10px auto;
+    cursor: pointer;
+    border-radius: var(--border-radius-2);
+    color: var(--color-font1);
+    background-color: rgba(255, 255, 255, 0.21);
+}
+
+.profilePat .main-body .main-background .content2 .previwe .content3 .profile .cardbg label:hover{
+    transition: .5s;
+    transform: scale(1.05);
+    text-decoration-line: underline;
+    color: var(--color-backgroun-main1);
+    text-shadow: 0 0 20px #BABDF6, 0 0 40px #BABDF6, 0 0 80px #BABDF6;
+}
+
+.profilePat .main-body .main-background .content2 .previwe .content3 .profile .cardbg input{
+    display: none;
+}
+
+.profilePat .main-body .main-background .content2 .previwe .content3 .card .imgBox img{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+}
+
+.profilePat .main-body .main-background .content2 .previwe .content3 .card .bg-right{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    transform: rotateY(180deg);
+}
+
+.profilePat .main-body .main-background .content2 .previwe .content3 .card .bg-right .content{
+    display: grid;
+    grid-template-rows: 20rem auto;
+    align-items: center;
+    margin: 30px;
+    width: calc(100% -30px);
+    height: 90%;
+    border-radius: var(--border-radius-1);
+    background: var(--color-backgroun-secondary2);
+}
+
+.profilePat .main-body .main-background .content2 .previwe .content3 .card .bg-right .content .info{
+    margin: 20px;
+    width: calc(100% -20px);
+    height: 80%;
+    border-bottom: 3px solid #DADDFA;
+}
+.profilePat .main-body .main-background .content2 .previwe .content3 .card .bg-right .content .info .m-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.profilePat .main-body .main-background .content2 .previwe .content3 .card .bg-right .content .info .m-content strong {
+    color: var(--color-font1);
+    font-size: 1.2rem;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.profilePat .main-body .main-background .content2 .previwe .content3 .card .bg-right .content .info .m-content p {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--color-font1);
+}
+
+.profilePat .main-body .main-background .content2 .previwe .content3 .card .bg-right .content .info .m-content .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin: 10px 0;
+}
+
+.profilePat .main-body .main-background .content2 .previwe .content3 .label-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60%;
+    padding: 2px 0;
+    background-color: var(--color-backgroun-secondary4);
+    /* border: 2px solid var(--color-backgroun-secondary1);
+    box-shadow: var(--box-shadow1), var(--box-shadow-1); */
+    border-radius: var(--border-radius-1);
+}
+
+.profilePat .main-body .main-background .content2 .previwe .content3 .card .bg-right .content .infoPsy{
+    margin: 20px;
+    width: calc(100% -20px);
+    height: 90%;
+    background: var(--color-backgroun-secondary4);
+}
+
+.profilePat .main-body .main-background .content2 .previwe .content3 .card .bg-right .content .infoPsy .head{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: -10px 20px;
+    padding: 10px 0;
+    border-radius: var(--border-radius-2);
+}
+
+.profilePat .main-body .main-background .content2 .previwe .content3 .card .bg-right .content .infoPsy .head img{
+    width: 20%;
+    height: 20%;
+    border-bottom: 3px solid #DADDFA;
+    border-radius: var(--border-radius-2);
+}
+
+.profilePat .main-body .main-background .content2 .previwe .content3 .card .bg-right .content .infoPsy .head strong{
+    color: var(--color-font1);
+    font-size: 1.2rem;
+}
+
+.profilePat .main-body .main-background .content2 .previwe .content3 .card .bg-right .content .infoPsy .info-content{
+    margin: 20px;
+    width: calc(100% -20px);
+    height: 80%;
+}
+
+.profilePat .main-body .main-background .content2 .previwe .content3 .card .bg-right .content .infoPsy .info-content .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin: 10px 0;
+}
+
+.profilePat .main-body .main-background .content2 .previwe .content3 .card .bg-right .content .infoPsy .info-content .label-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60%;
+    padding: 2px 0;
+    background-color: rgba(255, 255, 255, 0.3);
+    /* border: 2px solid var(--color-backgroun-secondary1);
+    box-shadow: var(--box-shadow1), var(--box-shadow-1); */
+    border-radius: var(--border-radius-1);
+}
+
+
+.edit-profile {
+    width: 65vw;
+    height: 75vh;
+    display: grid;
+    grid-template-columns: 30rem auto;
+    gap: 30px;
+    /* background: #333f60; */
+    font-family: 'Noto Sans Thai', sans-serif;
+}
+
+.edit-profile .imgBox .profile{
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-right: 2px solid #DADDFA;
+}
+.edit-profile .profile .cardbg{
+    margin: 30px;
+    width: calc(100% -30px);
+    height: 90%;
+    margin-right: 55px;
+    display: block;
+    justify-content: center;
+    align-items: center;
+    border-radius: var(--border-radius-1);
+    text-align: center;
+    background: #fbfbff;
+
+}
+
+.edit-profile .cardbg .name{
+    display: flex;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 800;
+    gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: var(--color-font1);
+}
+
+.edit-profile .profile .cardbg img.pro{
+    position: relative;
+    width: 45%;
+    height: 50%;
+    border-radius: var(--border-radius-3);
+    margin-top: 20px;
+    margin-bottom: 30px;
+    object-fit: cover;
+    border-bottom: 3px solid #DADDFA;
+}
+
+.edit-profile .profile .cardbg label{
+    display: block;
+    width: 43%;
+    padding: 10px;
+    margin: 10px auto;
+    cursor: pointer;
+    border-radius: var(--border-radius-2);
+    color: var(--color-font1);
+    background: var(--color-backgroun-secondary2);
+}
+
+.edit-profile .profile .cardbg label:hover{
+    transition: .5s;
+    transform: scale(1.05);
+    text-decoration-line: underline;
+    color: var(--color-backgroun-main1);
+    text-shadow: 0 0 20px #BABDF6, 0 0 40px #BABDF6, 0 0 80px #BABDF6;
+}
+.edit-profile .profile .cardbg input{
+    display: none;
+}
+
+.edit-profile .card .bg-right{
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.edit-profile .bg-right .content{
+    display: grid;
+    margin: 30px;
+    width: calc(100% -30px);
+    height: 570px;
+    border-radius: var(--border-radius-1);
+    background: #fbfbff;
+    overflow-y: auto;
+}
+
+.edit-profile .bg-right .content .info{
+    margin: 20px;
+    width: calc(100% -20px);
+    height: 80%;
+}
+
+.edit-profile .bg-right .content .info .m-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.edit-profile .bg-right .content .info .m-content .title {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.edit-profile .bg-right .content .info .m-content strong {
+    color: var(--color-font1);
+    font-size: 1.2rem;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.edit-profile .bg-right .content .info .m-content p {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--color-font1);
+}
+
+.edit-profile .bg-right .content .info .m-content .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin: 10px 0;
+}
+
+.edit-profile .label-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60%;
+    padding: 2px 0;
+    background-color: var(--color-backgroun-secondary4);
+    /* border: 2px solid var(--color-backgroun-secondary1);
+    box-shadow: var(--box-shadow1), var(--box-shadow-1); */
+    border-radius: var(--border-radius-1);
+}
+
+.edit-profile .content1 .profile-image-section {
+    margin-bottom: 20px;
+}
+
+.edit-profile .profile-image {
+    width: 100px;
+    height: 100px;
+    border-radius: var(--border-radius-2);
+    object-fit: cover;
+    margin-right: 50px;
+}
+
+.edit-profile .profile-buttons {
+    display: flex;
+    gap: 30px;
+}
+
+.edit-profile button {
+    padding: 8px 16px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: var(--border-radius-1);
+    cursor: pointer;
+    font-family: 'Noto Sans Thai', sans-serif;
+}
+
+.edit-profile .save-changes-btn {
+    display: block;
+    margin: 20px auto;
+    width: 100%;
+    font-size: 1rem;
+    padding: 10px 0;
+    background-color: var(--color-backgroun-main1);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius-1);
+    cursor: pointer;
+    margin-top: 30px;
+    margin-bottom: 100px;
+}
+
+.edit-profile .nextPage{
+    width: 100%;
+    text-align: end;
+    margin-bottom: 20px;
+}
+
+.edit-profile .nextPage a{
+    text-decoration: none;
+    color: var(--color-font2);
+}
+
+.edit-profile .save-changes-btn:hover{
+    background: var(--color-secondary1);
+    transform: scale(1.05);
+    transition: .5s;
+    color: var(--color-backgroun-secondary2);
+    text-shadow: 0 0 10px var(--color-backgroun-main2), 0 0 40px var(--color-backgroun-main2), 0 0 80px var(--color-backgroun-main2);
+    transition: .5s;
+}
+
+.password {
+    display: block;
+    align-items: center;
+    justify-content: center;
+    margin-top: 70px;
+}
+
+.password h2{
+    text-align: center;
+}
+
+.password .form-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.password .form-group {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.password .form-group:last-child {
+    margin-right: 0;
+}
+
+.password label {
+    display: block;
+    color: var(--color-font1);
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+
+.password input[type="password"],
+.password input[type="password"],
+.password input[type="password"] {
+    width: 95%;
+    padding: 10px;
+    border: none;
+    color: var(--color-font1);
+    background-color: var(--color-backgroun-secondary4);
+    /* border: 2px solid var(--color-backgroun-secondary1);
+    box-shadow: var(--box-shadow1), var(--box-shadow-1); */
+    border-radius: var(--border-radius-1);
+    font-family: 'Noto Sans Thai', sans-serif;
+}
+
+.password .save-btn {
+    width: 100%;
+    margin-top: 20px;
+    background-color: var(--color-backgroun-main1);
+    color: white;
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 130px;
+} 
+
+.password .save-btn:hover{
+    background: var(--color-secondary1);
+    transform: scale(1.05);
+    transition: .5s;
+    color: var(--color-backgroun-secondary2);
+    text-shadow: 0 0 10px var(--color-backgroun-main2), 0 0 40px var(--color-backgroun-main2), 0 0 80px var(--color-backgroun-main2);
+    transition: .5s;
+}

@@ -1,0 +1,760 @@
+.mainSheet{
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    max-height: 100vh;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+
+.mainSheet .main-body{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 3.2rem auto 15rem;
+    gap: 1.5rem;
+    background: var(--color-backgroun-secondary1);
+}
+
+.mainSheet .main-body .sidebar {
+    width: 100%;
+    height: 100%;
+    background: var(--color-backgroun-main1);
+    z-index: 1;
+}
+
+/* ------------  main-background   ------------------- */
+
+.mainSheet .main-body .main-background{
+    width: 100%;
+    height: 100%;
+}
+
+.mainSheet .main-body .main-background header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 50px;
+    background: var(--color-backgroun-secondary1);
+    font-family: "Poppins", sans-serif;
+    font-family:'Noto Sans Thai',sans-serif;
+}
+
+.mainSheet .main-body .main-background header h1{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    left: 0;
+    top: 0;
+    height: 100%;
+    color: var(--color-font1);
+}
+
+.mainSheet .main-body .main-background header .search-bar{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 35%;
+    height: 100%;
+    gap: 10px;
+}
+
+.mainSheet .main-body .main-background header .search-bar .labelSearch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    height: 65%;
+    background: var(--color-backgroun-secondary2);
+    border: none;
+    border-radius: var(--border-radius-3);
+}
+
+.mainSheet .main-body .main-background header .search-bar .labelSearch input {
+    color: var(--color-font3);
+    background: transparent;
+    border: none;
+    height: 90%;
+    width: 100%;
+    font-size: 1rem;
+    font-weight: 200;
+    margin: 5px;
+}
+
+.mainSheet .main-body .main-background header .search-bar .labelSearch input::placeholder{
+    color: var(--color-backgroun-main1);
+    font-family:'Noto Sans Thai',sans-serif;
+    font-weight: 400;
+}
+
+.mainSheet .main-body .main-background header .search-bar .labelSearch input:focus {
+    outline: none;
+}
+
+.mainSheet .main-body .main-background header .search-bar .warm{
+    width: 15%;
+    height: 100%;
+}
+
+.mainSheet .main-body .main-background header .search-bar .warm .content{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mainSheet .main-body .main-background header .search-bar .warm .bg-warm{
+    position: relative;
+    margin: 5px;
+    width: calc(100px -10px);
+    height: 78%;
+    border-radius: var(--border-radius-2);
+    background: var(--color-backgroun-secondary2);
+}
+
+.mainSheet .main-body .main-background header .search-bar .warm .bg-warm i{
+    margin-top: 7px;
+    font-size: 1.4rem;
+    color: #5E7BD0;
+}
+
+.mainSheet .main-body .main-background header .search-bar .warm .bg-warm .num{
+    position: absolute;
+    top: 3px;
+    right: 7px;
+    width: 14px;
+    height: 14px;
+    font-size: 0.7rem;
+    border-radius: 50%;
+    color: var(--color-backgroun-secondary2);
+    background: var(--color-font1);
+}
+
+/* .Pat .main-body .main-background header .search-bar .warm .bg-warm .box{
+    width: 200px;
+    height: 250px;
+    background: var(--color-backgroun-secondary2);
+    position: absolute;
+    border-radius: var(--border-radius-2);
+    top: 50px;
+    left: -170px;
+    z-index: 100;
+}
+
+.Pat .main-body .main-background header .search-bar .warm .bg-warm .box .heading{
+    margin-top: 0.2rem auto;
+    color: var(--color-backgroun-secondary2);
+    background: #9BA5F6;
+    width: 100%;
+    height: 30px;
+    border-radius: var(--border-radius-2);
+}
+
+.Pat .main-body .main-background header .search-bar .warm .bg-warm .box .content-box{
+    margin-top: 0.4rem auto 0 auto;
+    width: 85%;
+    height: 190px;
+    overflow-x: auto;
+} */
+
+.mainSheet .main-body .main-background header .search-bar .searchIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    margin-right: 8px;
+    color: var(--color-backgroun-main1);
+}
+
+/* ------------  main-content   ------------------- */
+
+.mainSheet .main-body .main-background .main-content{
+    position: relative;
+    margin-top: 5px;
+    width: 100%;
+    height: calc(97% - 50px); /* ลบความสูงของ header */
+    margin-inline: auto;
+    background: var(--color-backgroun-secondary2);
+    border-radius: var(--border-radius-3);
+    overflow-y: auto;
+}
+
+.mainSheet .main-body .main-background .main-content .bg-content{
+    margin: 20px;
+    width: calc(100% -20px);
+    height: calc(97% - 20px); /* ลบความสูงของ header */
+    background: var(--color-backgroun-secondary4);
+    border-radius: var(--border-radius-2);
+}
+
+.mainSheet .main-body .main-background .main-content .bg-content h2 {
+    font-size: 1.5rem;
+    color: var(--color-font1);
+    margin: 1rem 0 0.5rem 1rem;
+}
+
+.mainSheet .main-body .main-background .main-content .bg-content .book-categories {
+    display: flex;
+    margin-left: 1rem;
+}
+
+.mainSheet .main-body .main-background .main-content .bg-content .month {
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem;
+    overflow-x: auto;
+}
+
+.mainSheet .main-body .main-background .main-content .bg-content .month button {
+    padding: 0.5rem 1rem;
+    border: none;
+    background-color: var(--color-backgroun-secondary2);
+    color: var(--color-font1);
+    cursor: pointer;
+    border-radius: var(--border-radius-1);
+    transition: background-color 0.3s ease;
+}
+
+.mainSheet .main-body .main-background .main-content .bg-content .month button.active {
+    background-color: var(--color-backgroun-main1);
+    color: white;
+}
+
+.mainSheet .main-body .main-background .main-content .bg-content .month button:hover {
+    background-color: var(--color-secondary1);
+}
+
+.mainSheet .main-body .main-background .main-content .bg-content .book-item{
+    margin-top: 15px;
+    margin-left: 15px;
+    width: 73vw;
+}
+
+
+/* ------------  main-bg-right   ------------------- */
+
+.mainSheet .main-body .main-bg-right{
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+}
+
+
+.mainSheet .main-body .main-bg-right .main-content{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: 20rem 15rem auto;
+    background: var(--color-backgroun-secondary2);
+    overflow-y: auto;
+}
+
+/* ------------  content1   ------------------- */
+
+.mainSheet .main-body .main-bg-right .main-content .content1{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: var(--color-backgroun-main2);
+}
+
+.mainSheet .main-body .main-bg-right .main-content .content1 .box{
+    position: relative;
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+    margin: 10px;
+    background: #ffffffd2;
+    border-radius: var(--border-radius-2);
+    font-family:'Noto Sans Thai',sans-serif;
+}
+
+.mainSheet .main-body .main-bg-right .main-content .content1 .box .profile{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: 9rem auto;
+}
+
+.mainSheet .main-bg-right .main-content .content1 .box .profile .header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+    width: 100%;
+    border-bottom: 2px solid #DADDFA;
+    /* background-color: #868686; */
+}
+
+.mainSheet .main-bg-right .main-content .content1 .box .profile .header .img-profile{
+    width: 90px;
+    height: 90px;
+    margin-bottom: -10px;
+}
+
+.mainSheet .main-bg-right .main-content .content1 .box .profile .header .img-profile img{
+    width: 100%;
+    height: 100%;
+    border-bottom: 2px solid #DADDFA;
+    object-fit: cover;
+    border-radius: var(--border-radius-3);
+}
+
+.mainSheet .main-bg-right .main-content .content1 .box .profile .header h2{
+    font-size: 1.3rem;
+    color: var(--color-font1);
+}
+
+.mainSheet .main-bg-right .main-content .content1 .box .profile .info{
+    background-color: #ffffff7d;
+    text-align: center;
+    font-size: 0.9rem;
+    border-radius: var(--border-radius-2);
+}
+
+.mainSheet .main-bg-right .main-content .content1 .box .profile .info p {
+    color: var(--color-font4);
+}
+
+.mainSheet .main-bg-right .main-content .content1 .box .profile .info p strong{
+    color: var(--color-font1);
+}
+
+/* ------------  content2   ------------------- */
+
+.mainSheet .main-body .main-bg-right .main-content .content2{
+    position: relative;
+    width: calc(100% - 20px);
+    height: calc(100% - 13px);
+    margin: 10px;
+    background: var(--color-backgroun-secondary1);
+    border-radius: var(--border-radius-2);
+}
+
+/* ------------  content3   ------------------- */
+
+.mainSheet .main-body .main-bg-right .main-content .content3{
+    position: relative;
+    width: calc(100% - 20px);
+    height: calc(100% - 30px);
+    margin: 10px;
+    border-radius: var(--border-radius-2);
+}
+
+
+
+
+/* ------------  sheetDetail   ------------------- */
+
+.sheetDetail{
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    max-height: 100vh;
+    box-sizing: border-box;
+    font-family: 'Noto Sans Thai', sans-serif;
+}
+
+.sheetDetail .befor-main{
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+.sheetDetail .main-body{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 3.2rem auto 25rem;
+    gap: 1.5rem;
+    background-color: var(--color-backgroun-secondary4);
+}
+
+.sheetDetail .main-body .sidebar {
+    width: 100%;
+    height: 100%;
+    background: var(--color-backgroun-main1);
+    z-index: 1;
+}
+
+/* ------------  main-background   ------------------- */
+
+.sheetDetail .main-body .main-background{
+    width: 100%;
+    height: 99vh;
+    background-color: var(--color-backgroun-secondary4);
+}
+
+.sheetDetail .main-body .main-background header{
+    width: calc(100% -20px);
+    height: 100px;
+    display: block;
+    align-items: center;
+}
+
+.sheetDetail .main-body .main-background header .on{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sheetDetail .main-body .main-background header .lower{
+    margin-top: -30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.sheetDetail .main-body .main-background header .lower .typebook{
+    font-size: 1rem;
+}
+
+.sheetDetail .main-body .main-background header .lower .emo{
+    display: flex;
+    gap: 20px;
+}
+
+.sheetDetail .main-body .main-background .main-content{
+    position: relative;
+    margin-top: 20px;
+    width: 100%;
+    height: calc(100% - 50px); /* ลบความสูงของ header */
+    margin-inline: auto;
+    background: var(--color-backgroun-secondary2);
+    border-radius: var(--border-radius-3);
+    overflow-y: auto;
+}
+
+.sheetDetail .main-body .main-background .main-content .content1{
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+    margin: 10px;
+}
+
+.sheetDetail .content-display {
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+    color: #5E7BD0;
+    padding: 10px;
+    border-radius: var(--border-radius-2);
+    background-color: var(--color-backgroun-secondary4);
+}
+
+.sheetDetail .day-content {
+    margin-left: 10px;
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+}
+
+.sheetDetail .day-content .content{
+    display: grid;
+    grid-template-rows: 6rem auto;
+    width: 100%;
+    height: 100%;
+}
+
+.sheetDetail .day-content .content .head .lowerInput .mainTitle {
+    margin-top: -5px;
+    padding-left: 10px;
+    width: 99%;
+    height: 45px;
+    font-size: 1.2rem;
+    color: var(--color-font1);
+    border-radius: var(--border-radius-1);
+    background-color: var(--color-backgroun-secondary2);
+    font-family: 'Noto Sans Thai', sans-serif;
+    display: flex;
+    align-items: center;
+}
+
+.sheetDetail .thought, .behavior, .bodily, .emotion {
+    padding-top: 10px;
+    margin: 10px;
+    height: 400px;
+    overflow-y: auto;
+    font-size: 1rem;
+    text-align: center;
+    color: var(--color-font1);
+}
+
+.sheetDetail .no-content {
+    margin: 80px;
+    width: calc(100% -20px);
+    height: 72vh;
+}
+
+.sheetDetail .day-content .lower-content{
+    margin: 30px 20px 0 0px;
+    width: 100%;
+    height: 95%;
+    border-radius: var(--border-radius-1);
+    background-color: var(--color-backgroun-secondary3);
+}
+
+.sheetDetail .day-content .lower-content .bg-Content{
+    margin: 20px 20px 0 20px;
+    width: calc(100% -20px);
+    height: 91%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.sheetDetail .day-content .lower-content .bg-Content .content-box {
+    flex: 1 1 calc(50% - 10px);
+    margin-top: 10px;
+    min-width: 150px;
+    height: 99%;
+    padding: 10px;
+    border-radius: var(--border-radius-1);
+}
+
+.sheetDetail .day-content .lower-content .bg-Content .content-box:nth-child(1) {
+    background-color: var(--color-secondary1);
+}
+
+.sheetDetail .day-content .lower-content .bg-Content .content-box:nth-child(2) {
+    background-color: var(--color-secondary2);
+}
+
+.sheetDetail .day-content .lower-content .bg-Content .content-box:nth-child(3) {
+    background-color: var(--color-secondary3);
+}
+
+.sheetDetail .day-content .lower-content .bg-Content .content-box:nth-child(4) {
+    background-color: var(--color-secondary1);
+}
+
+.sheetDetail .day-content .lower-content .bg-Content .content-box h3 {
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--color-font1);
+}
+
+.sheetDetail .day-content .lower-content .bg-Content .content-box .bg-input{
+    margin-left: 5px;
+    width: 95%;
+    height: 85%;
+    border-radius: var(--border-radius-1);
+    background-color: var(--color-backgroun-secondary2);
+}
+
+.sheetDetail .day-content .lower-content .bg-Content .content-box .bg-input .content-input {
+    margin-top: 10px;
+    width: 100%;
+    height: 84%;
+    font-size: 1.1rem;
+    text-align: center;
+    border: none;
+    resize: none;
+    outline: none; 
+    color: var(--color-font1);
+    background: transparent;
+    font-family: 'Noto Sans Thai', sans-serif;
+}
+
+.sheetDetail .day-content .lower-content .bg-Content .content-box .bg-input .feeling-input {
+    margin-left: 13px;
+    width: 90%;
+    height: 40px;
+    color: var(--color-font1);
+    font-family: 'Noto Sans Thai', sans-serif;
+}
+
+.sheetDetail .day-content  .ant-select-show-search:where(.css-dev-only-do-not-override-1uq9j6g).ant-select:not(.ant-select-customize-input) .ant-select-selector {
+    cursor: text;
+    text-align: center;
+    border: none;
+    background-color: var(--color-backgroun-secondary4);
+    overflow-x: auto; /* เพิ่มแถบเลื่อนในแนวนอน */
+    display: flex;
+    flex-wrap: nowrap; /* ทำให้รายการอยู่ในบรรทัดเดียว */
+    align-items: center;
+    white-space: nowrap; /* ป้องกันการห่อข้อความ */
+}
+
+
+
+
+/* ------------  main-bg-right   ------------------- */
+
+.sheetDetail .main-body .main-bg-right{
+    width: 100%;
+    height: 100%;
+}
+
+
+.sheetDetail .main-body .main-bg-right .main-content{
+    position: relative;
+    margin-top: 20px;
+    width: 100%;
+    height: 93.3vh;
+    /* display: grid;
+    grid-template-rows: 10rem auto; */
+    gap: 10px;
+}
+
+/* ------------  content1   ------------------- */
+
+.sheetDetail .main-body .main-bg-right .main-content .content1{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: 10rem auto;
+    border-radius: var(--border-radius-3);
+    background-color: var(--color-backgroun-secondary3);
+}
+
+.sheetDetail .main-body .main-bg-right .main-content .content1 .box1{
+    width: calc(45% - 20px);
+    height: calc(100% - 20px);
+    margin: 0 10px 10px 10px;
+    /* background: #ffffffd2; */
+    border-radius: var(--border-radius-2);
+    font-family:'Noto Sans Thai',sans-serif;
+}
+
+.sheetDetail .shoedate{
+    width: 100%;
+    min-height: 35px;
+    margin-left: 20px;
+    margin-bottom: 5px;
+    /* background-color: #DADDFA; */
+}
+
+.sheetDetail .shoedate p{
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-font1);
+}
+
+.sheetDetail .date-range {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 20px;
+    gap: 20px;
+    width: 100%;
+    overflow-x: auto;
+    padding: 5px 0;
+}
+
+
+.sheetDetail .day {
+    flex: 0 0 auto;
+    padding: 10px;
+    width: 30px;
+    font-size: .8rem;
+    font-weight: 600;
+    text-align: center;
+    color: var(--color-font1);
+    border-radius: var(--border-radius-1);
+    background: var(--color-backgroun-secondary2);
+    box-shadow: rgba(14, 63, 126, 0.04) 0px 0px 0px 1px, rgba(42, 51, 69, 0.04) 0px 1px 1px -0.5px, rgba(42, 51, 70, 0.04) 0px 3px 3px -1.5px, rgba(42, 51, 70, 0.04) 0px 6px 6px -3px, rgba(14, 63, 126, 0.04) 0px 12px 12px -6px, rgba(14, 63, 126, 0.04) 0px 24px 24px -12px;    
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+
+.sheetDetail .day.selected {
+    background-color: var(--color-backgroun-main2);
+}
+
+
+/* ------------  box2   ------------------- */
+
+.sheetDetail .main-body .main-bg-right .main-content .content1 .box2{
+    margin: -10px 15px;
+    width: calc(49% - 20px);
+    height: 74vh;
+    /* background: #ffffffd2; */
+    border-radius: var(--border-radius-2);
+    font-family:'Noto Sans Thai',sans-serif;
+    background: var(--color-backgroun-secondary4);
+}
+
+.sheetDetail .main-body .main-bg-right .main-content .content1 .box2 .contentComment{
+    margin: 0 10px;
+    height: 94%;
+    overflow-y: auto;
+}
+
+.sheetDetail .contentComment h3{
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-font1);
+    padding-left: 10px;
+}
+
+.sheetDetail .day-comments {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 100%;
+}
+
+.sheetDetail .comment-box {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    right: 16%;
+    border-radius: 15px;
+    padding: 15px;
+    max-width: 70%;
+    margin-bottom: 20px;
+    background-color: #ffffff;
+    box-shadow: rgba(92, 63, 130, 0.1) 0px 10px 50px;
+}
+
+.sheetDetail .comment-box::after {
+    content: "";
+    position: absolute;
+    bottom: 10px;
+    right: -6.5%;
+    border-width: 10px;
+    border-style: solid;
+    border-color: transparent transparent transparent #ffffff;
+}
+
+.sheetDetail .comment-content {
+    color: var(--color-font1);
+    width: 100%;
+}
+
+.sheetDetail .comment-user {
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.sheetDetail .comment-date {
+    font-size: .8rem;
+    color: var(--color-font4);
+}
+
+.sheetDetail .comment-text {
+    font-size: .9rem;
+    line-height: 1.5;
+}
+
+.sheetDetail .comment-avatar {
+    position: absolute;
+    right: -50px;
+    bottom: -5px;
+}
+
+.sheetDetail .comment-avatar img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+}

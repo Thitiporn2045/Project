@@ -16,6 +16,11 @@ import LoginPsychologist from './page/login/LoginPsychologist';
 import RegisterPsychologist from './page/login/RegisterPsychologist';
 import HomePage from './page/login/HomePage';
 import Admin from './page/admin/Admin'
+import MainSheet from './page/patient/worksheet/totalSheet/mainSheet';
+import SheetDetail from './page/patient/worksheet/totalSheet/sheetDetail';
+import Planning from './page/patient/worksheet/cbt/planning';
+import CrossSectional from './page/patient/worksheet/cbt/crossSectional';
+
 export default function App() {
 
   return (
@@ -38,6 +43,10 @@ export default function App() {
         <Route path="/Worksheets" element={<Worksheets />} />
         <Route path="/Summary" element={<Summary />} />
         <Route path="/Profile" element={<Profile />} />
+        <Route path='/MainSheet' element={<MainSheet/>} />
+        <Route path='/SheetDetail' element={<SheetDetail/>} />
+        <Route path='/Planning' element={<Planning/>} />
+        <Route path='/CrossSectional' element={<CrossSectional/>} />
       </Routes>
     </BrowserRouter>
   );

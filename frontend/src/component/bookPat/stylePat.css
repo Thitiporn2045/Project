@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&display=swap');
+:root{
+    --color-backgroun-main1: #9BA5F6;
+    --color-backgroun-main2: #BABDF6;
+    --color-backgroun-secondary1: #EEEEF8;
+    --color-backgroun-secondary2: #FFFFFF;
+    --color-backgroun-secondary3: #FCFCFF;
+    --color-backgroun-secondary4: #F3F3FE;
+
+    --color-secondary1: #C1C4F8;
+    --color-secondary2: #EAD7F8;
+    --color-secondary3: #EFCDF3;
+
+    --color-popup-main: #F3F3FE;
+    --color-popup-secondary: #EEEEF8;
+
+    --color-buttoon-secondary: #E3E3E3;
+
+    --color-font1: #333f60;
+    --color-font2: #CCCCE3;
+    --color-font3: #585858;
+    --color-font4: #868686;
+
+    --color-hover: rgba(255, 255, 255, .2)
+    --color-light: rgba(132, 139, 200, 0.18);
+
+    --card-border-radius: 2rem;
+    --border-radius-1: 0.4rem;
+    --border-radius-2: 0.8rem;
+    --border-radius-3: 1.2rem;
+    --card-padding: 1.8rem;
+    --padding-1: 1.2rem;
+    --box-shadow: 0 2rem 3rem var(--color-light)
+}
+
+.bookPat {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-around;
+}
+
+.bookPat .book-item {
+    width: calc(20% - 30px); /* ปรับขนาดให้พอดีกับ 4 คอลัมน์ รวมถึง margin */
+    height: 33vh;    
+    margin:  0 15px;
+    padding: 10px;
+    border-radius: var(--border-radius-2);
+    text-align: center;
+    background: var(--color-backgroun-secondary2);
+    transition: transform 0.3s ease;
+}
+
+.bookPat .book-item:hover {
+    transform: translateY(-8px);
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 18px 30px -10px;
+}
+
+.bookPat .book-item .img-book {
+    width: 100%;
+    height: 70%; /* กำหนดความสูงที่แน่นอน */
+    margin-bottom: 10px;
+    overflow: hidden; /* ป้องกันรูปภาพล้นออกนอก div */
+}
+
+.bookPat .book-item .img-book img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.bookPat .book-item .head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+    width: 100%;
+    height: 30px;
+    margin-bottom: 5px;
+}
+
+.bookPat .book-item .head h3 {
+    font-size: 1.2rem;
+    color: var(--color-font1);
+}
+
+.bookPat .book-item .head .btn-edit {
+    width: 20%;
+    height: 100%;
+    border: none;
+    border-radius: 50%;
+    font-size: 1rem;
+    text-align: center;
+    color: var(--color-backgroun-secondary2);
+    background: var(--color-backgroun-main1);
+}
+
+.bookPat .book-item .head .btn-edit:hover{
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 20px -2px, rgba(0, 0, 0, 0.3) 0px 3px 8px -3px;
+    transform: scale(1.05);
+    transition: .5s;
+}
+
+.bookPat .book-item .content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+    width: 100%;
+    height: 30px;
+    margin-bottom: 5px;
+}
+
+.bookPat .book-item p {
+    font-size: 0.9rem;
+    color: var(--color-font1);
+    margin: 5px 0;
+}

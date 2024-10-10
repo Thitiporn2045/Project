@@ -1,70 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&display=swap');
-:root{
-    --color-backgroun-main1: #9BA5F6;
-    --color-backgroun-main2: #BABDF6;
-    --color-backgroun-secondary1: #EEEEF8;
-    --color-backgroun-secondary2: #FFFFFF;
-    --color-backgroun-secondary3: #FCFCFF;
-    --color-backgroun-secondary4: #F3F3FE;
-
-    --color-secondary1: #C1C4F8;
-    --color-secondary2: #EAD7F8;
-    --color-secondary3: #EFCDF3;
-
-    --color-popup-main: #F3F3FE;
-    --color-popup-secondary: #EEEEF8;
-
-    --color-buttoon-secondary: #E3E3E3;
-
-    --color-font1: #17374E;
-    --color-font2: #CCCCE3;
-    --color-font3: #585858;
-    --color-font4: #868686;
-
-    --color-hover: rgba(255, 255, 255, .2)
-    --color-light: rgba(132, 139, 200, 0.18);
-
-    --card-border-radius: 2rem;
-    --border-radius-1: 0.4rem;
-    --border-radius-2: 0.8rem;
-    --border-radius-3: 1.2rem;
-    --card-padding: 1.8rem;
-    --padding-1: 1.2rem;
-    --box-shadow: 0 2rem 3rem var(--color-light)
-}
-
-h1{
-    color: var(--color-font1);
-    font-weight: 700;
-    font-size: 1.8rem;
-}
-h2{
-    color: var(--color-font1);
-    font-size: 1.4rem;
-}
-h3{
-    color: var(--color-font1);
-    font-size: 0.87rem;
-}
-h4{
-    color: var(--color-font1);
-    font-size: 0.8rem;
-}
-h5{
-    color: var(--color-font1);
-    font-size: 0.77rem;
-}
-small{
-    color: var(--color-font1);
-    font-size: 0.75rem;
-}
-
 .Pat{
     margin: 0;
     padding: 0;
     width: 100vw;
-    height: 100vh;
+    max-height: 100vh;
     box-sizing: border-box;
     font-family: "Poppins", sans-serif;
 }
@@ -80,8 +18,8 @@ small{
     width: 100%;
     height: 100%;
     display: grid;
-    grid-template-columns: 3.2rem auto 14rem;
-    gap: 1rem;
+    grid-template-columns: 3.2rem auto 15rem;
+    gap: 1.5rem;
     background: var(--color-backgroun-secondary1);
 }
 
@@ -106,6 +44,8 @@ small{
     width: 100%;
     height: 50px;
     background: var(--color-backgroun-secondary1);
+    font-family: "Poppins", sans-serif;
+    font-family:'Noto Sans Thai',sans-serif;
 }
 
 .Pat .main-body .main-background header h1{
@@ -166,13 +106,65 @@ small{
     height: 100%;
 }
 
+.Pat .main-body .main-background header .search-bar .warm .content{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .Pat .main-body .main-background header .search-bar .warm .bg-warm{
+    position: relative;
     margin: 5px;
     width: calc(100px -10px);
     height: 78%;
     border-radius: var(--border-radius-2);
     background: var(--color-backgroun-secondary2);
 }
+
+.Pat .main-body .main-background header .search-bar .warm .bg-warm i{
+    margin-top: 7px;
+    font-size: 1.4rem;
+    color: #5E7BD0;
+}
+
+.Pat .main-body .main-background header .search-bar .warm .bg-warm .num{
+    position: absolute;
+    top: 3px;
+    right: 7px;
+    width: 14px;
+    height: 14px;
+    font-size: 0.7rem;
+    border-radius: 50%;
+    color: var(--color-backgroun-secondary2);
+    background: var(--color-font1);
+}
+
+/* .Pat .main-body .main-background header .search-bar .warm .bg-warm .box{
+    width: 200px;
+    height: 250px;
+    background: var(--color-backgroun-secondary2);
+    position: absolute;
+    border-radius: var(--border-radius-2);
+    top: 50px;
+    left: -170px;
+    z-index: 100;
+}
+
+.Pat .main-body .main-background header .search-bar .warm .bg-warm .box .heading{
+    margin-top: 0.2rem auto;
+    color: var(--color-backgroun-secondary2);
+    background: #9BA5F6;
+    width: 100%;
+    height: 30px;
+    border-radius: var(--border-radius-2);
+}
+
+.Pat .main-body .main-background header .search-bar .warm .bg-warm .box .content-box{
+    margin-top: 0.4rem auto 0 auto;
+    width: 85%;
+    height: 190px;
+    overflow-x: auto;
+} */
 
 .Pat .main-body .main-background header .search-bar .searchIcon {
     display: flex;
@@ -233,10 +225,16 @@ small{
     justify-content: center;
     padding: 6px 30px;
     color: var(--color-backgroun-secondary2);
-    background: #9BA5F6;
+    background: var(--color-backgroun-main1);
     font-weight: 600;
     border: none;
     border-radius: var(--border-radius-1);
+}
+
+.Pat .main-body .main-background .main-content .content2 .header .btn-add-co2:hover{
+    background: var(--color-secondary1);
+    transform: scale(1.05);
+    transition: .5s;
 }
 
 .Pat .main-body .main-background .main-content .content2 .note-board{
@@ -250,8 +248,9 @@ small{
 
 .Pat .main-body .main-background .main-content .content2 .note-board .content{
     position: relative;
-    width: 100%;
+    width: calc(100% -10px);
     height: 100%;
+    margin:  0 10px;
 }
 
 /* ------------  content3   ------------------- */
@@ -272,23 +271,29 @@ small{
     height: 40px;
 }
 
-.Pat .main-body .main-background .main-content .content3 .header .btn-add-co2{
+.Pat .main-body .main-background .main-content .content3 .header .btn-add-co3{
     top: 0;
     display: flex;
     justify-content: center;
-    padding: 6px 30px;
+    padding: 3px 20px;
     color: var(--color-backgroun-secondary2);
-    background: #9BA5F6;
+    background: var(--color-backgroun-main1);
     font-weight: 600;
     border: none;
+    text-decoration: none;
     border-radius: var(--border-radius-1);
+}
+
+.Pat .main-body .main-background .main-content .content3 .header .btn-add-co3:hover{
+    background: var(--color-secondary1);
+    transform: scale(1.05);
+    transition: .5s;
 }
 
 .Pat .main-body .main-background .main-content .content3 .book-boar .content{
     position: relative;
     width: 100%;
     height: 100%;
-    background: #17374E;
 }
 
 /* ------------  main-bg-right   ------------------- */
@@ -305,10 +310,12 @@ small{
     width: 100%;
     height: 100%;
     display: grid;
-    grid-template-rows: auto auto auto;
+    grid-template-rows: 20rem 15rem auto;
     background: var(--color-backgroun-secondary2);
     overflow-y: auto;
 }
+
+/* ------------  content1   ------------------- */
 
 .Pat .main-body .main-bg-right .main-content .content1{
     position: relative;
@@ -319,12 +326,67 @@ small{
 
 .Pat .main-body .main-bg-right .main-content .content1 .box{
     position: relative;
-    margin: 10px;
     width: calc(100% - 20px);
     height: calc(100% - 20px);
-    background: var(--color-backgroun-secondary1);
+    margin: 10px;
+    background: #ffffffd2;
+    border-radius: var(--border-radius-2);
+    font-family:'Noto Sans Thai',sans-serif;
+}
+
+.Pat .main-body .main-bg-right .main-content .content1 .box .profile{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: 9rem auto;
+}
+
+.Pat .main-bg-right .main-content .content1 .box .profile .header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+    width: 100%;
+    border-bottom: 2px solid #DADDFA;
+    /* background-color: #868686; */
+}
+
+.Pat .main-bg-right .main-content .content1 .box .profile .header .img-profile{
+    width: 90px;
+    height: 90px;
+    margin-bottom: -10px;
+}
+
+.Pat .main-bg-right .main-content .content1 .box .profile .header .img-profile img{
+    width: 100%;
+    height: 100%;
+    border-bottom: 2px solid #DADDFA;
+    object-fit: cover;
+    border-radius: var(--border-radius-3);
+}
+
+.Pat .main-bg-right .main-content .content1 .box .profile .header h2{
+    font-size: 1.3rem;
+    color: var(--color-font1);
+}
+
+.Pat .main-bg-right .main-content .content1 .box .profile .info{
+    background-color: #ffffff7d;
+    text-align: center;
+    font-size: 0.9rem;
     border-radius: var(--border-radius-2);
 }
+
+.Pat .main-bg-right .main-content .content1 .box .profile .info p {
+    color: var(--color-font4);
+}
+
+.Pat .main-bg-right .main-content .content1 .box .profile .info p strong{
+    color: var(--color-font1);
+}
+
+/* ------------  content2   ------------------- */
 
 .Pat .main-body .main-bg-right .main-content .content2{
     position: relative;
@@ -335,16 +397,15 @@ small{
     border-radius: var(--border-radius-2);
 }
 
+/* ------------  content3   ------------------- */
+
 .Pat .main-body .main-bg-right .main-content .content3{
     position: relative;
     width: calc(100% - 20px);
     height: calc(100% - 30px);
     margin: 10px;
-    background: var(--color-backgroun-secondary1);
     border-radius: var(--border-radius-2);
 }
-
-
 
 /* ------------  blur   ------------------- */
 
@@ -516,7 +577,7 @@ small{
 
 #popupNote .buttons .btn-cancel:hover{
     background: var(--color-backgroun-secondary3);
-    color: var(--color-buttoon-secondary);
+    color: #bebebe;
     text-shadow: 0 0 10px var(--color-backgroun-main2), 0 0 40px var(--color-backgroun-main2), 0 0 80px var(--color-backgroun-main2);
     transition: .5s;
 }
@@ -528,8 +589,9 @@ small{
 }
 
 #popupNote .buttons .btn-create:hover{
-    transform: scale(1.2);
-    background: var(--color-backgroun-main2);
+    background: var(--color-secondary1);
+    transform: scale(1.05);
+    transition: .5s;
     color: var(--color-backgroun-secondary2);
     text-shadow: 0 0 10px var(--color-backgroun-main2), 0 0 40px var(--color-backgroun-main2), 0 0 80px var(--color-backgroun-main2);
     transition: .5s;
