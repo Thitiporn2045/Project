@@ -30,7 +30,7 @@ func CreatePsychologist(c *gin.Context){
 		Picture: psychologist.Picture,
 		WorkingNumber: psychologist.WorkingNumber,
 		CertificateFile: psychologist.CertificateFile,
-		IsApproved: false,
+		IsApproved: psychologist.IsApproved,
 	}
 
 	a.Password = string(hashPassword)

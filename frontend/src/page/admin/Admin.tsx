@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Button, message } from 'antd';
+import { Modal, Button, message, ConfigProvider } from 'antd';
 import { PsychologistInterface } from '../../interfaces/psychologist/IPsychologist';
 import { ListPsychologists, UpdatePsychologist, DeletePsychologistByID } from '../../services/https/psychologist/psy';
+import thTH from 'antd/lib/locale/th_TH';
 import './admin.css';
 
 function Admin() {
@@ -72,26 +73,29 @@ const showModalDel = (val: PsychologistInterface) => {
 
    let  res = await DeletePsychologistByID(Number(deleteId));
    if (res.status) {
-      messageApi.open({
-        type: "success",
-        content: "ลบข้อมูลสำเร็จ",
-      });
+      message.success("อัปเดทการอนุมัติแล้ว!");
       setOpen(false);
-      ListPsychologists();
+      
     } else {
-      messageApi.open({
-        type: "error",
-        content: "เกิดข้อผิดพลาด",
-      });
+      message.error(res.message || "เกิดข้อผิดพลาด");
     }
     setConfirmLoading(false);
+    ListPsychologists();
   }
   const handleCancelDel = () => {
     setOpen(false);
   };
 
   return (
-    
+    <ConfigProvider
+      locale={thTH}
+      theme={{
+          token: {
+              colorText: '#585858',
+              fontFamily: 'Noto Sans Thai, sans-serif',
+          }
+      }}
+  >
     <div className='Admin' style={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center'}}>
       {contextHolder}
       <div><h2>Psychologist Table</h2></div>
@@ -159,30 +163,31 @@ const showModalDel = (val: PsychologistInterface) => {
         </tbody>
       </table>
 
-        <Modal
-            visible={isModalVisible}
-            onCancel={handleCancel}
-            footer={null}
-            style={{top:0,paddingTop:20,paddingBottom:0}} 
-            width="50%" // ตั้งกว้างเต็ม
-            height="100%" // ตั้งสูงเต็ม
-        >
-            <iframe
-                src={`${selectedCertificate}`}
-                width="100%"
-                height="640px"
-                style={{marginTop:25,border:'none',borderRadius:'10px'}}
-            />
-        </Modal>
-        <Modal
-            title="ลบข้อมูล ?"
-            visible={open}
-            onOk={handleOk}
-            onCancel={handleCancelDel}
+      <Modal
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        footer={null}
+        style={{top:0,paddingTop:20,paddingBottom:0}} 
+        width="50%" // ตั้งกว้างเต็ม
+        height="100%" // ตั้งสูงเต็ม
+      >
+        <iframe
+            src={`${selectedCertificate}`}
+            width="100%"
+            height="640px"
+            style={{marginTop:25,border:'none',borderRadius:'10px'}}
+        />
+      </Modal>
+      <Modal
+        title="ลบข้อมูล ?"
+        visible={open}
+        onOk={handleOk}
+        onCancel={handleCancelDel}
       >
         <p>{modalText}</p>
       </Modal>
     </div>
+    </ConfigProvider>
   );
 
 }

@@ -44,7 +44,7 @@ function PsyPassword() {
       }}
     >
       <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', marginLeft: '6%' }}>
-        <div style={{ width: '30%', height: '70%', background: 'transparent', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ width: '40%', height: '70%', background: 'transparent', display: 'flex', flexDirection: 'column' }}>
           <Form form={form} onFinish={handleSubmit}>
             <div
               className="passwordSetting-container"
