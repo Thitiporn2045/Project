@@ -1,32 +1,46 @@
-import { Button, ConfigProvider, Form, Input, message } from 'antd';
+import { Button, ConfigProvider, Form, Input, message} from 'antd';
 import thTH from 'antd/lib/locale/th_TH';
-import React, { useState } from 'react';
-
-const initialPsychologist = {
-  firstname: 'ศุภชลิตา',
-  lastname: 'พลนงค์',
-  tel: '0812345678',
-  email: 'note.psy@gmail.com',
-  password: 'note1234',
-  profilepic: 'https://via.placeholder.com/150?text=Psy',
-};
+import React, { useEffect, useState } from 'react';
+import { PsychologistInterface } from '../../../interfaces/psychologist/IPsychologist';
+import { GetPsychologistById,UpdatePsychologist,CheckPassword } from '../../../services/https/psychologist/psy';
 
 function PsyPassword() {
-  const [psychologist, setPsychologist] = useState(initialPsychologist);
+  const [psychologist, setPsychologist] = useState<PsychologistInterface>();
+  const psyID = localStorage.getItem('psychologistID') 
   const [form] = Form.useForm();
 
-  const handleSubmit = ({ oldPassword, newPassword }: { oldPassword: string, newPassword: string }) => {
-    // ตรวจสอบความถูกต้องของรหัสผ่าน
-    if (oldPassword !== psychologist.password) {
-      message.error('รหัสผ่านเดิมไม่ถูกต้อง');
-      return;
+  const getPsychologist = async () =>{
+    let res = await GetPsychologistById(Number(psyID));
+    if(res){
+      setPsychologist(res);
+    }
+    console.log(psychologist?.Password)
+  }
+  useEffect(() => {
+    getPsychologist();
+  }, []);
+  const handleSubmit = async ({ oldPassword, newPassword }: { oldPassword: string, newPassword: string }) => {
+    const checkValues:PsychologistInterface = {
+      ID: Number(psyID),
+      Password: oldPassword
+    }
+    const isPasswordMatch = await CheckPassword(checkValues);
+    if(!isPasswordMatch.status){
+      message.error(isPasswordMatch.message)
+    }
+    else{
+      const updatedPsychologist: PsychologistInterface = { ...psychologist, Password: newPassword };      
+      let res = await UpdatePsychologist(updatedPsychologist);
+      if (res.status) {
+        message.success("เปลี่ยนรหัสผ่านสำเร็จ");
+        setTimeout(() => {
+          window.location.reload(); 
+        }, 2000);
+      } else {
+        message.error(res.message || "เกิดข้อผิดพลาด");
+      }
     }
 
-    // อัปเดตรหัสผ่านในข้อมูลผู้ใช้
-    setPsychologist({ ...psychologist, password: newPassword });
-
-    // แจ้งเตือนการบันทึกสำเร็จ
-    message.success('รหัสผ่านถูกเปลี่ยนเรียบร้อยแล้ว');
   };
 
   return (

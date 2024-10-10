@@ -1,7 +1,8 @@
 package controller
 
-import(
+import (
 	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/n6teen/Project-Thesis/entity"
 	"golang.org/x/crypto/bcrypt"
@@ -77,6 +78,26 @@ func DeletePsychologist(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": id})	
 }
 
+func CheckOldPassword(c *gin.Context){
+	var psychologist entity.Psychologist
+	var result entity.Psychologist
+
+	if err := c.ShouldBindJSON(&psychologist); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if tx := entity.DB().Where("id = ?", psychologist.ID).First(&result); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "psychologist not found"})
+		return
+	}
+	
+	err := bcrypt.CompareHashAndPassword([]byte(result.Password), []byte(psychologist.Password))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "รหัสผ่านเดิมไม่ถูกต้อง"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"data": psychologist})
+}
 
 func UpdatePsychologist(c *gin.Context) {
 
@@ -91,6 +112,14 @@ func UpdatePsychologist(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "psychologist not found"})
 		return
 	}
+	if psychologist.Password != "" {
+        hashedPassword, err := bcrypt.GenerateFromPassword([]byte(psychologist.Password), bcrypt.DefaultCost)
+        if err != nil {
+            c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to hash password"})
+            return
+        }
+        psychologist.Password = string(hashedPassword)
+    }
 	if err := entity.DB().Save(&psychologist).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

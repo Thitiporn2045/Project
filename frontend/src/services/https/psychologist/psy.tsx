@@ -100,9 +100,31 @@ async function DeletePsychologistByID(id: number) {
     return res;
 }
 
+async function CheckPassword(data: PsychologistInterface) {
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  };
+
+  let res = await fetch(`${apiUrl}/checkPassword`, requestOptions)
+    .then((response) => response.json())
+    .then((res) => {
+      if (res.data) {
+        return { status: true, message: res.data };
+      } else {
+        return { status: false, message: res.error };
+      }
+    });
+
+  return res;
+}
+
 export{
     ListPsychologists,
     GetPsychologistById,
     CreatePsychologist,
     UpdatePsychologist,
-    DeletePsychologistByID}
+    DeletePsychologistByID,
+    CheckPassword,
+  }

@@ -70,8 +70,9 @@ function PsyProfile() {
         type: "success",
         content: "แก้ไขข้อมูลสำเร็จ",
       });
-      console.log(psychologist?.Picture)
-      
+      setTimeout(() => {
+        window.location.reload(); 
+      }, 2000);
     } else {
       messageApi.open({
         type: "error",

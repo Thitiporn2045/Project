@@ -35,6 +35,7 @@ func main() {
 			r.GET("/psychologist/:id", controller.GetPsychologist)
 			r.PATCH("/psychologists", controller.UpdatePsychologist)
 			r.DELETE("/psychologist/:id", controller.DeletePsychologist)
+			r.POST("/checkPassword",controller.CheckOldPassword)
 
 		}
 	}
