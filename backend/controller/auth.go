@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -93,7 +92,6 @@ func LoginPsychologist(c *gin.Context){
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "บัญชีของคุณยังไม่ได้รับการอนุมัติจากแอดมิน โปรดรอการตรวจสอบ"})
 		return
 	}
-	fmt.Printf("login password ",payload.Password)
 
 	// Check password
 	err := bcrypt.CompareHashAndPassword([]byte(psychologist.Password), []byte(payload.Password))

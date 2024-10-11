@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -17,7 +16,6 @@ func CreatePsychologist(c *gin.Context){
 	
 		return
 	}
-	fmt.Printf("Create Password: ",psychologist.Password)
 	hashPassword, err := bcrypt.GenerateFromPassword([]byte(psychologist.Password), bcrypt.DefaultCost)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "error hash password"})
