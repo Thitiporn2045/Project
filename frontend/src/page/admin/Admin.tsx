@@ -52,7 +52,7 @@ function Admin() {
     const res = await UpdatePsychologist(updatedPsychologist);
 
     if (res.status) {
-      message.success("อัปเดทการอนุมัติแล้ว!");
+      message.success("อัปเดตการอนุมัติแล้ว!");
       listPsychologists(); 
     } else {
       message.error(`เกิดข้อผิดพลาด: ${res.message}`);
@@ -73,7 +73,7 @@ const showModalDel = (val: PsychologistInterface) => {
 
    let  res = await DeletePsychologistByID(Number(deleteId));
    if (res.status) {
-      message.success("อัปเดทการอนุมัติแล้ว!");
+      message.success("ลบบัญชีผู้ใช้แล้ว!");
       setOpen(false);
       
     } else {
