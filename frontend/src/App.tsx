@@ -20,6 +20,7 @@ import MainSheet from './page/patient/worksheet/totalSheet/mainSheet';
 import SheetDetail from './page/patient/worksheet/totalSheet/sheetDetail';
 import Planning from './page/patient/worksheet/cbt/planning';
 import CrossSectional from './page/patient/worksheet/cbt/crossSectional';
+import Activity from './page/patient/worksheet/cbt/activity';
 
 export default function App() {
 
@@ -47,6 +48,7 @@ export default function App() {
         <Route path='/SheetDetail' element={<SheetDetail/>} />
         <Route path='/Planning' element={<Planning/>} />
         <Route path='/CrossSectional' element={<CrossSectional/>} />
+        <Route path='/Activity' element={<Activity/>} />
       </Routes>
     </BrowserRouter>
   );

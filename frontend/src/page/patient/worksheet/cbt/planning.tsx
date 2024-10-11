@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import NavbarPat from '../../../../component/navbarPat/navbarPat';
-import { Calendar, Badge, Modal, Form, Select, List, Input } from 'antd';
+import { Calendar, Badge, Modal, Form, Select, List, Input, ConfigProvider, Dropdown, Button, Menu, Timeline } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import { FaUnlockAlt } from "react-icons/fa";
 import { SelectProps } from 'antd';
+import { AiOutlineMore } from 'react-icons/ai';
 
 interface Event {
   date: string;
@@ -21,12 +22,14 @@ const Planning: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
   const [events, setEvents] = useState<Event[]>([]);
   const [form] = Form.useForm();
+  const [editingEvent, setEditingEvent] = useState<Event | null>(null); // Track the event being edited
+
 
   const options: SelectProps['options'] = [
-    { value: 'green', label: '🙂 Happy' },
-    { value: 'red', label: '😡 Angry' },
-    { value: 'yellow', label: '😕 Confused' },
-    { value: 'purple', label: '😢 Sad' },
+    { value: '#A8E6CE', emotion: '🙂', label: 'Happy' },
+    { value: '#FF91AE',emotion: '😡', label: 'Angry' },
+    { value: '#F4ED7F',emotion: '😕', label: 'Confused' },
+    { value: '#B78FCB',emotion: '😢 ', label: 'Sad' },
   ];
 
   const startDay = dayjs(Books[0].startDay, 'YYYY-MM-DD');
@@ -68,15 +71,26 @@ const Planning: React.FC = () => {
     const dayEvents = events.filter(event => event.date === date.format('YYYY-MM-DD'));
     return (
       <ul className="events">
-        {dayEvents.map((event, index) => (
-          <li key={index}>
-            <Badge color={event.emotion} text={options.find(opt => opt.value === event.emotion)?.label} />
-          </li>
-        ))}
+        {dayEvents.map((event, index) => {
+          const option = options.find(opt => opt.value === event.emotion);
+          return (
+            <li key={index}>
+              <Badge 
+                color={getColor(option?.emotion ?? '')} // Use the correct emotion to get color
+                text={`${option?.label} ${option?.emotion}`}
+              />
+            </li>
+          );
+        })}
       </ul>
     );
   };
-
+  
+  const getColor = (emotion: any): any => {
+    const option = options.find(opt => opt.emotion === emotion);
+    return option ? option.value : ''; // Ensure it returns a string
+  };
+  
   const groupedEvents = events.reduce((acc, event) => {
     const hour = parseInt(event.time.split(':')[0], 10);
     const timeSlot = hour < 12 ? 'Morning' : hour < 18 ? 'Afternoon' : 'Evening';
@@ -87,106 +101,175 @@ const Planning: React.FC = () => {
     return acc;
   }, {} as Record<string, Event[]>);
 
+  const handleEditEvent = (event: Event) => {
+    setEditingEvent(event);
+    form.setFieldsValue({
+      emotion: event.emotion,
+      description: event.description,
+    });
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteEvent = (event: Event) => {
+    setEvents(events.filter(e => e.date !== event.date || e.time !== event.time));
+  };
+
+  const menu = (event: Event) => (
+    <Menu>
+      <Menu.Item onClick={() => handleEditEvent(event)}>Edit</Menu.Item>
+      <Menu.Item onClick={() => handleDeleteEvent(event)} style={{ color: 'red' }}>Delete</Menu.Item>
+    </Menu>
+  );
+
   return (
-    <div className='planning'>
-      <div className="befor-main">
-        <div className='main-body'>
-          <div className='sidebar'>
-            <NavbarPat />
-          </div>
-          <div className="main-background">
-            <div style={{ display: 'flex', gap: '20px' }}>
-              <div style={{ width: '70%' }}>
-              <Calendar 
-                dateCellRender={dateCellRender}
-                onSelect={openModal}
-                defaultValue={dayjs()}
-                disabledDate={(current) => 
-                  current && 
-                  (current.isAfter(endDay, 'day') || current.isBefore(startDay, 'day'))
-                }
-                headerRender={({ value, onChange }) => {
-                  const current = value;
-                  const start = startDay;
-                  const end = endDay;
+    <ConfigProvider
+      theme={{
+        components: {
+          Calendar: {
+          },
+          Button:{
+          }
+        },
 
-                  return (
-                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: 10 }}>
-                      <div className='titleCalender'>{Books[0].name}</div>
-                      <div>
-                        <Select
-                          value={current.month()}
-                          onChange={(month) => {
-                            const newValue = current.clone().month(month);
-                            onChange(newValue);
-                          }}
-                          style={{ width: 100 }}
-                        >
-                          {Array.from({ length: 12 }, (_, i) => (
-                            <Select.Option key={i} value={i}>
-                              {dayjs().month(i).format('MMMM')}
-                            </Select.Option>
-                          ))}
-                        </Select>
-                      </div>
-                    </div>
-                  );
-                }}
-              />
-
-              </div>
-
-              <div style={{ width: '30%' }}>
-                <h1 className='titleCalender'>Upcoming</h1>
-                {Object.keys(groupedEvents).map((slot) => (
-                  <div key={slot}>
-                    <div className='period'>
-                      <h3>{slot}</h3>
-                    </div>
-                    <List
-                      itemLayout="horizontal"
-                      dataSource={groupedEvents[slot]}
-                      renderItem={item => (
-                        <List.Item>
-                          <List.Item.Meta
-                            title={`${options.find(opt => opt.value === item.emotion)?.label} (${item.date})`}
-                            description={item.description}
-                          />
-                        </List.Item>
-                      )}
-                    />
-                  </div>
-                ))}
-              </div>
+        token: {
+          colorPrimary: '#9BA5F6', // Example of primary color customization
+        },
+      }}
+    >
+      <div className='planning'>
+        <div className="befor-main">
+          <div className='main-body'>
+            <div className='sidebar'>
+              <NavbarPat />
             </div>
+            <div className="main-background">
+              <div style={{ display: 'flex', gap: '20px' }}>
+                <div style={{ width: '70%' }}>
+                <Calendar 
+                  dateCellRender={dateCellRender}
+                  onSelect={openModal}
+                  defaultValue={dayjs()}
+                  disabledDate={(current) => 
+                    current && 
+                    (current.isAfter(endDay, 'day') || current.isBefore(startDay, 'day'))
+                  }
+                  headerRender={({ value, onChange }) => {
+                    const current = value;
+                    const start = startDay;
+                    const end = endDay;
 
-            <Modal
-              title="Add Emotion"
-              visible={isModalOpen}
-              onOk={handleOk}
-              onCancel={handleCancel}
-            >
-              <Form form={form} layout="vertical">
-                <Form.Item
-                  name="emotion"
-                  label="Select Emotion"
-                  rules={[{ required: true, message: 'Please select an emotion!' }]}
-                >
-                  <Select options={options} />
-                </Form.Item>
-                <Form.Item
-                  name="description"
-                  label="Description"
-                  rules={[{ required: true, message: 'Please input the description!' }]}
-                >
-                  <Input.TextArea />
-                </Form.Item>
-              </Form>
-            </Modal>
+                    return (
+                      <div style={{ display: 'flex', justifyContent: 'space-between', padding: 10 }}>
+                        <div className='titleCalender'>{Books[0].name}</div>
+                        <div>
+                          <Select
+                            value={current.month()}
+                            onChange={(month) => {
+                              const newValue = current.clone().month(month);
+                              onChange(newValue);
+                            }}
+                            style={{ width: 100 }}
+                          >
+                            {Array.from({ length: 12 }, (_, i) => (
+                              <Select.Option key={i} value={i}>
+                                {dayjs().month(i).format('MMMM')}
+                              </Select.Option>
+                            ))}
+                          </Select>
+                        </div>
+                      </div>
+                    );
+                  }}
+                />
+
+                </div>
+
+                <div className='showContent' style={{ width: '30%', marginLeft: '10px', overflowX: 'auto', height: '100vh' }}>
+                  <h1 className='titleCalender'>Upcoming</h1>
+                  {Object.keys(groupedEvents).map((slot) => (
+                    <div key={slot}>
+                      <div className='period'>
+                        <h3>{slot}</h3>
+                      </div>
+                      <List
+                        itemLayout="horizontal"
+                        dataSource={groupedEvents[slot]}
+                        renderItem={item => (
+                          <List.Item>
+                            <List.Item.Meta
+                              avatar={
+                                <div
+                                  style={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    width: 50,
+                                    height: 50,
+                                    borderRadius: '50%',
+                                    fontSize: '40px',
+                                    textAlign: 'center'
+                                  }}
+                                >
+                                  {options.find(opt => opt.value === item.emotion)?.emotion}
+                                </div>
+                              }
+                              title={
+                                <span style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                                  {options.find(opt => opt.value === item.emotion)?.label} ({item.date})
+                                  <Dropdown overlay={menu(item)} trigger={['click']} placement="bottomRight">
+                                    <Button
+                                      className="action-button" // Add this class for extra control
+                                    ><AiOutlineMore /></Button>
+                                  </Dropdown>
+                                </span>
+                              }
+                              description={item.description}
+                            />
+                          </List.Item>
+                        )}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <Modal
+                title="เพิ่มอารมณ์ของวันนี้"
+                visible={isModalOpen}
+                onOk={handleOk}
+                onCancel={handleCancel}
+              >
+                <Form form={form} layout="vertical">
+                  <Form.Item
+                    name="emotion"
+                    label="เลือกอารมณ์ของคุณ"
+                    rules={[{ required: true, message: 'กรุณาเลือกอารมณ์ของคุณ!' }]}
+                  >
+                    <Select
+                      options={options.map(opt => ({
+                        value: opt.value,
+                        label: (
+                          <span>
+                            {opt.emotion} {opt.label}
+                          </span>
+                        ),
+                      }))}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    name="description"
+                    label="อธิบายเหตุการณ์หน่อย"
+                    rules={[{ required: true, message: 'กรุณากรอกคำอธิบาย!' }]}
+                  >
+                    <Input.TextArea />
+                  </Form.Item>
+                </Form>
+              </Modal>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </ConfigProvider>
   );
 }
 
