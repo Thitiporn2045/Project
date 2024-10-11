@@ -1,11 +1,9 @@
 package entity
 
 import (
-
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"golang.org/x/crypto/bcrypt"
-
 )
 
 var db *gorm.DB

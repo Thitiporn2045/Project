@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -40,6 +41,7 @@ func LoginPatient(c *gin.Context){
 
 	// Check password
 	err := bcrypt.CompareHashAndPassword([]byte(patient.Password), []byte(payload.Password))
+
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "อีเมลหรือรหัสผ่านไม่ถูกต้อง"})
 		return
@@ -91,6 +93,7 @@ func LoginPsychologist(c *gin.Context){
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "บัญชีของคุณยังไม่ได้รับการอนุมัติจากแอดมิน โปรดรอการตรวจสอบ"})
 		return
 	}
+	fmt.Printf("login password ",payload.Password)
 
 	// Check password
 	err := bcrypt.CompareHashAndPassword([]byte(psychologist.Password), []byte(payload.Password))

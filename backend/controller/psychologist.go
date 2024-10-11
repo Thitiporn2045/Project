@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -16,7 +17,7 @@ func CreatePsychologist(c *gin.Context){
 	
 		return
 	}
-
+	fmt.Printf("Create Password: ",psychologist.Password)
 	hashPassword, err := bcrypt.GenerateFromPassword([]byte(psychologist.Password), bcrypt.DefaultCost)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "error hash password"})
@@ -27,14 +28,12 @@ func CreatePsychologist(c *gin.Context){
 		LastName: psychologist.LastName,
 		Tel: psychologist.Tel,
 		Email: psychologist.Email,
-		Password: psychologist.Password,
+		Password: string(hashPassword) ,
 		Picture: psychologist.Picture,
 		WorkingNumber: psychologist.WorkingNumber,
 		CertificateFile: psychologist.CertificateFile,
 		IsApproved: psychologist.IsApproved,
 	}
-
-	a.Password = string(hashPassword)
 	if err := entity.DB().Create(&a).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -78,7 +77,7 @@ func DeletePsychologist(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": id})	
 }
 
-func CheckOldPassword(c *gin.Context){
+func CheckOldPasswordPsychologist(c *gin.Context){
 	var psychologist entity.Psychologist
 	var result entity.Psychologist
 
@@ -99,7 +98,7 @@ func CheckOldPassword(c *gin.Context){
 	c.JSON(http.StatusOK, gin.H{"data": psychologist})
 }
 
-func UpdatePsychologist(c *gin.Context) {
+func UpdatePasswordPsychologist(c *gin.Context) {
 
 	var psychologist entity.Psychologist
 	var result entity.Psychologist
@@ -120,6 +119,29 @@ func UpdatePsychologist(c *gin.Context) {
         }
         psychologist.Password = string(hashedPassword)
     }
+	if err := entity.DB().Save(&psychologist).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	
+	c.JSON(http.StatusOK, gin.H{"data": psychologist})
+	
+}
+
+func UpdatePsychologist(c *gin.Context) {
+
+	var psychologist entity.Psychologist
+	var result entity.Psychologist
+
+	if err := c.ShouldBindJSON(&psychologist); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if tx := entity.DB().Where("id = ?", psychologist.ID).First(&result); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "psychologist not found"})
+		return
+	}
+
 	if err := entity.DB().Save(&psychologist).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
