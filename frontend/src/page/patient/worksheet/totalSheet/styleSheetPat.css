@@ -662,6 +662,25 @@
     transition: all 0.3s ease;
 }
 
+.sheetDetail .day:hover{
+    animation: wobble 0.7s ease-in-out infinite;  
+}
+
+@keyframes wobble {
+    0% {
+        transform: translateY(-8px) translateX(0) rotate3d(0, 0, 0, 0deg);
+    }
+    25% {
+        transform: translateY(-8px) translateX(0) rotate3d(1, 2, 3, -20deg);
+    }
+    50% {
+        transform: translateY(-8px) translateX(0) rotate3d(1, 2, 3, 0deg);
+    }
+    100% {
+        transform: translateY(-8px) translateX(0) rotate3d(1, 2, 3, 20deg);
+    }
+}
+
 
 .sheetDetail .day.selected {
     background-color: var(--color-backgroun-main2);
