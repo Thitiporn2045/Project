@@ -2,7 +2,7 @@ import { Button, ConfigProvider, Form, Input, message} from 'antd';
 import thTH from 'antd/lib/locale/th_TH';
 import React, { useEffect, useState } from 'react';
 import { PsychologistInterface } from '../../../interfaces/psychologist/IPsychologist';
-import { GetPsychologistById,UpdatePsychologist,CheckPassword } from '../../../services/https/psychologist/psy';
+import { GetPsychologistById,UpdatePasswordpsychologist,CheckPasswordPsychologist } from '../../../services/https/psychologist/psy';
 
 function PsyPassword() {
   const [psychologist, setPsychologist] = useState<PsychologistInterface>();
@@ -19,18 +19,19 @@ function PsyPassword() {
   useEffect(() => {
     getPsychologist();
   }, []);
+  //=============================================================
   const handleSubmit = async ({ oldPassword, newPassword }: { oldPassword: string, newPassword: string }) => {
     const checkValues:PsychologistInterface = {
       ID: Number(psyID),
       Password: oldPassword
     }
-    const isPasswordMatch = await CheckPassword(checkValues);
+    const isPasswordMatch = await CheckPasswordPsychologist(checkValues);
     if(!isPasswordMatch.status){
       message.error(isPasswordMatch.message)
     }
     else{
       const updatedPsychologist: PsychologistInterface = { ...psychologist, Password: newPassword };      
-      let res = await UpdatePsychologist(updatedPsychologist);
+      let res = await UpdatePasswordpsychologist(updatedPsychologist);
       if (res.status) {
         message.success("เปลี่ยนรหัสผ่านสำเร็จ");
         setTimeout(() => {
@@ -42,6 +43,7 @@ function PsyPassword() {
     }
 
   };
+  //=============================================================
 
   return (
     <ConfigProvider

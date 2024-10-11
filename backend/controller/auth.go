@@ -40,6 +40,7 @@ func LoginPatient(c *gin.Context){
 
 	// Check password
 	err := bcrypt.CompareHashAndPassword([]byte(patient.Password), []byte(payload.Password))
+
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "อีเมลหรือรหัสผ่านไม่ถูกต้อง"})
 		return
