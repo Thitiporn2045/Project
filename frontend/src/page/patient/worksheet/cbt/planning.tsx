@@ -205,6 +205,7 @@ const Planning: React.FC = () => {
                                   borderRadius: '50%',
                                   fontSize: '32px', // Larger emoji
                                   textAlign: 'center',
+                                  boxShadow: 'rgba(50, 50, 93, 0.25) 0px 3px 30px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px',                                    
                                   backgroundColor: String(options.find(opt => opt.value === item.emotion)?.value) || 'transparent', // Color based on emotion
                                 }}
                               >

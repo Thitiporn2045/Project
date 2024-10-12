@@ -21,6 +21,7 @@ import SheetDetail from './page/patient/worksheet/totalSheet/sheetDetail';
 import Planning from './page/patient/worksheet/cbt/planning';
 import CrossSectional from './page/patient/worksheet/cbt/crossSectional';
 import Activity from './page/patient/worksheet/cbt/activity';
+import Behavioural from './page/patient/worksheet/cbt/behavioural';
 
 export default function App() {
 
@@ -49,6 +50,7 @@ export default function App() {
         <Route path='/Planning' element={<Planning/>} />
         <Route path='/CrossSectional' element={<CrossSectional/>} />
         <Route path='/Activity' element={<Activity/>} />
+        <Route path='/Behavioural' element={<Behavioural/>} />
       </Routes>
     </BrowserRouter>
   );

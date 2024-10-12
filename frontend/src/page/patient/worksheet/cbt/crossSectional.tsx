@@ -1,63 +1,57 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import NavbarPat from '../../../../component/navbarPat/navbarPat';
 import './stylePat.css';
-import { Button, Input, Select, Tooltip, Tag } from 'antd';
-import { BiSolidBookBookmark, BiSolidEditAlt, BiSolidLockOpen } from "react-icons/bi";
+import { Button, Input, Select, Tooltip, Tag, ConfigProvider } from 'antd';
+import { BiSolidEditAlt, BiSolidLockOpen } from "react-icons/bi";
 import type { SelectProps } from 'antd';
 
+interface OptionType {
+  value: string;
+  emotion: string;
+  label: string;
+}
+
+const options: OptionType[] = [
+  { value: '#A8E6CE', emotion: '🙂', label: 'Happy' },
+  { value: '#FF91AE', emotion: '😡', label: 'Angry' },
+  { value: '#F4ED7F', emotion: '😕', label: 'Confused' },
+  { value: '#B78FCB', emotion: '😢', label: 'Sad' },
+];
+
 // Define the TagRender function outside the component
-const tagRender: SelectProps['tagRender'] = ({ label, value, closable, onClose }) => {
+const tagRender: SelectProps['tagRender'] = (props) => {
+  const { label, value, closable, onClose } = props;
   const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
     event.preventDefault();
     event.stopPropagation();
   };
-
+  
+  // Find the option that matches the value
+  const option = options.find(opt => opt.value === value);
+  
   return (
     <Tag
-      color={value ? value.toString() : undefined} // Check if value is defined before converting to string
+      color={value as string}
       onMouseDown={onPreventMouseDown}
       closable={closable}
       onClose={onClose}
       style={{ marginInlineEnd: 4 }}
     >
-      {label}
+      {option?.emotion} {label}
     </Tag>
   );
 };
 
-// Define options for the emotions
-const options: SelectProps['options'] = [
-  { value: 'green', label: '🙂 Happy' },
-  { value: 'red', label: '😡 Angry' },
-  { value: 'yellow', label: '😕 Confused' },
-  { value: 'purple', label: '😢 Sad' },
-];
-
 const CrossSectional: React.FC = () => {
-  // const [currentTime, setCurrentTime] = useState<string>("");
-
-  // useEffect(() => {
-  //   const updateTime = () => {
-  //     const now = new Date();
-  //     const formattedTime = now.toLocaleString('th-TH', {
-  //       weekday: 'long',
-  //       year: 'numeric',
-  //       month: 'long',
-  //       day: 'numeric',
-  //       hour: '2-digit',
-  //       minute: '2-digit',
-  //       second: '2-digit',
-  //     });
-  //     setCurrentTime(formattedTime);
-  //   };
-
-  //   updateTime(); // Set time initially
-  //   const timer = setInterval(updateTime, 1000); // Update every second
-
-  //   return () => clearInterval(timer); // Cleanup on component unmount
-  // }, []);
-
   return (
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: '#9BA5F6', // Example of primary color customization
+        },
+      }}
+    >
+
     <div className="crossSectional">
       <div className="befor-main">
         <div className='main-body'>
@@ -68,9 +62,6 @@ const CrossSectional: React.FC = () => {
             <header>
               <div className='on'>
                 <h1 className="title">Week1</h1>
-                {/* <div className="date">
-                  {currentTime}
-                </div> */}
               </div>
               <div className='lower'>
                 <div className="name">
@@ -98,7 +89,7 @@ const CrossSectional: React.FC = () => {
                       <button className="btn-submit">บันทึก</button>
                     </div>
                     <div className='lowerInput'>
-                      <Input className='mainTitle' placeholder="เหตุการณ์หรือสิ่งที่กระตุ้น..." variant="filled" />
+                      <Input className='mainTitle' placeholder="เหตุการณ์หรือสิ่งที่กระตุ้น..." />
                     </div>
                   </div>
                   <div className="lower-content">
@@ -113,6 +104,8 @@ const CrossSectional: React.FC = () => {
                             tagRender={tagRender}
                             options={options}
                             placeholder="ความรู้สึก..."
+                            optionLabelProp="label"
+                            optionFilterProp="label"
                           />
                         </div>
                       </div>
@@ -126,6 +119,8 @@ const CrossSectional: React.FC = () => {
                             tagRender={tagRender}
                             options={options}
                             placeholder="ความรู้สึก..."
+                            optionLabelProp="label"
+                            optionFilterProp="label"
                           />
                         </div>
                       </div>
@@ -139,6 +134,8 @@ const CrossSectional: React.FC = () => {
                             tagRender={tagRender}
                             options={options}
                             placeholder="ความรู้สึก..."
+                            optionLabelProp="label"
+                            optionFilterProp="label"
                           />
                         </div>
                       </div>
@@ -152,6 +149,8 @@ const CrossSectional: React.FC = () => {
                             tagRender={tagRender}
                             options={options}
                             placeholder="ความรู้สึก..."
+                            optionLabelProp="label"
+                            optionFilterProp="label"
                           />
                         </div>
                       </div>
@@ -164,6 +163,7 @@ const CrossSectional: React.FC = () => {
         </div>
       </div>
     </div>
+    </ConfigProvider>
   );
 };
 

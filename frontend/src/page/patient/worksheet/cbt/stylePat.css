@@ -157,19 +157,26 @@
     height: 100%;
 }
 
-.crossSectional .main-body .main-background .bg-maincontent .bg-content .content .head{
+.crossSectional .main-body .main-background .bg-maincontent .bg-content .content-behavioural{
+    display: grid;
+    grid-template-rows: 2.9rem auto;
+    width: 100%;
+    height: 100%;
+}
+
+.crossSectional .main-body .main-background .bg-maincontent .bg-content .head{
     margin: 0 40px 0 40px;
     width: calc(100% -20px);
     height: 94%;
 }
 
-.crossSectional .main-body .main-background .bg-maincontent .bg-content .content .head .onTitle{
+.crossSectional .main-body .main-background .bg-maincontent .bg-content .head .onTitle{
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.crossSectional .main-body .main-background .bg-maincontent .bg-content .content .head .onTitle .btn-submit{
+.crossSectional .main-body .main-background .bg-maincontent .bg-content .head .onTitle .btn-submit{
     height: 30px;
     width: 80px;
     color: var(--color-font2);
@@ -181,18 +188,18 @@
     font-family: 'Noto Sans Thai', sans-serif;
 }
 
-.crossSectional .main-body .main-background .bg-maincontent .bg-content .content .head .onTitle .btn-submit:hover{
+.crossSectional .main-body .main-background .bg-maincontent .bg-content .head .onTitle .btn-submit:hover{
     color: var(--color-backgroun-secondary2);
     background: var(--color-secondary1);
     transform: scale(1.05);
     transition: .5s;
 }
 
-.crossSectional .main-body .main-background .bg-maincontent .bg-content .content .head .lowerInput{
+.crossSectional .main-body .main-background .bg-maincontent .bg-content .head .lowerInput{
     margin-top: 0px;
 }
 
-.crossSectional .main-body .main-background .bg-maincontent .bg-content .content .head .lowerInput .mainTitle{
+.crossSectional .main-body .main-background .bg-maincontent .bg-content .head .lowerInput .mainTitle{
     margin-top: -5px;
     height: 45px;
     font-size: 1.2rem;
@@ -202,7 +209,7 @@
     font-family: 'Noto Sans Thai', sans-serif;
 }
 
-.crossSectional .main-body .main-background .bg-maincontent .bg-content .content .lower-content{
+.crossSectional .main-body .main-background .bg-maincontent .bg-content .lower-content{
     margin: 30px 40px 0 40px;
     width: calc(100% -20px);
     height: 92%;
@@ -210,7 +217,7 @@
     background-color: var(--color-backgroun-secondary2);
 }
 
-.crossSectional .main-body .main-background .bg-maincontent .bg-content .content .lower-content .bg-Content{
+.crossSectional .main-body .main-background .bg-maincontent .bg-content .lower-content .bg-Content{
     margin: 20px 20px 0 20px;
     width: calc(100% -20px);
     height: 90%;
@@ -220,7 +227,17 @@
     gap: 20px;
 }
 
-.crossSectional .main-body .main-background .bg-maincontent .bg-content .content .lower-content .bg-Content .content-box {
+.crossSectional .main-body .main-background .bg-maincontent .bg-content .lower-content .bg-Content-behavioural{
+    margin: 20px 20px 0 20px;
+    width: calc(100% -20px);
+    height: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.crossSectional .main-body .main-background .bg-maincontent .bg-content .lower-content .bg-Content .content-box {
     flex: 1 1 calc(50% - 10px);
     margin-top: 10px;
     min-width: 200px;
@@ -229,30 +246,39 @@
     border-radius: var(--border-radius-1);
 }
 
-.crossSectional .main-body .main-background .bg-maincontent .bg-content .content .lower-content .bg-Content .content-box:nth-child(1) {
+.crossSectional .main-body .main-background .bg-maincontent .bg-content .lower-content .bg-Content-behavioural .content-box {
+    flex: 1 1 calc(50% - 10px);
+    margin-top: 10px;
+    min-width: 200px;
+    height: 99%;
+    padding: 10px;
+    border-radius: var(--border-radius-1);
+}
+
+.crossSectional .main-body .main-background .bg-maincontent .bg-content .lower-content .content-box:nth-child(1) {
     background-color: var(--color-secondary1);
 }
 
-.crossSectional .main-body .main-background .bg-maincontent .bg-content .content .lower-content .bg-Content .content-box:nth-child(2) {
+.crossSectional .main-body .main-background .bg-maincontent .bg-content .lower-content .content-box:nth-child(2) {
     background-color: var(--color-secondary2);
 }
 
-.crossSectional .main-body .main-background .bg-maincontent .bg-content .content .lower-content .bg-Content .content-box:nth-child(3) {
+.crossSectional .main-body .main-background .bg-maincontent .bg-content .lower-content .content-box:nth-child(3) {
     background-color: var(--color-secondary3);
 }
 
-.crossSectional .main-body .main-background .bg-maincontent .bg-content .content .lower-content .bg-Content .content-box:nth-child(4) {
+.crossSectional .main-body .main-background .bg-maincontent .bg-content .lower-content .content-box:nth-child(4) {
     background-color: var(--color-secondary1);
 }
 
-.crossSectional .main-body .main-background .bg-maincontent .bg-content .content .lower-content .bg-Content .content-box h3 {
+.crossSectional .main-body .main-background .bg-maincontent .bg-content .lower-content .content-box h3 {
     text-align: center;
     font-size: 1.2rem;
     font-weight: 800;
     color: var(--color-font1);
 }
 
-.crossSectional .main-body .main-background .bg-maincontent .bg-content .content .lower-content .bg-Content .content-box .bg-input{
+.crossSectional .main-body .main-background .bg-maincontent .bg-content .lower-content .content-box .bg-input{
     margin-left: 15px;
     width: 90%;
     height: 83%;
@@ -260,7 +286,7 @@
     background-color: var(--color-backgroun-secondary2);
 }
 
-.crossSectional .main-body .main-background .bg-maincontent .bg-content .content .lower-content .bg-Content .content-box .bg-input .content-input {
+.crossSectional .main-body .main-background .bg-maincontent .bg-content .lower-content .content-box .bg-input .content-input {
     margin-top: 10px;
     width: 100%;
     height: 84%;
@@ -274,7 +300,7 @@
     font-family: 'Noto Sans Thai', sans-serif;
 }
 
-.crossSectional .main-body .main-background .bg-maincontent .bg-content .content .lower-content .bg-Content .content-box .bg-input .feeling-input {
+.crossSectional .main-body .main-background .bg-maincontent .bg-content .lower-content .content-box .bg-input .feeling-input {
     margin-left: 13px;
     width: 90%;
     height: 40px;
@@ -292,6 +318,26 @@
     flex-wrap: nowrap; /* ทำให้รายการอยู่ในบรรทัดเดียว */
     align-items: center;
     white-space: nowrap; /* ป้องกันการห่อข้อความ */
+}
+
+.crossSectional .ant-select-outlined:not(.ant-select-customize-input) .ant-select-selector {
+    border: 1px solid #d9d9d9;
+    background: #ffffff;
+    overflow-x: auto;
+}
+
+.crossSectional .ant-tag.ant-tag-has-color{
+    font-weight: 490;
+    margin: 4px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 3px 30px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+}
+
+.crossSectional .ant-select-dropdown .ant-select-item-option-content {
+    flex: auto;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: var(--color-font1);
 }
 
 
@@ -471,7 +517,7 @@
     position: relative;
     border-radius: 15px;
     padding: 15px;
-    max-width: 95%;
+    max-width: 93%;
     margin-bottom: 20px;
     box-shadow: rgba(92, 63, 130, 0.1) 10px 10px 50px;
     background: var(--color-backgroun-secondary2);
