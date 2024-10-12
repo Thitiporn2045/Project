@@ -219,7 +219,7 @@ return (
                 </div>
 
                 <div className='showContent' style={{ width: '30%', marginLeft: '10px', overflowX: 'auto', height: '100vh' }}>
-                    <h1 className='titleCalender'>Upcoming</h1>
+                    <h1 className='titleCalender'>รายการบันทึก</h1>
                     <Timeline>
                         {Object.keys(groupedEventsByHour).map((timeSlot) => (
                             <Timeline.Item key={timeSlot}>
@@ -239,8 +239,11 @@ return (
                                                             width: 50,
                                                             height: 50,
                                                             borderRadius: '50%',
-                                                            fontSize: '40px',
-                                                            textAlign: 'center'
+                                                            fontSize: '45px', // Increased font size
+                                                            textAlign: 'center',
+                                                            padding: '8px 5px 3px 5px',
+                                                            boxShadow: 'rgba(50, 50, 93, 0.25) 0px 3px 30px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px',                                    
+                                                            backgroundColor: String(options.find(opt => opt.value === item.emotion)?.value) || 'transparent', // Cast to string and provide fallback
                                                         }}
                                                     >
                                                         {options.find(opt => opt.value === item.emotion)?.emotion}

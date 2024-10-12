@@ -93,7 +93,7 @@ const Planning: React.FC = () => {
   
   const groupedEvents = events.reduce((acc, event) => {
     const hour = parseInt(event.time.split(':')[0], 10);
-    const timeSlot = hour < 12 ? 'Morning' : hour < 18 ? 'Afternoon' : 'Evening';
+    const timeSlot = hour < 12 ? 'เช้า' : hour < 18 ? 'กลางวัน' : 'เย็น';
     if (!acc[timeSlot]) {
       acc[timeSlot] = [];
     }
@@ -157,7 +157,6 @@ const Planning: React.FC = () => {
                     const current = value;
                     const start = startDay;
                     const end = endDay;
-
                     return (
                       <div style={{ display: 'flex', justifyContent: 'space-between', padding: 10 }}>
                         <div className='titleCalender'>{Books[0].name}</div>
@@ -184,50 +183,45 @@ const Planning: React.FC = () => {
 
                 </div>
 
-                <div className='showContent' style={{ width: '30%', marginLeft: '10px', overflowX: 'auto', height: '100vh' }}>
-                  <h1 className='titleCalender'>Upcoming</h1>
+                <div className='showContent-Planning' style={{ width: '30%', marginLeft: '10px', overflowX: 'auto', height: '100vh' }}>
+                  <h1 className='titleCalender'>รายการบันทึก</h1>
                   {Object.keys(groupedEvents).map((slot) => (
                     <div key={slot}>
                       <div className='period'>
                         <h3>{slot}</h3>
                       </div>
-                      <List
-                        itemLayout="horizontal"
-                        dataSource={groupedEvents[slot]}
-                        renderItem={item => (
-                          <List.Item>
-                            <List.Item.Meta
-                              avatar={
-                                <div
-                                  style={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    width: 50,
-                                    height: 50,
-                                    borderRadius: '50%',
-                                    fontSize: '40px',
-                                    textAlign: 'center'
-                                  }}
-                                >
-                                  {options.find(opt => opt.value === item.emotion)?.emotion}
-                                </div>
-                              }
-                              title={
-                                <span style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                                  {options.find(opt => opt.value === item.emotion)?.label} ({item.date})
-                                  <Dropdown overlay={menu(item)} trigger={['click']} placement="bottomRight">
-                                    <Button
-                                      className="action-button" // Add this class for extra control
-                                    ><AiOutlineMore /></Button>
-                                  </Dropdown>
-                                </span>
-                              }
-                              description={item.description}
-                            />
-                          </List.Item>
-                        )}
-                      />
+                      <Timeline>
+                        {groupedEvents[slot].map((item, index) => (
+                          <Timeline.Item
+                            key={index}
+                            dot={
+                              <div
+                                style={{
+                                  display: 'flex',
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                  width: 50,
+                                  height: 50,
+                                  borderRadius: '50%',
+                                  fontSize: '32px', // Larger emoji
+                                  textAlign: 'center',
+                                  backgroundColor: String(options.find(opt => opt.value === item.emotion)?.value) || 'transparent', // Color based on emotion
+                                }}
+                              >
+                                {options.find(opt => opt.value === item.emotion)?.emotion}
+                              </div>
+                            }
+                          >
+                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                              <h3>{options.find(opt => opt.value === item.emotion)?.label} ({item.date})</h3>
+                              <Dropdown overlay={menu(item)} trigger={['click']} placement="bottomRight">
+                                <Button className="action-button"><AiOutlineMore /></Button>
+                              </Dropdown>
+                            </div>
+                            <p>{item.description}</p>
+                          </Timeline.Item>
+                        ))}
+                      </Timeline>
                     </div>
                   ))}
                 </div>

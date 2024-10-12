@@ -362,6 +362,7 @@
     font-size: 1.5rem;
     font-weight: 800;
     color: var(--color-font1);
+    font-family:'Noto Sans Thai',sans-serif;
 }
 
 .planning h1{
@@ -375,6 +376,7 @@
 .planning .period h3{
     font-size: 1.2rem;
     color: var(--color-font1);
+    font-family:'Noto Sans Thai',sans-serif;
 }
 
 .planning .ant-select-single.ant-select-show-arrow .ant-select-selection-item{
@@ -473,6 +475,37 @@
     margin-bottom: 20px;
     box-shadow: rgba(92, 63, 130, 0.1) 10px 10px 50px;
     background: var(--color-backgroun-secondary2);
+}
+
+.showContent-Planning .ant-timeline .ant-timeline-item-content{
+    border-block-end: none;
+    position: relative;
+    border-radius: 15px;
+    margin-left: 40px;
+    padding: 15px;
+    max-width: 85%;
+    box-shadow: rgba(92, 63, 130, 0.1) 10px 10px 50px;
+    background: var(--color-backgroun-secondary2);
+}
+
+.showContent-Planning .ant-timeline .ant-timeline-item {
+    position: relative;
+    margin: 35px 0 0 30px;
+    padding-bottom: 20px;
+    list-style: none;
+}
+
+.showContent-Planning div h3{
+    margin: -5px 0;
+    font-size: 1rem;
+    color: rgba(0, 0, 0, 0.88);
+}
+
+.showContent-Planning div p{
+    color: rgba(0, 0, 0, 0.45);
+    font-size: 1rem;
+    line-height: 1.5714285714285714;
+    margin: -1px 0;
 }
 
 .action-button{
