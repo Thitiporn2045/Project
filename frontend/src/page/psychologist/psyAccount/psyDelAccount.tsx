@@ -1,15 +1,10 @@
 import { Button, ConfigProvider, Form, Input, message, Select } from 'antd'
 import thTH from 'antd/lib/locale/th_TH';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { PsychologistInterface } from '../../../interfaces/psychologist/IPsychologist';
+import { GetPsychologistById, DeletePsychologistByID, CheckPasswordPsychologist } from '../../../services/https/psychologist/psy';
+import { useNavigate } from 'react-router-dom';
 
-const initialPsychologist = {
-  firstname:'ศุภชลิตา',
-  lastname:'พลนงค์',
-  tel:'0812345678',
-  email:'note.psy@gmail.com',
-  password:'note1234',
-  profilepic:'https://via.placeholder.com/150?text=Psy'
-}
 const reasons = [
   { id: '1', label: 'ต้องการหยุดการให้บริการ' },
   { id: '2', label: 'พบปัญหาทางเทคนิค' },
@@ -18,27 +13,44 @@ const reasons = [
 ];
 
 function PsyDelAccount() {
-  const [psychologist, setPsychologist] = useState(initialPsychologist);
+  const [messageApi, contextHolder] = message.useMessage();
+
   const [reason, setReason] = useState('');
   const [password, setPassword] = useState('');
+  const psyID = localStorage.getItem('psychologistID') 
 
-
-  const handleDeleteAccount = (event: React.FormEvent<HTMLFormElement>) => {
-
-    // Validate password and perform account deletion
-    if (password === psychologist.password) {
-      // Handle account deletion here (e.g., call API)
-      message.success('บัญชีผู้ใช้ถูกลบเรียบร้อยแล้ว');
-    } else {
-      message.error('รหัสผ่านไม่ถูกต้อง');
+  const navigate = useNavigate();
+  const handleDeleteAccount = async (event: React.FormEvent<HTMLFormElement>) => {
+    const checkValues:PsychologistInterface = {
+      ID: Number(psyID),
+      Password: password
     }
-  };
+    const isPasswordMatch = await CheckPasswordPsychologist(checkValues);
+    
+    if(!isPasswordMatch.status){
+      messageApi.error(isPasswordMatch.message)
+    }
+    else{
+      let res = await DeletePsychologistByID(Number(psyID));
+      if (res.status) {
+        messageApi.success("ลบบัญชีผู้ใช้แล้ว");
+        setTimeout(() => {
+          navigate("/"); 
+        }, 3000);
+      } 
+      else {
+        messageApi.error(res.message || "เกิดข้อผิดพลาด");
+      }
+    }
+  }
+
+  
   return (
     <ConfigProvider
       locale={thTH}
         theme={{
           components:{
-            Input:{
+            Message:{
             }
           },
           token:{
@@ -47,8 +59,9 @@ function PsyDelAccount() {
             fontFamily:'Noto Sans Thai, sans-serif'
           }
         }}>
+        {contextHolder}
       <div style={{width:'100%',height:'100%',display:'flex',alignItems:'center',marginLeft:'6%'}}>
-        <div style={{width:'30%',height:'70%',background:'transparent',display:'flex',flexDirection:'column'}}>
+        <div style={{width:'40%',height:'70%',background:'transparent',display:'flex',flexDirection:'column'}}>
         <Form onFinish={handleDeleteAccount}>
             <div
               className="delAccount-container"

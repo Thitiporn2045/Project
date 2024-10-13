@@ -13,8 +13,8 @@ type ActivityDiary struct{
 	Diary Diary `gorm:"foreignKey:DiaryID"`
 
 	EmotionID *uint
-	EmotionScore EmotionScore `gorm:"foreignKey:EmotionID"`
+	Emotion Emotion `gorm:"foreignKey:EmotionID"`
 
-	FeelGoodTypeID *uint
-	FeelGoodType FeelGoodType `gorm:"foreignKey:FeelGoodTypeID"`
+	// FeelGoodTypeID *uint
+	// FeelGoodType FeelGoodType `gorm:"foreignKey:FeelGoodTypeID"`
 }

@@ -20,4 +20,5 @@ type Psychologist struct{
 	TypeOfPatient []TypeOfPatient `gorm:"foreignKey:PsyID"`
 	WorkSchedule []WorkSchedule `gorm:"foreignKey:PsyID"`
 	ConnectionRequest []ConnectionRequest `gorm:"foreignKey:PsyID"`
+	Comment []Comment `gorm:"foreignKey:PsyID"`
 }

@@ -28,12 +28,15 @@ func SetupDatabase() (*gorm.DB, error) {
 		&ActivityPlanning{},
 		&BehavioralExp{},
 		&CrossSectional{},
+		&Comment{},
 		&ConnectionRequest{},
 		&Diary{},
-		&EmotionScore{},
-		&FeelGoodType{},
+		&Emotion{},
+		// &FeelGoodType{},
 		&TypeOfPatient{},
-		&WorkSchedule{},	
+		&TimeOfDay{},
+		&WorkSchedule{},
+		&WorksheetType{},	
 	)
 //=========================================================
 	db = database
@@ -55,23 +58,35 @@ func SetupDatabase() (*gorm.DB, error) {
 	db.Model(&Gender{}).Create(&lgbtq)
 	db.Model(&Gender{}).Create(&other)
 //======================================================================
-	funny := FeelGoodType{
-		Name: "มีความสุข/สนุก",
+	timeOfDat := []TimeOfDay{
+		{Name: "ช่วงเช้า",},
+		{Name: "ช่วงกลางวัน"},
+		{Name: "ช่วงเย็น"},
 	}
-	succeed := FeelGoodType{
-		Name: "ประสบความสำเร็จ",
+	for _, tmd := range timeOfDat {
+		db.Create(&tmd) 
 	}
-	db.Model(&FeelGoodType{}).Create(&funny)
-	db.Model(&FeelGoodType{}).Create(&succeed)
 //======================================================================
-	for i := 0; i <= 10; i++ {
-		score := EmotionScore{
-			Score: i,
-		}
-		db.Model(&EmotionScore{}).Create(&score)
+	worksheetType := []WorksheetType{
+		{Name: "Activity Planning"},
+		{Name: "Activity Diary"},
+		{Name: "Behavioral Experiment"},
+		{Name: "Cross Sectional"},	
+	}
+	for _, wst := range worksheetType {
+		db.Create(&wst)
 	}
 //======================================================================
 
+	// funny := FeelGoodType{
+	// 	Name: "มีความสุข/สนุก",
+	// }
+	// succeed := FeelGoodType{
+	// 	Name: "ประสบความสำเร็จ",
+	// }
+	// db.Model(&FeelGoodType{}).Create(&funny)
+	// db.Model(&FeelGoodType{}).Create(&succeed)
+//======================================================================
 	all := TypeOfPatient{
 		Name: "ทั้งหมด",
 	}
