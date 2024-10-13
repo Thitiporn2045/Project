@@ -8,6 +8,8 @@ import { Button, Form, Input, ConfigProvider, Steps, message, DatePicker, Select
 import TestCompo from '../../component/psychologist/testCompo';
 
 function RegisterPatient() {
+    const [messageApi, contextHolder] = message.useMessage();
+
     const [currentStep, setCurrentStep] = useState(0);
     const [formValues, setFormValues] = useState({});
     const [gender,setGender] = useState<GenderInterface[]>([]);
@@ -24,10 +26,10 @@ const listPatients = async () => {
 //=========================================================================
 
     const [sliderValue, setSliderValue] = useState<number>();
-    const handleSliderChange = (value: number) => {
+    const handleSliderChange = (value: number) => {//รับค่าจากcomponent <TestCompo/> เพื่อเอาไปใช้ต่อ
         setSliderValue(value);
     };
-//รับค่าจากcomponent <TestCompo/> เพื่อเอาไปใช้ต่อ
+
 //=========================================================================
     
     const { Step } = Steps;
@@ -45,8 +47,8 @@ const listPatients = async () => {
 
                     // ตรวจสอบว่าอีเมลมีอยู่ในระบบแล้วหรือไม่
                     if (checkEmailExists(email)) {
-                        message.error("ไม่สามารถใช้อีเมลดังกล่าวได้");
-                        return; // หยุดการทำงานถ้าอีเมลซ้ำ
+                        messageApi.error("ไม่สามารถใช้อีเมลดังกล่าวได้");
+                        return; 
                     }
                     }
                 // Save form values from the current step
@@ -54,7 +56,7 @@ const listPatients = async () => {
                 setCurrentStep(currentStep + 1);
             })
             .catch(() => {
-                message.error("กรุณากรอกข้อมูลให้ครบถ้วน");
+                messageApi.error("กรุณากรอกข้อมูลให้ครบถ้วน");
             }
         );
     };
@@ -88,12 +90,12 @@ const listPatients = async () => {
 
         const res = await CreatePatient(patientData);
         if (res.status) {
-            message.success("ลงทะเบียนสำเร็จ!");
+            messageApi.success("ลงทะเบียนสำเร็จ!");
             setTimeout(() => {
                 next(); 
             }, 3000); // Move to the success screen
         } else {
-            message.error(res.message || "การลงทะเบียนล้มเหลว");
+            messageApi.error(res.message || "การลงทะเบียนล้มเหลว");
         }
 
        console.log("Registration Values: ", allValues);
@@ -120,6 +122,7 @@ const listPatients = async () => {
                 }
             }}
         >
+            {contextHolder}
         <div className="registerPatient">
             <div className="register-container">
                 <div style={{position:'relative',}}><h1 style={{marginTop:'0%'}}>ลงทะเบียน</h1></div>

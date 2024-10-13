@@ -52,10 +52,10 @@ function Admin() {
     const res = await UpdatePsychologist(updatedPsychologist);
 
     if (res.status) {
-      message.success("อัปเดตการอนุมัติแล้ว!");
+      messageApi.success("อัปเดตการอนุมัติแล้ว!");
       listPsychologists(); 
     } else {
-      message.error(`เกิดข้อผิดพลาด: ${res.message}`);
+      messageApi.error(`เกิดข้อผิดพลาด: ${res.message}`);
     }
 
 
@@ -73,11 +73,11 @@ const showModalDel = (val: PsychologistInterface) => {
 
    let  res = await DeletePsychologistByID(Number(deleteId));
    if (res.status) {
-      message.success("ลบบัญชีผู้ใช้แล้ว!");
+      messageApi.success("ลบบัญชีผู้ใช้แล้ว!");
       setOpen(false);
       
     } else {
-      message.error(res.message || "เกิดข้อผิดพลาด");
+      messageApi.error(res.message || "เกิดข้อผิดพลาด");
     }
     setConfirmLoading(false);
     ListPsychologists();

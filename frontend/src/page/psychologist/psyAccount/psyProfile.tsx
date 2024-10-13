@@ -1,6 +1,7 @@
 import { Button, ConfigProvider, Form, Input, message } from 'antd'
 import thTH from 'antd/lib/locale/th_TH';
 import React, { useEffect, useState } from 'react'
+import userEmpty from '../../../assets/userEmty.png';
 import { PsychologistInterface } from '../../../interfaces/psychologist/IPsychologist';
 import { GetPsychologistById, UpdatePsychologist } from '../../../services/https/psychologist/psy';
 
@@ -9,6 +10,7 @@ function PsyProfile() {
   const [messageApi, contextHolder] = message.useMessage();
 
   const [psychologist, setPsychologist] = useState<PsychologistInterface>();
+  const [initialPsychologist, setInitialPsychologist] = useState<PsychologistInterface>(); // เก็บข้อมูลเริ่มต้น
   const [isChanged, setIsChanged] = useState(false); // สถานะสำหรับปุ่มบันทึก
   const psyID = localStorage.getItem('psychologistID') 
   
@@ -18,6 +20,7 @@ function PsyProfile() {
     let res = await GetPsychologistById(Number(psyID));
     if(res){
       setPsychologist(res);
+      setInitialPsychologist(res);
 
       form.setFieldsValue({
         firstname: res.FirstName,
@@ -28,10 +31,23 @@ function PsyProfile() {
       });
     }
   }
- 
+ //==================================================================
+  const handleCancel = () => {
+    if (initialPsychologist) {
+      setPsychologist(initialPsychologist); 
 
-
-
+      form.setFieldsValue({
+        firstname: initialPsychologist.FirstName,
+        lastname: initialPsychologist.LastName,
+        tel: initialPsychologist.Tel,
+        email: initialPsychologist.Email,
+        picture: initialPsychologist.Picture
+      });      
+      
+      setIsChanged(false); 
+    }
+  };
+ //==================================================================
 
   const handleProfilePicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -51,12 +67,17 @@ function PsyProfile() {
   useEffect(() => {
     getPsychologist();
   }, []);
-
+//===================================================================
+  const handleDeleteProfilePic = () => {
+    setPsychologist({ ...psychologist, Picture: "" });
+    setIsChanged(true); // เปลี่ยนสถานะให้บันทึกได้
+  };
+//===================================================================
   const handleInputChange = (field: string, value: string) => {
     setPsychologist({ ...psychologist, [field]: value });
     setIsChanged(true); // เปลี่ยนสถานะเมื่อมีการเปลี่ยนแปลงข้อมูลในอินพุต
   };
-
+//===================================================================
   const handleSubmit = async(allValues: PsychologistInterface) => {
     allValues.ID = psychologist?.ID;
     allValues.Picture = psychologist?.Picture;
@@ -70,8 +91,10 @@ function PsyProfile() {
         type: "success",
         content: "แก้ไขข้อมูลสำเร็จ",
       });
+      
       setTimeout(() => {
-        window.location.reload(); 
+        setIsChanged(false)
+        getPsychologist(); 
       }, 2000);
     } else {
       messageApi.open({
@@ -80,9 +103,8 @@ function PsyProfile() {
       });
     }
 
-    // ดำเนินการส่งข้อมูลหรืออื่น ๆ ตามต้องการ
   };
-
+//===========================================================
   const validateMessages = {
     types: {
       email: '${label} is not a valid email!',
@@ -118,7 +140,19 @@ function PsyProfile() {
               <span style={{fontSize:'20px',fontWeight:'bold'}}>รูปโปรไฟล์</span>
               <Form.Item name={'picture'}>
               <div style={{display:'flex',flexDirection:'row',alignItems:'center',gap:'1rem',marginTop:'2%'}}>
-                <div><img src={psychologist?.Picture} style={{width:'100px',height:'100px',borderRadius:'50%'}}></img></div>
+                <div>{psychologist?.Picture && (psychologist?.Picture !== " ") && (psychologist.Picture !== undefined) ? (
+                  <img 
+                    src={psychologist.Picture} 
+                    style={{ width: '100px', height: '100px', borderRadius: '50%' }}
+                    alt="Psychologist Profile" 
+                  />
+                  ) : (
+                    <img 
+                    src={userEmpty} 
+                    style={{ width: '100px', height: '100px', borderRadius: '50%' }}
+                  />
+                  )}
+                </div>
                 <input
                   type="file"
                   accept="image/*"
@@ -128,7 +162,7 @@ function PsyProfile() {
                 />
                 
                 <Button type='primary' onClick={() => document.getElementById('profilePicInput')?.click()}>เปลี่ยนรูปโปรไฟล์</Button>
-                <Button danger>ลบรูปโปรไฟล์</Button>
+                <Button danger onClick={handleDeleteProfilePic}>ลบรูปโปรไฟล์</Button>
               </div>
               </Form.Item>
             </div>
@@ -205,8 +239,14 @@ function PsyProfile() {
                   </Form.Item>
                 </div>
               </div>
-              <div style={{width:504, display:'flex',justifyContent:'end',}}>
-                <Form.Item>
+              <div style={{width:504, display:'flex',justifyContent:'end',gap:'1rem'}}>
+                 <Button
+                    disabled={!isChanged}
+                    onClick={handleCancel}
+                  >
+                    ยกเลิก
+                  </Button>
+                  <Form.Item>
                   <Button 
                     type='primary' 
                     disabled={!isChanged}

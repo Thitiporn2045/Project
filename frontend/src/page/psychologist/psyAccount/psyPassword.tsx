@@ -5,6 +5,8 @@ import { PsychologistInterface } from '../../../interfaces/psychologist/IPsychol
 import { GetPsychologistById,UpdatePasswordpsychologist,CheckPasswordPsychologist } from '../../../services/https/psychologist/psy';
 
 function PsyPassword() {
+  const [messageApi, contextHolder] = message.useMessage();
+
   const [psychologist, setPsychologist] = useState<PsychologistInterface>();
   const psyID = localStorage.getItem('psychologistID') 
   const [form] = Form.useForm();
@@ -27,18 +29,19 @@ function PsyPassword() {
     }
     const isPasswordMatch = await CheckPasswordPsychologist(checkValues);
     if(!isPasswordMatch.status){
-      message.error(isPasswordMatch.message)
+      messageApi.error(isPasswordMatch.message)
     }
     else{
       const updatedPsychologist: PsychologistInterface = { ...psychologist, Password: newPassword };      
       let res = await UpdatePasswordpsychologist(updatedPsychologist);
       if (res.status) {
-        message.success("เปลี่ยนรหัสผ่านสำเร็จ");
+        messageApi.success("เปลี่ยนรหัสผ่านสำเร็จ");
+        getPsychologist();
         setTimeout(() => {
-          window.location.reload(); 
-        }, 2000);
+          form.resetFields(); 
+        }, 1000);
       } else {
-        message.error(res.message || "เกิดข้อผิดพลาด");
+        messageApi.error(res.message || "เกิดข้อผิดพลาด");
       }
     }
 
@@ -59,6 +62,7 @@ function PsyPassword() {
         },
       }}
     >
+      {contextHolder}
       <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', marginLeft: '6%' }}>
         <div style={{ width: '40%', height: '70%', background: 'transparent', display: 'flex', flexDirection: 'column' }}>
           <Form form={form} onFinish={handleSubmit}>
