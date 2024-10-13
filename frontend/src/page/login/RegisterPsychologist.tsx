@@ -7,7 +7,10 @@ import { CreatePsychologist,ListPsychologists } from '../../services/https/psych
 import { Button, Form, Input, ConfigProvider, Steps, message} from 'antd';
 
 
+
 function RegisterPsychologist() {
+  const [messageApi, contextHolder] = message.useMessage();
+
   const [currentStep, setCurrentStep] = useState(0);
   const [formValues, setFormValues] = useState({});
   const [psy,setPsy] = useState<PsychologistInterface[]>([]);
@@ -36,7 +39,7 @@ const listPsychologist = async () => {
 
                 // ตรวจสอบว่าอีเมลมีอยู่ในระบบแล้วหรือไม่
                 if (checkEmailExists(email)) {
-                  message.error("ไม่สามารถใช้อีเมลดังกล่าวได้");
+                  messageApi.error("ไม่สามารถใช้อีเมลดังกล่าวได้");
                   return; 
                 }
               }
@@ -45,7 +48,7 @@ const listPsychologist = async () => {
               setCurrentStep(currentStep + 1);
           })
           .catch(() => {
-              message.error("กรุณากรอกข้อมูลให้ครบถ้วน");
+              messageApi.error("กรุณากรอกข้อมูลให้ครบถ้วน");
           }
       );
   };
@@ -92,12 +95,12 @@ const handleSubmitReg = async (values: any) => {
 
     const res = await CreatePsychologist(psychologistData);
     if (res.status) {
-        message.success("ลงทะเบียนสำเร็จ!");
+        messageApi.success("ลงทะเบียนสำเร็จ!");
         setTimeout(() => {
             next(); 
         }, 3000); // Move to the success screen
     } else {
-        message.error(res.message || "การลงทะเบียนล้มเหลว");
+        messageApi.error(res.message || "การลงทะเบียนล้มเหลว");
     }
 
    console.log("Registration Values: ", allValues);
@@ -125,6 +128,7 @@ return(
       }
   }}
 >
+{contextHolder}
 <div className="registerPsychologist">
   <div className="register-container">
       <div style={{position:'relative',}}><h1 style={{marginTop:'0%'}}>ลงทะเบียน</h1></div>

@@ -180,7 +180,7 @@ function AddPat() {
         },
       }}
     >
-      <div>
+      <div className='Add-patient'>
         <Button type="primary" onClick={showModal}>
           <b style={{ fontSize: 20 }}>+</b>เพิ่มผู้ป่วยใหม่
         </Button>
