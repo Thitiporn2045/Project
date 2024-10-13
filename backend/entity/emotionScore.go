@@ -3,9 +3,11 @@ import(
 	"gorm.io/gorm"
 )
 
-type EmotionScore struct{
+type Emotion struct{
 	gorm.Model
-	Score int `gorm:"uniqueIndex"`
+	Name string `gorm:"uniqueIndex"`
+	Emoticon string
+	ColorCode string
 
 	ActivityDiary []ActivityDiary `gorm:"foreignKey:EmotionID"`
 	ActivityPlanning []ActivityPlanning `gorm:"foreignKey:EmotionID"`

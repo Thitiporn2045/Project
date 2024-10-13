@@ -9,11 +9,10 @@ type CrossSectional struct{
 	Thought string
 	Behavior string
 	BodilySensation string
-	Emotion string
 
 	DiaryID *uint
 	Diary Diary `gorm:"foreignKey:DiaryID"`
 
 	EmotionID *uint
-	EmotionScore EmotionScore `gorm:"foreignKey:EmotionID"`
+	Emotion Emotion `gorm:"foreignKey:EmotionID"`
 }

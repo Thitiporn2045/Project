@@ -10,9 +10,12 @@ type ActivityPlanning struct{
 	Activity string
 	IsDone bool
 
+	TimeOfDayID *uint
+	TimeOfDay TimeOfDay `gorm:foreignKey:TimeOfDayID`
+
 	DiaryID *uint
 	Diary Diary `gorm:"foreignKey:DiaryID"`
 
 	EmotionID *uint
-	EmotionScore EmotionScore `gorm:"foreignKey:EmotionID"`
+	Emotion Emotion `gorm:"foreignKey:EmotionID"`
 }
