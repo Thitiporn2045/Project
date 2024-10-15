@@ -96,7 +96,7 @@ func SetupDatabase() (*gorm.DB, error) {
 	db.Model(&TypeOfPatient{}).Create(&all)
 	db.Model(&TypeOfPatient{}).Create(&notSpecified)
 //======================================================================
-	psyID := uint(1)
+	// psyID := uint(1)
 	patientPassword := "pat1234"
 	hashedPassword1, err := bcrypt.GenerateFromPassword([]byte(patientPassword), bcrypt.DefaultCost)
 	hashedPassword2, err := bcrypt.GenerateFromPassword([]byte(patientPassword), bcrypt.DefaultCost)
@@ -133,7 +133,6 @@ func SetupDatabase() (*gorm.DB, error) {
 			Lastname: "ศิริพงษ์",
 			Dob: "23-07-1998",
 			GenderID: &female.ID,
-			PsyID: &psyID,
 			Tel: "0834567890",
 			Email: "waranya@gmail.com",
 			Password: string(hashedPassword3),
@@ -145,7 +144,7 @@ func SetupDatabase() (*gorm.DB, error) {
 			Lastname: "ธรรมรักษ์",
 			Dob: "02-09-1995",
 			GenderID: &male.ID,
-			PsyID: &psyID,
+			
 			Tel: "0845678901",
 			Email: "thana@gmail.com",
 			Password: string(hashedPassword4),
@@ -157,7 +156,6 @@ func SetupDatabase() (*gorm.DB, error) {
 			Lastname: "อัครกุล",
 			Dob: "11-12-2001",
 			GenderID: &female.ID,
-			PsyID: &psyID,
 			Tel: "0856789012",
 			Email: "pimlada@gmail.com",
 			Password: string(hashedPassword5),

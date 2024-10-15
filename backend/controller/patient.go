@@ -51,7 +51,7 @@ func GetPatient(c *gin.Context) {
 
 	var patient entity.Patient
 	id := c.Param("id")
-	if err := entity.DB().Preload("Gender").Preload("Psychologist").Preload("TypeOfPatient").Raw("SELECT * FROM patients WHERE id = ?", id).Scan(&patient).Error; err != nil {
+	if err := entity.DB().Preload("Gender").Preload("Psychologist").Preload("TypeOfPatient").Raw("SELECT * FROM patients WHERE id = ?", id).Find(&patient).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -63,7 +63,7 @@ func GetPatient(c *gin.Context) {
 func ListPatients(c *gin.Context) {
 
 	var patients []entity.Patient
-	if err := entity.DB().Preload("Gender").Preload("Psychologist").Preload("TypeOfPatient").Raw("SELECT * FROM patients").Scan(&patients).Error; err != nil {
+	if err := entity.DB().Preload("Gender").Preload("Psychologist").Preload("TypeOfPatient").Raw("SELECT * FROM patients").Find(&patients).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	
