@@ -22,6 +22,7 @@ import Planning from './page/patient/worksheet/cbt/planning';
 import CrossSectional from './page/patient/worksheet/cbt/crossSectional';
 import Activity from './page/patient/worksheet/cbt/activity';
 import Behavioural from './page/patient/worksheet/cbt/behavioural';
+import Connection from './page/Connection';
 
 export default function App() {
 
@@ -29,6 +30,8 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path='admin' element={<Admin/>}/>
+        {/* ========================================================================= */}
+        <Route path='connection' element={<Connection/>}/>
         {/* ========================================================================= */}
         <Route path='/' element={<HomePage/>}/>
         <Route path='/login/psychologist' element={<LoginPsychologist/>}/>

@@ -38,6 +38,14 @@ func main() {
 			r.POST("/checkPassword",controller.CheckOldPasswordPsychologist)
 			r.PATCH("/updatepassword",controller.UpdatePasswordPsychologist)
 
+			//Connection Request Routes
+			r.POST("/connection/send",controller.SendConnectionRequest)
+			r.PATCH("/connection/cancel",controller.CancelConnectionRequest)
+			r.PATCH("/connection/accept",controller.AcceptConnectionRequest)
+			r.PATCH("/connection/reject",controller.RejectConnectionRequest)
+			r.GET("/connection/psy/:id",controller.GetConnectionRequestById)
+			r.GET("/connection/pat/:id",controller.ListConnectionPatientById)
+
 		}
 	}
 	
