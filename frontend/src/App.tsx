@@ -17,7 +17,7 @@ import RegisterPsychologist from './page/login/RegisterPsychologist';
 import HomePage from './page/login/HomePage';
 import Admin from './page/admin/Admin'
 import MainSheet from './page/patient/worksheet/totalSheet/mainSheet';
-import SheetDetail from './page/patient/worksheet/totalSheet/sheetDetail';
+import SheetCross from './page/patient/worksheet/totalSheet/sheetCross';
 import Planning from './page/patient/worksheet/cbt/planning';
 import CrossSectional from './page/patient/worksheet/cbt/crossSectional';
 import Activity from './page/patient/worksheet/cbt/activity';
@@ -49,7 +49,7 @@ export default function App() {
         <Route path="/Summary" element={<Summary />} />
         <Route path="/Profile" element={<Profile />} />
         <Route path='/MainSheet' element={<MainSheet/>} />
-        <Route path='/SheetDetail' element={<SheetDetail/>} />
+        <Route path='/SheetCross' element={<SheetCross/>} />
         <Route path='/Planning' element={<Planning/>} />
         <Route path='/CrossSectional' element={<CrossSectional/>} />
         <Route path='/Activity' element={<Activity/>} />

@@ -30,7 +30,7 @@ function BookPat({ month }: BookPatProps) {
     });
 
     const handleBookClick = (book: any) => {
-        navigate(`/SheetDetail?name=${book.name}&image=${encodeURIComponent(book.image)}`);
+        navigate(`/SheetCross?name=${book.name}&image=${encodeURIComponent(book.image)}`);
     };
 
     

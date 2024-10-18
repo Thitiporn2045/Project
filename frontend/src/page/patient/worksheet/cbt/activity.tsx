@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import NavbarPat from '../../../../component/navbarPat/navbarPat';
-import { Calendar, Badge, Modal, Form, Select, List, Input, ConfigProvider, Dropdown, Button, Menu, Timeline } from 'antd';
+import { Calendar, Badge, Modal, Form, Select, List, Input, ConfigProvider, Dropdown, Button, Menu, Timeline, Drawer } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import { FaUnlockAlt } from "react-icons/fa";
 import { SelectProps } from 'antd';
@@ -32,6 +32,26 @@ const options: SelectProps['options'] = [
     { value: '#B78FCB',emotion: '😢 ', label: 'Sad' },
 ];
 
+const comments = [
+    {
+    user: "John Doe",
+    date: '25/08/2024',
+    comment: "The psychologist was very attentive and gave practical advice on managing stress. I felt heard and understood throughout the session.",
+    image: 'https://i.pinimg.com/736x/ae/b3/0b/aeb30b5e52ee5578af71b98312c67055.jpg'
+    },
+    {
+    user: "Jane Smith",
+    date: '25/08/2024',
+    comment: "The session was insightful, but I felt like there could have been more focus on solutions. However, the psychologist was very compassionate.",
+    image: 'https://i.pinimg.com/736x/ae/b3/0b/aeb30b5e52ee5578af71b98312c67055.jpg'
+    },
+    {
+    user: "David Brown",
+    date: '28/08/2024',
+    comment: "I appreciated the psychologist's approach to mindfulness exercises. It helped me stay grounded during stressful moments.",
+    image: 'https://i.pinimg.com/736x/ae/b3/0b/aeb30b5e52ee5578af71b98312c67055.jpg'
+    }
+];
 const startDay = dayjs(Books[0].startDay, 'YYYY-MM-DD');
 const endDay = dayjs(Books[0].endDay, 'YYYY-MM-DD');
 
@@ -65,6 +85,16 @@ const handleOk = () => {
 const handleCancel = () => {
     form.resetFields();
     setIsModalOpen(false);
+};
+
+const [open, setOpen] = useState(false);
+
+const showDrawer = () => {
+    setOpen(true);
+};
+
+const onClose = () => {
+    setOpen(false);
 };
 
 const dateCellRender = (date: Dayjs) => {
@@ -219,7 +249,12 @@ return (
                 </div>
 
                 <div className='showContent' style={{ width: '30%', marginLeft: '10px', overflowX: 'auto', height: '100vh' }}>
-                    <h1 className='titleCalender'>รายการบันทึก</h1>
+                    <h1 className='titleCalender'>รายการบันทึก
+                    <Button type="primary" onClick={showDrawer}>
+                        Open
+                    </Button>
+                    </h1>
+                    
                     <Timeline>
                         {Object.keys(groupedEventsByHour).map((timeSlot) => (
                             <Timeline.Item key={timeSlot}>
@@ -303,6 +338,27 @@ return (
             </div>
         </div>
         </div>
+        <Drawer title="Basic Drawer" onClose={onClose} open={open}>
+            <div className="day-comments">
+                {comments.map((comment, index) => (
+                    <div key={index} className="comment-box">
+                        <div className="comment-content">
+                            <div className="comment-user">
+                                <strong>{comment.user}</strong>
+                                {/* <span className="comment-date">{formattedDate}</span> */}
+                            </div>
+                            <div className="comment-text">
+                                {comment.comment}
+                            </div>
+                        </div>
+                        {/* Avatar at the bottom */}
+                        <div className="comment-avatar">
+                            <img src={comment.image} />
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </Drawer>
     </div>
     </ConfigProvider>
 );

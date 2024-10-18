@@ -36,7 +36,7 @@ const comments = [
 ];
 
 
-function SheetDetail() {
+function SheetCross() {
     const [currentBook, setCurrentBook] = useState(Books[0]);
     const [dateRange, setDateRange] = useState<Date[]>([]);
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -141,50 +141,6 @@ function SheetDetail() {
         );
     };
 
-    const getCommentsForDay = (date: Date) => {
-        if (!isDateInRange(date)) return null;
-    
-        const formattedDate = date.toLocaleDateString('en-GB'); // Use 'en-GB' to match 'dd/mm/yyyy' format
-        const dayComments = comments.filter(comment => comment.date === formattedDate);
-    
-        if (dayComments.length > 0) {
-            return (
-                <div className="day-comments">
-                    {dayComments.map((comment, index) => (
-                        <div key={index} className="comment-box">
-                            <div className="comment-content">
-                                <div className="comment-user">
-                                    <strong>{comment.user}</strong>
-                                    <span className="comment-date">{formattedDate}</span>
-                                </div>
-                                <div className="comment-text">
-                                    {comment.comment}
-                                </div>
-                            </div>
-                            {/* Avatar at the bottom */}
-                            <div className="comment-avatar">
-                                <img src={comment.image} />
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            );
-        }
-    
-        return (
-            <div className="no-comments">
-                <Result
-                    status="404"
-                    title="No Comments"
-                    subTitle="No comments available for this day."
-                    extra={<Button type="primary">เพิ่มคอมเมนต์ใหม่</Button>}
-                />
-            </div>
-        );
-    };
-    
-    
-
     const isToday = (date: Date | null) => {
         if (!date) return false;
         const today = new Date();
@@ -192,7 +148,7 @@ function SheetDetail() {
     };
 
     return (
-        <div className='sheetDetail'>
+        <div className='SheetCross'>
             <div className='main-body'>
                 <div className='sidebar'>
                     <NavbarPat />
@@ -240,7 +196,25 @@ function SheetDetail() {
                             <div className='box2'>
                                 <div className="contentComment">
                                     <h3>คำแนะนำ</h3>
-                                    {selectedDate && getCommentsForDay(selectedDate)}
+                                    <div className="day-comments">
+                                        {comments.map((comment, index) => (
+                                            <div key={index} className="comment-box">
+                                                <div className="comment-content">
+                                                    <div className="comment-user">
+                                                        <strong>{comment.user}</strong>
+                                                        {/* <span className="comment-date">{formattedDate}</span> */}
+                                                    </div>
+                                                    <div className="comment-text">
+                                                        {comment.comment}
+                                                    </div>
+                                                </div>
+                                                {/* Avatar at the bottom */}
+                                                <div className="comment-avatar">
+                                                    <img src={comment.image} />
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -251,4 +225,4 @@ function SheetDetail() {
     );
 }
 
-export default SheetDetail;
+export default SheetCross;

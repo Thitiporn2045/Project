@@ -347,9 +347,9 @@
 
 
 
-/* ------------  sheetDetail   ------------------- */
+/* ------------  SheetCross   ------------------- */
 
-.sheetDetail{
+.SheetCross{
     margin: 0;
     padding: 0;
     width: 100vw;
@@ -358,14 +358,14 @@
     font-family: 'Noto Sans Thai', sans-serif;
 }
 
-.sheetDetail .befor-main{
+.SheetCross .befor-main{
     margin: 0;
     padding: 0;
     width: 100vw;
     height: 100vh;
 }
 
-.sheetDetail .main-body{
+.SheetCross .main-body{
     width: 100%;
     height: 100%;
     display: grid;
@@ -374,7 +374,7 @@
     background-color: var(--color-backgroun-secondary4);
 }
 
-.sheetDetail .main-body .sidebar {
+.SheetCross .main-body .sidebar {
     width: 100%;
     height: 100%;
     background: var(--color-backgroun-main1);
@@ -383,26 +383,26 @@
 
 /* ------------  main-background   ------------------- */
 
-.sheetDetail .main-body .main-background{
+.SheetCross .main-body .main-background{
     width: 100%;
     height: 99vh;
     background-color: var(--color-backgroun-secondary4);
 }
 
-.sheetDetail .main-body .main-background header{
+.SheetCross .main-body .main-background header{
     width: calc(100% -20px);
     height: 100px;
     display: block;
     align-items: center;
 }
 
-.sheetDetail .main-body .main-background header .on{
+.SheetCross .main-body .main-background header .on{
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.sheetDetail .main-body .main-background header .lower{
+.SheetCross .main-body .main-background header .lower{
     margin-top: -30px;
     display: flex;
     justify-content: space-between;
@@ -410,16 +410,16 @@
 
 }
 
-.sheetDetail .main-body .main-background header .lower .typebook{
+.SheetCross .main-body .main-background header .lower .typebook{
     font-size: 1rem;
 }
 
-.sheetDetail .main-body .main-background header .lower .emo{
+.SheetCross .main-body .main-background header .lower .emo{
     display: flex;
     gap: 20px;
 }
 
-.sheetDetail .main-body .main-background .main-content{
+.SheetCross .main-body .main-background .main-content{
     position: relative;
     margin-top: 20px;
     width: 100%;
@@ -430,13 +430,13 @@
     overflow-y: auto;
 }
 
-.sheetDetail .main-body .main-background .main-content .content1{
+.SheetCross .main-body .main-background .main-content .content1{
     width: calc(100% - 20px);
     height: calc(100% - 20px);
     margin: 10px;
 }
 
-.sheetDetail .content-display {
+.SheetCross .content-display {
     width: calc(100% - 20px);
     height: calc(100% - 20px);
     color: #5E7BD0;
@@ -445,20 +445,20 @@
     background-color: var(--color-backgroun-secondary4);
 }
 
-.sheetDetail .day-content {
+.SheetCross .day-content {
     margin-left: 10px;
     width: calc(100% - 20px);
     height: calc(100% - 20px);
 }
 
-.sheetDetail .day-content .content{
+.SheetCross .day-content .content{
     display: grid;
     grid-template-rows: 6rem auto;
     width: 100%;
     height: 100%;
 }
 
-.sheetDetail .day-content .content .head .lowerInput .mainTitle {
+.SheetCross .day-content .content .head .lowerInput .mainTitle {
     margin-top: -5px;
     padding-left: 10px;
     width: 99%;
@@ -472,7 +472,7 @@
     align-items: center;
 }
 
-.sheetDetail .thought, .behavior, .bodily, .emotion {
+.SheetCross .thought, .behavior, .bodily, .emotion {
     padding-top: 10px;
     margin: 10px;
     height: 400px;
@@ -482,13 +482,13 @@
     color: var(--color-font1);
 }
 
-.sheetDetail .no-content {
+.SheetCross .no-content {
     margin: 80px;
     width: calc(100% -20px);
     height: 72vh;
 }
 
-.sheetDetail .day-content .lower-content{
+.SheetCross .day-content .lower-content{
     margin: 30px 20px 0 0px;
     width: 100%;
     height: 95%;
@@ -496,7 +496,7 @@
     background-color: var(--color-backgroun-secondary3);
 }
 
-.sheetDetail .day-content .lower-content .bg-Content{
+.SheetCross .day-content .lower-content .bg-Content{
     margin: 20px 20px 0 20px;
     width: calc(100% -20px);
     height: 91%;
@@ -506,7 +506,7 @@
     gap: 20px;
 }
 
-.sheetDetail .day-content .lower-content .bg-Content .content-box {
+.SheetCross .day-content .lower-content .bg-Content .content-box {
     flex: 1 1 calc(50% - 10px);
     margin-top: 10px;
     min-width: 150px;
@@ -515,30 +515,30 @@
     border-radius: var(--border-radius-1);
 }
 
-.sheetDetail .day-content .lower-content .bg-Content .content-box:nth-child(1) {
+.SheetCross .day-content .lower-content .bg-Content .content-box:nth-child(1) {
     background-color: var(--color-secondary1);
 }
 
-.sheetDetail .day-content .lower-content .bg-Content .content-box:nth-child(2) {
+.SheetCross .day-content .lower-content .bg-Content .content-box:nth-child(2) {
     background-color: var(--color-secondary2);
 }
 
-.sheetDetail .day-content .lower-content .bg-Content .content-box:nth-child(3) {
+.SheetCross .day-content .lower-content .bg-Content .content-box:nth-child(3) {
     background-color: var(--color-secondary3);
 }
 
-.sheetDetail .day-content .lower-content .bg-Content .content-box:nth-child(4) {
+.SheetCross .day-content .lower-content .bg-Content .content-box:nth-child(4) {
     background-color: var(--color-secondary1);
 }
 
-.sheetDetail .day-content .lower-content .bg-Content .content-box h3 {
+.SheetCross .day-content .lower-content .bg-Content .content-box h3 {
     text-align: center;
     font-size: 1rem;
     font-weight: 800;
     color: var(--color-font1);
 }
 
-.sheetDetail .day-content .lower-content .bg-Content .content-box .bg-input{
+.SheetCross .day-content .lower-content .bg-Content .content-box .bg-input{
     margin-left: 5px;
     width: 95%;
     height: 85%;
@@ -546,7 +546,7 @@
     background-color: var(--color-backgroun-secondary2);
 }
 
-.sheetDetail .day-content .lower-content .bg-Content .content-box .bg-input .content-input {
+.SheetCross .day-content .lower-content .bg-Content .content-box .bg-input .content-input {
     margin-top: 10px;
     width: 100%;
     height: 84%;
@@ -560,7 +560,7 @@
     font-family: 'Noto Sans Thai', sans-serif;
 }
 
-.sheetDetail .day-content .lower-content .bg-Content .content-box .bg-input .feeling-input {
+.SheetCross .day-content .lower-content .bg-Content .content-box .bg-input .feeling-input {
     margin-left: 13px;
     width: 90%;
     height: 40px;
@@ -568,7 +568,7 @@
     font-family: 'Noto Sans Thai', sans-serif;
 }
 
-.sheetDetail .day-content  .ant-select-show-search:where(.css-dev-only-do-not-override-1uq9j6g).ant-select:not(.ant-select-customize-input) .ant-select-selector {
+.SheetCross .day-content  .ant-select-show-search:where(.css-dev-only-do-not-override-1uq9j6g).ant-select:not(.ant-select-customize-input) .ant-select-selector {
     cursor: text;
     text-align: center;
     border: none;
@@ -585,13 +585,13 @@
 
 /* ------------  main-bg-right   ------------------- */
 
-.sheetDetail .main-body .main-bg-right{
+.SheetCross .main-body .main-bg-right{
     width: 100%;
     height: 100%;
 }
 
 
-.sheetDetail .main-body .main-bg-right .main-content{
+.SheetCross .main-body .main-bg-right .main-content{
     position: relative;
     margin-top: 20px;
     width: 100%;
@@ -603,7 +603,7 @@
 
 /* ------------  content1   ------------------- */
 
-.sheetDetail .main-body .main-bg-right .main-content .content1{
+.SheetCross .main-body .main-bg-right .main-content .content1{
     width: 100%;
     height: 100%;
     display: grid;
@@ -612,7 +612,7 @@
     background-color: var(--color-backgroun-secondary3);
 }
 
-.sheetDetail .main-body .main-bg-right .main-content .content1 .box1{
+.SheetCross .main-body .main-bg-right .main-content .content1 .box1{
     width: calc(45% - 20px);
     height: calc(100% - 20px);
     margin: 0 10px 10px 10px;
@@ -621,7 +621,7 @@
     font-family:'Noto Sans Thai',sans-serif;
 }
 
-.sheetDetail .shoedate{
+.SheetCross .shoedate{
     width: 100%;
     min-height: 35px;
     margin-left: 20px;
@@ -629,14 +629,14 @@
     /* background-color: #DADDFA; */
 }
 
-.sheetDetail .shoedate p{
+.SheetCross .shoedate p{
     text-align: center;
     font-size: 1.2rem;
     font-weight: 600;
     color: var(--color-font1);
 }
 
-.sheetDetail .date-range {
+.SheetCross .date-range {
     display: flex;
     justify-content: space-between;
     margin-left: 20px;
@@ -647,7 +647,7 @@
 }
 
 
-.sheetDetail .day {
+.SheetCross .day {
     flex: 0 0 auto;
     padding: 10px;
     width: 30px;
@@ -662,7 +662,7 @@
     transition: all 0.3s ease;
 }
 
-.sheetDetail .day:hover{
+.SheetCross .day:hover{
     animation: wobble 0.7s ease-in-out infinite;  
 }
 
@@ -682,14 +682,14 @@
 }
 
 
-.sheetDetail .day.selected {
+.SheetCross .day.selected {
     background-color: var(--color-backgroun-main2);
 }
 
 
 /* ------------  box2   ------------------- */
 
-.sheetDetail .main-body .main-bg-right .main-content .content1 .box2{
+.SheetCross .main-body .main-bg-right .main-content .content1 .box2{
     margin: -10px 15px;
     width: calc(49% - 20px);
     height: 74vh;
@@ -699,27 +699,27 @@
     background: var(--color-backgroun-secondary4);
 }
 
-.sheetDetail .main-body .main-bg-right .main-content .content1 .box2 .contentComment{
+.SheetCross .main-body .main-bg-right .main-content .content1 .box2 .contentComment{
     margin: 0 10px;
     height: 94%;
     overflow-y: auto;
 }
 
-.sheetDetail .contentComment h3{
+.SheetCross .contentComment h3{
     font-size: 1.2rem;
     font-weight: 600;
     color: var(--color-font1);
     padding-left: 10px;
 }
 
-.sheetDetail .day-comments {
+.SheetCross .day-comments {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     width: 100%;
 }
 
-.sheetDetail .comment-box {
+.SheetCross .comment-box {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -733,7 +733,7 @@
     box-shadow: rgba(92, 63, 130, 0.1) 0px 10px 50px;
 }
 
-.sheetDetail .comment-box::after {
+.SheetCross .comment-box::after {
     content: "";
     position: absolute;
     bottom: 10px;
@@ -743,35 +743,35 @@
     border-color: transparent transparent transparent #ffffff;
 }
 
-.sheetDetail .comment-content {
+.SheetCross .comment-content {
     color: var(--color-font1);
     width: 100%;
 }
 
-.sheetDetail .comment-user {
+.SheetCross .comment-user {
     font-weight: bold;
     display: flex;
     justify-content: space-between;
     margin-bottom: 5px;
 }
 
-.sheetDetail .comment-date {
+.SheetCross .comment-date {
     font-size: .8rem;
     color: var(--color-font4);
 }
 
-.sheetDetail .comment-text {
+.SheetCross .comment-text {
     font-size: .9rem;
     line-height: 1.5;
 }
 
-.sheetDetail .comment-avatar {
+.SheetCross .comment-avatar {
     position: absolute;
     right: -50px;
     bottom: -5px;
 }
 
-.sheetDetail .comment-avatar img {
+.SheetCross .comment-avatar img {
     width: 35px;
     height: 35px;
     border-radius: 50%;
