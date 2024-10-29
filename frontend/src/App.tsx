@@ -23,6 +23,7 @@ import CrossSectional from './page/patient/worksheet/cbt/crossSectional';
 import Activity from './page/patient/worksheet/cbt/activity';
 import Behavioural from './page/patient/worksheet/cbt/behavioural';
 import Connection from './page/Connection';
+import Emotional from './component/emotional/emotional';
 
 export default function App() {
 
@@ -54,6 +55,7 @@ export default function App() {
         <Route path='/CrossSectional' element={<CrossSectional/>} />
         <Route path='/Activity' element={<Activity/>} />
         <Route path='/Behavioural' element={<Behavioural/>} />
+        <Route path='/Emotional' element={<Emotional/>} />
       </Routes>
     </BrowserRouter>
   );
