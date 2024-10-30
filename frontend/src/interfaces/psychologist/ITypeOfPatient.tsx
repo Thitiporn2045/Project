@@ -1,7 +1,7 @@
-import { PsychologistInterface } from "../psychologist/IPsychologist";
+import { PsychologistInterface } from "./IPsychologist";
 
 export interface TypeOfPatientInterface{
-    ID?: string;
+    ID?: number;
     Name?: string;
 
     PsyID?: number;

@@ -91,9 +91,10 @@ async function DeletePatientByID(id: Number | undefined) {
       .then((response) => response.json())
       .then((res) => {
         if (res.data) {
-          return res.data;
-        } else {
-          return false;
+          return { status: true, message: res.data };
+        } 
+        else {
+          return { status: false, message: res.error };
         }
       });
   

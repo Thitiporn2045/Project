@@ -152,26 +152,26 @@
 }
 
 .HomePage .moo-deng1 .moo-deng-pic1{
-    background: url('../../assets/moo-deng-pic1.jpg');
+    background: url('../../assets/pic2.gif');
     background-size: cover;
     width: 200px;
     height: 200px; 
     
-    border: 5px solid transparent; /* กำหนดกรอบที่เริ่มต้นเป็นโปร่งใส */
-    border-radius: 10px; /* ทำให้ขอบโค้งมนตามที่ต้องการ */
-    animation: rainbow-border1 1s linear infinite, move-image 3s ease-in-out infinite, in-left 2s ease-in;
+    border: 5px solid transparent; 
+    border-radius: 10px; 
+    /* animation: rainbow-border1 1s linear infinite, move-image 3s ease-in-out infinite, in-left 2s ease-in; */
 
 }
 
 .HomePage .moo-deng2 .moo-deng-pic2{
-    background: url('../../assets/moo-deng-pic2.jpg');
+    background: url('../../assets/pic1.gif');
     background-size: cover;
     width: 200px;
     height: 200px; 
     
-    border: 5px solid transparent; /* กำหนดกรอบที่เริ่มต้นเป็นโปร่งใส */
-    border-radius: 10px; /* ทำให้ขอบโค้งมนตามที่ต้องการ */
-    animation: rainbow-border2 1s linear infinite, move-image 3s ease-in-out infinite, in-right 2s ease-in;
+    border: 5px solid transparent; 
+    border-radius: 10px; 
+    /* animation: rainbow-border2 1s linear infinite, move-image 3s ease-in-out infinite, in-right 2s ease-in; */
 
 }
 

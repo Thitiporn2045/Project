@@ -80,7 +80,7 @@ function PsyProfile() {
 //===================================================================
   const handleSubmit = async(allValues: PsychologistInterface) => {
     allValues.ID = psychologist?.ID;
-    allValues.Picture = psychologist?.Picture;
+    allValues.Picture = psychologist?.Picture; //set ผ่าน useState
     allValues.IsApproved = psychologist?.IsApproved;
     allValues.Password = psychologist?.Password;
     allValues.WorkingNumber = psychologist?.WorkingNumber;

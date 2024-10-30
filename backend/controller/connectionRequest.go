@@ -62,7 +62,7 @@ func CancelConnectionRequest(c *gin.Context){//PATCH
 
 }
 
-func GetConnectionRequestById(c *gin.Context){
+func GetConnectionRequestById(c *gin.Context){//For add pats function
     var connectionRequest []entity.ConnectionRequest
     
     psyID := c.Param("id")
@@ -75,6 +75,7 @@ func GetConnectionRequestById(c *gin.Context){
     c.JSON(http.StatusOK, gin.H{"data": connectionRequest})	
 
 }
+
 
 //ปุ่มลบผู้ป่วย ต้องทำฟังก์ชันอัปเดต เป็น not_connect ================================================================
 

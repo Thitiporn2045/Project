@@ -17,8 +17,8 @@ function Connection() {
     const [connection, setConnection] = useState<ConnectionRequestInterface[]>([]); //Psy
     const [patConnection, setPatConnection] = useState<ConnectionRequestInterface[]>([]); //Pat
     const [countNoti, setCountNoti] = useState(0); //pat
-    const psyID = 1;
-    const patID = 13;
+    const psyID = 3;
+    const patID = 4;
 
     const listPatients = async () => {//psy
         let res = await ListPatients();
@@ -45,6 +45,7 @@ function Connection() {
         if(res.status){
             messageApi.success("ส่งคำขอแล้ว");
             getConnectionrequest();
+            listPatientConnection();
             // setConnection(prevConnections => [...prevConnections, conn]);
         }
         else{
@@ -64,6 +65,7 @@ function Connection() {
         if(res.status){
             messageApi.success("ยกเลิกคำขอแล้ว")
             getConnectionrequest();
+            listPatientConnection();
             // setConnection(prevConnections => 
             //     prevConnections.map(con => 
             //         con.ID === conID ? cancelConnection : con
@@ -114,6 +116,7 @@ const acceptConnectionRequest = async (conID: number) =>{ //pat
             
         // },1500)
         listPatientConnection();
+        getConnectionrequest();
         setCountNoti(countNoti-1);    
     } 
     else{
@@ -141,6 +144,7 @@ const rejectConnectionRequest = async (conID: number) =>{ //pat
             
         // },1500)
         listPatientConnection();
+        getConnectionrequest();
         setCountNoti(countNoti-1);
     } 
     else{

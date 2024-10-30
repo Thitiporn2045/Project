@@ -1,224 +1,165 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { TypeOfPatientInterface } from '../../../interfaces/psychologist/ITypeOfPatient';
+import { CreateTypeOfPatient, ListTypeOfPatient,ListConnectedPatientByType } from '../../../services/https/psychologist/typeOfPatient';
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, ConfigProvider, Divider, Input, Modal, Select, Space } from 'antd';
-import type { InputRef } from 'antd';
+import { Button, ConfigProvider, Divider, Input, Modal, Select, Space,Form, message } from 'antd';
 import thTH from 'antd/lib/locale/th_TH';
 import { LuUserMinus2 } from "react-icons/lu";
 import { FiEdit3 } from "react-icons/fi";
+import userEmpty from '../../../assets/userEmty.png';
 import './PatTypeSelect.css';
-
-interface Patient{
-  id: number;
-  firstName: string;
-  lastName: string;
-  birthdate: string;
-  age: number;
-  phone: string;
-  email: string;
-  symptoms: string;
-  type: string;
-  profilePicture: string;
-  connectionStatus: string;
-  isWorksheetPublic: boolean;
-
-}
-
-const patients: Patient[] = [
-  {
-    "id": 1,
-    "firstName": "สมใจ",
-    "lastName": "ยิ้มแย้ม",
-    "birthdate": "1985-05-12",
-    "age": 39,
-    "phone": "0812345678",
-    "email": "somchai.s@example.com",
-    "symptoms": "Depression",
-    "type": "รพ.มทส",
-    "profilePicture": "https://via.placeholder.com/150?text=Somchai",
-    "connectionStatus": "connected",
-    "isWorksheetPublic": true,
-
-  },
-  {
-    "id": 2,
-    "firstName": "สมใจ",
-    "lastName": "ชีวเจริญ",
-    "birthdate": "1990-03-22",
-    "age": 34,
-    "phone": "0897654321",
-    "email": "somsak.p@example.com",
-    "symptoms": "Anxiety",
-    "type": "คลินิกวัยรุ่น",
-    "profilePicture": "https://via.placeholder.com/150?text=Somsak",
-    "connectionStatus": "not_connected",
-    "isWorksheetPublic": true,
-
-  },
-{
-    "id": 3,
-    "firstName": "สมใจ",
-    "lastName": "ยอดรักยิ่ง",
-    "birthdate": "1978-08-15",
-    "age": 46,
-    "phone": "0876543210",
-    "email": "sompong.j@example.com",
-    "symptoms": "PTSD",
-    "type": "รพ.มทส",
-    "profilePicture": "https://via.placeholder.com/150?text=Sompong",
-    "connectionStatus": "pending",
-    "isWorksheetPublic": false,
-
-  },
-  {
-    "id": 4,
-    "firstName": "สมพงษ์",
-    "lastName": "รักไทย",
-    "birthdate": "1995-01-30",
-    "age": 29,
-    "phone": "0865432109",
-    "email": "sureeporn.w@example.com",
-    "symptoms": "Bipolar Disorder",
-    "type": "คลินิกวัยรุ่น",
-    "profilePicture": "https://via.placeholder.com/150?text=Sureeporn",
-    "connectionStatus": "pending",
-    "isWorksheetPublic": true,
-
-  },
-{
-    "id": 5,
-    "firstName": "ศรราม",
-    "lastName": "น้ำใจ",
-    "birthdate": "1988-11-05",
-    "age": 35,
-    "phone": "0854321098",
-    "email": "siriwan.k@example.com",
-    "symptoms": "OCD",
-    "type": "รพ.มทส",
-    "profilePicture": "https://via.placeholder.com/150?text=Siriwan",
-    "connectionStatus": "pending",
-    "isWorksheetPublic": false,
-
-  },
-{
-    "id": 6,
-    "firstName": "อนุชา",
-    "lastName": "งามเจริญ",
-    "birthdate": "1983-07-21",
-    "age": 41,
-    "phone": "0843210987",
-    "email": "sakchai.i@example.com",
-    "symptoms": "Schizophrenia",
-    "type": "",
-    "profilePicture": "https://via.placeholder.com/150?text=Sakchai",
-    "connectionStatus": "connected",
-    "isWorksheetPublic": true,
-
-  },
-  {
-    "id": 7,
-    "firstName": "สุมาลี",
-    "lastName": "ทองใส",
-    "birthdate": "1992-12-10",
-    "age": 31,
-    "phone": "0832109876",
-    "email": "sumalee.t@example.com",
-    "symptoms": "Panic Disorder",
-    "type": "",
-    "profilePicture": "https://via.placeholder.com/150?text=Sumalee",
-    "connectionStatus": "pending",
-    "isWorksheetPublic": true,
-
-  }
-]
+import { PatientInterface } from '../../../interfaces/patient/IPatient';
+import { calculateAge } from '../../../page/calculateAge';
+import { DeletePatientByID, UpdatePatient } from '../../../services/https/patient';
 
 
 let index = 0;
 
 function PatTypeSelect() {
-  const [items, setItems] = useState(['ทั้งหมด', 'รพ.มทส', 'คลินิกวัยรุ่น','ไม่ระบุ']);
-  const [name, setName] = useState('');
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const [items, setItems] = useState<TypeOfPatientInterface[]>([]);
   const [selectedType, setSelectedType] = useState<string>('ทั้งหมด');
-  const [selectedPatient, setSelectedPatient] = useState<Patient>();
+  const [pat,setPat] = useState<PatientInterface[]>([]);
+  
+  const [form] = Form.useForm();
+
+
+  const [selectedPatient, setSelectedPatient] = useState<PatientInterface>();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
-  const [originalSymptoms, setOriginalSymptoms] = useState<string | undefined>('');
-  const [originalType, setOriginalType] = useState<string | undefined>('');
+  const [originalSymptoms, setOriginalSymptoms] = useState<string | undefined>(''); //Original เอาไว้ทำ disable ปุ่มบันทึก เทียบกับค่า edited
+  const [originalType, setOriginalType] = useState<number | undefined>();
 
   const [editedSymptoms, setEditedSymptoms] = useState<string | undefined>('');
-  const [editedType, setEditedType] = useState<string | undefined>('');
+  const [editedType, setEditedType] = useState<number | undefined>(); //เก็บไอดีจากSelect
 
   const [isSaveDisabled, setIsSaveDisabled] = useState<boolean>(true);
-  const inputRef = useRef<InputRef>(null);
-
-  //======================== Select============
-  const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value);
-  };
-
-  const addItem = (e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => {
-    e.preventDefault();
-    setItems([...items, name || `หมวดหมู่ ${index++}`]);
-    setName('');
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 0);
-  };
+  
+  const psyID = localStorage.getItem('psychologistID') 
+//=========================================================================
+const listPatients = async () => {
+  let res = await ListConnectedPatientByType(Number(psyID));
+  if(res){
+    setPat(res);
+  }
+}
+//=========================================================================
+  const listTypeOfPatient = async () => {
+    let res = await ListTypeOfPatient(Number(psyID));
+    if(res){
+      setItems(res);
+    }
+  }
+  useEffect(() => {
+    listTypeOfPatient();
+    listPatients();
+    
+  }, []);
+  //======================== Select หมวดหมู่ ============
+  const handleAddType = async(values: TypeOfPatientInterface) => {
+    values.PsyID = Number(psyID);
+    let res = await CreateTypeOfPatient(values);
+    if(res.status){
+      messageApi.success("เพิ่มหมวดหมู่สำเร็จ!")
+      form.resetFields();
+      setTimeout(() => {
+        listTypeOfPatient();
+      },0)
+    }
+    else{
+      messageApi.error(res.status);
+    }
+   
+  }
   //=================================================
 
   //================Listed by Select=================
   const filteredPatients = selectedType === 'ทั้งหมด' 
-    ? patients 
-    : selectedType === 'ไม่ระบุ'
-        ? patients.filter(patient => (patient.type === null || patient.type === ''))
-        : patients.filter(patient => patient.type === selectedType);
+    ? pat 
+    : selectedType === 'ที่ยังไม่ระบุ'
+        ? pat.filter(pat => (pat.TypeID === null))
+        : pat.filter(pat => pat.TypeOfPatient?.Name === selectedType);
   //=================================================
 
   //======================Modal User Info============
-  const filteredItems = items.filter(item => item !== 'ทั้งหมด' && item !== 'ไม่ระบุ'); //ไม่เอาไปแสดงใน select ของModal
-  const showModal = (patients: Patient) => {
+  const filteredItems = items.filter(item => item.Name !== 'ทั้งหมด' && item.Name !== 'ที่ยังไม่ระบุ'); //ไม่เอาไปแสดงใน select ของModal
+  const showEditModal = (patients: PatientInterface) => {
     setSelectedPatient(patients);
-    setOriginalSymptoms(patients.symptoms);
-    setOriginalType(patients.type);
 
-    setEditedSymptoms(patients.symptoms);
-    setEditedType(patients.type);
+    setOriginalSymptoms(patients.Symtoms);
+    setEditedSymptoms(patients.Symtoms);
 
+    if(patients.TypeOfPatient?.ID === 0){ //ถ้าไม่ทำ if ที่ Select มันจะขึ้นเลข 0 สำหรับคนที่ยังไม่มี Type
+      setOriginalType(undefined);
+      setEditedType(undefined);
+    }
+    else{
+      setOriginalType(patients.TypeOfPatient?.ID);
+      setEditedType(patients.TypeOfPatient?.ID);
+    }
+  
     setIsModalVisible(true);
   };
+  
+  //บันทึกข้อมูลที่ถูกแก้ไข symtoms and type
+  const handleUpdateOk = async(patID: number) => {
+    
+    const updatePatient = pat.find((pat) => pat.ID === patID)
+    const data: PatientInterface = {
+      ...updatePatient,
+      Symtoms: editedSymptoms,
+      TypeID: editedType,
+    }
+
+    let res = await UpdatePatient(data);
+    if(res.status){
+      messageApi.success("แก้ไขข้อมูลสำเร็จ");
+      listPatients();
+    }
+    else{
+      messageApi.error(res.message);
+    }
+    
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };  
+  
+  // Function เปิดปิดปุ่มบันทึกการแก้ไข
+  useEffect(() => {
+    const isChanged = editedSymptoms !== originalSymptoms || editedType !== originalType;
+    setIsSaveDisabled(!isChanged);
+  }, [editedSymptoms, editedType, originalSymptoms, originalType]);
   //=================================================
 
   //============Modal Delete=========================
-  const showDeleteModal = (patient: Patient) => {
+  const showDeleteModal = (patient: PatientInterface) => {
     setSelectedPatient(patient);
     setIsDeleteModalVisible(true);
   };
 
-  const handleDeleteOk = () => {
-    console.log("Deleted patient:", selectedPatient);
-    // เพิ่มโค้ดเพื่อดำเนินการลบผู้ป่วยที่เลือก
-    setIsDeleteModalVisible(false);
+  const handleDeleteOk = async (patID: number) => {
+
+   let  res = await DeletePatientByID(Number(patID));
+   if (res.status) {
+      messageApi.success("ลบบัญชีผู้ใช้แล้ว!");
+      setIsDeleteModalVisible(false);
+      
+    } else {
+      messageApi.error(res.message || "เกิดข้อผิดพลาด");
+      setIsDeleteModalVisible(false);
+    }
+    listPatients();
   };
 
   const handleDeleteCancel = () => {
     setIsDeleteModalVisible(false);
   };
   //=================================================
-
-  // Function ที่ใช้เมื่อข้อมูลถูกแก้ไข
-  useEffect(() => {
-    const isChanged = editedSymptoms !== originalSymptoms || editedType !== originalType;
-    setIsSaveDisabled(!isChanged);
-  }, [editedSymptoms, editedType, originalSymptoms, originalType]);
-
-  const handleOk = () => {
-    // ดำเนินการบันทึกข้อมูลที่ถูกแก้ไข
-    setIsModalVisible(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
   return (
     <ConfigProvider
       locale={thTH}
@@ -226,10 +167,12 @@ function PatTypeSelect() {
         components:{},
         token:{
           colorPrimary: '#63C592',
-          colorText:'#585858'
+          colorText:'#585858',
+          fontFamily:'Noto Sans Thai, sans-serif'
         }
       }}
     >
+      {contextHolder}
       <div style={{width:'100%',height:'100%',display:'flex',flexDirection:'column'}}>
         <div style={{position:'relative',width:'100%',height:'10%',top:'2%',display:'flex',alignItems:'center'}}>
             <Select
@@ -241,80 +184,162 @@ function PatTypeSelect() {
                 <>
                     {menu}
                     <Divider style={{ margin: '8px 0' }} />
-                    <Space style={{ padding: '0 8px 4px' }}>
-                    <Input
-                        placeholder="กรุณาใส่หมวดหมู่ใหม่"
-                        ref={inputRef}
-                        value={name}
-                        onChange={onNameChange}
-                        onKeyDown={(e) => e.stopPropagation()}
-                    />
-                    <Button type="text" icon={<PlusOutlined />} onClick={addItem}>
-                        เพิ่มหมวดหมู่ {/*เขียนฟังก์ชันนี้ให้เพิ่มหมวดหมู่ลงตาราง หมวดหมู่ */}
-                    </Button> 
+                    <Space style={{ padding: '0 8px 0 ',}}>
+                      <Form
+                        form={form}
+                        onFinish={handleAddType}
+                        style={{padding:0,height:40}}
+                      >
+                        <div style={{display:'flex', flexDirection:'row', gap:'0.5rem'}}>
+                          <Form.Item
+                            name={'Name'}
+                          >
+                            <Input
+                              placeholder="กรุณากรอกหมวดหมู่ใหม่"
+                            />
+                          </Form.Item>
+                          <Form.Item
+                          >
+                            <Button type="text" htmlType='submit' icon={<PlusOutlined />} style={{color:'#63C592'}}>
+                                เพิ่ม {/*เพิ่มหมวดหมู่ลงตาราง */}
+                            </Button>
+                          </Form.Item>
+                        </div>
+                      </Form>
                     </Space>
                 </>
                 )}
-                options={items.map((item) => ({ label: item, value: item }))}
+                options={items.map((item) => ({ label: item.Name, value: item.Name }))}
             />
           </div>
-          <div style={{position:'relative',width:'100%',height:'88%',top:'2%',display:'flex',flexDirection:'column',gap:'5.5rem',overflowY:'auto'}}>
-              {filteredPatients.map(patient => (
-                  <li style={{listStyle:'none'}}>
-                  <div className="PatientList-containner" key={patient.id} style={{position:'absolute',display:'flex',flexDirection:'row',alignItems:'center',width:'99%',height:'80px',background:'#ffffff',borderRadius:'15px'}}>
-                    <img src={patient.profilePicture} alt={`${patient.firstName} ${patient.lastName}`} style={{ borderRadius: '10px', width: '50px', height: '50px', marginRight: '10px',marginLeft:'1%' }} />
-                    <div>
-                        <strong>{patient.firstName} {patient.lastName}</strong><br/>
-                        <span style={{color:'#b0b0b0'}}>อายุ: {patient.age}&nbsp;&nbsp;&nbsp;อาการที่รักษา: {patient.symptoms}</span>
+
+            <div style={{height:'96%',width:'100%',display:'flex' , flexDirection:'column',gap:'0.5rem',marginTop:'1rem',overflow:'auto'}}>
+              {filteredPatients.map(pat =>(
+                
+                <div style={{position:'relative',height:'80px',width:'100%',display:'flex', flexDirection:'row', justifyContent:'space-between',background:'white',borderRadius:'10px'}}>
+                  <div style={{position:'relative',display:'flex', flexDirection:'row', alignItems:'center',gap:'1rem',left:'16px'}}>
+                    {pat.Picture && (pat.Picture !== "") && (pat.Picture !== undefined)?(
+                      <img 
+                        src={pat.Picture}
+                        style={{width:'70px',height:'70px',borderRadius:'50%'}}/>
+                    ) : (
+                      <img 
+                        src={userEmpty}
+                        style={{width:'60px',height:'60px',borderRadius:'50%',}}/>
+                    )}
+                    <div style={{display:'flex', flexDirection:'column'}}>
+                      <div>{pat.Firstname} {pat.Lastname}</div>
+                      <div style={{color:'#868686'}}>อายุ: {calculateAge(String(pat.Dob))}ปี &nbsp; อาการที่รักษา: {(pat.Symtoms === "") || (pat.Symtoms === null)? `ไม่ระบุ`:(pat.Symtoms)}</div>
                     </div>
-                   
-                    <Button icon={<LuUserMinus2/>} 
-                      onClick={() => showDeleteModal(patient)} 
-                      style={{color:'#EE5D6A',fontSize:'24px',position:'absolute',left:'95%',width:'40px',height:'40px',alignItems:'center',justifyContent:'center',display:'flex',border:'none'}}/>
-                    <Button icon={<FiEdit3/>} 
-                      onClick={() => showModal(patient)} 
-                      style={{color:'#63C592',fontSize:'24px',position:'absolute',left:'90%',width:'40px',height:'40px',alignItems:'center',justifyContent:'center',display:'flex',border:'none'}}/>
+
                   </div>
-                  </li>
+
+                  <div style={{position:'relative',display:'flex', flexDirection:'row', alignItems:'center',gap:'1rem',right:'16px'}}>
+                    <Button 
+                      icon={<FiEdit3/>} 
+                      style={{color:'#63C592',fontSize:'24px',width:'40px',height:'40px',alignItems:'center',justifyContent:'center',display:'flex',border:'none'}}
+                      onClick={()=>showEditModal(pat)}/>
+                    
+                    <Button 
+                    icon={<LuUserMinus2/>} 
+                    style={{color:'#EE5D6A',fontSize:'24px',width:'40px',height:'40px',alignItems:'center',justifyContent:'center',display:'flex',border:'none'}}
+                    onClick={()=>showDeleteModal(pat)}/>
+                    
+                  </div>
+                </div>
+                
               ))}
-              {selectedPatient && (
-                <Modal open={isModalVisible} onOk={handleOk} onCancel={handleCancel} okButtonProps={{ disabled: isSaveDisabled }} okText="บันทึก">
-                  <div style={{display:'flex',flexDirection:'row',gap:'1rem'}}>
-                    <div><img src={selectedPatient.profilePicture} alt="Profile" style={{ borderRadius: '15%', width: '100px', height: '100px', marginBottom: '10px' }} /></div>
-                    <div>
-                      <b style={{fontSize:'24px'}}>{selectedPatient.firstName} {selectedPatient.lastName}</b><br/>
-                      <span><b>วันเกิด:</b> {selectedPatient.birthdate} <b>อายุ:</b> {selectedPatient.age} ปี</span><br/>
-                      <span><b>เบอร์โทรศัพท์:</b> {selectedPatient.phone}</span><br/>
-                      <span><b>อีเมล:</b> {selectedPatient.email}</span><br/>
-                      <span><b>อาการที่รักษา:</b></span>
-                      <Input value={editedSymptoms} onChange={(e) => setEditedSymptoms(e.target.value)} />
-                      <span><b>หมวดหมู่:</b></span>
-                      <Select value={editedType} onChange={(value) => setEditedType(value)} style={{ width: '100%' }}>
+            </div>
+
+            {selectedPatient && (
+              <Modal 
+              open={isModalVisible} 
+              onOk={()=>handleUpdateOk(Number(selectedPatient.ID))} 
+              onCancel={handleCancel} 
+              okButtonProps={{ disabled: isSaveDisabled }} 
+              okText="บันทึก"
+              width={700}
+              >
+                <div style={{display:'flex',flexDirection:'row',gap:'2rem',paddingBottom:'1rem',paddingTop:'1rem'}}>
+                
+                  <div style={{width:220,height:220,borderRadius:'50%',marginTop:'0.5rem'}}>
+                    {selectedPatient.Picture && (selectedPatient.Picture !== "") && (selectedPatient.Picture !== undefined)?(  
+                      <img 
+                        src={selectedPatient.Picture}
+                        style={{width:'100%',height:'100%',objectFit:'cover',borderRadius:'50%'}}/>
+                      ) : (
+                      <img 
+                        src={userEmpty}
+                        style={{width:'100%',height:'100%',objectFit:'cover',borderRadius:'50%'}}/>
+                    )}
+                  </div>
+
+                  <div style={{ width: '60%', display: 'flex', flexDirection: 'column',}}>
+                    <div style={{ display: 'flex', alignItems: 'center', width: '100%', height: '20%', borderBottom: 'solid 2px',borderColor:'#63C592' }}>
+                      <b style={{ fontSize: '24px' }}>{selectedPatient.Firstname} {selectedPatient.Lastname}</b>
+                    </div>
+                    <div style={{ display: 'flex',gap:'5.5rem',marginTop:'1rem'}}>
+                      <b>เพศ</b> <span style={{color:'#868686'}}>{selectedPatient.Gender?.Gender}</span>
+                    </div>
+                    <div style={{ display: 'flex',gap:'5.5rem'}}>
+                      <b>อายุ</b> <span style={{color:'#868686'}}>{calculateAge(String(selectedPatient.Dob))} ปี</span>
+                    </div>
+                    <div style={{ display: 'flex',gap:'4.5rem'}}>
+                      <b>วันเกิด</b> <span style={{color:'#868686'}}>{selectedPatient.Dob}</span>
+                    </div>
+                    <div style={{ display: 'flex',gap:'2rem'}}>
+                      <b>เบอร์โทรศัพท์</b> <span style={{color:'#868686'}}>{selectedPatient.Tel}</span>
+                    </div>
+                    <div style={{ display: 'flex',gap:'5rem'}}>
+                      <b>อีเมล</b> <span style={{color:'#868686'}}>{selectedPatient.Email}</span>
+                    </div>
+                    <div style={{ display: 'flex',gap:'2rem',marginTop:'1rem'}}>
+                      <b>อาการที่รักษา</b>
+                      <Input 
+                        value={editedSymptoms} 
+                        onChange={(e) => setEditedSymptoms(e.target.value)} 
+                        style={{ width: 150 }} 
+                      />
+                    </div>
+                    <div style={{ display: 'flex',gap:'3.6rem',marginTop:'1rem'}}>
+                      <b>หมวดหมู่</b>
+                      <Select 
+                        value={editedType} 
+                        onChange={(value) => setEditedType(value)} 
+                        style={{ width: 150 }}>
                         {filteredItems.map((item, index) => (
-                          <Select.Option key={index} value={item}>
-                            {item}
+                          <Select.Option key={index} value={item.ID}>
+                            {item.Name}
                           </Select.Option>
                         ))}
                       </Select>
                     </div>
                   </div>
-                </Modal>
-              )}
-          </div>
 
-          <Modal
-            title="ยืนยันการลบ"
-            open={isDeleteModalVisible}
-            onOk={handleDeleteOk}
-            onCancel={handleDeleteCancel}
-            okText="ยืนยัน"
-            cancelText="ยกเลิก"
-          >
-            <p>คุณต้องการลบผู้ป่วย {selectedPatient?.firstName} {selectedPatient?.lastName} หรือไม่?</p>
-          </Modal>
+
+                </div>
+
+                
+              </Modal>
+
+            )}
+            {selectedPatient && (
+              <Modal
+                title="ยืนยันการลบ"
+                open={isDeleteModalVisible}
+                onOk={() => handleDeleteOk(Number(selectedPatient?.ID))}
+                onCancel={handleDeleteCancel}
+                okText="ยืนยัน"
+                okType='danger'
+                cancelText="ยกเลิก"
+              >
+                <p>คุณต้องการลบผู้ป่วย <b>{selectedPatient?.Firstname} {selectedPatient?.Lastname}</b> หรือไม่?</p>
+              </Modal>
+            )}
         </div>
     </ConfigProvider>
   );
 }
+
 
 export default PatTypeSelect;
