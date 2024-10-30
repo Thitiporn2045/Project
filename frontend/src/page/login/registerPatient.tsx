@@ -79,7 +79,7 @@ const listPatients = async () => {
         const allValues = { ...formValues, ...values };
 
         const patientData: PatientInterface = {
-            Firstname: String(sliderValue),
+            Firstname: allValues.FirstName,
             Lastname: allValues.LastName,
             Dob: allValues.Dob.format('DD-MM-YYYY'),
             GenderID: allValues.GenderID,
@@ -147,8 +147,8 @@ const listPatients = async () => {
                                 label="ชื่อ"
                                 rules={[{ required: true, message: 'กรุณากรอกชื่อ!' }]}
                             >
-                                {/* <Input/> */}
-                                <TestCompo onChange={handleSliderChange}/>
+                                <Input/>
+                                {/* <TestCompo onChange={handleSliderChange}/> */}
                             </Form.Item>
                             <Form.Item
                                 name="LastName"

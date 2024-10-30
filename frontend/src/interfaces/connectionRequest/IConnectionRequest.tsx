@@ -2,7 +2,7 @@ import { PatientInterface } from "../patient/IPatient";
 import { PsychologistInterface } from "../psychologist/IPsychologist";
 
 export interface ConnectionRequestInterface{
-    ID?: number,
+    ID?: number;
     PatID?: number;
     Patient?: PatientInterface
     

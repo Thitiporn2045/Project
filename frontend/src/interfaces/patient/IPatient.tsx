@@ -1,9 +1,9 @@
 import { PsychologistInterface } from "../psychologist/IPsychologist";
 import { GenderInterface } from "./IGender";
-import { TypeOfPatientInterface } from "./ITypeOfPatient";
+import { TypeOfPatientInterface } from "../psychologist/ITypeOfPatient";
 
 export interface PatientInterface{
-    ID?: string;
+    ID?: number;
     Firstname?: string;
 	Lastname?: string;
 	Dob?: string; 

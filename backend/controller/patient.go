@@ -88,12 +88,14 @@ func DeletePatient(c *gin.Context) {
 func UpdatePatient(c *gin.Context) {
 
 	var patient entity.Patient
+	var result entity.Patient
+
 	
 	if err := c.ShouldBindJSON(&patient); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	if tx := entity.DB().Where("id = ?", patient.ID).First(&patient); tx.RowsAffected == 0 {
+	if tx := entity.DB().Where("id = ?", patient.ID).First(&result); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found"})
 		return
 	}
