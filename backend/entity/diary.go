@@ -19,6 +19,6 @@ type Diary struct{
 	ActivityPlanning []ActivityPlanning `gorm:"foreignKey:DiaryID"`
 	CrossSectional []CrossSectional `gorm:"foreignKey:DiaryID"`
 	ActivityDiary []ActivityDiary `gorm:"foreignKey:DiaryID"`
-	Comment []Comment `gorm:foreignKey:PsyID`
+	Comment []Comment `gorm:"foreignKey:PsyID"`
 
 }

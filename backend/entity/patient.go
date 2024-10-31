@@ -16,10 +16,7 @@ type Patient struct{
 	Picture string
 	Symtoms string
 	
-	PsyID *uint  `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-	Psychologist Psychologist `gorm:"foreignKey:PsyID"`
-
-	TypeID *uint
+	TypeID *uint `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 	TypeOfPatient TypeOfPatient `gorm:"foreignKey:TypeID"`
 	
 	GenderID *uint

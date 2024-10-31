@@ -144,7 +144,6 @@ func SetupDatabase() (*gorm.DB, error) {
 			Lastname: "ธรรมรักษ์",
 			Dob: "02-09-1995",
 			GenderID: &male.ID,
-			
 			Tel: "0845678901",
 			Email: "thana@gmail.com",
 			Password: string(hashedPassword4),

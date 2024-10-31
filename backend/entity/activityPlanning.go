@@ -11,7 +11,7 @@ type ActivityPlanning struct{
 	IsDone bool
 
 	TimeOfDayID *uint
-	TimeOfDay TimeOfDay `gorm:foreignKey:TimeOfDayID`
+	TimeOfDay TimeOfDay `gorm:"foreignKey:TimeOfDayID"`
 
 	DiaryID *uint
 	Diary Diary `gorm:"foreignKey:DiaryID"`

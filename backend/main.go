@@ -44,6 +44,8 @@ func main() {
 			r.POST("/typeOfPatient",controller.CreateTypeofPatient)
 			r.PATCH("/typeOfPatient",controller.UpdateTypeOfPatient)
 			r.DELETE("/typeOfPatient/:id",controller.DeleteTypeOfPatient)
+
+			r.GET("/diaries/psy/:id",controller.ListPublicDiariesByPatientType)
 			
 
 			//Connection Request Routes
