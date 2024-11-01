@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import NavbarPat from '../../component/navbarPat/navbarPat'
 import SearchPat from '../../component/searchPat/searchPat'
 import NotePat from '../../component/notePat/notePat';
@@ -9,6 +9,9 @@ import './stylePat.css'
 import { ImSearch } from "react-icons/im";
 import { FaBell } from "react-icons/fa";
 import { LuAlarmClock } from "react-icons/lu";
+import { GetPatientById } from '../../services/https/patient';
+import { PatientInterface } from '../../interfaces/patient/IPatient';
+import { Form } from 'react-router-dom';
 
 const userLogin = {
     imge: 'https://i.pinimg.com/474x/0f/44/6f/0f446fc154c16b2dd85413d50bc9c170.jpg',
@@ -20,6 +23,26 @@ const userLogin = {
 }
 
 function Pat() {
+    const patID = localStorage.getItem('patientID') 
+    const [patient, setPatient] = useState<PatientInterface>();
+    // const [initialPatient, setInitialPatient] = useState<PatientInterface>(); // เก็บข้อมูลเริ่มต้น
+
+const getPatientById = async () => {
+    let res = await GetPatientById(Number(patID));
+    if(res){
+        setPatient(res);
+        // setInitialPatient(res);
+
+    //   form.setFieldsValue({
+    //     firstname: res.FirstName,
+    //     lastname: res.LastName,
+    //     tel: res.Tel,
+    //     email: res.Email,
+    //     picture: res.Picture
+    //   });
+    }
+  }
+ //==================================================================
 
 //Note
 function addNotePat() {
