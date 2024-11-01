@@ -8,143 +8,23 @@ import { FaFileLines } from 'react-icons/fa6';
 import { useNavigate } from 'react-router-dom'; // นำเข้า useNavigate
 import Cookies from 'js-cookie'; // นำเข้า js-cookie
 import { TypeOfPatientInterface } from '../../../interfaces/psychologist/ITypeOfPatient';
-import { DiaryInterface } from '../../../interfaces/diary/IDiary';
+import { DiaryInterface, patientDiaryInterface } from '../../../interfaces/diary/IDiary';
 import { CreateTypeOfPatient, ListTypeOfPatient } from '../../../services/https/psychologist/typeOfPatient';
 import { ListPublicDiariesByPatientType } from '../../../services/https/diary';
+import { PatientInterface } from '../../../interfaces/patient/IPatient';
 
-interface Patient{
-  id: number;
-  firstName: string;
-  lastName: string;
-  birthdate: string;
-  age: number;
-  phone: string;
-  email: string;
-  symptoms: string;
-  type: string;
-  profilePicture: string;
-  connectionStatus: string;
-  isWorksheetPublic: boolean;
 
+interface DataInterface {
+  diaries: DiaryInterface[];
+  patient: patientDiaryInterface;
 }
-
-const patients: Patient[] = [
-  {
-    "id": 1,
-    "firstName": "สมใจ",
-    "lastName": "ยิ้มแย้ม",
-    "birthdate": "1985-05-12",
-    "age": 39,
-    "phone": "0812345678",
-    "email": "somchai.s@example.com",
-    "symptoms": "Depression",
-    "type": "รพ.มทส",
-    "profilePicture": "https://via.placeholder.com/150?text=Somchai",
-    "connectionStatus": "connected",
-    "isWorksheetPublic": true,
-
-  },
-  {
-    "id": 2,
-    "firstName": "สมใจ",
-    "lastName": "ชีวเจริญ",
-    "birthdate": "1990-03-22",
-    "age": 34,
-    "phone": "0897654321",
-    "email": "somsak.p@example.com",
-    "symptoms": "Anxiety",
-    "type": "คลินิกวัยรุ่น",
-    "profilePicture": "https://via.placeholder.com/150?text=Somsak",
-    "connectionStatus": "not_connected",
-    "isWorksheetPublic": true,
-
-  },
-{
-    "id": 3,
-    "firstName": "สมใจ",
-    "lastName": "ยอดรักยิ่ง",
-    "birthdate": "1978-08-15",
-    "age": 46,
-    "phone": "0876543210",
-    "email": "sompong.j@example.com",
-    "symptoms": "PTSD",
-    "type": "รพ.มทส",
-    "profilePicture": "https://via.placeholder.com/150?text=Sompong",
-    "connectionStatus": "pending",
-    "isWorksheetPublic": false,
-
-  },
-  {
-    "id": 4,
-    "firstName": "สมพงษ์",
-    "lastName": "รักไทย",
-    "birthdate": "1995-01-30",
-    "age": 29,
-    "phone": "0865432109",
-    "email": "sureeporn.w@example.com",
-    "symptoms": "Bipolar Disorder",
-    "type": "คลินิกวัยรุ่น",
-    "profilePicture": "https://via.placeholder.com/150?text=Sureeporn",
-    "connectionStatus": "pending",
-    "isWorksheetPublic": true,
-
-  },
-{
-    "id": 5,
-    "firstName": "ศรราม",
-    "lastName": "น้ำใจ",
-    "birthdate": "1988-11-05",
-    "age": 35,
-    "phone": "0854321098",
-    "email": "siriwan.k@example.com",
-    "symptoms": "OCD",
-    "type": "รพ.มทส",
-    "profilePicture": "https://via.placeholder.com/150?text=Siriwan",
-    "connectionStatus": "pending",
-    "isWorksheetPublic": false,
-
-  },
-{
-    "id": 6,
-    "firstName": "อนุชา",
-    "lastName": "งามเจริญ",
-    "birthdate": "1983-07-21",
-    "age": 41,
-    "phone": "0843210987",
-    "email": "sakchai.i@example.com",
-    "symptoms": "Schizophrenia",
-    "type": "",
-    "profilePicture": "https://via.placeholder.com/150?text=Sakchai",
-    "connectionStatus": "connected",
-    "isWorksheetPublic": true,
-
-  },
-  {
-    "id": 7,
-    "firstName": "สุมาลี",
-    "lastName": "ทองใส",
-    "birthdate": "1992-12-10",
-    "age": 31,
-    "phone": "0832109876",
-    "email": "sumalee.t@example.com",
-    "symptoms": "Panic Disorder",
-    "type": "",
-    "profilePicture": "https://via.placeholder.com/150?text=Sumalee",
-    "connectionStatus": "pending",
-    "isWorksheetPublic": true,
-
-  }
-]
-
-
-let index = 0;
 
 function WorksheetsList() {
   const [messageApi, contextHolder] = message.useMessage();
 
   const [items, setItems] = useState<TypeOfPatientInterface[]>([]);
   const [selectedType, setSelectedType] = useState<string>('ทั้งหมด');
-  const [diaries,setDiaries] = useState<DiaryInterface[]>([]);
+  const [diaries,setDiaries] = useState<DataInterface[]>([]);
 
   const [form] = Form.useForm();
   const psyID = localStorage.getItem('psychologistID') 
@@ -168,8 +48,7 @@ useEffect(()=>{
   listDiaries();
   listTypeOfPatient();
 
-},[  console.log('diaries data',diaries)
-])
+},[])
 //======================== Select หมวดหมู่ ============
 const handleAddType = async(values: TypeOfPatientInterface) => {
   values.PsyID = Number(psyID);
@@ -187,12 +66,12 @@ const handleAddType = async(values: TypeOfPatientInterface) => {
  
 }
 //=================================================
- //================Listed by Select=================
+//================Listed by Select=================
  const filteredPatients = selectedType === 'ทั้งหมด' 
  ? diaries 
  : selectedType === 'ที่ยังไม่ระบุ'
-     ? diaries.filter(diaries => (diaries.Patient?.TypeID === null))
-     : diaries.filter(diaries => diaries.Patient?.TypeOfPatient?.Name === selectedType);
+     ? diaries.filter(diaries => (diaries.patient.TypeOfPatient === null))
+     : diaries.filter(diaries => diaries.patient.TypeOfPatient === selectedType);
 //=================================================
  return(
   <ConfigProvider
@@ -248,7 +127,16 @@ const handleAddType = async(values: TypeOfPatientInterface) => {
         </div>
 
         <div style={{height:'96%',width:'100%',display:'flex' , flexDirection:'column',gap:'0.5rem',marginTop:'1rem',overflow:'auto'}}>
-          
+          {filteredPatients.map((item) =>(
+            <div>
+              <li>
+                <p>{item.patient.FirstName}</p>
+                {item.diaries.map((item2) => (
+                  <div>{item2.Name}</div> 
+                ))}
+              </li>
+            </div>
+          ))}
         </div>
 
       </div>

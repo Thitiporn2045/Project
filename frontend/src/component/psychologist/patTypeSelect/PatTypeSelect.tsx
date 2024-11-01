@@ -108,13 +108,14 @@ const listPatients = async () => {
     const data: PatientInterface = {
       ...updatePatient,
       Symtoms: editedSymptoms,
-      TypeID: editedType,
+      TypeID: Number(editedType),
     }
 
     let res = await UpdatePatient(data);
     if(res.status){
       messageApi.success("แก้ไขข้อมูลสำเร็จ");
       listPatients();
+      console.log(editedType)
     }
     else{
       messageApi.error(res.message);

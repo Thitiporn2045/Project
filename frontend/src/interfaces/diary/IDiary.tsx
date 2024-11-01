@@ -1,13 +1,18 @@
 import { PatientInterface } from "../patient/IPatient";
 import { WorksheetTypeInterface } from "../worksheetType/IWorksheetType";
 
-export interface DiaryInterface{
+export interface DiaryInterface{//Psy only
     ID?: number,
     IsPublic?: boolean,
+    Name?: string,
+    WorksheetType?: string
+}
 
-    PatID?: number,
-    Patient?: PatientInterface
+export interface patientDiaryInterface{//Psy only
+    ID?: number,
+    FirstName?: string,
+    LastName?: string,
+    TypeID?: number,
+    TypeOfPatient?: string,
 
-    WorksheetTypeID?: number,
-    WorksheetType?: WorksheetTypeInterface
 }
