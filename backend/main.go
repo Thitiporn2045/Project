@@ -27,6 +27,9 @@ func main() {
 			//Patient Routes
 			r.GET("/patients", controller.ListPatients)
 			r.GET("/patient/:id", controller.GetPatient)
+
+			r.GET("/pat/connection/:id", controller.GetConnectionPatientById)
+
 			r.PATCH("/patients", controller.UpdatePatient)
 			r.DELETE("/patients/:id", controller.DeletePatient)
 

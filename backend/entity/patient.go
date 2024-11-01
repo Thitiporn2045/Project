@@ -15,6 +15,7 @@ type Patient struct{
 	Password string
 	Picture string
 	Symtoms string
+	IsTakeMedicine bool
 	
 	TypeID *uint `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 	TypeOfPatient TypeOfPatient `gorm:"foreignKey:TypeID"`

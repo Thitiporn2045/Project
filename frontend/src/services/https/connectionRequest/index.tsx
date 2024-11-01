@@ -125,11 +125,34 @@ async function RejectConnectionRequest(data: ConnectionRequestInterface) {
   return res;
 }
 
+async function GetConnectionPatientById(id: Number | undefined) {
+  const requestOptions = {
+    method: "GET",
+    header:{
+      "Content-Type": "application/json",
+    },
+  };
+
+  let res = await fetch(`${apiUrl}/pat/connection/${id}`, requestOptions)
+    .then((response) => response.json())
+    .then((res) => {
+      if (res.data) {
+        return res.data;
+      } else {
+        return false;
+      }
+    });
+
+  return res;
+}
+
+
 export{
     SendConnectionRequest,
     CancelConnectionRequest,
     GetConnectionRequestById,
     ListConnectionPatientById,
     AcceptConnectionRequest,
-    RejectConnectionRequest
+    RejectConnectionRequest,
+    GetConnectionPatientById
 }

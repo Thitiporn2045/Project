@@ -35,6 +35,7 @@ func CreatePatient(c *gin.Context) {
 		Password: patient.Password,
 		Email: patient.Email,
 		Picture: patient.Picture,
+		IsTakeMedicine: patient.IsTakeMedicine,
 	}
 	// บันทึก
 	a.Password = string(hashPassword)

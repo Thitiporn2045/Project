@@ -12,6 +12,8 @@ import { LuAlarmClock } from "react-icons/lu";
 import { GetPatientById } from '../../services/https/patient';
 import { PatientInterface } from '../../interfaces/patient/IPatient';
 import { Form } from 'react-router-dom';
+import { ConnectionRequestInterface } from '../../interfaces/connectionRequest/IConnectionRequest';
+import { GetConnectionPatientById } from '../../services/https/connectionRequest';
 
 const userLogin = {
     imge: 'https://i.pinimg.com/474x/0f/44/6f/0f446fc154c16b2dd85413d50bc9c170.jpg',
@@ -25,6 +27,7 @@ const userLogin = {
 function Pat() {
     const patID = localStorage.getItem('patientID') 
     const [patient, setPatient] = useState<PatientInterface>();
+    const [connectedPsy, setConnectedPsy] = useState<ConnectionRequestInterface>();
     // const [initialPatient, setInitialPatient] = useState<PatientInterface>(); // เก็บข้อมูลเริ่มต้น
 
 const getPatientById = async () => {
@@ -41,12 +44,32 @@ const getPatientById = async () => {
     //     picture: res.Picture
     //   });
     }
-  }
+}
 
-  useEffect(() => {
+useEffect(() => {
     getPatientById();
-  }, []);
- //==================================================================
+    getConnectionRequest();
+}, [
+    // console.log(connectedPsy)
+]);
+
+//==================================================================
+const formatDateString = (dateString: string) => {
+    const months = [
+        "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
+        "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
+    ];
+    const [day, month, year] = dateString.split('-');
+    return `${Number(day)} ${months[Number(month) - 1]} ${year}`;
+};
+//==================================================================
+const getConnectionRequest = async () => {
+    let res = await GetConnectionPatientById(Number(patID));
+        if (res) {
+            setConnectedPsy(res);
+    }
+};
+//==================================================================
 
 //Note
 function addNotePat() {
@@ -56,15 +79,16 @@ function addNotePat() {
     const popup = document.getElementById('popupNote') as HTMLElement;
     popup.classList.toggle('active');
 }
-
+//==================================================================
 const handleSave = (text: string) => {
     console.log('Note saved:', text);
     addNotePat();
 };
-
+//==================================================================
 const handleClose = () => {
     addNotePat();
 };
+//==================================================================
 
 //popup
 function toggle() {
@@ -74,6 +98,8 @@ function toggle() {
     const popup = document.getElementById('popup') as HTMLElement;
     popup.classList.toggle('active');
 }
+//==================================================================
+
 
     return (
         <div className='Pat'>
@@ -160,14 +186,14 @@ function toggle() {
                                                     <div className="img-profile">
                                                         <img src={userLogin.imge} alt="imge" className="avatar" />
                                                     </div>
-                                                    <h2 className="name">{userLogin.name}</h2>
+                                                    <h2 className="name">{patient?.Firstname} {patient?.Lastname}</h2>
                                                     <div className='border'></div>
                                                 </div>
                                                 <div className="info">
-                                                    <p><strong>วันเกิด:</strong> {userLogin.birthDate}</p>
-                                                    <p><strong>เบอร์โทรศัพท์:</strong> {userLogin.phone}</p>
-                                                    <p><strong>อีเมล:</strong> {userLogin.email}</p>
-                                                    <p><strong>นักวิดของคุณ:</strong> {userLogin.therapist}</p>
+                                                    <p><strong>วันเกิด:</strong> {patient?.Dob ? formatDateString(patient.Dob) : ""}</p>
+                                                    <p><strong>เบอร์โทรศัพท์:</strong> {patient?.Tel}</p>
+                                                    <p><strong>อีเมล:</strong> {patient?.Email}</p>
+                                                    <p><strong>นักจิตของคุณ:</strong> {connectedPsy?.Psychologist?.FirstName} {connectedPsy?.Psychologist?.LastName}</p>
                                                 </div>
                                             </div>
                                         </div>

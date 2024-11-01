@@ -12,12 +12,11 @@ export interface PatientInterface{
 	Password?: string;
 	Picture?: string;
 	Symtoms?: string;
+	IsTakeMedicine?: boolean;
+
 
 	GenderID?: number;
 	Gender?: GenderInterface;
-
-	PsyID?: number;
-	Psychologist?: PsychologistInterface;
 
 	TypeID?: number;
 	TypeOfPatient?: TypeOfPatientInterface;

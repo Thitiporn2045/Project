@@ -367,7 +367,8 @@
 }
 
 .Pat .main-bg-right .main-content .content1 .box .profile .header h2{
-    font-size: 1.3rem;
+    margin-top: 15px;
+    font-size: 1.1rem;
     color: var(--color-font1);
 }
 

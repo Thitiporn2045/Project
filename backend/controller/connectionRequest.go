@@ -93,6 +93,19 @@ func ListConnectionPatientById(c *gin.Context){
     c.JSON(http.StatusOK, gin.H{"data": connectionRequest})	
 }
 
+func GetConnectionPatientById(c *gin.Context){
+    var connectionRequest entity.ConnectionRequest
+
+    patID := c.Param("id")
+    if err := entity.DB().Preload("Psychologist").Preload("Patient").Raw("SELECT * FROM connection_requests WHERE pat_id = ? AND status = ?",patID, "connected").Find(&connectionRequest).Error;
+    err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+    c.JSON(http.StatusOK, gin.H{"data": connectionRequest})	
+}
+
 func AcceptConnectionRequest(c *gin.Context){
     var acceptConnectionRequest entity.ConnectionRequest
     var result entity.ConnectionRequest
@@ -147,3 +160,19 @@ func RejectConnectionRequest(c *gin.Context){
     c.JSON(http.StatusOK, gin.H{"data": rejectConnectionRequest})
 
 }
+
+
+//--------------------------
+// func GetConnectionPsychologistById(c *gin.Context){//For add pats function
+//     var connectionRequest entity.ConnectionRequest
+    
+//     patID := c.Param("id")
+//     if err := entity.DB().Preload("Psychologist").Preload("Patient").Raw("SELECT * FROM connection_requests WHERE pat_id = ? AND status = ?",patID, "connected").Find(&connectionRequest).Error;
+//     err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+// 		return
+// 	}
+
+//     c.JSON(http.StatusOK, gin.H{"data": connectionRequest})	
+
+// }

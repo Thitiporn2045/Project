@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence, useScroll } from 'framer-motion';
 import NavbarPat from '../../../component/navbarPat/navbarPat';
 import './stylePat.css';
+import { PatientInterface } from '../../../interfaces/patient/IPatient';
+import { ConnectionRequestInterface } from '../../../interfaces/connectionRequest/IConnectionRequest';
+import { Button, Form, message } from 'antd';
+import { GetConnectionPatientById } from '../../../services/https/connectionRequest';
+import { GetPatientById, UpdatePatient } from '../../../services/https/patient';
+import userEmpty from '../../../assets/userEmty.png';
 
 const userLogin = {
     imge: 'https://i.pinimg.com/474x/0f/44/6f/0f446fc154c16b2dd85413d50bc9c170.jpg',
@@ -14,6 +20,128 @@ const userLogin = {
 }
 
 function Profile() {
+    const patID = localStorage.getItem('patientID') 
+    const [patient, setPatient] = useState<PatientInterface>();
+    const [connectedPsy, setConnectedPsy] = useState<ConnectionRequestInterface>();
+    const [initialPatient, setInitialPatient] = useState<PatientInterface>();
+    const [isChanged, setIsChanged] = useState(false); // สถานะสำหรับปุ่มบันทึก
+    const [messageApi, contextHolder] = message.useMessage();
+    const [form] = Form.useForm();
+
+    const getPatientById = async () => {
+        let res = await GetPatientById(Number(patID));
+        if(res){
+            setPatient(res);
+            setInitialPatient(res);
+    
+            form.setFieldsValue({
+                firstname: res.FirstName,
+                lastname: res.LastName,
+                tel: res.Tel,
+                email: res.Email,
+                picture: res.Picture,
+                isTakeMedicine: res.IsTakeMedicine
+            });
+        }
+    }
+    //==================================================================
+    const handleCancel = () => {
+        if (initialPatient) {
+            setInitialPatient(initialPatient); 
+
+        form.setFieldsValue({
+            firstname: initialPatient.Firstname,
+            lastname: initialPatient.Lastname,
+            tel: initialPatient.Tel,
+            email: initialPatient.Email,
+            picture: initialPatient.Picture,
+            isTakeMedicine: initialPatient.IsTakeMedicine
+        });      
+        
+        setIsChanged(false); 
+        }
+    };
+    //==================================================================
+    
+    const getConnectionRequest = async () => {
+        let res = await GetConnectionPatientById(Number(patID));
+        if (res) {
+            setConnectedPsy(res);
+        }
+    };
+
+    useEffect(() => {
+        getPatientById();
+        getConnectionRequest();
+    }, []);
+
+    const formatDateString = (dateString: string) => {
+        const months = [
+            "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
+            "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
+        ];
+        const [day, month, year] = dateString.split('-');
+        return `${Number(day)} ${months[Number(month) - 1]} ${year}`;
+    };
+
+    //==================================================================
+
+    const handleProfilePicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                if (e.target) {
+                    const base64String = e.target.result as string;
+                    setPatient(prev => ({ ...prev, Picture: base64String }));
+                    setIsChanged(true);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+    
+
+//===================================================================
+    const handleInputChange = (field: keyof PatientInterface, value: string) => {
+        setPatient({ ...patient, [field]: value });
+        setIsChanged(true); 
+    };
+    //===========================================================
+    
+    const onFinishEditer = async (allValues: PatientInterface) => {
+        allValues.ID = patient?.ID;
+        allValues.Firstname = patient?.Firstname;
+        allValues.Lastname = patient?.Lastname;
+        allValues.Dob = patient?.Dob;
+        allValues.Tel = patient?.Tel;
+        allValues.Email = patient?.Email;
+        allValues.IsTakeMedicine = patient?.IsTakeMedicine;
+        
+        console.log('Form submitted with values:', allValues);
+
+            let res = await UpdatePatient(allValues);
+
+            if (res.status) {
+                messageApi.open({
+                    type: "success",
+                    content: "แก้ไขข้อมูลสำเร็จ",
+                });
+                setTimeout(() => {
+                    setIsChanged(false)
+                    getPatientById(); 
+                }, 2000);
+            } else {
+                messageApi.open({
+                    type: "error",
+                    content: res.message,
+                });
+            }
+        
+    };
+    //===========================================================
+    
+    
     const [isOpen, setIsOpen] = useState(false);
     const [activeContent, setActiveContent] = useState('profile');
     const { scrollYProgress } = useScroll();
@@ -53,7 +181,7 @@ function Profile() {
                             <div className="profile">
                                 <motion.div className="cardbg" variants={contentVariants}>
                                     <motion.div className="name" variants={contentVariants}>
-                                        <div className="firstname">{userLogin.name}</div>
+                                        <div className="firstname">{patient?.Firstname} {patient?.Lastname}</div>
                                     </motion.div>
                                     <motion.div className="user-profile" variants={contentVariants}>
                                         <img src={userLogin.imge} alt="profile" className="pro" />
@@ -67,15 +195,15 @@ function Profile() {
                                     <div className="m-content">
                                         <div className="row">
                                             <strong>วันเกิด:</strong>
-                                            <label className="label-wrapper"><p>{userLogin.birthDate}</p></label>
+                                            <label className="label-wrapper"><p>{patient?.Dob ? formatDateString(patient.Dob) : ""}</p></label>
                                         </div>
                                         <div className="row">
                                             <strong>เบอร์โทรศัพท์:</strong>
-                                            <label className="label-wrapper"><p>{userLogin.phone}</p></label>
+                                            <label className="label-wrapper"><p>{patient?.Tel}</p></label>
                                         </div>
                                         <div className="row">
                                             <strong>อีเมล:</strong>
-                                            <label className="label-wrapper"><p>{userLogin.email}</p></label>
+                                            <label className="label-wrapper"><p>{patient?.Email}</p></label>
                                         </div>
                                         <div className="row">
                                             <strong>สถานะ:</strong>
@@ -83,15 +211,24 @@ function Profile() {
                                         </div>
                                         <div className="row">
                                             <strong>นักจิตของคุณ:</strong>
-                                            <label className="label-wrapper"><p>{userLogin.therapist}</p></label>
+                                            <label className="label-wrapper"><p>{connectedPsy?.Psychologist?.FirstName} {connectedPsy?.Psychologist?.LastName}</p></label>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="infoPsy">
                                     <div className="head">
                                         <img src={userLogin.imge} alt="therapist" className="pro" />
-                                        <strong>{userLogin.therapist}</strong>
+                                        <strong>{connectedPsy?.Psychologist?.FirstName} {connectedPsy?.Psychologist?.LastName}</strong>
                                     </div>
+                                    <div className="rowPsy">
+                                            <strong>อีเมล:</strong>
+                                            <label className="label-wrapper"><p>{connectedPsy?.Psychologist?.Email}</p></label>
+                                    </div>
+                                    <div className="rowPsy">
+                                            <strong>เบอร์โทรศัพท์:</strong>
+                                            <label className="label-wrapper"><p>{connectedPsy?.Psychologist?.Tel}</p></label>
+                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -108,6 +245,7 @@ function Profile() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
         >
+            <Form form={form} onFinish={onFinishEditer}>        
             <div className="edit-profile">
                 <div className="imgBox">
                     <div className="profile">
@@ -116,15 +254,27 @@ function Profile() {
                                 <h2>รูปโปรไฟล์</h2>
                             </div>
                             <div className="user-profile">
-                                <img src={userLogin.imge} alt="profile" className="pro" />
+                            {patient?.Picture && (patient?.Picture !== " ") && (patient.Picture !== undefined) ? (
+                            <img 
+                                    className='pro'
+                                    src={patient.Picture} 
+                                    alt="profile" 
+                                />
+                                ) : (
+                                    <img 
+                                    className='pro'
+                                    src={userEmpty} 
+                                />
+                                )}
                             </div>
-                            <label htmlFor="input-file" id="label">
+                            <label htmlFor="input-file" id="label" onClick={() => document.getElementById('profilePicInput')?.click()}>
                                 เปลี่ยนรูปโปร์ไฟล์
                             </label>
                             <input
                                 type="file"
                                 accept="image/*"
-                                id="input-file"
+                                id="profilePicInput"
+                                onChange={handleProfilePicChange}
                             />
                         </div>
                     </div>
@@ -137,30 +287,58 @@ function Profile() {
                                     <h2>ข้อมูลส่วนตัว</h2>
                                 </div>
                                 <div className="row">
-                                    <strong>ชื่อ:</strong>
-                                    <label className="label-wrapper"><p>{userLogin.name}</p></label>
+                                    <strong>ชื่อจริง:</strong>
+                                    <input 
+                                        className="label-wrapper"
+                                        value={patient?.Firstname}
+                                        onChange={(e) => handleInputChange('Firstname', e.target.value)}
+                                    ></input>
                                 </div>
                                 <div className="row">
-                                    <strong>วันเกิด:</strong>
-                                    <label className="label-wrapper"><p>{userLogin.birthDate}</p></label>
+                                    <strong>นามสกุล:</strong>
+                                    <input 
+                                        className="label-wrapper"
+                                        value={patient?.Lastname}
+                                        onChange={(e) => handleInputChange('Lastname', e.target.value)}
+                                        ></input>
                                 </div>
                                 <div className="row">
                                     <strong>เบอร์โทรศัพท์:</strong>
-                                    <label className="label-wrapper"><p>{userLogin.phone}</p></label>
+                                    <input 
+                                        className="label-wrapper"
+                                        value={patient?.Tel}
+                                        onChange={(e) => handleInputChange('Tel', e.target.value)}
+                                        ></input>
                                 </div>
                                 <div className="row">
                                     <strong>อีเมล:</strong>
-                                    <label className="label-wrapper"><p>{userLogin.email}</p></label>
+                                    <input 
+                                        className="label-wrapper"
+                                        value={patient?.Email}
+                                        onChange={(e) => handleInputChange('Email', e.target.value)}
+                                        ></input>
                                 </div>
                                 <div className="row">
                                     <strong>สถานะ:</strong>
-                                    <label className="label-wrapper"><p>{userLogin.drug}</p></label>
+                                    {/* <input 
+                                        className="label-wrapper"
+                                        value={patient?.IsTakeMedicine}
+                                        onChange={(e) => handleInputChange(String(patient?.IsTakeMedicine), e.target.value)}
+                                        ></input> */}
                                 </div>
-                                <button type="submit" className="save-changes-btn">บันทึกการเปลี่ยนแปลง</button>
+                                    <button 
+                                        type="button" // เปลี่ยนจาก submit เป็น button
+                                        className="save-changes-btn"
+                                        onClick={() => form.submit()} // เรียกใช้ form.submit() แทนการ submit อัตโนมัติ
+                                        disabled={!isChanged}
+                                    >
+                                        บันทึกการเปลี่ยนแปลง
+                                    </button>
                                 <div className='nextPage'>
                                     <a href="#passwordPat">รหัสผ่าน</a>
                                 </div>
                             </div>
+
                             <div id='passwordPat' className="password">
                                 <h2>เปลี่ยนรหัสผ่าน</h2>
                                 <form>
@@ -189,6 +367,7 @@ function Profile() {
                     </div>
                 </div>
             </div>
+            </Form>
         </motion.div>
     );
 
