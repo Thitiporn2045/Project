@@ -20,7 +20,7 @@ func ListPublicDiariesByPatientType(c *gin.Context) {
         Select("diaries.*").
         Joins("JOIN patients ON patients.id = diaries.pat_id").
         Joins("JOIN connection_requests ON connection_requests.pat_id = patients.id").
-        Where("connection_requests.psy_id = ? AND connection_requests.status = ? AND diaries.is_public = ?", psyID, "connected", true).
+        Where("connection_requests.psy_id = ? AND connection_requests.status = ? AND diaries.is_public = ?" , psyID, "connected", true).
         Find(&diaries).Error
 
     if err != nil {

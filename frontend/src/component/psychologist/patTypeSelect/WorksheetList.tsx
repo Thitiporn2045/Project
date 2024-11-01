@@ -1,12 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, ConfigProvider, Divider, Input, Select, Space } from 'antd';
+import { Button, ConfigProvider, Divider, Form, Input, message, Select, Space } from 'antd';
 import type { InputRef } from 'antd';
 import thTH from 'antd/lib/locale/th_TH';
 import './PatTypeSelect.css';
 import { FaFileLines } from 'react-icons/fa6';
 import { useNavigate } from 'react-router-dom'; // นำเข้า useNavigate
 import Cookies from 'js-cookie'; // นำเข้า js-cookie
+import { TypeOfPatientInterface } from '../../../interfaces/psychologist/ITypeOfPatient';
+import { DiaryInterface } from '../../../interfaces/diary/IDiary';
+import { CreateTypeOfPatient, ListTypeOfPatient } from '../../../services/https/psychologist/typeOfPatient';
+import { ListPublicDiariesByPatientType } from '../../../services/https/diary';
 
 interface Patient{
   id: number;
@@ -136,106 +140,124 @@ const patients: Patient[] = [
 let index = 0;
 
 function WorksheetsList() {
-  const [items, setItems] = useState(['ทั้งหมด', 'รพ.มทส', 'คลินิกวัยรุ่น','ไม่ระบุ']);
-  const [name, setName] = useState('');
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const [items, setItems] = useState<TypeOfPatientInterface[]>([]);
   const [selectedType, setSelectedType] = useState<string>('ทั้งหมด');
-  const [selectedPatient, setSelectedPatient] = useState<Patient>();
-  const inputRef = useRef<InputRef>(null);
-  const navigate = useNavigate();
+  const [diaries,setDiaries] = useState<DiaryInterface[]>([]);
 
+  const [form] = Form.useForm();
+  const psyID = localStorage.getItem('psychologistID') 
+//=========================================================================
 
-  //======================== Select============
-  const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value);
-  };
+const listDiaries = async () => {
+  let res = await ListPublicDiariesByPatientType(Number(psyID));
+  if(res){
+    setDiaries(res);
+  }
+}
+//=========================================================================
+const listTypeOfPatient = async () => {
+  let res = await ListTypeOfPatient(Number(psyID));
+  if(res){
+    setItems(res);
+  }
+}
 
-  const addItem = (e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => {
-    e.preventDefault();
-    setItems([...items, name || `หมวดหมู่ ${index++}`]);
-    setName('');
+useEffect(()=>{
+  listDiaries();
+  listTypeOfPatient();
+
+},[  console.log('diaries data',diaries)
+])
+//======================== Select หมวดหมู่ ============
+const handleAddType = async(values: TypeOfPatientInterface) => {
+  values.PsyID = Number(psyID);
+  let res = await CreateTypeOfPatient(values);
+  if(res.status){
+    messageApi.success("เพิ่มหมวดหมู่สำเร็จ!")
+    form.resetFields();
     setTimeout(() => {
-      inputRef.current?.focus();
-    }, 0);
-  };
-  //=================================================
-
-  //================Listed by Select=================
-  const filteredPatients = selectedType === 'ทั้งหมด'
-  ? patients.filter(patient => patient.isWorksheetPublic) // Show all patients with public worksheets
-  : selectedType === 'ไม่ระบุ'
-      ? patients.filter(patient => (patient.type === null || patient.type === '') && patient.isWorksheetPublic)
-      : patients.filter(patient => patient.type === selectedType && patient.isWorksheetPublic);
-  //=================================================
-
-   // ฟังก์ชันที่ใช้เมื่อคลิกที่ปุ่ม FaFileLines
-   const handleWorksheetClick = (patient: Patient) => {
-    // ตั้งค่า cookie ด้วย id ของผู้ป่วย
-    Cookies.set('patientId', patient.id.toString());
-    // นำทางไปยังหน้าที่ต้องการ
-    navigate('/PsyWorksheet/ShowWoeksheet'); // เปลี่ยนเส้นทางไปยังหน้าใหม่
-  };
-
+      listTypeOfPatient();
+    },0)
+  }
+  else{
+    messageApi.error(res.status);
+  }
  
-  return (
-    <ConfigProvider
+}
+//=================================================
+ //================Listed by Select=================
+ const filteredPatients = selectedType === 'ทั้งหมด' 
+ ? diaries 
+ : selectedType === 'ที่ยังไม่ระบุ'
+     ? diaries.filter(diaries => (diaries.Patient?.TypeID === null))
+     : diaries.filter(diaries => diaries.Patient?.TypeOfPatient?.Name === selectedType);
+//=================================================
+ return(
+  <ConfigProvider
       locale={thTH}
       theme={{
         components:{},
         token:{
           colorPrimary: '#63C592',
-          colorText:'#585858'
+          colorText:'#585858',
+          fontFamily:'Noto Sans Thai, sans-serif'
         }
       }}
     >
+      {contextHolder}
       <div style={{width:'100%',height:'100%',display:'flex',flexDirection:'column'}}>
         <div style={{position:'relative',width:'100%',height:'10%',top:'2%',display:'flex',alignItems:'center'}}>
-            <Select
-                style={{ width: 300 }}
-                placeholder="แสดงตามหมวดหมู่"
-                value={selectedType}
-                onChange={setSelectedType}
-                dropdownRender={(menu) => (
-                <>
-                    {menu}
-                    <Divider style={{ margin: '8px 0' }} />
-                    <Space style={{ padding: '0 8px 4px' }}>
-                    <Input
-                        placeholder="กรุณาใส่หมวดหมู่ใหม่"
-                        ref={inputRef}
-                        value={name}
-                        onChange={onNameChange}
-                        onKeyDown={(e) => e.stopPropagation()}
-                    />
-                    <Button type="text" icon={<PlusOutlined />} onClick={addItem}>
-                        เพิ่มหมวดหมู่ {/*เขียนฟังก์ชันนี้ให้เพิ่มหมวดหมู่ลงตาราง หมวดหมู่ */}
-                    </Button> 
-                    </Space>
-                </>
-                )}
-                options={items.map((item) => ({ label: item, value: item }))}
-            />
-          </div>
-          <div style={{position:'relative',width:'100%',height:'88%',top:'2%',display:'flex',flexDirection:'column',gap:'5.5rem',overflowY:'auto'}}>
-                {filteredPatients.map(patient => (
-                    <li style={{listStyle:'none'}}>
-                      <div className="PatientList-containner" key={patient.id} style={{position:'absolute',display:'flex',flexDirection:'row',alignItems:'center',width:'99%',height:'80px',background:'#ffffff',borderRadius:'15px'}}>
-                        <img src={patient.profilePicture} alt={`${patient.firstName} ${patient.lastName}`} style={{ borderRadius: '10px', width: '50px', height: '50px', marginRight: '10px',marginLeft:'1%' }} />
-                        <div>
-                            <strong>{patient.firstName} {patient.lastName}</strong><br/>
-                            <span style={{color:'#b0b0b0'}}>อายุ: {patient.age}&nbsp;&nbsp;&nbsp;อาการที่รักษา: {patient.symptoms}</span>
-                        </div>
-                        <Button 
-                          icon={<FaFileLines/>} 
-                          style={{color:'#63C592',fontSize:'24px',position:'absolute',left:'95%',width:'40px',height:'40px',alignItems:'center',justifyContent:'center',display:'flex',border:'none'}}
-                          onClick={() => handleWorksheetClick(patient)}
-                        />
-                      </div>
-                    </li>
-                ))}
-          </div>
+          <Select
+            style={{ width: 300 }}
+            placeholder="แสดงตามหมวดหมู่"
+            value={selectedType}
+            onChange={setSelectedType}
+            dropdownRender={(menu) => (
+            <>
+              {menu}
+              <Divider style={{ margin: '8px 0' }} />
+              <Space style={{ padding: '0 8px 0 ',}}>
+                <Form
+                  form={form}
+                  onFinish={handleAddType}
+                  style={{padding:0,height:40}}
+                >
+                  <div style={{display:'flex', flexDirection:'row', gap:'0.5rem'}}>
+                    <Form.Item
+                      name={'Name'}
+                    >
+                      <Input
+                        placeholder="กรุณากรอกหมวดหมู่ใหม่"
+                      />
+                    </Form.Item>
+                    <Form.Item
+                    >
+                      <Button type="text" htmlType='submit' icon={<PlusOutlined />} style={{color:'#63C592'}}>
+                          เพิ่ม {/*เพิ่มหมวดหมู่ลงตาราง */}
+                      </Button>
+                    </Form.Item>
+                  </div>
+                </Form>
+              </Space>
+            </>
+            )}
+            options={items.map((item) => ({ label: item.Name, value: item.Name }))}
+          />
         </div>
+
+        <div style={{height:'96%',width:'100%',display:'flex' , flexDirection:'column',gap:'0.5rem',marginTop:'1rem',overflow:'auto'}}>
+          
+        </div>
+
+      </div>
+
+
+
     </ConfigProvider>
-  );
+ )
+
 }
 
 export default WorksheetsList;

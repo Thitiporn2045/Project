@@ -18,7 +18,7 @@ function Connection() {
     const [patConnection, setPatConnection] = useState<ConnectionRequestInterface[]>([]); //Pat
     const [countNoti, setCountNoti] = useState(0); //pat
     const psyID = 3;
-    const patID = 4;
+    const patID = 3;
 
     const listPatients = async () => {//psy
         let res = await ListPatients();

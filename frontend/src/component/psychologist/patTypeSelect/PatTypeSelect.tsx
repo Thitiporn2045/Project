@@ -13,8 +13,6 @@ import { calculateAge } from '../../../page/calculateAge';
 import { DeletePatientByID, UpdatePatient } from '../../../services/https/patient';
 
 
-let index = 0;
-
 function PatTypeSelect() {
   const [messageApi, contextHolder] = message.useMessage();
 
