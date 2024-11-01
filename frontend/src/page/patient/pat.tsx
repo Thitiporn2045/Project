@@ -42,6 +42,10 @@ const getPatientById = async () => {
     //   });
     }
   }
+
+  useEffect(() => {
+    getPatientById();
+  }, []);
  //==================================================================
 
 //Note
@@ -81,7 +85,7 @@ function toggle() {
                         </div>
                         <div className="main-background">
                             <header>
-                                <h1>Hello, {patient?.Firstname} 👋</h1>
+                                <h1>Hello, {patient?.Firstname} {patient?.Lastname} 👋</h1>
                                 <div className='search-bar'>
                                     <div className="labelSearch">
                                         <input
