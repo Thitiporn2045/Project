@@ -4,9 +4,9 @@ import NavbarPat from '../../../component/navbarPat/navbarPat';
 import './stylePat.css';
 import { PatientInterface } from '../../../interfaces/patient/IPatient';
 import { ConnectionRequestInterface } from '../../../interfaces/connectionRequest/IConnectionRequest';
-import { Button, Form, message } from 'antd';
+import { Button, Form, Input, message } from 'antd';
 import { GetConnectionPatientById } from '../../../services/https/connectionRequest';
-import { GetPatientById, UpdatePatient } from '../../../services/https/patient';
+import { CheckPasswordPatient, GetPatientById, UpdatePasswordPatient, UpdatePatient } from '../../../services/https/patient';
 import userEmpty from '../../../assets/userEmty.png';
 
 const userLogin = {
@@ -23,57 +23,36 @@ function Profile() {
     const patID = localStorage.getItem('patientID') 
     const [patient, setPatient] = useState<PatientInterface>();
     const [connectedPsy, setConnectedPsy] = useState<ConnectionRequestInterface>();
-    const [initialPatient, setInitialPatient] = useState<PatientInterface>();
-    const [isChanged, setIsChanged] = useState(false); // สถานะสำหรับปุ่มบันทึก
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm();
 
-    const getPatientById = async () => {
-        let res = await GetPatientById(Number(patID));
-        if(res){
+    const fetchPatientData = async () => {
+        const res = await GetPatientById(Number(patID));
+        if (res) {
             setPatient(res);
-            setInitialPatient(res);
-    
             form.setFieldsValue({
-                firstname: res.FirstName,
-                lastname: res.LastName,
+                firstname: res.Firstname,
+                lastname: res.Lastname,
                 tel: res.Tel,
                 email: res.Email,
                 picture: res.Picture,
-                isTakeMedicine: res.IsTakeMedicine
+                isTakeMedicine: res.IsTakeMedicine,
             });
         }
-    }
-    //==================================================================
-    const handleCancel = () => {
-        if (initialPatient) {
-            setInitialPatient(initialPatient); 
-
-        form.setFieldsValue({
-            firstname: initialPatient.Firstname,
-            lastname: initialPatient.Lastname,
-            tel: initialPatient.Tel,
-            email: initialPatient.Email,
-            picture: initialPatient.Picture,
-            isTakeMedicine: initialPatient.IsTakeMedicine
-        });      
-        
-        setIsChanged(false); 
-        }
     };
-    //==================================================================
-    
-    const getConnectionRequest = async () => {
-        let res = await GetConnectionPatientById(Number(patID));
+
+    const fetchConnectionData = async () => {
+        const res = await GetConnectionPatientById(Number(patID));
         if (res) {
             setConnectedPsy(res);
         }
     };
 
     useEffect(() => {
-        getPatientById();
-        getConnectionRequest();
-    }, []);
+        fetchPatientData();
+        fetchConnectionData();
+    }, [patID, form]);
+    //==================================================================
 
     const formatDateString = (dateString: string) => {
         const months = [
@@ -94,7 +73,6 @@ function Profile() {
                 if (e.target) {
                     const base64String = e.target.result as string;
                     setPatient(prev => ({ ...prev, Picture: base64String }));
-                    setIsChanged(true);
                 }
             };
             reader.readAsDataURL(file);
@@ -102,49 +80,66 @@ function Profile() {
     };
     
 
-//===================================================================
-    const handleInputChange = (field: keyof PatientInterface, value: string) => {
-        setPatient({ ...patient, [field]: value });
-        setIsChanged(true); 
-    };
-    //===========================================================
+    //===================================================================
+    const handleSubmit = async ({ oldPassword, newPassword }: { oldPassword: string, newPassword: string }) => {
+        console.log("Handling submit for password change"); // เพิ่มการตรวจสอบ
+        const checkValues:PatientInterface = {
+            ID: Number(patID),
+            Password: oldPassword
+        }
+        const isPasswordMatch = await CheckPasswordPatient(checkValues);
+        if(!isPasswordMatch.status){
+        messageApi.error(isPasswordMatch.message)
+        }
+        else{
+        const updatedPsychologist: PatientInterface = { ...patient, Password: newPassword };      
+        let res = await UpdatePasswordPatient(updatedPsychologist);
+        if (res.status) {
+            messageApi.success("เปลี่ยนรหัสผ่านสำเร็จ");
+            fetchPatientData();
+            setTimeout(() => {
+            form.resetFields(); 
+            }, 1000);
+        } else {
+            messageApi.error(res.message || "เกิดข้อผิดพลาด");
+        }
+        }
     
-    const onFinishEditer = async (allValues: PatientInterface) => {
-        allValues.ID = patient?.ID;
-        allValues.Firstname = patient?.Firstname;
-        allValues.Lastname = patient?.Lastname;
-        allValues.Dob = patient?.Dob;
-        allValues.Tel = patient?.Tel;
-        allValues.Email = patient?.Email;
-        allValues.IsTakeMedicine = patient?.IsTakeMedicine;
-        
-        console.log('Form submitted with values:', allValues);
-
-            let res = await UpdatePatient(allValues);
-
-            if (res.status) {
-                messageApi.open({
-                    type: "success",
-                    content: "แก้ไขข้อมูลสำเร็จ",
-                });
-                setTimeout(() => {
-                    setIsChanged(false)
-                    getPatientById(); 
-                }, 2000);
-            } else {
-                messageApi.open({
-                    type: "error",
-                    content: res.message,
-                });
-            }
-        
     };
+    
+    //===========================================================
+
+    const onFinishEditer = async (values: PatientInterface) => {
+        const updatedPatient = {
+            ...patient,
+            ...values,
+            ID: patient?.ID,
+        };
+        const res = await UpdatePatient(updatedPatient);
+        
+        console.log(res); // Check what the response contains
+    
+        if (res.status) {
+            messageApi.open({
+                type: "success",
+                content: "แก้ไขข้อมูลสำเร็จ",
+            });
+
+            await fetchPatientData();
+
+        } else {
+            messageApi.open({
+                type: "error",
+                content: res.message,
+            });
+        }
+    };
+    
     //===========================================================
     
     
     const [isOpen, setIsOpen] = useState(false);
     const [activeContent, setActiveContent] = useState('profile');
-    const { scrollYProgress } = useScroll();
     
     const toggleCard = () => {
         setIsOpen(prev => !prev);
@@ -184,7 +179,18 @@ function Profile() {
                                         <div className="firstname">{patient?.Firstname} {patient?.Lastname}</div>
                                     </motion.div>
                                     <motion.div className="user-profile" variants={contentVariants}>
-                                        <img src={userLogin.imge} alt="profile" className="pro" />
+                                        {patient?.Picture && (patient?.Picture !== " ") && (patient.Picture !== undefined) ? (
+                                        <img 
+                                            className='pro'
+                                            src={patient.Picture} 
+                                            alt="profile" 
+                                        />
+                                        ) : (
+                                            <img 
+                                            className='pro'
+                                            src={userEmpty} 
+                                        />
+                                        )}
                                     </motion.div>
                                 </motion.div>
                             </div>
@@ -239,14 +245,8 @@ function Profile() {
     );
 
     const EditProfile = () => (
-        <motion.div
-            key="editProfile"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-        >
-            <Form form={form} onFinish={onFinishEditer}>        
-            <div className="edit-profile">
+        <Form form={form} onFinish={onFinishEditer}>
+        <div className="edit-profile">
                 <div className="imgBox">
                     <div className="profile">
                         <div className="cardbg">
@@ -288,35 +288,48 @@ function Profile() {
                                 </div>
                                 <div className="row">
                                     <strong>ชื่อจริง:</strong>
-                                    <input 
-                                        className="label-wrapper"
-                                        value={patient?.Firstname}
-                                        onChange={(e) => handleInputChange('Firstname', e.target.value)}
-                                    ></input>
+                                    <Form.Item 
+                                        name="firstname"
+                                        rules={[{ required: true, message: 'กรุณากรอกชื่อ !' }]}
+                                    >
+                                        <input className="label-wrapper" type="text" />
+                                    </Form.Item>
                                 </div>
                                 <div className="row">
                                     <strong>นามสกุล:</strong>
-                                    <input 
-                                        className="label-wrapper"
-                                        value={patient?.Lastname}
-                                        onChange={(e) => handleInputChange('Lastname', e.target.value)}
-                                        ></input>
+                                    <Form.Item 
+                                        name="lastname"
+                                        rules={[{ required: true, message: 'กรุณากรอกนามสกุล !'}]}
+                                    >
+                                        <input className="label-wrapper" type="text" />
+                                    </Form.Item>
                                 </div>
                                 <div className="row">
                                     <strong>เบอร์โทรศัพท์:</strong>
-                                    <input 
-                                        className="label-wrapper"
-                                        value={patient?.Tel}
-                                        onChange={(e) => handleInputChange('Tel', e.target.value)}
-                                        ></input>
+                                    <Form.Item 
+                                        name="tel"
+                                        rules={[{ required: true, message: 'กรุณากรอกเบอร์โทรศัพท์ !'}]}
+                                    >
+                                        <input className="label-wrapper" type="text" />
+                                    </Form.Item>
                                 </div>
                                 <div className="row">
                                     <strong>อีเมล:</strong>
-                                    <input 
-                                        className="label-wrapper"
-                                        value={patient?.Email}
-                                        onChange={(e) => handleInputChange('Email', e.target.value)}
-                                        ></input>
+                                    <Form.Item 
+                                        name="email"
+                                        rules={[
+                                            {
+                                            type: "email",
+                                            message: "รูปแบบอีเมลไม่ถูกต้อง !",
+                                            },
+                                            {
+                                            required: true,
+                                            message: "กรุณากรอกอีเมล !",
+                                            },
+                                        ]}
+                                    >
+                                        <input className="label-wrapper" type="text" />
+                                    </Form.Item>
                                 </div>
                                 <div className="row">
                                     <strong>สถานะ:</strong>
@@ -326,49 +339,89 @@ function Profile() {
                                         onChange={(e) => handleInputChange(String(patient?.IsTakeMedicine), e.target.value)}
                                         ></input> */}
                                 </div>
-                                    <button 
-                                        type="button" // เปลี่ยนจาก submit เป็น button
-                                        className="save-changes-btn"
-                                        onClick={() => form.submit()} // เรียกใช้ form.submit() แทนการ submit อัตโนมัติ
-                                        disabled={!isChanged}
-                                    >
-                                        บันทึกการเปลี่ยนแปลง
-                                    </button>
+                                <button 
+                                    type="button"
+                                    className="save-changes-btn"
+                                    onClick={() => form.submit()}
+                                >
+                                    บันทึกการเปลี่ยนแปลง
+                                </button>
                                 <div className='nextPage'>
                                     <a href="#passwordPat">รหัสผ่าน</a>
                                 </div>
-                            </div>
-
-                            <div id='passwordPat' className="password">
-                                <h2>เปลี่ยนรหัสผ่าน</h2>
-                                <form>
-                                    <div className="form-row">
-                                        <div className="form-group">
-                                            <label>รหัสผ่านเดิม</label>
-                                            <input type="password" />
-                                        </div>
-                                    </div>
-                                    <div className="form-row">
-                                        <div className="form-group">
-                                            <label>รหัสผ่านใหม่</label>
-                                            <input type="password"/>
-                                        </div>
-                                    </div>
-                                    <div className="form-row">
-                                        <div className="form-group">
-                                            <label>ยืนยันรหัสผ่านใหม่</label>
-                                            <input type="password" />
-                                        </div>
-                                    </div>
-                                    <button type="submit" className="save-btn">บันทึกการเปลี่ยนแปลง</button>
-                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             </Form>
-        </motion.div>
+    );
+
+    const EditPassword = () =>(
+        <div id='passwordPat' className="password">
+        <Form form={form} onFinish={handleSubmit}>
+        <h2>เปลี่ยนรหัสผ่าน</h2>
+            <div className="form-row">
+                <div className="form-group">
+                    <label>รหัสผ่านเดิม</label>
+                    <Form.Item
+                        name="oldPassword"
+                        rules={[
+                            { required: true, message: 'กรุณากรอกรหัสผ่านเดิม' },
+                        ]}
+                        >
+                        <Input.Password />
+                    </Form.Item>
+                </div>
+            </div>
+            <div className="form-row">
+                <div className="form-group">
+                    <label>รหัสผ่านใหม่</label>
+                    <Form.Item
+                        name="newPassword"
+                        rules={[
+                        { required: true, message: 'กรุณากรอกรหัสผ่านใหม่' },
+                        {
+                            min: 8,
+                            message: 'รหัสผ่านใหม่ต้องมีความยาวอย่างน้อย 8 ตัวอักษร',
+                        },
+                        ]}
+                    >
+                        <Input.Password />
+                    </Form.Item>
+                </div>
+            </div>
+            <div className="form-row">
+                <div className="form-group">
+                    <label>ยืนยันรหัสผ่านใหม่</label>
+                    <Form.Item
+                        name="confirmNewPassword"
+                        dependencies={['newPassword']}
+                        rules={[
+                        { required: true, 
+                            message: 'กรุณายืนยันรหัสผ่านใหม่' 
+                        },
+                        ({ getFieldValue }) => ({
+                            validator(_, value) {
+                            if (!value || getFieldValue('newPassword') === value) {
+                                return Promise.resolve();
+                            }
+                            return Promise.reject(new Error('รหัสผ่านใหม่ไม่ตรงกัน'));
+                            },
+                        }),
+                        ]}
+                    >
+                        <Input.Password />
+                    </Form.Item>
+                </div>
+            </div>
+            <button 
+                type="button" 
+                className="save-btn"
+                onClick={() => form.submit()}
+            >บันทึกการเปลี่ยนแปลง</button>
+        </Form>
+    </div>
     );
 
     const DeleteAccount = () => (
@@ -386,48 +439,54 @@ function Profile() {
 
     return (
         <div className='profilePat'>
-            <div className="befor-main">
-                <div className='main-body'>
-                    <div className='sidebar'>
-                        <NavbarPat />
+        {contextHolder} {/* Make sure this line is present */}
+        <div className="befor-main">
+            <div className='main-body'>
+                <div className='sidebar'>
+                    <NavbarPat />
+                </div>
+                <div className="main-background">
+                    <div className='content1'>
+                        <div className="header">
+                            <h2>ตั้งค่าบัญชีผู้ใช้</h2>
+                        </div>
+                        <ul className="list">
+                            <li
+                                className={`list-item ${activeContent === 'profile' ? 'active' : ''}`}
+                                onClick={() => setActiveContent('profile')}
+                            >
+                                <span className="link-name">โปรไฟล์</span>
+                            </li>
+                            <li
+                                className={`list-item ${activeContent === 'editProfile' ? 'active' : ''}`}
+                                onClick={() => setActiveContent('editProfile')}
+                            >
+                                <span className="link-name">แก้ไขโปรไฟล์</span>
+                            </li>
+                            <li
+                                className={`list-item ${activeContent === 'editPassword' ? 'active' : ''}`}
+                                onClick={() => setActiveContent('editPassword')}
+                            >
+                                <span className="link-name">รหัสผ่าน</span>
+                            </li>
+                            <li
+                                className={`list-item ${activeContent === 'deleteAccount' ? 'active' : ''}`}
+                                onClick={() => setActiveContent('deleteAccount')}
+                            >
+                                <span className="link-name">ลบบัญชีผู้ใช้</span>
+                            </li>
+                        </ul>
                     </div>
-                    <div className="main-background">
-                        <div className='content1'>
-                            <div className="header">
-                                <h2>ตั้งค่าบัญชีผู้ใช้</h2>
-                            </div>
-                            <ul className="list">
-                                <li
-                                    className={`list-item ${activeContent === 'profile' ? 'active' : ''}`}
-                                    onClick={() => setActiveContent('profile')}
-                                >
-                                    <span className="link-name">โปรไฟล์</span>
-                                </li>
-                                <li
-                                    className={`list-item ${activeContent === 'editProfile' ? 'active' : ''}`}
-                                    onClick={() => setActiveContent('editProfile')}
-                                >
-                                    <span className="link-name">แก้ไขโปรไฟล์</span>
-                                </li>
-                                <li
-                                    className={`list-item ${activeContent === 'deleteAccount' ? 'active' : ''}`}
-                                    onClick={() => setActiveContent('deleteAccount')}
-                                >
-                                    <span className="link-name">ลบบัญชีผู้ใช้</span>
-                                </li>
-                            </ul>
-                        </div>
-                        <div className="content2">
-                            <AnimatePresence mode='wait'>
-                                {activeContent === 'profile' && <Previwe />}
-                                {activeContent === 'editProfile' && <EditProfile />}
-                                {activeContent === 'deleteAccount' && <DeleteAccount />}
-                            </AnimatePresence>
-                        </div>
+                    <div className="content2">
+                        {activeContent === 'profile' && <Previwe />}
+                        {activeContent === 'editProfile' && <EditProfile />}
+                        {activeContent === 'editPassword' && <EditPassword />}
+                        {activeContent === 'deleteAccount' && <DeleteAccount />}
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     )
 }
 
