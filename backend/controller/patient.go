@@ -100,6 +100,10 @@ func UpdatePatient(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found"})
 		return
 	}
+
+
+	patient.TypeOfPatient.ID = patient.TypeID	//เพิ่มเพื่อให้มันสามารถอัพเดต Fk ได้
+
 	if err := entity.DB().Save(&patient).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
