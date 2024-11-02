@@ -17,7 +17,7 @@ type Patient struct{
 	Symtoms string
 	IsTakeMedicine bool
 	
-	TypeID *uint 
+	TypeID uint 
 	TypeOfPatient TypeOfPatient `gorm:"foreignKey:TypeID"`
 	
 	GenderID *uint

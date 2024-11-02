@@ -94,8 +94,8 @@ const listPatients = async () => {
       setEditedType(undefined);
     }
     else{
-      setOriginalType(patients.TypeOfPatient?.ID);
-      setEditedType(patients.TypeOfPatient?.ID);
+      setOriginalType(patients.TypeID);
+      setEditedType(patients.TypeID);
     }
   
     setIsModalVisible(true);
@@ -108,14 +108,14 @@ const listPatients = async () => {
     const data: PatientInterface = {
       ...updatePatient,
       Symtoms: editedSymptoms,
-      TypeID: Number(editedType),
+      TypeID: editedType,
+
     }
 
     let res = await UpdatePatient(data);
     if(res.status){
       messageApi.success("แก้ไขข้อมูลสำเร็จ");
       listPatients();
-      console.log(editedType)
     }
     else{
       messageApi.error(res.message);
