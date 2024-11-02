@@ -37,14 +37,13 @@ function AntD() {
                 itemHoverColor:'#3b7758',
                 itemSelectedColor:'#3b7758',
                 itemSelectedBg:'#BFE5D2',
-                iconMarginInlineEnd:10,
-                iconSize:25,
+                iconSize:20,
                 itemPaddingInline:30,
                 itemBorderRadius: 14,
                 popupBg:'#3b7758',
                 itemHeight:54,
-                itemMarginBlock:25,
-                collapsedWidth:95
+                itemMarginBlock:16,
+                collapsedWidth:75
 
                 },
                 Button:{
@@ -55,16 +54,18 @@ function AntD() {
 
             token:{
                 colorPrimary: '#63C592',
-                fontSize:19,
+                fontSize:18,
             }
         }}>
 
-        <div style={{  width: collapsed ? '95px' : '256px',
+        <div style={{  width: collapsed ? '75px' : '200px',
             position:'absolute',
             left:'0%',
             height:'100%',
             display:'flex',
+            justifyItems:'center',
             transition: 'width 0.3s ease-in-out', // ทำให้เปลี่ยนความกว้างสมูทขึ้น
+            zIndex:5
             }}>
                 
                 <Menu
@@ -73,21 +74,51 @@ function AntD() {
                     mode="inline"
                     inlineCollapsed={collapsed}
                     items={items}
-                    style={{height:'97%',
-                        top:'1.5%',
-                        left:'3%',
+                    style={{height:'100%',
                         background:'#63C592',
-                        borderRadius:'15px',
-                        paddingTop:'100px',
+                        borderRadius:'0 20px 20px 0',
+                        paddingTop:'120px',
                         position:'relative',
+                        display:'flex',
+                        flexDirection:'column'
                     }}
-                /> 
+                >
+                </Menu> 
             
-            <Button type="primary" onClick={toggleCollapsed} style={{position:'relative',top:'3%',right:'26%',background:'none'}}>
-                {collapsed ? <FaBars style={{right:'135%',position:'absolute'}}/> : <FaBars />}
-            </Button>
-            {collapsed? <Button type='text' icon={<FaSignOutAlt/>} style={{position:'absolute',top:'93%',left:'35%',fontSize:'24px',color:'white',background:'none' }} ></Button>   
-                        :<Button type='text' icon={<FaSignOutAlt/>} style={{position:'absolute',top:'93%',left:'13%',fontSize:'24px',color:'white',background:'none' }}><p style={{position:'absolute',fontSize:'18px',left:'80%',}}>ออกจากระบบ</p></Button>}
+                <Button
+                    type="primary"
+                    onClick={toggleCollapsed}
+                    style={{
+                    position: 'absolute',
+                    top: '20px',
+                    left: collapsed ? '50%' : 'auto', // Center when collapsed
+                    right: collapsed ? 'auto' : '20px', // Right when expanded
+                    transform: collapsed ? 'translateX(-50%)' : 'none', // Center alignment when collapsed
+                    background: 'none',
+                    zIndex: 3,
+                    }}
+                >
+                    <FaBars />
+                </Button>
+                <Button
+                    type="primary"
+                    // Function to handle logout
+                    style={{
+                        position: 'absolute',
+                        bottom: '20px',
+                        left: '50%',
+                        transform: 'translateX(-50%)', // Center alignment
+                        background: 'none',
+                        color: 'white',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                    }}
+                 
+                >
+                    <FaSignOutAlt />
+                    {!collapsed && 'ออกจากระบบ'}
+                </Button>
         </div>
     </ConfigProvider>
   )
