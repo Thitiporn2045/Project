@@ -112,3 +112,53 @@ func UpdatePatient(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": patient})
 	
 }
+
+func CheckOldPasswordPatient(c *gin.Context){
+	var patient entity.Patient
+	var result entity.Patient
+
+	if err := c.ShouldBindJSON(&patient); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if tx := entity.DB().Where("id = ?", patient.ID).First(&result); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "psychologist not found"})
+		return
+	}
+	
+	err := bcrypt.CompareHashAndPassword([]byte(result.Password), []byte(patient.Password))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "รหัสผ่านเดิมไม่ถูกต้อง"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"data": patient})
+}
+
+func UpdatePasswordPatient(c *gin.Context) {
+
+	var patient entity.Patient
+	var result entity.Patient
+
+	if err := c.ShouldBindJSON(&patient); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if tx := entity.DB().Where("id = ?", patient.ID).First(&result); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "patient not found"})
+		return
+	}
+	if patient.Password != "" {
+        hashedPassword, err := bcrypt.GenerateFromPassword([]byte(patient.Password), bcrypt.DefaultCost)
+        if err != nil {
+            c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to hash password"})
+            return
+        }
+        patient.Password = string(hashedPassword)
+    }
+	if err := entity.DB().Save(&patient).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	
+	c.JSON(http.StatusOK, gin.H{"data": patient})
+}

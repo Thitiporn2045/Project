@@ -31,6 +31,10 @@ func main() {
 			r.GET("/pat/connection/:id", controller.GetConnectionPatientById)
 
 			r.PATCH("/patients", controller.UpdatePatient)
+			r.POST("/pat/checkPassword",controller.CheckOldPasswordPatient)
+			r.PATCH("/pat/updatepassword",controller.UpdatePasswordPatient)
+
+
 			r.DELETE("/patients/:id", controller.DeletePatient)
 
 			//Psychologist Routes

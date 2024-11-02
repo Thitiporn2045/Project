@@ -82,6 +82,46 @@ async function UpdatePatient(data: PatientInterface) {
     return res;
 }
 
+async function CheckPasswordPatient(data: PatientInterface) {
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  };
+
+  let res = await fetch(`${apiUrl}/pat/checkPassword`, requestOptions)
+    .then((response) => response.json())
+    .then((res) => {
+      if (res.data) {
+        return { status: true, message: res.data };
+      } else {
+        return { status: false, message: res.error };
+      }
+    });
+
+  return res;
+}
+
+async function UpdatePasswordPatient(data: PatientInterface) {
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  };
+
+  let res = await fetch(`${apiUrl}/pat/updatepassword`, requestOptions)
+    .then((response) => response.json())
+    .then((res) => {
+      if (res.data) {
+        return { status: true, message: res.data };
+      } else {
+        return { status: false, message: res.error };
+      }
+    });
+
+  return res;
+}
+
 async function DeletePatientByID(id: Number | undefined) {
     const requestOptions = {
       method: "DELETE",
@@ -129,7 +169,9 @@ export{
     ListPatients,
     GetPatientById,
     CreatePatient,
+    CheckPasswordPatient,
     UpdatePatient,
+    UpdatePasswordPatient,
     DeletePatientByID,
     ListGender
 }
