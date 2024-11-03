@@ -71,6 +71,33 @@ const handleAddType = async(values: TypeOfPatientInterface) => {
      ? diaries.filter(diaries => (diaries.patient.TypeOfPatient === null))
      : diaries.filter(diaries => diaries.patient.TypeOfPatient === selectedType);
 //=================================================
+//=================================================
+const navigate = useNavigate();
+const navigateToDiaryPage = (diary:DiaryInterface) => {
+  
+
+  let routePath = '';
+  switch (diary.WorksheetType) {
+    case 'Activity Planning':
+      routePath = '/Planning';
+      break;
+    case 'Activity Diary':
+      routePath = '/Activity';
+      break;
+    case 'Behavioral Experiment':
+      routePath = '/Behavioural';
+      break;
+    case 'Cross Sectional':
+      routePath = '/CrossSectional';
+      break;
+    default:
+      console.error('Unknown worksheet type');
+      return;
+  }
+
+  // Navigate to the desired route with the diary ID as a parameter
+  navigate(`${routePath}?id=${diary.ID}`);
+};
  return(
   <ConfigProvider
       locale={thTH}
@@ -124,79 +151,93 @@ const handleAddType = async(values: TypeOfPatientInterface) => {
           />
          </div>
 {/* ============================================================================================================================================= */}
-        <div style={{position:'relative',width:'100%',display:'flex',flexDirection:'column',gap:'1rem',flexGrow:1,overflow:'auto',flexShrink: 0,}}>
-           {filteredPatients.map((item) =>(
-              <div className='diary-container' 
-                style={{ 
+        <div style={{
+          position:'relative', 
+          width:'100%',
+          display:'flex',
+          flexDirection:'column',
+          gap:'1rem',
+          flexGrow:1,
+          overflow:'auto',
+          flexShrink: 0,
+          scrollbarColor:'#c5c5c5 transparent',
+          scrollbarWidth:'thin',
+          }}
+        >
+          {filteredPatients.map((item) =>(
+            <div className='diary-container' 
+              style={{ 
+                position:'relative',
+                width:'100%',
+                height:'55%',
+                display:'flex',
+                flexDirection:'column',
+                gap:'0.5rem',
+                flexShrink: 0,
+              }}
+            >
+              <div className='diary-owner-name' 
+                style={{
                   position:'relative',
-                  width:'100%',
-                  height:'55%',
+                  width:'98%',height:'10%',
                   display:'flex',
-                  flexDirection:'column',
-                  gap:'0.5rem',
-                  flexShrink: 0,
+                  flexDirection:'row',
+                  alignItems:'center',
+                  marginLeft:'1rem', 
+
                 }}
               >
-                <div className='diary-owner-name' 
-                  style={{
-                    position:'relative',
-                    width:'98%',height:'10%',
-                    display:'flex',
-                    flexDirection:'row',
-                    alignItems:'center',
-                    marginLeft:'1rem', 
-
-                  }}
-                >
-                  <b style={{fontSize:20}}>{item.patient.FirstName} {item.patient.LastName}</b>
-                </div>
-                
-                <div className='diary-row-container' 
-                  style={{
-                    position:'relative', 
-                    width:'98%',
-                    height:'90%',
-                    display:'flex',
-                    flexDirection:'row',
-                    alignItems:'center',
-                    marginLeft:'1rem', 
-                    
-                  }}
-                >
-                  {item.diaries.map((item2) => (
-                    <div className='each-diary' style={{position:'relative',width:'15%',height:'100%',display:'flex',flexDirection:'column',flexShrink:0, marginLeft:'1rem', marginRight:'1rem'}}>
-                      <div style={{
-                        position:'relative',
-                        width:'100%',height:'80%',
-                        display:'flex',
-                        backgroundImage:`url(${cover})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                        borderRadius:'5px 15px 15px 5px',
-                        flexShrink:0,
-                        }}
-                      >
-                      </div>
-                      <div style={{
-                        position:'relative',
-                        width:'100%',height:'20%',
-                        display:'flex',
-                        justifyContent:'center',
-                        flexDirection:'column',
-                        flexShrink:0
-                        }}
-                      >
-                        <b style={{fontSize:16}}>{item2.Name}</b>
-                        <span style={{fontSize:14,color:'#c5c5c5'}}>{item2.WorksheetType}</span>
-                      </div>
-                    </div> 
-                  ))}
-
-                </div>
-                
-                
+                <b style={{fontSize:20,color:'#585858'}}>{item.patient.FirstName} {item.patient.LastName}</b>
               </div>
-          ))} 
+              
+              <div className='diary-row-container' 
+                style={{
+                  position:'relative', 
+                  width:'98%',
+                  height:'90%',
+                  display:'flex',
+                  flexDirection:'row',
+                  alignItems:'center',
+                  marginLeft:'1rem', 
+                  
+                }}
+              >
+                {item.diaries.map((item2) => (
+                  <div className='each-diary' onClick={() => navigateToDiaryPage(item2)} style={{position:'relative',width:'15%',height:'100%',display:'flex',flexDirection:'column',flexShrink:0, marginLeft:'1rem', marginRight:'1rem'}}>
+                    <div style={{
+                      position:'relative',
+                      width:'100%',height:'80%',
+                      display:'flex',
+                      backgroundImage:`url(${cover})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      borderRadius:'5px 15px 15px 5px',
+                      boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+                      flexShrink:0,
+                      }}
+                    >
+                    </div>
+                    <div style={{
+                      position:'relative',
+                      width:'100%',height:'20%',
+                      display:'flex',
+                      justifyContent:'center',
+                      flexDirection:'column',
+                      flexShrink:0
+                      }}
+                    >
+                      <b style={{fontSize:16,color:'#585858'}}>{item2.Name}</b>
+                      <span style={{fontSize:14,color:'#c5c5c5'}}>{item2.WorksheetType}</span>
+                    </div>
+                  </div> 
+                ))}
+
+              </div>
+              
+              
+            </div>
+            ))
+          } 
         </div>
 
       </div>
