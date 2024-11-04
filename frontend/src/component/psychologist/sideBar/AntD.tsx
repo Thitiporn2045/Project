@@ -33,10 +33,10 @@ function AntD() {
             components:{
                Menu: {
                 itemColor: '#ffffff',
-                itemHoverBg	:'#BFE5D2',
-                itemHoverColor:'#3b7758',
-                itemSelectedColor:'#3b7758',
-                itemSelectedBg:'#BFE5D2',
+                itemHoverBg	:'#2C9F99',
+                itemHoverColor:'#ffffff',
+                itemSelectedColor:'#ffffff',
+                itemSelectedBg:'#2C9F99',
                 iconSize:20,
                 itemPaddingInline:30,
                 itemBorderRadius: 14,
@@ -53,7 +53,7 @@ function AntD() {
             },
 
             token:{
-                colorPrimary: '#63C592',
+                colorPrimary: '#2C9F99',
                 fontSize:18,
             }
         }}>
@@ -75,7 +75,7 @@ function AntD() {
                     inlineCollapsed={collapsed}
                     items={items}
                     style={{height:'100%',
-                        background:'#63C592',
+                        background:'#20B2AA',
                         borderRadius:'0 20px 20px 0',
                         paddingTop:'120px',
                         position:'relative',

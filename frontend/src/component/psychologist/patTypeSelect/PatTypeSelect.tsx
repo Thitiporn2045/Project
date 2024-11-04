@@ -175,7 +175,7 @@ const listPatients = async () => {
       theme={{
         components:{},
         token:{
-          colorPrimary: '#63C592',
+          colorPrimary: '#2C9F99',
           colorText:'#585858',
           fontFamily:'Noto Sans Thai, sans-serif'
         }
@@ -209,7 +209,7 @@ const listPatients = async () => {
                       </Form.Item>
                       <Form.Item
                       >
-                        <Button type="text" htmlType='submit' icon={<PlusOutlined />} style={{color:'#63C592'}}>
+                        <Button type="text" htmlType='submit' icon={<PlusOutlined />} style={{color:'#2C9F99'}}>
                             เพิ่ม {/*เพิ่มหมวดหมู่ลงตาราง */}
                         </Button>
                       </Form.Item>
@@ -298,7 +298,7 @@ const listPatients = async () => {
                   <div style={{position:'relative',display:'flex', flexDirection:'row', alignItems:'center',gap:'1rem',right:'1rem'}}>
                     <Button 
                       icon={<FiEdit3/>} 
-                      style={{color:'#63C592',fontSize:'24px',width:'40px',height:'40px',alignItems:'center',justifyContent:'center',display:'flex',border:'none'}}
+                      style={{color:'#2C9F99',fontSize:'24px',width:'40px',height:'40px',alignItems:'center',justifyContent:'center',display:'flex',border:'none'}}
                       onClick={()=>showEditModal(pat)}/>
                     
                     <Button 
