@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TypeOfPatientInterface } from '../../../interfaces/psychologist/ITypeOfPatient';
 import { CreateTypeOfPatient, ListTypeOfPatient,ListConnectedPatientByType } from '../../../services/https/psychologist/typeOfPatient';
 import { PlusOutlined } from '@ant-design/icons';
@@ -10,8 +10,9 @@ import userEmpty from '../../../assets/userEmty.png';
 import './PatTypeSelect.css';
 import { PatientInterface } from '../../../interfaces/patient/IPatient';
 import { calculateAge } from '../../../page/calculateAge';
-import { DeletePatientByID, UpdatePatient } from '../../../services/https/patient';
+import { UpdatePatient } from '../../../services/https/patient';
 import AddPat from '../addPatient/AddPat';
+import { DisconnectPatient } from '../../../services/https/connectionRequest';
 
 
 function PatTypeSelect() {
@@ -144,15 +145,23 @@ const listPatients = async () => {
 
   const handleDeleteOk = async (patID: number) => {
 
-  //  let  res = await DeletePatientByID(Number(patID));
-  //  if (res.status) {
-  //     messageApi.success("ลบบัญชีผู้ใช้แล้ว!");
-  //     setIsDeleteModalVisible(false);
+   let res = await DisconnectPatient(Number(patID),Number(psyID));
+   if (res.status) {
+      const updatePatient = pat.find((pat) => pat.ID === patID)
+      const data: PatientInterface = {
+        ...updatePatient,
+        Symtoms: undefined,
+        TypeID: undefined,
+      }
+      await UpdatePatient(data);
+
+      messageApi.success("ลบผู้ป่วยออกจากรายการแล้ว!");
+      setIsDeleteModalVisible(false);
       
-  //   } else {
-  //     messageApi.error(res.message || "เกิดข้อผิดพลาด");
-  //     setIsDeleteModalVisible(false);
-  //   }
+    } else {
+      messageApi.error(res.message);
+      setIsDeleteModalVisible(false);
+    }
     listPatients();
   };
 
