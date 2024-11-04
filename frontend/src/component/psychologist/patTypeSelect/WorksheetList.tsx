@@ -104,7 +104,7 @@ const navigateToDiaryPage = (diary:DiaryInterface) => {
       theme={{
         components:{},
         token:{
-          colorPrimary: '#63C592',
+          colorPrimary: '#2C9F99',
           colorText:'#585858',
           fontFamily:'Noto Sans Thai, sans-serif'
         }
@@ -138,7 +138,7 @@ const navigateToDiaryPage = (diary:DiaryInterface) => {
                     </Form.Item>
                     <Form.Item
                     >
-                      <Button type="text" htmlType='submit' icon={<PlusOutlined />} style={{color:'#63C592'}}>
+                      <Button type="text" htmlType='submit' icon={<PlusOutlined />} style={{color:'#2C9F99'}}>
                           เพิ่ม 
                       </Button>
                     </Form.Item>

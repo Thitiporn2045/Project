@@ -111,7 +111,7 @@ const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {//psy
           List:{}
         },
         token: {
-          colorPrimary: '#63C592',
+          colorPrimary: '#2C9F99',
           colorText: '#585858',
           fontFamily:'Noto Sans Thai, sans-serif'
         },

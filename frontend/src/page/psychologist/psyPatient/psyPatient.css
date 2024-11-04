@@ -3,7 +3,7 @@
     height: 100vh;
     display: flex;
     flex-direction: row;
-    gap: 1rem;
+    gap: 2rem;
     align-items: center;
     background: #F7F8FD;
     font-family:'Noto Sans Thai', sans-serif;
