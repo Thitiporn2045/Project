@@ -65,6 +65,7 @@ func main() {
 			//Connection Request Routes
 			r.POST("/connection/send",controller.SendConnectionRequest)
 			r.PATCH("/connection/cancel",controller.CancelConnectionRequest)
+			r.PATCH("/connection/:pat_id/:psy_id",controller.DisconnectPatient)
 			r.PATCH("/connection/accept",controller.AcceptConnectionRequest)
 			r.PATCH("/connection/reject",controller.RejectConnectionRequest)
 			r.GET("/connection/psy/:id",controller.GetConnectionRequestById)

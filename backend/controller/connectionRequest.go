@@ -77,6 +77,28 @@ func GetConnectionRequestById(c *gin.Context){//For add pats function
 }
 
 
+func DisconnectPatient(c *gin.Context) {//ปุ่มลบผู้ป่วยของนักจิตวิทยา
+    var connectionRequest entity.ConnectionRequest
+
+    patID := c.Param("pat_id")
+    psyID := c.Param("psy_id")
+
+    // ค้นหา connection request ที่ตรงกับ patID และ psyID
+    if err := entity.DB().Where("pat_id = ? AND psy_id = ? AND status = ?", patID, psyID, "connected").First(&connectionRequest).Error; err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "ไม่พบคำขอการเชื่อมต่อที่ระบุ"})
+        return
+    }
+
+    // อัปเดตสถานะเป็น not_connect
+    connectionRequest.Status = "not_connect"
+    if err := entity.DB().Save(&connectionRequest).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "ไม่สามารถยกเลิกการเชื่อมต่อได้"})
+        return
+    }
+
+    c.JSON(http.StatusOK, gin.H{"message": "ยกเลิกการเชื่อมต่อสำเร็จ"})
+}
+
 //ปุ่มลบผู้ป่วย ต้องทำฟังก์ชันอัปเดต เป็น not_connect ================================================================
 
 //Pat

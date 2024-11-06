@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TypeOfPatientInterface } from '../../../interfaces/psychologist/ITypeOfPatient';
 import { CreateTypeOfPatient, ListTypeOfPatient,ListConnectedPatientByType } from '../../../services/https/psychologist/typeOfPatient';
 import { PlusOutlined } from '@ant-design/icons';
@@ -10,7 +10,9 @@ import userEmpty from '../../../assets/userEmty.png';
 import './PatTypeSelect.css';
 import { PatientInterface } from '../../../interfaces/patient/IPatient';
 import { calculateAge } from '../../../page/calculateAge';
-import { DeletePatientByID, UpdatePatient } from '../../../services/https/patient';
+import { UpdatePatient } from '../../../services/https/patient';
+import AddPat from '../addPatient/AddPat';
+import { DisconnectPatient } from '../../../services/https/connectionRequest';
 
 
 function PatTypeSelect() {
@@ -77,7 +79,7 @@ const listPatients = async () => {
   const filteredPatients = selectedType === 'ทั้งหมด' 
     ? pat 
     : selectedType === 'ที่ยังไม่ระบุ'
-        ? pat.filter(pat => (pat.TypeID === null))
+        ? pat.filter(pat => (pat.TypeID === null || pat.TypeOfPatient?.Name === null))
         : pat.filter(pat => pat.TypeOfPatient?.Name === selectedType);
   //=================================================
 
@@ -143,13 +145,21 @@ const listPatients = async () => {
 
   const handleDeleteOk = async (patID: number) => {
 
-   let  res = await DeletePatientByID(Number(patID));
+   let res = await DisconnectPatient(Number(patID),Number(psyID));
    if (res.status) {
-      messageApi.success("ลบบัญชีผู้ใช้แล้ว!");
+      const updatePatient = pat.find((pat) => pat.ID === patID)
+      const data: PatientInterface = {
+        ...updatePatient,
+        Symtoms: undefined,
+        TypeID: undefined,
+      }
+      await UpdatePatient(data);
+
+      messageApi.success("ลบผู้ป่วยออกจากรายการแล้ว!");
       setIsDeleteModalVisible(false);
       
     } else {
-      messageApi.error(res.message || "เกิดข้อผิดพลาด");
+      messageApi.error(res.message);
       setIsDeleteModalVisible(false);
     }
     listPatients();
@@ -165,66 +175,118 @@ const listPatients = async () => {
       theme={{
         components:{},
         token:{
-          colorPrimary: '#63C592',
+          colorPrimary: '#2C9F99',
           colorText:'#585858',
           fontFamily:'Noto Sans Thai, sans-serif'
         }
       }}
     >
       {contextHolder}
-      <div style={{width:'100%',height:'100%',display:'flex',flexDirection:'column'}}>
-        <div style={{position:'relative',width:'100%',height:'10%',top:'2%',display:'flex',alignItems:'center'}}>
+      <div style={{width:'100%',height:'100%',display:'flex',flexDirection:'column',}}>
+        <div style={{position:'relative',width:'100%',height:'10%',display:'flex',alignItems:'center',flexShrink:0,justifyContent:'space-between'}}>
             <Select
-                style={{ width: 300 }}
-                placeholder="แสดงตามหมวดหมู่"
-                value={selectedType}
-                onChange={setSelectedType}
-                dropdownRender={(menu) => (
-                <>
-                    {menu}
-                    <Divider style={{ margin: '8px 0' }} />
-                    <Space style={{ padding: '0 8px 0 ',}}>
-                      <Form
-                        form={form}
-                        onFinish={handleAddType}
-                        style={{padding:0,height:40}}
+              style={{ width: 300 }}
+              placeholder="แสดงตามหมวดหมู่"
+              value={selectedType}
+              onChange={setSelectedType}
+              dropdownRender={(menu) => (
+              <>
+                {menu}
+                <Divider style={{ margin: '8px 0' }} />
+                <Space style={{ padding: '0 8px 0 ',}}>
+                  <Form
+                    form={form}
+                    onFinish={handleAddType}
+                    style={{padding:0,height:40}}
+                  >
+                    <div style={{display:'flex', flexDirection:'row', gap:'0.5rem'}}>
+                      <Form.Item
+                        name={'Name'}
                       >
-                        <div style={{display:'flex', flexDirection:'row', gap:'0.5rem'}}>
-                          <Form.Item
-                            name={'Name'}
-                          >
-                            <Input
-                              placeholder="กรุณากรอกหมวดหมู่ใหม่"
-                            />
-                          </Form.Item>
-                          <Form.Item
-                          >
-                            <Button type="text" htmlType='submit' icon={<PlusOutlined />} style={{color:'#63C592'}}>
-                                เพิ่ม {/*เพิ่มหมวดหมู่ลงตาราง */}
-                            </Button>
-                          </Form.Item>
-                        </div>
-                      </Form>
-                    </Space>
-                </>
-                )}
-                options={items.map((item) => ({ label: item.Name, value: item.Name }))}
+                        <Input
+                          placeholder="กรุณากรอกหมวดหมู่ใหม่"
+                        />
+                      </Form.Item>
+                      <Form.Item
+                      >
+                        <Button type="text" htmlType='submit' icon={<PlusOutlined />} style={{color:'#2C9F99'}}>
+                            เพิ่ม {/*เพิ่มหมวดหมู่ลงตาราง */}
+                        </Button>
+                      </Form.Item>
+                    </div>
+                  </Form>
+                </Space>
+              </>
+              )}
+              options={items.map((item) => ({ label: item.Name, value: item.Name }))}
             />
+            <div><AddPat/></div>
           </div>
 
-            <div style={{height:'96%',width:'100%',display:'flex' , flexDirection:'column',gap:'0.5rem',marginTop:'1rem',overflow:'auto'}}>
-              {filteredPatients.map(pat =>(
+          <div style={{
+            position:'relative', 
+            width:'100%',
+            marginTop:'0.5rem',
+            display:'flex',
+            flexDirection:'column',
+            alignItems:'center',
+            gap:'1rem',
+            flexGrow:1,
+            overflow:'auto',
+            flexShrink: 0,
+            scrollbarColor:'#c5c5c5 transparent',
+            scrollbarWidth:'thin',
+            }}
+          >              
+         {filteredPatients.map(pat =>(
                 
-                <div style={{position:'relative',height:'80px',width:'100%',display:'flex', flexDirection:'row', justifyContent:'space-between',background:'white',borderRadius:'10px'}}>
-                  <div style={{position:'relative',display:'flex', flexDirection:'row', alignItems:'center',gap:'1rem',left:'16px'}}>
-                    {pat.Picture && (pat.Picture !== "") && (pat.Picture !== undefined)?(
-                      <img 
-                        src={pat.Picture}
-                        style={{width:'70px',height:'70px',borderRadius:'50%'}}/>
+                <div style={{
+                  position:'relative',
+                  height:'15%',
+                  maxHeight:'80px',
+                  width:'97%',
+                  display:'flex',
+                  flexDirection:'row', 
+                  justifyContent:'space-between',
+                  flexShrink:0,
+                  flexWrap:'wrap',
+                  background:'white',
+                  borderRadius:'10px',
+                  boxShadow: '0px 3px 8px rgba(0, 0, 0, 0.03)',
+                  
+                }}
+                >
+                  <div style={{position:'relative',height:'100%',width:'50%',display:'flex', flexDirection:'row', alignItems:'center',gap:'1rem',marginLeft:'1rem',flexShrink:0,}}>
+                  {pat.Picture && (pat.Picture !== "") && (pat.Picture !== undefined)?(
+                      <div 
+                      style={{
+                        position:'relative',
+                        display:'flex',
+                        flexShrink:0,
+                        width:'60px',
+                        height:'80%',
+                        borderRadius:'50%',
+                        backgroundImage:`url(${pat.Picture})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                      }}
+                    >
+                    </div>
                     ) : (
-                      <img 
-                        src={userEmpty}
-                        style={{width:'60px',height:'60px',borderRadius:'50%',}}/>
+                      <div 
+                        style={{
+                          position:'relative',
+                          display:'flex',
+                          flexShrink:0,
+                          width:'65px',
+                          height:'80%',
+                          borderRadius:'50%',
+                          backgroundImage:`url(${userEmpty})`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center',
+                        }}
+                      >
+                      </div>
                     )}
                     <div style={{display:'flex', flexDirection:'column'}}>
                       <div>{pat.Firstname} {pat.Lastname}</div>
@@ -233,10 +295,10 @@ const listPatients = async () => {
 
                   </div>
 
-                  <div style={{position:'relative',display:'flex', flexDirection:'row', alignItems:'center',gap:'1rem',right:'16px'}}>
+                  <div style={{position:'relative',display:'flex', flexDirection:'row', alignItems:'center',gap:'1rem',right:'1rem'}}>
                     <Button 
                       icon={<FiEdit3/>} 
-                      style={{color:'#63C592',fontSize:'24px',width:'40px',height:'40px',alignItems:'center',justifyContent:'center',display:'flex',border:'none'}}
+                      style={{color:'#2C9F99',fontSize:'24px',width:'40px',height:'40px',alignItems:'center',justifyContent:'center',display:'flex',border:'none'}}
                       onClick={()=>showEditModal(pat)}/>
                     
                     <Button 
@@ -247,7 +309,7 @@ const listPatients = async () => {
                   </div>
                 </div>
                 
-              ))}
+              ))} 
             </div>
 
             {selectedPatient && (

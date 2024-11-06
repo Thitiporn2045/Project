@@ -20,7 +20,23 @@ function PsyPatient() {
 
   return (
     <div className="PsyPatientPage">
-        <div className="SideBar"><AntD/></div>
+      <div className='SideBar'>
+        <AntD/>
+      </div>
+
+      <div className='Content'>
+        <div style={{position:'relative',height:'5%',display:'flex',alignItems:'center',marginTop:'2rem'}}>
+          <h2 style={{color:'#585858'}}>ผู้ป่วยที่รับผิดชอบ</h2>
+        </div>
+        <div style={{position:'relative',flexGrow:1,}}>
+          <PatTypeSelect/>
+        </div>
+      </div>
+
+      <div className='Carendar'>
+        
+      </div>
+        {/* <div className="SideBar"><AntD/></div>
         <div className="Main-area">
             <div className="Main">
               <div style={{position:'relative',width:'100%',height:'6%',top:'2%',display:'flex',alignItems:'center'}}>
@@ -35,15 +51,14 @@ function PsyPatient() {
 
             </div>
         </div>
-        {/* <div className="Search"><SearchAntD/></div>
-        <div className='Noti'><Noti/></div> */}
+       
         <div className="Calendar-area">
             <div className="Calendar">
                 <div className="Cal"><PsyCalendar/></div>
                 <div className="Profile-pic"><Profile user={user}/></div>
 
             </div>
-        </div>
+        </div> */}
     </div>
   )
 }

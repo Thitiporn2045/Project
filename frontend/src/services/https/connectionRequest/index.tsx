@@ -42,6 +42,26 @@ async function CancelConnectionRequest(data: ConnectionRequestInterface) {
   return res;
 }
 
+async function DisconnectPatient(patID: number,psyID: number) {
+
+  const requestOptions = {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+  };
+
+  let res = await fetch(`${apiUrl}/connection/${patID}/${psyID}`, requestOptions)
+    .then((response) => response.json())
+    .then((res) => {
+      if (res.message) {
+        return { status: true, message: res.data };
+      } else {
+        return { status: false, message: res.error };
+      }
+    });
+
+  return res;
+}
+
 async function GetConnectionRequestById(id: Number | undefined) {
   const requestOptions = {
     method: "GET",
@@ -150,6 +170,7 @@ async function GetConnectionPatientById(id: Number | undefined) {
 export{
     SendConnectionRequest,
     CancelConnectionRequest,
+    DisconnectPatient,
     GetConnectionRequestById,
     ListConnectionPatientById,
     AcceptConnectionRequest,
