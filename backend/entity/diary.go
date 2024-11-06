@@ -7,6 +7,9 @@ type Diary struct{
 	gorm.Model
 	Name string
 	IsPublic bool
+	Picture string
+	Start string
+	End string
 
 	PatID *uint
 	Patient Patient `gorm:"foreignKey:PatID"`

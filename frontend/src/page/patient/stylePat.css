@@ -127,16 +127,22 @@
     color: #5E7BD0;
 }
 
-.Pat .main-body .main-background header .search-bar .warm .bg-warm .num{
-    position: absolute;
-    top: 3px;
-    right: 7px;
-    width: 14px;
+.Pat .ant-badge .ant-badge-count {
+    display: inline-flex;
+    justify-content: center;
+    z-index: auto;
+    min-width: 14px;
     height: 14px;
-    font-size: 0.7rem;
-    border-radius: 50%;
     color: var(--color-backgroun-secondary2);
+    font-weight: 500;
+    font-size: .65rem;
+    line-height: 14px;
+    white-space: nowrap;
+    text-align: center;
     background: var(--color-font1);
+    border-radius: 10px;
+    box-shadow: 0 0 0 1px #ffffff;
+    transition: background 0.2s;
 }
 
 /* .Pat .main-body .main-background header .search-bar .warm .bg-warm .box{
@@ -243,7 +249,6 @@
     height: 100%;
     border-radius: var(--border-radius-2);
     background: var(--color-backgroun-secondary3);
-
 }
 
 .Pat .main-body .main-background .main-content .content2 .note-board .content{
@@ -406,6 +411,17 @@
     height: calc(100% - 30px);
     margin: 10px;
     border-radius: var(--border-radius-2);
+}
+
+
+.Pat .notification-item {
+    align-items: center;
+    justify-content: space-between;
+    background: var(--color-backgroun-secondary2);
+    border-radius: var(--border-radius-2);
+    padding: 10px;
+    margin-bottom: 10px; /* เพิ่มระยะห่างระหว่าง item */
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 }
 
 /* ------------  blur   ------------------- */

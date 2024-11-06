@@ -119,3 +119,29 @@
     font-size: 0.8rem;
     font-weight: 500;
 }
+
+.notePat .note:nth-child(1){
+    background: var(--color-secondary1);
+}
+.notePat .note:nth-child(2){
+    background: var(--color-secondary2);
+}
+.notePat .note:nth-child(3){
+    background: var(--color-secondary3);
+}
+.notePat .note:nth-child(4){
+    background: var(--color-secondary2);
+}
+
+.notePat .actions{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.notePat .ant-btn {
+    background: rgba(255, 255, 255, 0.345);
+    border: none;
+    font-family: 'Noto Sans Thai', sans-serif;
+}

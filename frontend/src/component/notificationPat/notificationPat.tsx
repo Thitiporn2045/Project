@@ -32,7 +32,6 @@ for (let i = 0; i < numDays; i++) {
 
 return (
     <div className='notificationPat'>
-        <div className="notification-count">การแจ้งเตือนทั้งหมด: {notifications.length}</div>
         {notifications}
     </div>
 );

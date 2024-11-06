@@ -13,7 +13,10 @@ import { GetPatientById } from '../../services/https/patient';
 import { PatientInterface } from '../../interfaces/patient/IPatient';
 import { Form } from 'react-router-dom';
 import { ConnectionRequestInterface } from '../../interfaces/connectionRequest/IConnectionRequest';
-import { GetConnectionPatientById } from '../../services/https/connectionRequest';
+import { AcceptConnectionRequest, GetConnectionPatientById, GetConnectionRequestById, ListConnectionPatientById, RejectConnectionRequest } from '../../services/https/connectionRequest';
+import { Avatar, Badge, Button, List, message } from 'antd';
+import { BellOutlined } from '@ant-design/icons';
+import { CreateNotePat, GetNotesByPatientID } from '../../services/https/notePat/notePat';
 
 const userLogin = {
     imge: 'https://i.pinimg.com/474x/0f/44/6f/0f446fc154c16b2dd85413d50bc9c170.jpg',
@@ -25,30 +28,24 @@ const userLogin = {
 }
 
 function Pat() {
+    const [messageApi, contextHolder] = message.useMessage();
     const patID = localStorage.getItem('patientID') 
     const [patient, setPatient] = useState<PatientInterface>();
     const [connectedPsy, setConnectedPsy] = useState<ConnectionRequestInterface>();
-    // const [initialPatient, setInitialPatient] = useState<PatientInterface>(); // เก็บข้อมูลเริ่มต้น
+    const [patConnection, setPatConnection] = useState<ConnectionRequestInterface[]>([]); //Pat
+    const [countNoti, setCountNoti] = useState(0); //pat
 
 const getPatientById = async () => {
     let res = await GetPatientById(Number(patID));
     if(res){
         setPatient(res);
-        // setInitialPatient(res);
-
-    //   form.setFieldsValue({
-    //     firstname: res.FirstName,
-    //     lastname: res.LastName,
-    //     tel: res.Tel,
-    //     email: res.Email,
-    //     picture: res.Picture
-    //   });
     }
 }
 
 useEffect(() => {
     getPatientById();
     getConnectionRequest();
+    listPatientConnection();//pat
 }, [
     // console.log(connectedPsy)
 ]);
@@ -70,6 +67,56 @@ const getConnectionRequest = async () => {
     }
 };
 //==================================================================
+const listPatientConnection = async () =>{ //pat
+    let res = await ListConnectionPatientById(Number(patID));
+    if(res){
+        setPatConnection(res);
+        
+    }
+    setCountNoti(res.length);
+}
+
+const acceptConnectionRequest = async (conID: number) =>{ //pat
+    const updateConnection = patConnection.find((con) => con.ID === conID)
+    const acceptConnection = {
+        ...updateConnection,
+        Status: 'connected'
+    }
+
+    const res = await AcceptConnectionRequest(acceptConnection);
+    if(res.status){
+        messageApi.success("ยอมรับคำขอแล้ว")
+        listPatientConnection();
+        setCountNoti(countNoti-1);    
+    } 
+    else{
+        messageApi.error(res.message);
+    }
+
+}
+
+const rejectConnectionRequest = async (conID: number) =>{ //pat
+    const updateConnection = patConnection.find((con) => con.ID === conID)
+    const rejectConnection = {
+        ...updateConnection,
+        Status: 'not_connect'
+    }
+
+    const res = await RejectConnectionRequest(rejectConnection);
+    if(res.status){
+        messageApi.success("ปฏิเสธคำขอแล้ว")
+        listPatientConnection();
+        setCountNoti(countNoti-1);
+    } 
+    else{
+        messageApi.error(res.message);
+    }
+
+}
+
+//=======================================================================
+const [noteTitle, setNoteTitle] = useState('');
+const [noteContent, setNoteContent] = useState('');
 
 //Note
 function addNotePat() {
@@ -80,9 +127,27 @@ function addNotePat() {
     popup.classList.toggle('active');
 }
 //==================================================================
-const handleSave = (text: string) => {
-    console.log('Note saved:', text);
-    addNotePat();
+const handleSaveNote = async () => {
+    const existingNotes = await GetNotesByPatientID(Number(patID));
+    if (existingNotes.length >= 4) {
+        message.error("ไม่สามารถเพิ่มโน้ตได้เกิน 4 รายการ");
+        return; // Exit if there are already four notes
+    }
+    const noteData = {
+        Title: noteTitle,
+        Content: noteContent,
+        PatID: Number(patID),  // assuming patientID is stored in localStorage
+    };
+    const res = await CreateNotePat(noteData);
+    if (res.status) {
+        message.success("โน้ตถูกสร้างแล้ว");
+        window.location.reload();
+        setNoteTitle('');  
+        setNoteContent('');  
+        addNotePat(); 
+    } else {
+        message.error("เกิดข้อผิดพลาดในการสร้างโน้ต");
+    }
 };
 //==================================================================
 const handleClose = () => {
@@ -103,6 +168,7 @@ function toggle() {
 
     return (
         <div className='Pat'>
+            {contextHolder}
             <div id='blur'>
                 <div className="befor-main">
                     <div className='main-body'>
@@ -124,8 +190,11 @@ function toggle() {
                                     </div>
                                     <div className='warm'>
                                         <div className="bg-warm content">
+                                        <Badge count={countNoti} overflowCount={99}>
                                             <i><FaBell /></i>
-                                            <div className="num content">3</div>
+                                        </Badge>
+                                            {/* <i><FaBell /></i>
+                                            <div className="num content">3</div> */}
                                             {/* <div className="box">
                                                 <div className="heading content">
                                                     <p><i><FaBell /></i>3</p>
@@ -155,7 +224,7 @@ function toggle() {
                                         <h2>Note Board</h2>
                                         <button 
                                             className="btn-add-co2" 
-                                            onClick={addNotePat}>Add</button>
+                                            onClick={addNotePat}>เพิ่มโน้ต</button>
                                     </div>
                                     <div className='note-board'>
                                         <div className="content">
@@ -184,7 +253,7 @@ function toggle() {
                                             <div className="profile">
                                                 <div className="header">
                                                     <div className="img-profile">
-                                                        <img src={userLogin.imge} alt="imge" className="avatar" />
+                                                        <img src={patient?.Picture} alt="imge" className="avatar" />
                                                     </div>
                                                     <h2 className="name">{patient?.Firstname} {patient?.Lastname}</h2>
                                                     <div className='border'></div>
@@ -204,7 +273,71 @@ function toggle() {
                                 </div>
                                 <div className='content3'>
                                     <div className='box'>
-                                        <NotificationPat numDays={3} />
+                                    <div className="notification-count">การแจ้งเตือนทั้งหมด: {countNoti}</div>
+                                    {countNoti > 0 ? (
+                                        <div className="notification-item">
+                                            <List
+                                                className="Add-Patient-List"
+                                                style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem' }}
+                                                itemLayout="horizontal"
+                                                dataSource={patConnection}
+                                                renderItem={(item) =>
+                                                    item.Status === 'pending' ? (
+                                                        <div
+                                                            style={{
+                                                                width: '100%',
+                                                                display: 'flex',
+                                                                flexDirection: 'row',
+                                                                alignItems: 'center',
+                                                                justifyContent: 'space-between',
+                                                            }}
+                                                        >
+                                                            <List.Item.Meta
+                                                                style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}
+                                                                avatar={<Avatar src={item.Psychologist?.Picture} style={{ width: '60px', height: '60px', borderRadius: '10%' }} />}
+                                                                title={
+                                                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                                        <span style={{ fontWeight: 'bold', fontSize: '1rem' }}>
+                                                                            {`${item.Psychologist?.FirstName} ${item.Psychologist?.LastName}`}
+                                                                        </span>
+                                                                        <div style={{ display: 'flex', justifyContent: 'end', gap: '10px', marginTop: '0.5rem' }}>
+                                                                            <Button
+                                                                                style={{
+                                                                                    backgroundColor: '#f0f0f0',
+                                                                                    color: '#595959',
+                                                                                    borderRadius: '4px',
+                                                                                    padding: '0 25px',
+                                                                                    fontSize: '.7rem',
+                                                                                    border: 'none',
+                                                                                }}
+                                                                                onClick={() => rejectConnectionRequest(Number(item.ID))}
+                                                                            >
+                                                                                ปฎิเสธ
+                                                                            </Button>
+                                                                            <Button
+                                                                                style={{
+                                                                                    backgroundColor: '#BABDF6',
+                                                                                    color: '#fff',
+                                                                                    borderRadius: '4px',
+                                                                                    padding: '0 25px',
+                                                                                    fontSize: '.7rem',
+                                                                                    border: 'none',
+                                                                                }}
+                                                                                onClick={() => acceptConnectionRequest(Number(item.ID))}
+                                                                            >
+                                                                                ยอมรับ
+                                                                            </Button>
+                                                                        </div>
+                                                                    </div>
+                                                                }
+                                                            />
+                                                        </div>
+                                                    ) : null
+                                                }
+                                            />
+                                        </div>
+                                    ) : null}
+                                    <NotificationPat numDays={5} />
                                     </div>
                                 </div>
                             </div>
@@ -226,16 +359,27 @@ function toggle() {
                 </div>
                 <div className='noteBoard'>
                     <div className="head">
-                        <input className='titleNote' placeholder="หัวข้อ" type="text"/>
+                    <input
+                        className='titleNote'
+                        placeholder="หัวข้อ"
+                        type="text"
+                        value={noteTitle}
+                        onChange={(e) => setNoteTitle(e.target.value)}
+                    />
                         <div className='border'></div>
                     </div>
                     <div className="content">
-                        <textarea className='contentNote' placeholder="เนื้อหา..."></textarea>
+                        <textarea
+                            className='contentNote'
+                            placeholder="เนื้อหา..."
+                            value={noteContent}
+                            onChange={(e) => setNoteContent(e.target.value)}
+                        />
                     </div>
                 </div>
                 <div className="buttons">
                     <button className="btn-cancel" onClick={addNotePat}>ยกเลิก</button>
-                    <button className="btn-create">สร้างโน้ต</button>
+                    <button className="btn-create" onClick={handleSaveNote}>สร้างโน้ต</button>
                 </div>
             </div>
         </div>

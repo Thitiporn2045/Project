@@ -89,3 +89,21 @@ func ListPublicDiariesByPatientType(c *gin.Context) {
 
     c.JSON(http.StatusOK, gin.H{"data": result})
 }
+
+func CreateDiaryPat(c *gin.Context) {
+	var diaries entity.Diary
+
+	// Bind JSON data to notePat struct
+	if err := c.ShouldBindJSON(&diaries); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Save notePat into the database
+	if err := entity.DB().Create(&diaries).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": diaries})
+}

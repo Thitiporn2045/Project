@@ -43,6 +43,7 @@
 .notification-count {
     font-weight: bold;
     margin-bottom: 10px;
+    font-family: 'Noto Sans Thai', sans-serif;
 }
 
 .notification-item {

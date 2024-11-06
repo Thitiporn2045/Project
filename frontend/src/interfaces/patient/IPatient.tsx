@@ -1,4 +1,3 @@
-import { PsychologistInterface } from "../psychologist/IPsychologist";
 import { GenderInterface } from "./IGender";
 import { TypeOfPatientInterface } from "../psychologist/ITypeOfPatient";
 

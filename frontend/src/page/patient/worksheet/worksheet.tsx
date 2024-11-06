@@ -1,77 +1,84 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import NavbarPat from '../../../component/navbarPat/navbarPat';
-import { motion, AnimatePresence } from 'framer-motion';
 import DatePicker from 'react-datepicker';
-import { GrEdit } from "react-icons/gr";
 import { FaRegCalendarAlt, FaUnlockAlt } from "react-icons/fa";
 import 'react-datepicker/dist/react-datepicker.css';
 
 import './stylePat.css';
-
-const worksheetData = [
-    {
-        numberIndex: 1,
-        title: "Cross Sectional Formulation",
-        image: "https://i.pinimg.com/564x/8f/1a/b1/8f1ab1e2ef48c2a26de7df6e977930bd.jpg",
-        description: "การกำหนดกรอบความคิดกระบวนการ (สูตร) ช่วยให้นักบำบัดและลูกค้ามีความเข้าใจร่วมกันเกี่ยวกับปัญหา สูตรแบบตัดขวางนี้จะสำรวจปฏิสัมพันธ์ระหว่างสถานการณ์ ความคิด อารมณ์ ความรู้สึกของร่างกาย และพฤติกรรม"
-    },
-    {
-        numberIndex: 2,
-        title: "Behavioral Experiment",
-        image: "https://i.pinimg.com/564x/4a/e5/d6/4ae5d6acd7226353af132969be733a61.jpg",
-        description: "การกำหนดกรอบความคิดกระบวนการ (สูตร) ช่วยให้นักบำบัดและลูกค้ามีความเข้าใจร่วมกันเกี่ยวกับปัญหา สูตรแบบตัดขวางนี้จะสำรวจปฏิสัมพันธ์ระหว่างสถานการณ์ ความคิด อารมณ์ ความรู้สึกของร่างกาย และพฤติกรรม"
-    },
-    {
-        numberIndex: 3,
-        title: "Activity Planning",
-        image: "https://i.pinimg.com/564x/2f/c5/e2/2fc5e275f3a1fbd35c0a729ae2178002.jpg",
-        description: "การกำหนดกรอบความคิดกระบวนการ (สูตร) ช่วยให้นักบำบัดและลูกค้ามีความเข้าใจร่วมกันเกี่ยวกับปัญหา สูตรแบบตัดขวางนี้จะสำรวจปฏิสัมพันธ์ระหว่างสถานการณ์ ความคิด อารมณ์ ความรู้สึกของร่างกาย และพฤติกรรม"
-    },
-    {
-        numberIndex: 4,
-        title: "Panic - Self-Monitoring Record",
-        image: "https://i.pinimg.com/564x/7d/2d/c5/7d2dc513fc506bd9ad6cf3847b7326c2.jpg",
-        description: "การกำหนดกรอบความคิดกระบวนการ (สูตร) ช่วยให้นักบำบัดและลูกค้ามีความเข้าใจร่วมกันเกี่ยวกับปัญหา สูตรแบบตัดขวางนี้จะสำรวจปฏิสัมพันธ์ระหว่างสถานการณ์ ความคิด อารมณ์ ความรู้สึกของร่างกาย และพฤติกรรม"
-    }
-];
+import { WorksheetTypeInterface } from '../../../interfaces/worksheetType/IWorksheetType';
+import { ListWorkSheetType } from '../../../services/https/workSheetType/workSheetType';
+import { DiaryPatInterface } from '../../../interfaces/diary/IDiary';
+import { CreateDiaryPat } from '../../../services/https/diary';
+import { message } from 'antd';
+import dayjs from 'dayjs';
 
 function Worksheets() {
-    const [activeIndex, setActiveIndex] = useState(0);
-    const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(new Date());
+    const [messageApi, contextHolder] = message.useMessage();
+    const [diaryName, setDiaryName] = useState('');
+    const [diaryPicture, setDiaryPicture] = useState('');
+    const [diaryStart, setDiaryStart] = useState(new Date());
+    const [diaryEnd, setDiaryEnd] = useState(new Date());
+    const [diaryIsPublic, setDiaryIsPublic] = useState(false);
+    const patID = localStorage.getItem('patientID');
+
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [duration, setDuration] = useState(0);
     const [selectedBook, setSelectedBook] = useState<number | null>(null);
+    const [worksheets, setWorksheets] = useState<WorksheetTypeInterface[]>([]);
+    const [selectedWorksheet, setSelectedWorksheet] = useState<WorksheetTypeInterface | null>(null);
 
-    const handleThumbnailClick = (index: number) => {
-        setActiveIndex(index);
+    const fetchWorksheetData = async () => {
+        const res = await ListWorkSheetType();
+        if (res) {
+            setWorksheets(res);
+            setSelectedWorksheet(res[0] || null); // Set the first item as default
+        }
     };
 
-    const contentVariants = {
-        hidden: { opacity: 0, y: 20 },
-        visible: { 
-            opacity: 1, 
-            y: 0,
-            transition: { 
-                duration: 0.5,
-                ease: "easeOut"
-            }
-        },
-        exit: { 
-            opacity: 0, 
-            y: -20, 
-            transition: { 
-                duration: 0.3,
-                ease: "easeIn"
-            }
+    useEffect(() => {
+        fetchWorksheetData();
+    }, []);
+
+    const handleSaveNote = async () => {
+        const diaryData = {
+            Name: diaryName,
+            Picture: selectedWorksheet?.Picture,
+            Start:  dayjs(diaryStart).format('DD-MM-YYYY'),
+            End:  dayjs(diaryEnd).format('DD-MM-YYYY'),
+            IsPublic: diaryIsPublic,
+            WorksheetTypeID: selectedBook || 0,
+            PatID: Number(patID),
+        };
+        const res = await CreateDiaryPat(diaryData);
+        console.log(res)
+        if (res) {
+            messageApi.success("สร้างแล้ว");
+            setTimeout(() => {
+                window.location.reload()
+            }, 1000)
+            resetForm();
+        } else {
+            messageApi.error("เกิดข้อผิดพลาดในการสร้าง");
         }
+    };
+
+    const resetForm = () => {
+        setDiaryName('');
+        setDiaryStart(new Date());
+        setDiaryEnd(new Date());
+        setDiaryIsPublic(false);
+        setDiaryPicture('');
+        setSelectedBook(null);
     };
 
     const calculateDuration = (start: Date, end: Date) => {
         const diffTime = Math.abs(end.getTime() - start.getTime());
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        setDuration(diffDays);
+        setDuration(Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+    };
+
+    const handleThumbnailClick = (worksheet: WorksheetTypeInterface) => {
+        setSelectedWorksheet(worksheet);
     };
 
     const handleClickOutside = (event: any) => {
@@ -83,10 +90,7 @@ function Worksheets() {
     useEffect(() => {
         if (showDatePicker) {
             document.addEventListener('mousedown', handleClickOutside);
-        } else {
-            document.removeEventListener('mousedown', handleClickOutside);
         }
-
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
@@ -94,6 +98,7 @@ function Worksheets() {
 
     return (
         <div className={`worksheets ${showDatePicker ? 'show-blur-background' : ''}`}>
+            {contextHolder}
             <div className="main-body">
                 <div className='sidebar'>
                     <NavbarPat />
@@ -101,45 +106,36 @@ function Worksheets() {
                 <div className="main-background">
                     <div className="bg-content">
                         <div className="content-img">
-                            <motion.img 
-                                key={activeIndex}
-                                src={worksheetData[activeIndex].image} 
-                                alt={worksheetData[activeIndex].title}
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 0.5 }}
-                            />
+                            {selectedWorksheet && (
+                                <img 
+                                    src={selectedWorksheet.Picture} 
+                                    alt={selectedWorksheet.Name}
+                                    style={{ opacity: 1, transition: 'opacity 0.5s' }}
+                                />
+                            )}
                         </div>
-                        <AnimatePresence mode="wait">
-                            <motion.div 
-                                className="content-text"
-                                key={activeIndex}
-                                variants={contentVariants}
-                                initial="hidden"
-                                animate="visible"
-                                exit="exit"
-                            >
-                                <motion.h2 variants={contentVariants}>{worksheetData[activeIndex].title}</motion.h2>
-                                <motion.p variants={contentVariants}>{worksheetData[activeIndex].description}</motion.p>
-                                <motion.div variants={contentVariants}>
+                        <div className="content-text">
+                            {selectedWorksheet && (
+                                <>
+                                    <h2>{selectedWorksheet.Name}</h2>
+                                    <p>{selectedWorksheet.Description}</p>
                                     <button className="btn" onClick={() => setShowDatePicker(true)}>
                                         <span>START</span>
                                     </button>
-                                </motion.div>
-                            </motion.div>
-                        </AnimatePresence>
+                                </>
+                            )}
+                        </div>
                     </div>
                     <div className="thumbnail">
-                        {worksheetData.map((item, index) => (
-                            <motion.div 
-                                key={index}
-                                className={`thumbnail-item ${index === activeIndex ? 'active' : ''}`}
-                                onClick={() => handleThumbnailClick(index)}
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
+                        {worksheets.map((item) => (
+                            <div 
+                                key={item.ID}
+                                className={`thumbnail-item ${selectedWorksheet?.ID === item.ID ? 'active' : ''}`}
+                                onClick={() => handleThumbnailClick(item)}
+                                style={{ cursor: 'pointer' }}
                             >
-                                {item.numberIndex}
-                            </motion.div>
+                                {item.NumberType}
+                            </div>
                         ))}
                     </div>
                 </div>
@@ -147,15 +143,23 @@ function Worksheets() {
             {showDatePicker && (
                 <div className='bg-popup' onClick={handleClickOutside}>
                     <div className="date-picker-popup" onClick={(e) => e.stopPropagation()}>
-                        {/* <h2 className='title'>New Note</h2> */}
                         <div className="date-picker-content">
                             <div className="left-column">
                                 <div className='book-item'>
                                     <div className="img-book">
-                                        <img src={selectedBook !== null ? worksheetData[selectedBook - 1].image : ''} alt="" />
+                                        {selectedBook !== null && (
+                                            <img src={worksheets[selectedBook - 1]?.Picture} alt="" />
+                                        )}
                                     </div>
                                     <div className="head">
-                                        <input className='nameBook' type="text" placeholder="ชื่อไดอารี่" />
+                                        <input 
+                                            required
+                                            className='nameBook' 
+                                            type="text" 
+                                            placeholder="ชื่อไดอารี่"
+                                            value={diaryName}
+                                            onChange={(e) => setDiaryName(e.target.value)}
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -168,9 +172,9 @@ function Worksheets() {
                                         onChange={(e) => setSelectedBook(Number(e.target.value))}
                                     >
                                         <option value="" disabled hidden>เลือกแบบฟอร์ม</option>
-                                        {worksheetData.map((item) => (
-                                            <option value={item.numberIndex} key={item.numberIndex}>
-                                                {item.title}
+                                        {worksheets.map((item) => (
+                                            <option value={item.ID} key={item.ID}>
+                                                {item.Name}
                                             </option>
                                         ))}
                                     </select>
@@ -178,30 +182,30 @@ function Worksheets() {
                                 <div className="input-group">
                                     <label>วันเริ่มต้น</label>
                                     <DatePicker
-                                        selected={startDate}
+                                        selected={diaryStart}
                                         onChange={(date: Date | null) => {
-                                            if (date) setStartDate(date);
+                                            if (date) setDiaryStart(date);
                                         }}
                                         selectsStart
-                                        startDate={startDate}
-                                        endDate={endDate}
+                                        startDate={diaryStart}
+                                        endDate={diaryEnd}
                                         dateFormat="dd/MM/yyyy"
                                     />
                                 </div>
                                 <div className="input-group">
                                     <label>วันสิ้นสุด</label>
                                     <DatePicker
-                                        selected={endDate}
+                                        selected={diaryEnd}
                                         onChange={(date: Date | null) => {
                                             if (date) {
-                                                setEndDate(date);
-                                                calculateDuration(startDate, date);
+                                                setDiaryEnd(date);
+                                                calculateDuration(diaryStart, date);
                                             }
                                         }}
                                         selectsEnd
-                                        startDate={startDate}
-                                        endDate={endDate}
-                                        minDate={startDate}
+                                        startDate={diaryStart}
+                                        endDate={diaryEnd}
+                                        minDate={diaryStart}
                                         dateFormat="dd/MM/yyyy"
                                     />
                                 </div>
@@ -211,7 +215,7 @@ function Worksheets() {
                                 </div>
                             </div>
                         </div>
-                        <button className='btn-submit' onClick={() => setShowDatePicker(false)}>สร้างโน้ต</button>
+                        <button className='btn-submit' onClick={handleSaveNote}>สร้างโน้ต</button>
                     </div>
                 </div>
             )}

@@ -1,4 +1,7 @@
 export interface WorksheetTypeInterface{
     ID?: number,
-    Name?: string
+    NumberType?: number,
+    Name?: string,
+    Picture?: string,
+    Description?: string
 }

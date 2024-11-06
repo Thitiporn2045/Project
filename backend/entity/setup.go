@@ -37,6 +37,7 @@ func SetupDatabase() (*gorm.DB, error) {
 		&TimeOfDay{},
 		&WorkSchedule{},
 		&WorksheetType{},	
+		&NotePat{},
 	)
 //=========================================================
 	db = database
@@ -68,14 +69,36 @@ func SetupDatabase() (*gorm.DB, error) {
 	}
 //======================================================================
 	worksheetType := []WorksheetType{
-		{Name: "Activity Planning"},
-		{Name: "Activity Diary"},
-		{Name: "Behavioral Experiment"},
-		{Name: "Cross Sectional"},	
+		{	
+			NumberType: 1,
+			Name: "Activity Planning",
+			Description: "การกำหนดกรอบความคิดกระบวนการ (สูตร) ช่วยให้นักบำบัดและลูกค้ามีความเข้าใจร่วมกันเกี่ยวกับปัญหา สูตรแบบตัดขวางนี้จะสำรวจปฏิสัมพันธ์ระหว่างสถานการณ์ ความคิด อารมณ์ ความรู้สึกของร่างกาย และพฤติกรรม",
+			Picture: "https://i.pinimg.com/564x/8f/1a/b1/8f1ab1e2ef48c2a26de7df6e977930bd.jpg",
+		},
+		{	
+			NumberType: 2,
+			Name: "Activity Diary",
+			Description: "การกำหนดกรอบความคิดกระบวนการ (สูตร) ช่วยให้นักบำบัดและลูกค้ามีความเข้าใจร่วมกันเกี่ยวกับปัญหา สูตรแบบตัดขวางนี้จะสำรวจปฏิสัมพันธ์ระหว่างสถานการณ์ ความคิด อารมณ์ ความรู้สึกของร่างกาย และพฤติกรรม",
+			Picture: "https://i.pinimg.com/564x/8f/1a/b1/8f1ab1e2ef48c2a26de7df6e977930bd.jpg",
+		},
+		{	
+			NumberType: 3,
+			Name: "Behavioral Experiment",
+			Description: "การกำหนดกรอบความคิดกระบวนการ (สูตร) ช่วยให้นักบำบัดและลูกค้ามีความเข้าใจร่วมกันเกี่ยวกับปัญหา สูตรแบบตัดขวางนี้จะสำรวจปฏิสัมพันธ์ระหว่างสถานการณ์ ความคิด อารมณ์ ความรู้สึกของร่างกาย และพฤติกรรม",
+			Picture: "https://i.pinimg.com/564x/8f/1a/b1/8f1ab1e2ef48c2a26de7df6e977930bd.jpg",
+		},
+		{	
+			NumberType: 4,
+			Name: "Cross Sectional",
+			Description: "การกำหนดกรอบความคิดกระบวนการ (สูตร) ช่วยให้นักบำบัดและลูกค้ามีความเข้าใจร่วมกันเกี่ยวกับปัญหา สูตรแบบตัดขวางนี้จะสำรวจปฏิสัมพันธ์ระหว่างสถานการณ์ ความคิด อารมณ์ ความรู้สึกของร่างกาย และพฤติกรรม",
+			Picture: "https://i.pinimg.com/564x/8f/1a/b1/8f1ab1e2ef48c2a26de7df6e977930bd.jpg",
+		},	
 	}
+
 	for _, wst := range worksheetType {
-		db.Create(&wst)
+		db.Where("number_type = ?", wst.NumberType).FirstOrCreate(&wst)
 	}
+
 //======================================================================
 
 	// funny := FeelGoodType{

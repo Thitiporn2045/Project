@@ -27,15 +27,22 @@ func main() {
 			//Patient Routes
 			r.GET("/patients", controller.ListPatients)
 			r.GET("/patient/:id", controller.GetPatient)
-
 			r.GET("/pat/connection/:id", controller.GetConnectionPatientById)
+			r.GET("/pat/getNote/:id", controller.GetNotesByPatientID)
+			r.GET("/pat/workSheetType", controller.ListWorkSheetType)
 
 			r.PATCH("/patients", controller.UpdatePatient)
-			r.POST("/pat/checkPassword",controller.CheckOldPasswordPatient)
 			r.PATCH("/pat/updatepassword",controller.UpdatePasswordPatient)
+			r.PATCH("/pat/updateNote",controller.UpdateNotePatient)
 
 
+			r.POST("/pat/checkPassword",controller.CheckOldPasswordPatient)
+			r.POST("/pat/note",controller.CreateNotePat)
+			r.POST("/pat/creatDiary",controller.CreateDiaryPat)		
+			
 			r.DELETE("/patients/:id", controller.DeletePatient)
+			r.DELETE("/pat/delNote/:id", controller.DeleteNotePat)
+
 
 			//Psychologist Routes
 			r.GET("/psychologists", controller.ListPsychologists)

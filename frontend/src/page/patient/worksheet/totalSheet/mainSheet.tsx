@@ -42,41 +42,6 @@ function MainSheet() {
                         <NavbarPat></NavbarPat>
                     </div>
                     <div className="main-background">
-                        <header>
-                            <h1>Hello, {userLogin.name} 👋</h1>
-                            <div className='search-bar'>
-                                <div className="labelSearch">
-                                    <input
-                                        className='searchBook'
-                                        type="text"
-                                        placeholder="ค้นหาหนังสือของคุณ"
-                                        onClick={toggle}
-                                    />
-                                    <i className="searchIcon"><ImSearch /></i>
-                                </div>
-                                <div className='warm'>
-                                    <div className="bg-warm content">
-                                        <i><FaBell /></i>
-                                        <div className="num content">3</div>
-                                        {/* <div className="box">
-                                            <div className="heading content">
-                                                <p><i><FaBell /></i>3</p>
-                                            </div>
-                                            <div className="content-box">
-                                                <div className='text'>
-                                                    <p>วันนี้วันที่ 30/07/2024</p>
-                                                    <p>อย่าลืมเขียนบันทึกน้าา~~</p>
-                                                </div>
-                                                <div className='bg-icon'>
-                                                    <i><LuAlarmClock/></i>
-                                                </div>
-                                            </div>
-                                        </div> */}
-                                    </div>
-                                </div>
-                            </div>
-                        </header>
-
                         <div className="main-content">
                             <div className='bg-content'>
                                 <h2>My Book</h2>
@@ -93,38 +58,6 @@ function MainSheet() {
                                 </div>
                                 <div className="book-item">
                                     <BookPat month={selectedMonth} />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="main-bg-right">
-                        <div className="main-content">
-                            <div className='content1'>
-                                    <div className="box">
-                                        <div className="profile">
-                                            <div className="header">
-                                                <div className="img-profile">
-                                                    <img src={userLogin.imge} alt="imge" className="avatar" />
-                                                </div>
-                                                <h2 className="name">{userLogin.name}</h2>
-                                                <div className='border'></div>
-                                            </div>
-                                            <div className="info">
-                                                <p><strong>วันเกิด:</strong> {userLogin.birthDate}</p>
-                                                <p><strong>เบอร์โทรศัพท์:</strong> {userLogin.phone}</p>
-                                                <p><strong>อีเมล:</strong> {userLogin.email}</p>
-                                                <p><strong>นักวิดของคุณ:</strong> {userLogin.therapist}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                            </div>
-                            <div className='content2'>
-                                <div className='box'>
-                                </div>
-                            </div>
-                            <div className='content3'>
-                                <div className='box'>
-                                    <NotificationPat numDays={3} />
                                 </div>
                             </div>
                         </div>

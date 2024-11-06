@@ -16,3 +16,18 @@ export interface patientDiaryInterface{//Psy only
     TypeOfPatient?: string,
 
 }
+
+export interface DiaryPatInterface{ //Pat only
+    ID?: number,
+    IsPublic?: boolean,
+    Name?: string,
+    Picture?: string,
+	Start?: string,
+	End?: string,
+
+    PatID?: number;
+	Patient?: PatientInterface;
+
+    WorksheetTypeID?: number;
+    WorksheetType?: WorksheetTypeInterface;
+}
