@@ -1,30 +1,57 @@
-import React from 'react'
-import NotificationPat from '../../../../component/notificationPat/notificationPat'
-import NavbarPat from '../../../../component/navbarPat/navbarPat'
-import { ImSearch } from 'react-icons/im'
-import { FaBell } from 'react-icons/fa'
+import React, { useEffect, useState } from 'react';
+import NavbarPat from '../../../../component/navbarPat/navbarPat';
+import { ImSearch } from 'react-icons/im';
 import './styleSheetPat.css';
-import BookPat from '../../../../component/bookPat/bookPat'
-import SearchPat from '../../../../component/searchPat/searchPat'
-
-const userLogin = {
-    imge: 'https://i.pinimg.com/474x/0f/44/6f/0f446fc154c16b2dd85413d50bc9c170.jpg',
-    name: "สมใจ ยิ้มแย้ม",
-    birthDate: "20 สิงหาคม 2003",
-    phone: "0801234567",
-    email: "somjai2003@gmail.com",
-    therapist: "ญาดา โภคาริตนกุล",
-}
+import SearchPat from '../../../../component/searchPat/searchPat';
+import { useNavigate } from 'react-router-dom';
+import { DiaryPatInterface } from '../../../../interfaces/diary/IDiary';
+import { Form, message } from 'antd';
+import { GetDiaryByPatientID } from '../../../../services/https/diary';
 
 function MainSheet() {
+    const patID = localStorage.getItem('patientID');
+    const [diarys, setDiarys] = useState<DiaryPatInterface[]>([]); // Default to empty array
+    const [messageApi, contextHolder] = message.useMessage();
+    const [form] = Form.useForm();
 
-    const [selectedMonth, setSelectedMonth] = React.useState(new Date().getMonth());
-
-    const changeMonth = (month: any) => {
-        setSelectedMonth(month);
+    const fetchDiaryByPatientID = async () => {
+        const res = await GetDiaryByPatientID(Number(patID));
+        if (res) {
+            setDiarys(res.data);
+            console.log("res", res)
+        }
     };
 
-    //popup
+    useEffect(() => {
+        fetchDiaryByPatientID();
+    }, []);
+
+    const navigate = useNavigate();
+
+    // Function to navigate based on the WorksheetTypeID
+    const navigateToDiaryPage = (diary: DiaryPatInterface) => {
+        let routePath = '';
+        switch (diary.WorksheetTypeID) {
+            case 1:
+                routePath = '/Planning';
+                break;
+            case 2:
+                routePath = '/Activity';
+                break;
+            case 3:
+                routePath = '/Behavioural';
+                break;
+            case 4:
+                routePath = '/CrossSectional';
+                break;
+            default:
+                console.error('Unknown worksheet type');
+                return;
+        }
+        navigate(`${routePath}?id=${diary.ID}`);
+    };
+
+    // Toggle popup visibility
     function toggle() {
         const blur = document.getElementById('blur') as HTMLElement;
         blur.classList.toggle('active');
@@ -33,46 +60,65 @@ function MainSheet() {
         popup.classList.toggle('active');
     }
     
-
+    
     return (
         <div className='mainSheet'>
             <div className="befor-main">
                 <div className='main-body'>
                     <div className='sidebar'>
-                        <NavbarPat></NavbarPat>
+                        <NavbarPat />
                     </div>
                     <div className="main-background">
                         <div className="main-content">
                             <div className='bg-content'>
-                                <h2>My Book</h2>
-                                <div className="month">
-                                    {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((monthName, index) => (
-                                        <button 
-                                            key={monthName} 
-                                            onClick={() => changeMonth(index)}
-                                            className={selectedMonth === index ? 'active' : ''}
-                                        >
-                                            {monthName}
-                                        </button>
-                                    ))}
+                                <div className="header">
+                                    <div className='on'>
+                                        <h2>My Book</h2>
+                                    </div>
+                                    <div className="labelSearch">
+                                        <input
+                                            className='searchBook'
+                                            type="text"
+                                            placeholder="ค้นหาหนังสือของคุณ"
+                                            onClick={toggle}
+                                        />
+                                        <i className="searchIcon"><ImSearch /></i>
+                                    </div>                                   
                                 </div>
-                                <div className="book-item">
-                                    <BookPat month={selectedMonth} />
+                                
+                                {/* Display categorized diary entries */}
+                                <div className="diary-categories p-6">
+                                    {diarys && diarys.length > 0 ? (
+                                        diarys.map((diary) => (
+                                            <div key={diary.ID}>
+                                                <h3>{diary.Name}</h3>
+                                                <img src={diary.Picture} alt={diary.Name} />
+                                                <p>Start Date: {diary.Start}</p>
+                                                <p>End Date: {diary.End}</p>
+                                                {diary.Patient && <p>Patient Name: {diary.Patient.Firstname} {diary.Patient.Lastname}</p>}
+                                                {/* Render more details if necessary */}
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p>No diaries found</p>
+                                    )}
                                 </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
+            {/* Popup for Search */}
             <div id='popup'>
-                    <div className='compo-search'>
-                        <SearchPat></SearchPat>
-                        <a href="#" className='btn-close' onClick={toggle}>Close</a>
-                    </div>
+                <div className='compo-search'>
+                    <SearchPat />
+                    <a href="#" className='btn-close' onClick={toggle}>Close</a>
+                </div>
             </div>
         </div>
-    )
+    );
 }
 
-export default MainSheet
+export default MainSheet;

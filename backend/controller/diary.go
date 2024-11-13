@@ -107,3 +107,24 @@ func CreateDiaryPat(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"data": diaries})
 }
+
+
+func GetDiaryByPatientID(c *gin.Context) {
+	var diaries []entity.Diary
+
+	patID := c.Param("id")
+    if err := entity.DB().Preload("Patient").Preload("Patient.Gender").Preload("WorksheetType").Raw("SELECT * FROM diaries WHERE pat_id = ?",patID).Find(&diaries).Error;
+    err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// If no notes were found, return a message
+	if len(diaries) == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No diaries found for this patient"})
+		return
+	}
+
+	// Return the found notes
+	c.JSON(http.StatusOK, gin.H{"data": diaries})
+}

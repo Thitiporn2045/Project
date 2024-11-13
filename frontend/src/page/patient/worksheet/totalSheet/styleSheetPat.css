@@ -30,49 +30,19 @@
     height: 100%;
 }
 
-.mainSheet .main-body .main-background header{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    height: 50px;
-    background: var(--color-backgroun-secondary1);
-    font-family: "Poppins", sans-serif;
-    font-family:'Noto Sans Thai',sans-serif;
-}
-
-.mainSheet .main-body .main-background header h1{
+.mainSheet .labelSearch {
     display: flex;
     align-items: center;
     justify-content: center;
-    left: 0;
-    top: 0;
-    height: 100%;
-    color: var(--color-font1);
-}
-
-.mainSheet .main-body .main-background header .search-bar{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    width: 35%;
-    height: 100%;
-    gap: 10px;
-}
-
-.mainSheet .main-body .main-background header .search-bar .labelSearch {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 90%;
-    height: 65%;
+    width: 30%;
+    height: 50%;
     background: var(--color-backgroun-secondary2);
     border: none;
     border-radius: var(--border-radius-3);
+    margin-right: 15px;
 }
 
-.mainSheet .main-body .main-background header .search-bar .labelSearch input {
+.mainSheet .labelSearch input {
     color: var(--color-font3);
     background: transparent;
     border: none;
@@ -83,97 +53,23 @@
     margin: 5px;
 }
 
-.mainSheet .main-body .main-background header .search-bar .labelSearch input::placeholder{
+
+.mainSheet .labelSearch input::placeholder{
     color: var(--color-backgroun-main1);
     font-family:'Noto Sans Thai',sans-serif;
     font-weight: 400;
 }
 
-.mainSheet .main-body .main-background header .search-bar .labelSearch input:focus {
+.mainSheet .labelSearch input:focus {
     outline: none;
-}
-
-.mainSheet .main-body .main-background header .search-bar .warm{
-    width: 15%;
-    height: 100%;
-}
-
-.mainSheet .main-body .main-background header .search-bar .warm .content{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mainSheet .main-body .main-background header .search-bar .warm .bg-warm{
-    position: relative;
-    margin: 5px;
-    width: calc(100px -10px);
-    height: 78%;
-    border-radius: var(--border-radius-2);
-    background: var(--color-backgroun-secondary2);
-}
-
-.mainSheet .main-body .main-background header .search-bar .warm .bg-warm i{
-    margin-top: 7px;
-    font-size: 1.4rem;
-    color: #5E7BD0;
-}
-
-.mainSheet .main-body .main-background header .search-bar .warm .bg-warm .num{
-    position: absolute;
-    top: 3px;
-    right: 7px;
-    width: 14px;
-    height: 14px;
-    font-size: 0.7rem;
-    border-radius: 50%;
-    color: var(--color-backgroun-secondary2);
-    background: var(--color-font1);
-}
-
-/* .Pat .main-body .main-background header .search-bar .warm .bg-warm .box{
-    width: 200px;
-    height: 250px;
-    background: var(--color-backgroun-secondary2);
-    position: absolute;
-    border-radius: var(--border-radius-2);
-    top: 50px;
-    left: -170px;
-    z-index: 100;
-}
-
-.Pat .main-body .main-background header .search-bar .warm .bg-warm .box .heading{
-    margin-top: 0.2rem auto;
-    color: var(--color-backgroun-secondary2);
-    background: #9BA5F6;
-    width: 100%;
-    height: 30px;
-    border-radius: var(--border-radius-2);
-}
-
-.Pat .main-body .main-background header .search-bar .warm .bg-warm .box .content-box{
-    margin-top: 0.4rem auto 0 auto;
-    width: 85%;
-    height: 190px;
-    overflow-x: auto;
-} */
-
-.mainSheet .main-body .main-background header .search-bar .searchIcon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    margin-right: 8px;
-    color: var(--color-backgroun-main1);
 }
 
 /* ------------  main-content   ------------------- */
 
 .mainSheet .main-body .main-background .main-content{
     position: relative;
-    margin-top: 5px;
     width: calc(100% -20px);
-    height: calc(100% - 5px); /* ลบความสูงของ header */
+    height: 100%;
     margin-inline: auto;
     background: var(--color-backgroun-secondary2);
     border-radius: var(--border-radius-3);
@@ -186,6 +82,25 @@
     height: calc(97% - 20px); /* ลบความสูงของ header */
     background: var(--color-backgroun-secondary4);
     border-radius: var(--border-radius-2);
+
+    .header{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        height: 70px;
+        font-family: "Poppins", sans-serif;
+        font-family:'Noto Sans Thai',sans-serif;
+    }
+
+    i {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        margin-right: 8px;
+        color: var(--color-backgroun-main1);
+    }
 }
 
 .mainSheet .main-body .main-background .main-content .bg-content h2 {
@@ -199,151 +114,11 @@
     margin-left: 1rem;
 }
 
-.mainSheet .main-body .main-background .main-content .bg-content .month {
-    display: flex;
-    justify-content: space-between;
-    margin: 1rem;
-    overflow-x: auto;
-}
-
-.mainSheet .main-body .main-background .main-content .bg-content .month button {
-    padding: 0.5rem 1rem;
-    border: none;
-    background-color: var(--color-backgroun-secondary2);
-    color: var(--color-font1);
-    cursor: pointer;
-    border-radius: var(--border-radius-1);
-    transition: background-color 0.3s ease;
-}
-
-.mainSheet .main-body .main-background .main-content .bg-content .month button.active {
-    background-color: var(--color-backgroun-main1);
-    color: white;
-}
-
-.mainSheet .main-body .main-background .main-content .bg-content .month button:hover {
-    background-color: var(--color-secondary1);
-}
-
 .mainSheet .main-body .main-background .main-content .bg-content .book-item{
     margin-top: 15px;
     margin-left: 15px;
-    width: 73vw;
+    width: 15vw;
 }
-
-
-/* ------------  main-bg-right   ------------------- */
-
-.mainSheet .main-body .main-bg-right{
-    width: 100%;
-    height: 100%;
-    overflow-y: auto;
-}
-
-
-.mainSheet .main-body .main-bg-right .main-content{
-    position: relative;
-    width: 100%;
-    height: 100%;
-    display: grid;
-    grid-template-rows: 20rem 15rem auto;
-    background: var(--color-backgroun-secondary2);
-    overflow-y: auto;
-}
-
-/* ------------  content1   ------------------- */
-
-.mainSheet .main-body .main-bg-right .main-content .content1{
-    position: relative;
-    width: 100%;
-    height: 100%;
-    background: var(--color-backgroun-main2);
-}
-
-.mainSheet .main-body .main-bg-right .main-content .content1 .box{
-    position: relative;
-    width: calc(100% - 20px);
-    height: calc(100% - 20px);
-    margin: 10px;
-    background: #ffffffd2;
-    border-radius: var(--border-radius-2);
-    font-family:'Noto Sans Thai',sans-serif;
-}
-
-.mainSheet .main-body .main-bg-right .main-content .content1 .box .profile{
-    width: 100%;
-    height: 100%;
-    display: grid;
-    grid-template-rows: 9rem auto;
-}
-
-.mainSheet .main-bg-right .main-content .content1 .box .profile .header{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 30px;
-    width: 100%;
-    border-bottom: 2px solid #DADDFA;
-    /* background-color: #868686; */
-}
-
-.mainSheet .main-bg-right .main-content .content1 .box .profile .header .img-profile{
-    width: 90px;
-    height: 90px;
-    margin-bottom: -10px;
-}
-
-.mainSheet .main-bg-right .main-content .content1 .box .profile .header .img-profile img{
-    width: 100%;
-    height: 100%;
-    border-bottom: 2px solid #DADDFA;
-    object-fit: cover;
-    border-radius: var(--border-radius-3);
-}
-
-.mainSheet .main-bg-right .main-content .content1 .box .profile .header h2{
-    font-size: 1.3rem;
-    color: var(--color-font1);
-}
-
-.mainSheet .main-bg-right .main-content .content1 .box .profile .info{
-    background-color: #ffffff7d;
-    text-align: center;
-    font-size: 0.9rem;
-    border-radius: var(--border-radius-2);
-}
-
-.mainSheet .main-bg-right .main-content .content1 .box .profile .info p {
-    color: var(--color-font4);
-}
-
-.mainSheet .main-bg-right .main-content .content1 .box .profile .info p strong{
-    color: var(--color-font1);
-}
-
-/* ------------  content2   ------------------- */
-
-.mainSheet .main-body .main-bg-right .main-content .content2{
-    position: relative;
-    width: calc(100% - 20px);
-    height: calc(100% - 13px);
-    margin: 10px;
-    background: var(--color-backgroun-secondary1);
-    border-radius: var(--border-radius-2);
-}
-
-/* ------------  content3   ------------------- */
-
-.mainSheet .main-body .main-bg-right .main-content .content3{
-    position: relative;
-    width: calc(100% - 20px);
-    height: calc(100% - 30px);
-    margin: 10px;
-    border-radius: var(--border-radius-2);
-}
-
-
 
 
 /* ------------  SheetCross   ------------------- */

@@ -30,6 +30,8 @@ func main() {
 			r.GET("/pat/connection/:id", controller.GetConnectionPatientById)
 			r.GET("/pat/getNote/:id", controller.GetNotesByPatientID)
 			r.GET("/pat/workSheetType", controller.ListWorkSheetType)
+			r.GET("/pat/getDiary/:id", controller.GetDiaryByPatientID)
+
 
 			r.PATCH("/patients", controller.UpdatePatient)
 			r.PATCH("/pat/updatepassword",controller.UpdatePasswordPatient)

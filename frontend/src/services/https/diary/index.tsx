@@ -44,3 +44,21 @@ export async function CreateDiaryPat(data: DiaryPatInterface) {
 
   return res;
 }
+
+export async function GetDiaryByPatientID(id: Number | undefined) {
+  const requestOptions = {
+  method: "GET",
+  };
+
+  let res = await fetch(`${apiUrl}/pat/getDiary/${id}`, requestOptions)
+  .then((response) => response.json())
+  .then((res) => {
+      if (res.data) {
+      return res.data;
+      } else {
+      return false;
+      }
+  });
+
+  return res;
+}
