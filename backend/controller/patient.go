@@ -1,11 +1,12 @@
 package controller
 
-import(
+import (
+	"fmt"
 	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/n6teen/Project-Thesis/entity"
 	"golang.org/x/crypto/bcrypt"
-
 )
 
 func CreatePatient(c *gin.Context) {
@@ -36,6 +37,7 @@ func CreatePatient(c *gin.Context) {
 		Email: patient.Email,
 		Picture: patient.Picture,
 		IsTakeMedicine: patient.IsTakeMedicine,
+		IdNumber: patient.IdNumber,
 	}
 	// บันทึก
 	a.Password = string(hashPassword)
@@ -72,7 +74,6 @@ func ListPatients(c *gin.Context) {
 	
 	c.JSON(http.StatusOK, gin.H{"data": patients})	
 }
-
 
 func DeletePatient(c *gin.Context) {
 
@@ -161,4 +162,49 @@ func UpdatePasswordPatient(c *gin.Context) {
 	}
 	
 	c.JSON(http.StatusOK, gin.H{"data": patient})
+}
+
+func ListPatientsForDashboard(c *gin.Context){ //psy
+	psyID := c.Param("id")
+	var results []struct {
+        ID         uint   `json:"ID"`
+		IdNumber  string  `json:"IdNumber" gorm:"column:id_number"` 
+        FirstName   string `json:"Firstname" gorm:"column:firstname"`
+    	LastName    string `json:"Lastname" gorm:"column:lastname"`
+        Picture    string `json:"Picture"`
+        Symtoms    string `json:"Symtoms"`
+        DiaryStatus string `json:"Diary_Status"`
+    }
+
+    err := entity.DB().
+        Table("patients").
+        Select(`
+            patients.id,
+			patients.id_number,
+            patients.firstname,
+            patients.lastname,
+            patients.picture,
+            patients.symtoms,
+            CASE 
+                WHEN COUNT(diaries.id) > 0 AND SUM(CASE WHEN diaries.is_public = TRUE THEN 1 ELSE 0 END) > 0 THEN 'มีการแชร์'
+                WHEN COUNT(diaries.id) > 0 THEN 'ไม่มีการแชร์'
+                ELSE 'ไม่มีไดอารี่'
+            END AS diary_status
+        `).
+        Joins("JOIN connection_requests ON connection_requests.pat_id = patients.id").
+        Joins("LEFT JOIN diaries ON diaries.pat_id = patients.id").
+        Where("connection_requests.psy_id = ? AND connection_requests.status = ?", psyID, "connected").
+        Group("patients.id").
+        Limit(4). // จำกัดจำนวนผู้ป่วยที่ส่งกลับ
+        Find(&results).Error
+
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+	fmt.Println("Results: ", results)
+
+
+    c.JSON(http.StatusOK, gin.H{"data": results})
+
 }

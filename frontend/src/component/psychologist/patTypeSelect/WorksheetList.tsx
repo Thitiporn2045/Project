@@ -10,6 +10,7 @@ import { DiaryInterface, patientDiaryInterface } from '../../../interfaces/diary
 import { CreateTypeOfPatient, ListTypeOfPatient } from '../../../services/https/psychologist/typeOfPatient';
 import { ListPublicDiariesByPatientType } from '../../../services/https/diary';
 import cover from '../../../assets/book cover/cover3.jpg'
+import { CiSearch } from 'react-icons/ci';
 
 
 interface DataInterface {
@@ -22,6 +23,7 @@ function WorksheetsList() {
 
   const [items, setItems] = useState<TypeOfPatientInterface[]>([]);
   const [selectedType, setSelectedType] = useState<string>('ทั้งหมด');
+  const [searchTerm, setSearchTerm] = useState('');
   const [diaries,setDiaries] = useState<DataInterface[]>([]);
 
   const [form] = Form.useForm();
@@ -64,12 +66,31 @@ const handleAddType = async(values: TypeOfPatientInterface) => {
  
 }
 //=================================================
+  // ฟังก์ชันจัดการคำค้นหา
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
+  // กรองข้อมูลผู้ป่วยตามหมวดหมู่ที่เลือกและคำค้นหา
+  const filteredPatients = diaries.filter((item) => {
+    const matchesType =
+      selectedType === 'ทั้งหมด'
+        ? true
+        : selectedType === 'ที่ยังไม่ระบุ'
+        ? item.patient.TypeOfPatient === null
+        : item.patient.TypeOfPatient === selectedType;
+
+    const matchesSearch =
+      `${item.patient.FirstName} ${item.patient.LastName}`.toLowerCase().includes(searchTerm.toLowerCase());
+
+    return matchesType && matchesSearch;
+  });
 //================Listed by Select=================
- const filteredPatients = selectedType === 'ทั้งหมด' 
- ? diaries 
- : selectedType === 'ที่ยังไม่ระบุ'
-     ? diaries.filter(diaries => (diaries.patient.TypeOfPatient === null))
-     : diaries.filter(diaries => diaries.patient.TypeOfPatient === selectedType);
+//  const filteredPatients = selectedType === 'ทั้งหมด' 
+//  ? diaries 
+//  : selectedType === 'ที่ยังไม่ระบุ'
+//      ? diaries.filter(diaries => (diaries.patient.TypeOfPatient === null))
+//      : diaries.filter(diaries => diaries.patient.TypeOfPatient === selectedType);
 //=================================================
 //=================================================
 const navigate = useNavigate();
@@ -111,8 +132,8 @@ const navigateToDiaryPage = (diary:DiaryInterface) => {
       }}
     >
       {contextHolder}
-      <div style={{width:'100%',height:'100%',display:'flex',flexDirection:'column',}}>
-         <div style={{position:'relative',width:'100%',height:'10%',display:'flex',alignItems:'center',flexShrink:0,justifyContent:'space-between'}}>
+      <div style={{width:'100%',height:'100%',display:'flex',flexDirection:'column',alignItems:'center'}}>
+         <div style={{position:'relative',width:'98%',height:'10%',display:'flex',alignItems:'center',flexShrink:0,justifyContent:'space-between'}}>
             <Select
             style={{ width: 300 }}
             placeholder="แสดงตามหมวดหมู่"
@@ -148,6 +169,14 @@ const navigateToDiaryPage = (diary:DiaryInterface) => {
             </>
             )}
             options={items.map((item) => ({ label: item.Name, value: item.Name }))}
+          />
+          {/* ฟิลด์ค้นหา */}
+          <Input
+            style={{ width: 300,}}
+            placeholder="ค้นหาด้วยชื่อหรือเลขบัตรประชาชน"
+            suffix={<CiSearch style={{ color: '#63C592', fontSize: '20px', fontWeight: 'bolder' }} />}
+            value={searchTerm}
+            onChange={handleSearch}
           />
          </div>
 {/* ============================================================================================================================================= */}

@@ -62,6 +62,7 @@ func main() {
 			r.DELETE("/typeOfPatient/:id",controller.DeleteTypeOfPatient)
 
 			r.GET("/diaries/psy/:id",controller.ListPublicDiariesByPatientType)
+			r.GET("/patients/dash/:id",controller.ListPatientsForDashboard)
 			
 
 			//Connection Request Routes

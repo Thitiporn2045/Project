@@ -32,7 +32,8 @@ const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {//psy
   const value = event.target.value.toLowerCase();
   setSearchTerm(value);
   const filtered = pat.filter(pat =>
-    `${pat.Firstname} ${pat.Lastname}`.toLowerCase().includes(value)
+    `${pat.Firstname} ${pat.Lastname}`.toLowerCase().includes(value) ||
+    pat.IdNumber?.toLowerCase().includes(value)
   );
   setFilteredPatients(filtered);
 };

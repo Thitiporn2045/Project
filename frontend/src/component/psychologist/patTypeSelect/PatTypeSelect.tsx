@@ -13,6 +13,7 @@ import { calculateAge } from '../../../page/calculateAge';
 import { UpdatePatient } from '../../../services/https/patient';
 import AddPat from '../addPatient/AddPat';
 import { DisconnectPatient } from '../../../services/https/connectionRequest';
+import { CiSearch } from 'react-icons/ci';
 
 
 function PatTypeSelect() {
@@ -21,6 +22,8 @@ function PatTypeSelect() {
   const [items, setItems] = useState<TypeOfPatientInterface[]>([]);
   const [selectedType, setSelectedType] = useState<string>('ทั้งหมด');
   const [pat,setPat] = useState<PatientInterface[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredPatients, setFilteredPatients] = useState<PatientInterface[]>([]);
   
   const [form] = Form.useForm();
 
@@ -52,11 +55,63 @@ const listPatients = async () => {
       setItems(res);
     }
   }
+
+  
   useEffect(() => {
     listTypeOfPatient();
     listPatients();
     
   }, []);
+//===========================Search and filter==========================
+  useEffect(() => {
+    // Fetch data and set pat array here, then run the filter
+    filterPatients();
+  }, [searchTerm, selectedType, pat]);
+
+  const filterPatients = () => {
+    // เริ่มต้นด้วยข้อมูลผู้ป่วยทั้งหมด
+    let filtered = pat;
+  
+    // กรองด้วยประเภทที่เลือก
+    if (selectedType !== 'ทั้งหมด') {
+      filtered = filtered.filter(patient =>
+        selectedType === 'ที่ยังไม่ระบุ'
+          ? (patient.TypeID === null || patient.TypeID === undefined || patient.TypeID === 0)
+          : patient.TypeOfPatient?.Name === selectedType
+      );
+    }
+  
+    // กรองด้วยคำค้นหาที่มีความยาวมากกว่า 1 อักขระเท่านั้น
+    if (searchTerm.trim().length > 1) {
+      filtered = filtered.filter(patient =>
+        `${patient.Firstname} ${patient.Lastname}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (searchTerm.length === 13 && patient.IdNumber?.includes(searchTerm))      );
+    }
+  
+    setFilteredPatients(filtered);
+  };
+  
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setSearchTerm(value);
+  
+    // เรียกใช้ filterPatients ทุกครั้งที่คำค้นหามีการเปลี่ยนแปลง
+    if (value.trim().length > 1 || value === "") {
+      filterPatients();
+    }
+  };
+//===========================ค้นหาด้วยชื่อหรือเลขบัตร==============================
+  // const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {//psy
+  //   const value = event.target.value.toLowerCase();
+  //   setSearchTerm(value);
+  //   const filtered = pat.filter(pat =>
+  //     `${pat.Firstname} ${pat.Lastname}`.toLowerCase().includes(value) ||
+  //     pat.IdNumber?.toLowerCase().includes(value)
+  //   );
+  //   setFilteredSearch(filtered);
+  // };
+  
+  //=======================================================================
   //======================== Select หมวดหมู่ ============
   const handleAddType = async(values: TypeOfPatientInterface) => {
     values.PsyID = Number(psyID);
@@ -76,11 +131,11 @@ const listPatients = async () => {
   //=================================================
 
   //================Listed by Select=================
-  const filteredPatients = selectedType === 'ทั้งหมด' 
-    ? pat 
-    : selectedType === 'ที่ยังไม่ระบุ'
-        ? pat.filter(pat => (pat.TypeID === null || pat.TypeOfPatient?.Name === null))
-        : pat.filter(pat => pat.TypeOfPatient?.Name === selectedType);
+  // const filteredPatients = selectedType === 'ทั้งหมด' 
+  //   ? pat 
+  //   : selectedType === 'ที่ยังไม่ระบุ'
+  //       ? pat.filter(pat => (pat.TypeID === null || pat.TypeOfPatient?.Name === null))
+  //       : pat.filter(pat => pat.TypeOfPatient?.Name === selectedType);
   //=================================================
 
   //======================Modal User Info============
@@ -182,8 +237,8 @@ const listPatients = async () => {
       }}
     >
       {contextHolder}
-      <div style={{width:'100%',height:'100%',display:'flex',flexDirection:'column',}}>
-        <div style={{position:'relative',width:'100%',height:'10%',display:'flex',alignItems:'center',flexShrink:0,justifyContent:'space-between'}}>
+      <div style={{width:'100%',height:'100%',display:'flex',flexDirection:'column',alignItems:'center'}}>
+        <div style={{position:'relative',width:'98%',height:'10%',display:'flex',alignItems:'center',flexShrink:0,justifyContent:'space-between'}}>
             <Select
               style={{ width: 300 }}
               placeholder="แสดงตามหมวดหมู่"
@@ -220,6 +275,15 @@ const listPatients = async () => {
               )}
               options={items.map((item) => ({ label: item.Name, value: item.Name }))}
             />
+            <div>
+            <Input
+              placeholder="ค้นหาผู้ป่วยตามชื่อหรือเลขบัตรประชาชน"
+              suffix={<CiSearch style={{ color: '#63C592', fontSize: '20px', fontWeight: 'bolder' }} />}
+              value={searchTerm}
+              onChange={handleSearch}
+              style={{width:600}}
+            />
+            </div>
             <div><AddPat/></div>
           </div>
 

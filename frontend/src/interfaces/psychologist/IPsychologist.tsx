@@ -11,4 +11,5 @@ export interface PsychologistInterface{
     WorkingNumber?: string;
     CertificateFile?: string;
     IsApproved?: boolean;
+    WorkPlace?: string;
 }
