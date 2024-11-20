@@ -107,6 +107,7 @@ const showModalDel = (val: PsychologistInterface) => {
             <th className="col-last-name">นามสกุล</th>
             <th className="col-tel">เบอร์โทรศัพท์</th>
             <th className="col-email">อีเมล</th>
+            <th className="col-work-place">สถานที่ทำงาน</th>
             <th className="col-certificate">ไฟล์ใบรับรอง</th>
             <th className="col-working-number">เลขที่ใบรับรอง</th>
             <th className="col-is-approved">สถานะ</th>
@@ -120,6 +121,7 @@ const showModalDel = (val: PsychologistInterface) => {
                 <td>{psychologist.LastName}</td>
                 <td>{psychologist.Tel}</td>
                 <td>{psychologist.Email}</td>
+                <td>{psychologist.WorkPlace}</td>
             
                 <td>
                     {psychologist.CertificateFile ? (

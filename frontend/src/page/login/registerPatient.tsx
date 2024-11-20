@@ -101,6 +101,16 @@ const listPatients = async () => {
        console.log("Registration Values: ", allValues);
     };
 //=========================================================================
+    function isValidThaiIdCard(id: string) { //Thai ID Check
+        if (id.length !== 13) return false;
+        let sum = 0;
+        for (let i = 0; i < 12; i++) {
+            sum += parseInt(id.charAt(i)) * (13 - i);
+        }
+        const checkDigit = (11 - (sum % 11)) % 10;
+        return checkDigit === parseInt(id.charAt(12));
+    }
+//=========================================================================
 
     useEffect(() =>{
         listGender();
@@ -142,6 +152,22 @@ const listPatients = async () => {
                 >
                     {currentStep === 0 && (
                         <div>
+                            <Form.Item
+                                name="IdNumber"
+                                label="เลขบัตรประชาชน"
+                                rules={[
+                                    { required: true, message: 'กรุณากรอกเลขบัตรประชาชน!' },
+                                    {
+                                        validator: (_, value) => {
+                                            if (!value || isValidThaiIdCard(value)) {
+                                                return Promise.resolve();
+                                            }
+                                            return Promise.reject(new Error('เลขบัตรประชาชนไม่ถูกต้อง!'));
+                                        }}
+                                    ]}    
+                            >
+                                <Input maxLength={13}/>
+                            </Form.Item>
                             <Form.Item
                                 name="FirstName"
                                 label="ชื่อ"

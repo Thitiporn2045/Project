@@ -35,3 +35,49 @@
     /* border: solid 0.5px; */
     background: #7f8cce;
 }
+
+
+/* Diary Status Badge */
+.Patient-list .diary-status {
+padding: 3px 18px;
+border-radius: 20px;
+text-align: center;
+}
+
+.Patient-list .diary-status.shared {
+    width: 23%;
+    background-color: #e1f8e1; /* Green for shared */
+    border:solid 0.5px #4CAF50;
+    color: #4CAF50;
+}
+
+.Patient-list .diary-status.not-shared {
+    width: 29%;
+    background-color: #fcd6d3; /* Red for not shared */
+    border: solid 0.5px #F44336;
+    color:#F44336 ;
+}
+
+
+@keyframes fadeInSlideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .pat-list-info {
+    opacity: 0; /* เริ่มต้นซ่อน */
+    transform: translateY(-20px); /* เริ่มต้นอยู่เหนือขึ้นไป */
+  }
+  
+  .pat-list-info.animated {
+    animation: fadeInSlideDown 0.5s ease-in-out;
+    animation-fill-mode: forwards; /* ให้คงสถานะสุดท้าย */
+  }
+  
+

@@ -16,6 +16,7 @@ type Patient struct{
 	Picture string
 	Symtoms string
 	IsTakeMedicine bool
+	IdNumber string `gorm:"uniqueIndex"`
 	
 	TypeID uint 
 	TypeOfPatient TypeOfPatient `gorm:"foreignKey:TypeID"`
@@ -26,3 +27,4 @@ type Patient struct{
 	Diary []Diary `gorm:"foreignKey:PatID"`
 	ConnectionRequest []ConnectionRequest `gorm:"foreignKey:PatID"`
 }
+

@@ -85,6 +85,7 @@ function PsyProfile() {
     allValues.Password = psychologist?.Password;
     allValues.WorkingNumber = psychologist?.WorkingNumber;
     allValues.CertificateFile = psychologist?.CertificateFile;
+    allValues.WorkPlace = psychologist?.WorkPlace;
     let res = await UpdatePsychologist(allValues);
     if (res.status) {
       messageApi.open({
