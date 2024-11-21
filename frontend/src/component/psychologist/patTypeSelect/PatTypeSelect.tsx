@@ -119,14 +119,6 @@ const listPatients = async () => {
   }
   //=================================================
 
-  //================Listed by Select=================
-  // const filteredPatients = selectedType === 'ทั้งหมด' 
-  //   ? pat 
-  //   : selectedType === 'ที่ยังไม่ระบุ'
-  //       ? pat.filter(pat => (pat.TypeID === null || pat.TypeOfPatient?.Name === null))
-  //       : pat.filter(pat => pat.TypeOfPatient?.Name === selectedType);
-  //=================================================
-
   //======================Modal User Info============
   const filteredItems = items.filter(item => item.Name !== 'ทั้งหมด' && item.Name !== 'ที่ยังไม่ระบุ'); //ไม่เอาไปแสดงใน select ของModal
   const showEditModal = (patients: PatientInterface) => {

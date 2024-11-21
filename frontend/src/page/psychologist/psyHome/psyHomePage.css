@@ -36,6 +36,18 @@
     background: #dadada;
 }
 
+.Patient-list .Psy-No-Data{
+  background: url('../../../assets/noData.gif');
+  background-size: cover;
+  background-position: center;
+  width: 240px;
+  height: 110px; 
+  
+  border: 5px solid transparent ; 
+  border-radius: 10px;
+  opacity: 0.5;
+}
+
 
 /* Diary Status Badge */
 .Patient-list .diary-status {

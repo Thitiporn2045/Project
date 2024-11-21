@@ -168,6 +168,13 @@ export default function PsyHomePage(){
                 color: 'white'
               }}>แสดงทั้งหมด</Button>
             </div>
+            
+            {patients.length === 0? (
+                <div style={{width:'100%',height:'100%',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',}}>
+                  <div className="Psy-No-Data"></div>
+                  <div style={{color:'#b9b9b9'}}>ไม่มีข้อมูล...</div>
+                </div>
+              ):(
             <div
               style={{
                 display: 'flex',
@@ -178,6 +185,7 @@ export default function PsyHomePage(){
                 justifyContent: 'center',
               }}
             >
+              
               {/* Header */}
               <div
                 style={{
@@ -331,7 +339,7 @@ export default function PsyHomePage(){
                   </div>
                 ))}
               </div>
-            </div>
+            </div>)}
 
               
           </div>
