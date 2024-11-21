@@ -15,6 +15,7 @@ type Psychologist struct{
 	WorkingNumber string
 	CertificateFile string
 	IsApproved bool
+	WorkPlace string
 
 	TypeOfPatient []TypeOfPatient `gorm:"foreignKey:PsyID"`
 	WorkSchedule []WorkSchedule `gorm:"foreignKey:PsyID"`

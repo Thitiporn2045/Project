@@ -164,6 +164,29 @@ async function ListGender() {
   return res;
   
 }
+//============================== For Psy Dashboard =====================================
+export async function ListPatientsForDashboard(id:number) {
+  const requestOptions = {
+      method:"GET",
+      header:{
+          "Content-Type": "application/json",
+      },
+  };
+
+  let res = await fetch(`${apiUrl}/patients/dash/${id}`, requestOptions)
+  .then((response) => response.json())
+  .then((res) => {
+    if (res.data) {
+      return res.data;
+    } else {
+      return false;
+    }
+  });
+
+return res;
+  
+}
+
 
 export{
     ListPatients,

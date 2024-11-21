@@ -90,7 +90,8 @@ const handleSubmitReg = async (values: any) => {
         Password: allValues.Password,
         WorkingNumber: allValues.WorkingNumber,
         CertificateFile: fileUrl,
-        IsApproved: false
+        IsApproved: false,
+        WorkPlace: allValues.WorkPlace,
     }
 
     const res = await CreatePsychologist(psychologistData);
@@ -220,6 +221,13 @@ return(
                     คุณต้องเป็นจิตแพทย์หรือนักจิตวิทยาที่มีใบอนุญาตหรือได้รับการรับรอง และยินยอมให้ทางเราตรวจสอบประวัติของคุณ
                 </div>
                 <div>
+                <Form.Item
+                  name="WorkPlace"
+                  label="สถานที่ทำงาน"
+                  rules={[{ required: true, message: 'กรุณากรอกสถานที่ทำงาน!' }]}
+                >
+                  <Input/>
+                </Form.Item>
                 <Form.Item
                   name="WorkingNumber"
                   label="เลขที่ใบรับรองการทำงาน"

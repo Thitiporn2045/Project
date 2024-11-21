@@ -10,6 +10,7 @@ import { DiaryInterface, patientDiaryInterface } from '../../../interfaces/diary
 import { CreateTypeOfPatient, ListTypeOfPatient } from '../../../services/https/psychologist/typeOfPatient';
 import { ListPublicDiariesByPatientType } from '../../../services/https/diary';
 import cover from '../../../assets/book cover/cover3.jpg'
+import { CiSearch } from 'react-icons/ci';
 
 
 interface DataInterface {
@@ -22,7 +23,10 @@ function WorksheetsList() {
 
   const [items, setItems] = useState<TypeOfPatientInterface[]>([]);
   const [selectedType, setSelectedType] = useState<string>('ทั้งหมด');
+  const [searchTerm, setSearchTerm] = useState('');
   const [diaries,setDiaries] = useState<DataInterface[]>([]);
+  const [filteredPatients, setFilteredPatients] = useState<DataInterface[]>([]);
+
 
   const [form] = Form.useForm();
   const psyID = localStorage.getItem('psychologistID') 
@@ -63,15 +67,45 @@ const handleAddType = async(values: TypeOfPatientInterface) => {
   }
  
 }
-//=================================================
-//================Listed by Select=================
- const filteredPatients = selectedType === 'ทั้งหมด' 
- ? diaries 
- : selectedType === 'ที่ยังไม่ระบุ'
-     ? diaries.filter(diaries => (diaries.patient.TypeOfPatient === null))
-     : diaries.filter(diaries => diaries.patient.TypeOfPatient === selectedType);
-//=================================================
-//=================================================
+//====================Search and filter===================
+useEffect(() => {
+  // Fetch data and set pat array here, then run the filter
+  filterPatients();
+}, [searchTerm, selectedType, diaries.filter(pat => pat.patient)]);
+
+  // ฟังก์ชันจัดการคำค้นหา
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setSearchTerm(value);
+  
+    // เรียกใช้ filterPatients ทุกครั้งที่คำค้นหามีการเปลี่ยนแปลง
+    if (value.trim().length > 1 || value === "") {
+      filterPatients();
+    }
+  };
+
+  // กรองข้อมูลผู้ป่วยตามหมวดหมู่ที่เลือกและคำค้นหา
+  const filterPatients = () => {
+
+    let filtered = diaries.filter((diary)=> diary.patient)
+
+    if (selectedType !== 'ทั้งหมด'){
+      filtered = filtered.filter(patient =>
+        selectedType === 'ที่ยังไม่ระบุ'?
+        (patient.patient.TypeID === null || patient.patient.TypeID === undefined || patient.patient.TypeID === 0)
+        : patient.patient.TypeOfPatient === selectedType
+      );
+    }
+
+    if (searchTerm.trim().length > 1) {
+      filtered = filtered.filter(patient =>
+        `${patient.patient.FirstName} ${patient.patient.LastName}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (searchTerm.length === 13 && patient.patient.IdNumber?.includes(searchTerm)));
+    }
+
+    setFilteredPatients(filtered);
+  };
+//==============================================================================
 const navigate = useNavigate();
 const navigateToDiaryPage = (diary:DiaryInterface) => {
   
@@ -111,8 +145,8 @@ const navigateToDiaryPage = (diary:DiaryInterface) => {
       }}
     >
       {contextHolder}
-      <div style={{width:'100%',height:'100%',display:'flex',flexDirection:'column',}}>
-         <div style={{position:'relative',width:'100%',height:'10%',display:'flex',alignItems:'center',flexShrink:0,justifyContent:'space-between'}}>
+      <div style={{width:'100%',height:'100%',display:'flex',flexDirection:'column',alignItems:'center'}}>
+         <div style={{position:'relative',width:'98%',height:'10%',display:'flex',alignItems:'center',flexShrink:0,justifyContent:'space-between'}}>
             <Select
             style={{ width: 300 }}
             placeholder="แสดงตามหมวดหมู่"
@@ -148,6 +182,14 @@ const navigateToDiaryPage = (diary:DiaryInterface) => {
             </>
             )}
             options={items.map((item) => ({ label: item.Name, value: item.Name }))}
+          />
+          {/* ฟิลด์ค้นหา */}
+          <Input
+            style={{ width: 300,}}
+            placeholder="ค้นหาด้วยชื่อหรือเลขบัตรประชาชน"
+            suffix={<CiSearch style={{ color: '#63C592', fontSize: '20px', fontWeight: 'bolder' }} />}
+            value={searchTerm}
+            onChange={handleSearch}
           />
          </div>
 {/* ============================================================================================================================================= */}

@@ -31,6 +31,7 @@ func CreatePsychologist(c *gin.Context){
 		WorkingNumber: psychologist.WorkingNumber,
 		CertificateFile: psychologist.CertificateFile,
 		IsApproved: psychologist.IsApproved,
+		WorkPlace: psychologist.WorkPlace,
 	}
 	if err := entity.DB().Create(&a).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

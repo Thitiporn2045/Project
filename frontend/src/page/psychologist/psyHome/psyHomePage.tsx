@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import './psyHomePage.css';
 import AntD from "../../../component/psychologist/sideBar/AntD";
-import SearchAntD from "../../../component/psychologist/search/SearchAntD";
-import Noti from "../../../component/psychologist/notificate/Noti";
 import PsyCalendar from "../../../component/psychologist/calendar/Calendar";
-import Profile from "../../../component/psychologist/Profile/Profile";
 import doctor from '../../../assets/Doctors-resize.png';
 import dayjs from 'dayjs';
 import { PsychologistInterface } from "../../../interfaces/psychologist/IPsychologist";
 import { GetPsychologistById } from "../../../services/https/psychologist/psy";
+import { PatienForDashboardInterface } from "../../../interfaces/patient/IPatient";
+import { ListPatientsForDashboard } from "../../../services/https/patient";
+import userEmpty from "../../../assets/userEmty.png"
+import { Button } from "antd";
 
 
 export default function PsyHomePage(){
   const [psychologist, setPsychologist] = useState<PsychologistInterface>();
+  const [patients, setPatients] = useState<PatienForDashboardInterface[]>([])
   const [currentTime, setCurrentTime] = useState(dayjs());
   const psyID = localStorage.getItem('psychologistID') 
   
@@ -22,10 +25,18 @@ export default function PsyHomePage(){
       setPsychologist(res);
     }
   }
+//===========================================================================
+  const listPatientsForDashboard = async () => {
+    let res = await ListPatientsForDashboard(Number(psyID))
+    if(res){
+      setPatients(res);
+    }
+  }
 
-  
+//=========================================================================== 
   useEffect(() => {
     getPsychologist();
+    listPatientsForDashboard();
     const intervalId = setInterval(() => {
       setCurrentTime(dayjs());
     }, 1000);
@@ -33,6 +44,22 @@ export default function PsyHomePage(){
     // Clean up the interval on component unmount
     return () => clearInterval(intervalId);
   }, []);
+
+//===========================================================================
+  const [animatedIndexes, setAnimatedIndexes] = useState<number[]>([]);
+
+  useEffect(() => {
+    patients.forEach((_, index) => {
+      setTimeout(() => {
+        setAnimatedIndexes((prev) => [...prev, index]);
+      }, index * 100); // เพิ่ม delay ให้แสดงทีละรายการ
+    });
+  }, [patients]);
+//===========================================================================
+  const navigate = useNavigate();
+  const GoToPatListPage = () =>{
+    navigate("/PsyPatient");
+  }
 
   return(
     <div className="PsyHomePage">
@@ -114,22 +141,201 @@ export default function PsyHomePage(){
                   
                 }}
               >
-
               </div>
-
             </div>
-
           </div>
 
           <div className="Patient-list"
             style={{
-              width:'98%',
-              height:'90%',
-              border:'solid 1px',
+              width: '98%',
+              height: '90%',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1rem',
             }}
           >
+            <div style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between'
+            }}>
+              <b style={{ fontSize: 20, color: '#585858' }}>ผู้ป่วยในระบบของคุณ</b>
+              <Button type="default" onClick={GoToPatListPage} style={{
+                border: 'none',
+                borderRadius: '40px',
+                background: '#2C9F99',
+                color: 'white'
+              }}>แสดงทั้งหมด</Button>
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.2rem',
+                width: '100%',
+                height: '100%',
+                justifyContent: 'center',
+              }}
+            >
+              {/* Header */}
+              <div
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  padding: '0',
+                }}
+              >
+                <div style={{ width: '20%', textAlign: 'center' }}>
+                <b>เลขประจำตัว</b>
+                </div>
+                <div style={{ width: '30%', textAlign: 'center' }}>
+                  <b>ชื่อ-สกุล</b>
+                </div>
+                <div style={{ width: '30%', textAlign: 'center' }}>
+                  <b>อาการที่รักษา</b>
+                </div>
+                <div style={{ width: '25%', textAlign: 'center' }}>
+                  <b>การแชร์ Worksheet</b>
+                </div>
+              </div>
 
+              {/* Patient List */}
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  width: '100%',
+                  height: '100%',
+                  gap: '0.8rem',
+                }}
+              >
+                {patients.map((pat, index) => (
+                  <div
+                    key={pat.ID}
+                    className={`pat-list-info ${
+                      animatedIndexes.includes(index) ? 'animated' : ''
+                    }`}
+                    style={{
+                      position: 'relative',
+                      height:'21%',
+                      maxHeight: '80px',
+                      width: '100%',
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      flexShrink:0,
+                      alignItems: 'center',
+                      background: 'white',
+                      borderRadius: '10px',
+                      boxShadow: '0px 3px 8px rgba(0, 0, 0, 0.03)',
+                      padding: '0',
+                    }}
+                  >
+                    {/* ID */}
+
+                      <div
+                        style={{
+                          width: '20%',
+                          textAlign: 'center',
+                          color: '#b8b8b8'
+                        }}
+                      >
+                        {pat.IdNumber}
+                      </div>
+
+                      {/* Picture and Name */}
+                      <div
+                        style={{
+                          width: '30%',
+                          display: 'flex',
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          gap: '1rem',                        
+                        }}
+                      >
+                        {/* Picture */}
+                        {pat.Picture && pat.Picture !== '' ? (
+                          <div
+                            style={{
+                              width: '50px',
+                              height: '50px',
+                              borderRadius: '50%',
+                              backgroundImage: `url(${pat.Picture})`,
+                              backgroundSize: 'cover',
+                              backgroundPosition: 'center',
+                              marginLeft:'3rem'
+                            }}
+                          />
+                        ) : (
+                          <div
+                            style={{
+                              width: '50px',
+                              height: '50px',
+                              borderRadius: '50%',
+                              backgroundImage: `url(${userEmpty})`,
+                              backgroundSize: 'cover',
+                              backgroundPosition: 'center',
+                              marginLeft:'4rem'
+
+                            }}
+                          />
+                        )}
+                        <div style={{}}>{pat.Firstname} {pat.Lastname}</div>
+                      </div>
+
+                      {/* Symptoms */}
+                      <div
+                        style={{
+                          width: '30%',
+                          textAlign: 'center',
+                        }}
+                      >
+                        {pat.Symtoms === '' || pat.Symtoms === undefined ? 'ไม่ระบุ' : pat.Symtoms}
+                      </div>
+
+                      {/* Diary Status */}
+                      <div
+                      style={{
+                        width: '25%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem',
+                          color: pat.Diary_Status === 'มีการแชร์' ? '#4CAF50' : '#b0b0b0',
+                        }}
+                      >
+                        {pat.Diary_Status === 'มีการแชร์' && (
+                          <span
+                            style={{
+                              width: '8px',
+                              height: '8px',
+                              backgroundColor: '#4CAF50',
+                              borderRadius: '50%',
+                              display: 'inline-block',
+                            }}
+                          />
+                        )}
+                        <span>{pat.Diary_Status}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+              
           </div>
+
 
         </div>      
       </div>
@@ -140,49 +346,7 @@ export default function PsyHomePage(){
       </div>
 
 
-      {/* <div className="SideBar"><AntD/></div>
-      <div className="Main-area">
-          <div className="Main">
-              <div className="Banner-home">
-                  <div className="Banner-img"></div>
-                  <div className="Banner-date">
-                      {currentTime.format('DD MMMM YYYY h:mm A')}
-                  </div>
-                  <h1 className="Banner-hello">สวัสดี! คุณ{user?.name}</h1>
-                  <p className="Banner-bless">ขอให้วันนี้เป็นวันที่ดี</p>
-              </div>
-              <div className="PatientList-home">
-                  <div className="PatientList-head"><h2>ผู้ป่วยที่รับผิดชอบ ({patients.length})</h2></div>
-                  <div className="PatientList-info">
-                      {patients.map((patient)=>(
-                        <li style={{listStyle:'none'}}>
-                          <div className="PatientList-containner" key={patient.id}>
-                              <img src={patient.profilePicture} alt={`${patient.firstName} ${patient.lastName}`} style={{ borderRadius: '30%', width: '50px', height: '50px', marginRight: '10px',marginLeft:'1%' }} />
-                              <div>
-                              <strong>{patient.firstName} {patient.lastName}</strong><br/>
-                              <span style={{color:'#b0b0b0'}}>อายุ: {patient.age}&nbsp;&nbsp;&nbsp;อาการที่รักษา: {patient.symptoms}</span>
-                              </div>
-                          </div> 
-                        </li>
-                      ))}
-                  </div>
-              </div>
-
-
-          </div>
-      </div>
-      <div className="Search"><SearchAntD/></div>
-      <div className='Noti'><Noti/></div>
-      <div className="Calendar-area">
-          <div className="Calendar">
-              <div className="Cal"><PsyCalendar/></div>
-              <div className="Profile-pic"><Profile user={user}/></div>
-          </div>
-      </div>*/}
       
-      
-      
-        
     </div>
       
   )
