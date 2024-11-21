@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import NavbarPat from '../../../component/navbarPat/navbarPat';
 import DatePicker from 'react-datepicker';
-import { FaRegCalendarAlt, FaUnlockAlt } from "react-icons/fa";
 import 'react-datepicker/dist/react-datepicker.css';
-
+import defaultImg from '../../../assets/book cover/cover7.jpg'
 import './stylePat.css';
 import { WorksheetTypeInterface } from '../../../interfaces/worksheetType/IWorksheetType';
 import { ListWorkSheetType } from '../../../services/https/workSheetType/workSheetType';
 import { DiaryPatInterface } from '../../../interfaces/diary/IDiary';
 import { CreateDiaryPat } from '../../../services/https/diary';
-import { message } from 'antd';
+import { Button, Drawer, message } from 'antd';
 import dayjs from 'dayjs';
+
+    // global.d.ts หรือ index.d.ts
+    declare var require: {
+        context: (directory: string, useSubdirectories: boolean, regExp: RegExp) => {
+            keys: () => string[];
+            (id: string): any;
+        };
+    };
 
 function Worksheets() {
     const [messageApi, contextHolder] = message.useMessage();
@@ -27,6 +34,28 @@ function Worksheets() {
     const [selectedBook, setSelectedBook] = useState<number | null>(null);
     const [worksheets, setWorksheets] = useState<WorksheetTypeInterface[]>([]);
     const [selectedWorksheet, setSelectedWorksheet] = useState<WorksheetTypeInterface | null>(null);
+    const isFormValid = diaryName && selectedBook && diaryStart && diaryEnd;
+    const navigate = useNavigate();
+
+    // ใช้ require.context เพื่อดึงไฟล์รูปจากโฟลเดอร์
+    const imageContext = require.context('../../../assets/book cover', false, /\.(jpg|jpeg|png)$/);
+    const imageFiles = imageContext.keys().map(imageContext);
+
+    const handleImageClick = (image: any) => {
+        setDiaryPicture(image);
+        setOpen(false); // Close the popup after selecting an image
+        setShowDatePicker(true);
+    };
+
+    const [open, setOpen] = useState(false);
+
+    const showDrawer = () => {
+        setOpen(true);
+    };
+    
+    const onClose = () => {
+        setOpen(false);
+    };
 
     const fetchWorksheetData = async () => {
         const res = await ListWorkSheetType();
@@ -40,23 +69,53 @@ function Worksheets() {
         fetchWorksheetData();
     }, []);
 
+    const convertImageToBase64 = (imageUrl: string): Promise<string> => {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.crossOrigin = "Anonymous"; // ถ้ารูปภาพเป็น cross-origin
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                if (ctx) {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0);
+                    const base64Image = canvas.toDataURL();
+                    resolve(base64Image);
+                } else {
+                    reject('Canvas context is null');
+                }
+            };
+            img.onerror = (error) => reject(error);
+            img.src = imageUrl;
+        });
+    };
+    
     const handleSaveNote = async () => {
-        const diaryData = {
+        if (!diaryPicture) {
+            messageApi.error("กรุณาเลือกภาพ");
+            return;
+        }
+
+        // แปลงภาพที่เลือกให้เป็น Base64
+        const base64Image = await convertImageToBase64(diaryPicture);
+
+        const diaryData: DiaryPatInterface = {
             Name: diaryName,
-            Picture: selectedWorksheet?.Picture,
-            Start:  dayjs(diaryStart).format('DD-MM-YYYY'),
-            End:  dayjs(diaryEnd).format('DD-MM-YYYY'),
+            Picture: base64Image as string,  // แปลง Picture เป็น string
+            Start: dayjs(diaryStart).format('DD-MM-YYYY'),
+            End: dayjs(diaryEnd).format('DD-MM-YYYY'),
             IsPublic: diaryIsPublic,
             WorksheetTypeID: selectedBook || 0,
             PatID: Number(patID),
         };
+
         const res = await CreateDiaryPat(diaryData);
-        console.log(res)
         if (res) {
             messageApi.success("สร้างแล้ว");
             setTimeout(() => {
-                window.location.reload()
-            }, 1000)
+                navigate('/mainSheet');
+            }, 1000);
             resetForm();
         } else {
             messageApi.error("เกิดข้อผิดพลาดในการสร้าง");
@@ -120,7 +179,7 @@ function Worksheets() {
                                     <h2>{selectedWorksheet.Name}</h2>
                                     <p>{selectedWorksheet.Description}</p>
                                     <button className="btn" onClick={() => setShowDatePicker(true)}>
-                                        <span>START</span>
+                                        <span>เริ่มสร้าง</span>
                                     </button>
                                 </>
                             )}
@@ -147,10 +206,19 @@ function Worksheets() {
                             <div className="left-column">
                                 <div className='book-item'>
                                     <div className="img-book">
-                                        {selectedBook !== null && (
-                                            <img src={worksheets[selectedBook - 1]?.Picture} alt="" />
-                                        )}
+                                    {diaryPicture ? (
+                                        <img 
+                                            src={diaryPicture}
+                                            onClick={showDrawer} 
+                                            alt="Selected" />
+                                    ) : (
+                                        <img 
+                                            src={defaultImg}
+                                            onClick={showDrawer} 
+                                            alt="Selected" />
+                                    )}
                                     </div>
+                                    <p className='text'>สามารถคลิกที่รูปเพื่อเปลี่ยนรูปได้</p>
                                     <div className="head">
                                         <input 
                                             required
@@ -215,10 +283,27 @@ function Worksheets() {
                                 </div>
                             </div>
                         </div>
-                        <button className='btn-submit' onClick={handleSaveNote}>สร้างโน้ต</button>
+                        <button className='btn-submit' onClick={handleSaveNote} disabled={!isFormValid}>
+                            สร้างโน้ต
+                        </button>                 
                     </div>
                 </div>
             )}
+            <Drawer title="เลือกภาพปก" onClose={onClose} open={open}>
+                <div className='bgCover'
+                    style={{marginLeft: '70px'}}
+                    >
+                    {imageFiles.map((image, index) => (
+                        <img
+                            key={index}
+                            src={image}
+                            alt={`Cover ${index + 1}`}
+                            onClick={() => handleImageClick(image)}
+                            style={{ cursor: 'pointer', width: '200px', height: '300px', marginBottom: '40px', boxShadow: 'rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px' }}
+                        />
+                    ))}
+                </div>
+            </Drawer>
         </div>
     );
 }

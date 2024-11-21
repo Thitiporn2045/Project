@@ -17,13 +17,14 @@ function MainSheet() {
     const fetchDiaryByPatientID = async () => {
         const res = await GetDiaryByPatientID(Number(patID));
         if (res) {
-            setDiarys(res.data);
+            setDiarys(res);
             console.log("res", res)
         }
     };
 
     useEffect(() => {
         fetchDiaryByPatientID();
+        console.log(categorizeDiaries()); // ตรวจสอบผลลัพธ์ของ categorizeDiaries
     }, []);
 
     const navigate = useNavigate();
@@ -59,7 +60,51 @@ function MainSheet() {
         const popup = document.getElementById('popup') as HTMLElement;
         popup.classList.toggle('active');
     }
+
+    const categorizeDiaries = () => {
+        if (!diarys || diarys.length === 0) {
+            return {
+                planning: [],
+                activity: [],
+                behavioral: [],
+                crossSectional: []
+            };
+        }
     
+        return {
+            planning: diarys.filter(diary => diary.WorksheetType?.Name === "Activity Planning"),  // กรองโดยใช้ WorksheetType.ID
+            activity: diarys.filter(diary => diary.WorksheetType?.Name === "Activity Diary"),
+            behavioral: diarys.filter(diary => diary.WorksheetType?.Name === "Behavioral Experiment"),
+            crossSectional: diarys.filter(diary => diary.WorksheetType?.Name === "Cross Sectional")
+        };
+    };
+
+    
+
+    const DiaryCategory = ({ title, diaries }: { title: string; diaries: DiaryPatInterface[] }) => (
+        <div className="diary-category">
+            <h3>{title}</h3>
+            <div className="diary-grid">
+                {diaries.map((diary) => (
+                    <div 
+                        key={diary.ID} 
+                        className="diary-card"
+                        onClick={() => navigateToDiaryPage(diary)}
+                    >
+                        <img 
+                            src={diary.Picture} 
+                            alt={diary.Name}
+                        />
+                        <h4>{diary.Name}</h4>
+                        <div className="text-sm">
+                            <p>เริ่ม: {diary.Start}</p>
+                            <p>สิ้นสุด: {diary.End}</p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
     
     return (
         <div className='mainSheet'>
@@ -88,22 +133,34 @@ function MainSheet() {
                                 
                                 {/* Display categorized diary entries */}
                                 <div className="diary-categories p-6">
-                                    {diarys && diarys.length > 0 ? (
-                                        diarys.map((diary) => (
-                                            <div key={diary.ID}>
-                                                <h3>{diary.Name}</h3>
-                                                <img src={diary.Picture} alt={diary.Name} />
-                                                <p>Start Date: {diary.Start}</p>
-                                                <p>End Date: {diary.End}</p>
-                                                {diary.Patient && <p>Patient Name: {diary.Patient.Firstname} {diary.Patient.Lastname}</p>}
-                                                {/* Render more details if necessary */}
-                                            </div>
-                                        ))
-                                    ) : (
-                                        <p>No diaries found</p>
+                                    {categorizeDiaries().planning.length > 0 && (
+                                        <DiaryCategory 
+                                            title="Planning Diary" 
+                                            diaries={categorizeDiaries().planning}
+                                        />
+                                    )}
+                                    
+                                    {categorizeDiaries().activity.length > 0 && (
+                                        <DiaryCategory 
+                                            title="Activity Diary" 
+                                            diaries={categorizeDiaries().activity}
+                                        />
+                                    )}
+                                    
+                                    {categorizeDiaries().behavioral.length > 0 && (
+                                        <DiaryCategory 
+                                            title="Behavioral Diary" 
+                                            diaries={categorizeDiaries().behavioral}
+                                        />
+                                    )}
+                                    
+                                    {categorizeDiaries().crossSectional.length > 0 && (
+                                        <DiaryCategory 
+                                            title="Cross Sectional Diary" 
+                                            diaries={categorizeDiaries().crossSectional}
+                                        />
                                     )}
                                 </div>
-
                             </div>
                         </div>
                     </div>
