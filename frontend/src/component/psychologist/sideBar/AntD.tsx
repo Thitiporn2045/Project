@@ -6,8 +6,6 @@ import { Button, Menu } from 'antd';
 import { ConfigProvider} from 'antd';
 import { Link, useLocation } from 'react-router-dom';
 import './Ant.css';
-import SearchAntD from '../search/SearchAntD';
-
 
 type MenuItem = Required<MenuProps>['items'][number];
 

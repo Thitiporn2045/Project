@@ -25,6 +25,8 @@ function WorksheetsList() {
   const [selectedType, setSelectedType] = useState<string>('ทั้งหมด');
   const [searchTerm, setSearchTerm] = useState('');
   const [diaries,setDiaries] = useState<DataInterface[]>([]);
+  const [filteredPatients, setFilteredPatients] = useState<DataInterface[]>([]);
+
 
   const [form] = Form.useForm();
   const psyID = localStorage.getItem('psychologistID') 
@@ -65,34 +67,45 @@ const handleAddType = async(values: TypeOfPatientInterface) => {
   }
  
 }
-//=================================================
+//====================Search and filter===================
+useEffect(() => {
+  // Fetch data and set pat array here, then run the filter
+  filterPatients();
+}, [searchTerm, selectedType, diaries.filter(pat => pat.patient)]);
+
   // ฟังก์ชันจัดการคำค้นหา
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
+    const value = event.target.value;
+    setSearchTerm(value);
+  
+    // เรียกใช้ filterPatients ทุกครั้งที่คำค้นหามีการเปลี่ยนแปลง
+    if (value.trim().length > 1 || value === "") {
+      filterPatients();
+    }
   };
 
   // กรองข้อมูลผู้ป่วยตามหมวดหมู่ที่เลือกและคำค้นหา
-  const filteredPatients = diaries.filter((item) => {
-    const matchesType =
-      selectedType === 'ทั้งหมด'
-        ? true
-        : selectedType === 'ที่ยังไม่ระบุ'
-        ? item.patient.TypeOfPatient === null
-        : item.patient.TypeOfPatient === selectedType;
+  const filterPatients = () => {
 
-    const matchesSearch =
-      `${item.patient.FirstName} ${item.patient.LastName}`.toLowerCase().includes(searchTerm.toLowerCase());
+    let filtered = diaries.filter((diary)=> diary.patient)
 
-    return matchesType && matchesSearch;
-  });
-//================Listed by Select=================
-//  const filteredPatients = selectedType === 'ทั้งหมด' 
-//  ? diaries 
-//  : selectedType === 'ที่ยังไม่ระบุ'
-//      ? diaries.filter(diaries => (diaries.patient.TypeOfPatient === null))
-//      : diaries.filter(diaries => diaries.patient.TypeOfPatient === selectedType);
-//=================================================
-//=================================================
+    if (selectedType !== 'ทั้งหมด'){
+      filtered = filtered.filter(patient =>
+        selectedType === 'ที่ยังไม่ระบุ'?
+        (patient.patient.TypeID === null || patient.patient.TypeID === undefined || patient.patient.TypeID === 0)
+        : patient.patient.TypeOfPatient === selectedType
+      );
+    }
+
+    if (searchTerm.trim().length > 1) {
+      filtered = filtered.filter(patient =>
+        `${patient.patient.FirstName} ${patient.patient.LastName}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (searchTerm.length === 13 && patient.patient.IdNumber?.includes(searchTerm)));
+    }
+
+    setFilteredPatients(filtered);
+  };
+//==============================================================================
 const navigate = useNavigate();
 const navigateToDiaryPage = (diary:DiaryInterface) => {
   

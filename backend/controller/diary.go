@@ -39,6 +39,7 @@ func ListPublicDiariesByPatientType(c *gin.Context) {
             groupedDiaries[patientID] = map[string]interface{}{
                 "patient": map[string]interface{}{
                     "ID":            diary.Patient.ID,
+                    "IdNumber":      diary.Patient.IdNumber,
                     "FirstName":     diary.Patient.Firstname,
                     "LastName":      diary.Patient.Lastname,
                     "TypeID":        diary.Patient.TypeID,

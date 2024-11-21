@@ -85,7 +85,7 @@ const listPatients = async () => {
     if (searchTerm.trim().length > 1) {
       filtered = filtered.filter(patient =>
         `${patient.Firstname} ${patient.Lastname}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (searchTerm.length === 13 && patient.IdNumber?.includes(searchTerm))      );
+        (searchTerm.length === 13 && patient.IdNumber?.includes(searchTerm)));
     }
   
     setFilteredPatients(filtered);
@@ -100,18 +100,7 @@ const listPatients = async () => {
       filterPatients();
     }
   };
-//===========================ค้นหาด้วยชื่อหรือเลขบัตร==============================
-  // const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {//psy
-  //   const value = event.target.value.toLowerCase();
-  //   setSearchTerm(value);
-  //   const filtered = pat.filter(pat =>
-  //     `${pat.Firstname} ${pat.Lastname}`.toLowerCase().includes(value) ||
-  //     pat.IdNumber?.toLowerCase().includes(value)
-  //   );
-  //   setFilteredSearch(filtered);
-  // };
-  
-  //=======================================================================
+
   //======================== Select หมวดหมู่ ============
   const handleAddType = async(values: TypeOfPatientInterface) => {
     values.PsyID = Number(psyID);

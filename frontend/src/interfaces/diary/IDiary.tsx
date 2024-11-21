@@ -10,6 +10,7 @@ export interface DiaryInterface{//Psy only
 
 export interface patientDiaryInterface{//Psy only
     ID?: number,
+    IdNumber?: string,
     FirstName?: string,
     LastName?: string,
     TypeID?: number,

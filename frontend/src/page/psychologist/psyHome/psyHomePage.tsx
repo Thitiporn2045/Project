@@ -241,6 +241,7 @@ export default function PsyHomePage(){
                         style={{
                           width: '20%',
                           textAlign: 'center',
+                          color: '#b8b8b8'
                         }}
                       >
                         {pat.IdNumber}

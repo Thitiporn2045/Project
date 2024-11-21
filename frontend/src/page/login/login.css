@@ -3,56 +3,7 @@
     --color-main-psy1: #63C592;
     --color-font1: #585858
 }
-@keyframes rainbow-border1 {
-    0% {
-        border-color: red;
-    }
-    16% {
-        border-color: rgb(255, 172, 18);
-    }
-    33% {
-        border-color: yellow;
-    }
-    50% {
-        border-color: rgb(0, 255, 0);
-    }
-    66% {
-        border-color: blue;
-    }
-    83% {
-        border-color: rgb(149, 0, 255);
-    }
-    100% {
-        border-color: rgb(255, 0, 255);
-    }
-}
-@keyframes rainbow-border2{
-    0% {
-        border-color: red;
-    }
-    10% {
-        border-color: yellow;
-    }
-    25% {
-        border-color: blue;
-    }
-    40% {
-        border-color: orange;
-    }
-    55% {
-        border-color: rgb(0, 255, 0);
-    }
-    70% {
-        border-color: rgb(255, 0, 255);
-    }
-    85% {
-        border-color: rgb(149, 0, 255);
-    }
-    100% {
-        border-color: rgb(255, 0, 43);
-    }
 
-}
 @keyframes move-image {
     0%, 100% {
         transform: translateY(0); /* ตำแหน่งเริ่มต้น */
