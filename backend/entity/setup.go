@@ -33,6 +33,7 @@ func SetupDatabase() (*gorm.DB, error) {
 		&Diary{},
 		&Emotion{},
 		// &FeelGoodType{},
+		&QuickReplies{},
 		&TypeOfPatient{},
 		&TimeOfDay{},
 		&WorkSchedule{},
