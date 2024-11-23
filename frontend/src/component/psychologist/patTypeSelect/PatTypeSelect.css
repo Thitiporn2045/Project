@@ -7,3 +7,26 @@
 
 }
 
+.Psy-No-Data{
+    background: url('../../../assets/noData.gif');
+    background-size: cover;
+    background-position: center;
+    width: 240px;
+    height: 110px; 
+    
+    border: 5px solid transparent ; 
+    border-radius: 10px;
+    opacity: 0.5;
+}
+
+.Psy-Loading-Data{
+    background: url('../../../assets/loading.gif');
+    background-size: cover;
+    background-position: center;
+    width: 100px;
+    height: 50px; 
+    
+    border: 5px solid transparent ; 
+    border-radius: 10px;
+    opacity: 0.5;
+}

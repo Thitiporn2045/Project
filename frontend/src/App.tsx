@@ -9,7 +9,6 @@ import Profile from './page/patient/profile/profile';
 import PsyPatient from './page/psychologist/psyPatient/psyPatient';
 import PsyWorksheet from './page/psychologist/psyWorksheet/psyWorksheet';
 import PsyAccount from './page/psychologist/psyAccount/psyAccount';
-import PsyShowWSh from './page/psychologist/psyWorksheet/psyShowWSh';
 import RegisterPatient from './page/login/registerPatient';
 import LoginPatient from './page/login/loginPatient';
 import LoginPsychologist from './page/login/LoginPsychologist';
@@ -24,6 +23,10 @@ import Activity from './page/patient/worksheet/cbt/activity';
 import Behavioural from './page/patient/worksheet/cbt/behavioural';
 import Connection from './page/Connection';
 import Emotional from './component/emotional/emotional';
+import PsyCommentAP from './page/psychologist/psyComment/PsyCommentAP';
+import PsyCommentAD from './page/psychologist/psyComment/PsyCommentAD';
+import PsyCommentBE from './page/psychologist/psyComment/PsyCommentBE';
+import PsyCommentCS from './page/psychologist/psyComment/PsyCommentCS';
 
 export default function App() {
 
@@ -41,8 +44,13 @@ export default function App() {
         <Route path='/reg/patient' element={<RegisterPatient/>}/>
         <Route path='/PsyHomePage' element={<PsyHomePage/>}/>
         <Route path='/PsyPatient' element={<PsyPatient/>}/>
+        
         <Route path='/PsyWorksheet' element={<PsyWorksheet/>}/>
-        <Route path='/PsyWorksheet/ShowWorksheet' element={<PsyShowWSh/>}/>
+        <Route path='/PsyWorksheet/PsyCommentActivitiesDiaries' element={<PsyCommentAD/>}/>
+        <Route path='/PsyWorksheet/PsyCommentActivitiesPlanning' element={<PsyCommentAP/>}/>
+        <Route path='/PsyWorksheet/PsyCommentBehavioralExperiment' element={<PsyCommentBE/>}/>
+        <Route path='/PsyWorksheet/PsyCommentCrossSectional' element={<PsyCommentCS/>}/>
+
         <Route path='/PsyAccount' element={<PsyAccount/>}/>
         {/* ========================================================================= */}
         <Route path="/Pat" element={<Pat />} />
