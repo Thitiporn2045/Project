@@ -32,6 +32,7 @@ const EmotionalWeb = () => {
     const [selectedEmotion, setSelectedEmotion] = useState<AddEmotion | null>(null);
     const [newEmotionLabel, setNewEmotionLabel] = useState<string>('');
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    
 
     const handleSelectEmotion = (emotion: AddEmotion) => {
         setSelectedEmotion(emotion);

@@ -109,7 +109,7 @@ async function UpdatePasswordPatient(data: PatientInterface) {
     body: JSON.stringify(data),
   };
 
-  let res = await fetch(`${apiUrl}/pat/updatepassword`, requestOptions)
+  let res = await fetch(`${apiUrl}/pat/update/Password"`, requestOptions)
     .then((response) => response.json())
     .then((res) => {
       if (res.data) {

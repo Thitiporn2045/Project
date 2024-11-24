@@ -31,16 +31,18 @@ func main() {
 			r.GET("/pat/getNote/:id", controller.GetNotesByPatientID)
 			r.GET("/pat/workSheetType", controller.ListWorkSheetType)
 			r.GET("/pat/getDiary/:id", controller.GetDiaryByPatientID)
-
+			r.GET("/pat/get/Emotion/:id", controller.GetEmotionByPatientID)
 
 			r.PATCH("/patients", controller.UpdatePatient)
-			r.PATCH("/pat/updatepassword",controller.UpdatePasswordPatient)
-			r.PATCH("/pat/updateNote",controller.UpdateNotePatient)
-
+			r.PATCH("/pat/update/Password",controller.UpdatePasswordPatient)
+			r.PATCH("/pat/update/Note",controller.UpdateNotePatient)
+			r.PATCH("/pat/update/DiaryPat", controller.UpdateDiaryPat)
+			r.PATCH("/diaries/:id/toggle-public", controller.ToggleDiaryIsPublic)
 
 			r.POST("/pat/checkPassword",controller.CheckOldPasswordPatient)
 			r.POST("/pat/note",controller.CreateNotePat)
-			r.POST("/pat/creatDiary",controller.CreateDiaryPat)		
+			r.POST("/pat/creatDiary",controller.CreateDiaryPat)	
+			r.POST("/pat/creat/Emotion",controller.CreateDiaryPat)	
 			
 			r.DELETE("/patients/:id", controller.DeletePatient)
 			r.DELETE("/pat/delNote/:id", controller.DeleteNotePat)

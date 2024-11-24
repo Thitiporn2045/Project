@@ -29,18 +29,61 @@ function NotePat() {
 
     const handleNoteClick = (index: number) => {
         const note = notePatients[index];
-        // Toggle selected note: if it's the same note, set to null, otherwise set to the clicked note
-        setSelectedNote(prev => (prev && prev.ID === note.ID ? null : note));
+        setSelectedNote(prev => (prev && prev.ID === note.ID ? null : note)); // Ensure selectedNote has ID
     };
 
+    
     const handleEdit = (note: NotePatInterface) => {
-        setSelectedNote(note);
-        form.setFieldsValue({ 
-            Title: note.Title, 
-            Content: note.Content 
+        console.log('Selected note for editing:', note); // ตรวจสอบข้อมูลโน้ต
+        if (!note?.ID) {
+            messageApi.error('ไม่พบ ID ของโน้ต');
+            return;
+        }
+    
+        setSelectedNote(note); // note นี้จะมี ID
+        form.setFieldsValue({
+            Title: note.Title,
+            Content: note.Content,
         });
-        setIsEditModalVisible(true);
+        setIsEditModalVisible(true); // เปิด Modal
     };
+    
+    
+    const handleEditSubmit = async () => {
+        console.log('Selected Note ID:', selectedNote?.ID); // ตรวจสอบว่า ID มีค่าหรือไม่
+        if (!selectedNote?.ID) {
+            messageApi.error('ไม่สามารถแก้ไขได้: ไม่พบ ID ของโน้ต');
+            return;
+        }
+    
+        const values = form.getFieldsValue();
+    
+        // Combine selectedNote (which includes ID) with form values
+        const updatedNote = {
+            ...selectedNote,  // selectedNote already contains the ID
+            ...values,        // form values (Title, Content)
+        };
+    
+        // Log the updated note to ensure the ID is included
+        console.log('Payload to API:', updatedNote);
+    
+        try {
+            const res = await UpdateNotePatient(updatedNote);
+    
+            // Handle API response
+            if (res.status) {
+                messageApi.success("แก้ไขข้อมูลสำเร็จ");
+                await fetchNotePatientData(); // Refresh the note data
+                setIsEditModalVisible(false); // ปิด Modal
+            } else {
+                messageApi.error(res.message);
+            }
+        } catch (error) {
+            console.error('Error updating note:', error);
+            messageApi.error('เกิดข้อผิดพลาดในการแก้ไขโน้ต');
+        }
+    };
+    
 
     const handleDelete = async (noteId: number | undefined) => {
         Modal.confirm({
@@ -61,36 +104,6 @@ function NotePat() {
             okText: 'ยืนยัน',
             cancelText: 'ยกเลิก',
         });
-    };
-
-    const handleEditSubmit = async () => {
-        const values = form.getFieldsValue();
-        const updatedNote = {
-            ...selectedNote,
-            ...values,
-        };
-
-        try {
-            const res = await UpdateNotePatient(updatedNote);
-            console.log(res);
-        
-            if (res.status) {
-                messageApi.open({
-                    type: "success",
-                    content: "แก้ไขข้อมูลสำเร็จ",
-                });
-
-                await fetchNotePatientData();
-                setIsEditModalVisible(false);
-            } else {
-                messageApi.open({
-                    type: "error",
-                    content: res.message,
-                });
-            }
-        } catch (error) {
-            messageApi.error('เกิดข้อผิดพลาดในการแก้ไขโน้ต');
-        }
     };
 
     return (
@@ -130,25 +143,33 @@ function NotePat() {
                     ))
                 )}
 
+                {contextHolder}
+
                 <Modal
                     title="แก้ไขโน้ต"
                     visible={isEditModalVisible}
-                    onOk={handleEditSubmit}
-                    onCancel={() => setIsEditModalVisible(false)}
+                    onOk={handleEditSubmit} // เมื่อคลิกบันทึก
+                    onCancel={() => setIsEditModalVisible(false)} // เมื่อคลิกยกเลิก
                     okText="บันทึก"
                     cancelText="ยกเลิก"
                 >
                     <Form form={form} layout="vertical">
-                        <Form.Item name="Title" label="ชื่อเรื่อง" rules={[{ required: true, message: 'กรุณาใส่ชื่อเรื่อง' }]}>
+                        <Form.Item 
+                            name="Title" 
+                            label="ชื่อเรื่อง" 
+                            rules={[{ required: true, message: 'กรุณาใส่ชื่อเรื่อง' }]}
+                        >
                             <Input />
                         </Form.Item>
-                        <Form.Item name="Content" label="เนื้อหา" rules={[{ required: true, message: 'กรุณาใส่เนื้อหา' }]}>
+                        <Form.Item 
+                            name="Content" 
+                            label="เนื้อหา" 
+                            rules={[{ required: true, message: 'กรุณาใส่เนื้อหา' }]}
+                        >
                             <Input.TextArea rows={4} />
                         </Form.Item>
                     </Form>
                 </Modal>
-
-                {contextHolder}
             </div>
         </ConfigProvider>
     );

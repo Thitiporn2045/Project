@@ -48,23 +48,32 @@ func UpdateNotePatient(c *gin.Context) {
 	var notePat entity.NotePat
 	var result entity.NotePat
 
+	// รับข้อมูล JSON
 	if err := c.ShouldBindJSON(&notePat); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	// ตรวจสอบว่า ID ของโน้ตมีอยู่ในฐานข้อมูลหรือไม่
 	if tx := entity.DB().Where("id = ?", notePat.ID).First(&result); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "ไม่พบโน้ตที่ต้องการแก้ไข"})
 		return
 	}
 
+	// ตรวจสอบว่ามีการกรอกข้อมูล ID ที่ถูกต้อง
+	if notePat.ID == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "ID ของโน้ตไม่ถูกต้อง"})
+		return
+	}
 
+	// อัพเดทข้อมูล
 	if err := entity.DB().Save(&notePat).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	
+	// ส่งข้อมูลที่อัพเดทแล้วกลับไป
 	c.JSON(http.StatusOK, gin.H{"data": notePat})
-	
 }
 
 

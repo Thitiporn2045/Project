@@ -47,7 +47,7 @@ async function UpdateNotePatient(data: NotePatInterface) {
     body: JSON.stringify(data),
     };
 
-    let res = await fetch(`${apiUrl}/pat/updateNote`, requestOptions)
+    let res = await fetch(`${apiUrl}/pat/update/Note`, requestOptions)
     .then((response) => response.json())
     .then((res) => {
         if (res.data) {

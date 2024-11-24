@@ -13,4 +13,7 @@ type BehavioralExp struct{
 
 	DiaryID *uint
 	Diary Diary `gorm:"foreignKey:DiaryID"`
+
+	EmotionID *uint
+	Emotion Emotion `gorm:"foreignKey:EmotionID"`
 }

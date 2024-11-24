@@ -2,30 +2,17 @@ import React, { useEffect, useState } from 'react'
 import NavbarPat from '../../component/navbarPat/navbarPat'
 import SearchPat from '../../component/searchPat/searchPat'
 import NotePat from '../../component/notePat/notePat';
-import BookPat from '../../component/bookPat/bookPat';
 import NotificationPat from '../../component/notificationPat/notificationPat';
 import './stylePat.css'
 
 import { ImSearch } from "react-icons/im";
 import { FaBell } from "react-icons/fa";
-import { LuAlarmClock } from "react-icons/lu";
 import { GetPatientById } from '../../services/https/patient';
 import { PatientInterface } from '../../interfaces/patient/IPatient';
-import { Form } from 'react-router-dom';
 import { ConnectionRequestInterface } from '../../interfaces/connectionRequest/IConnectionRequest';
-import { AcceptConnectionRequest, GetConnectionPatientById, GetConnectionRequestById, ListConnectionPatientById, RejectConnectionRequest } from '../../services/https/connectionRequest';
+import { AcceptConnectionRequest, GetConnectionPatientById, ListConnectionPatientById, RejectConnectionRequest } from '../../services/https/connectionRequest';
 import { Avatar, Badge, Button, List, message } from 'antd';
-import { BellOutlined } from '@ant-design/icons';
 import { CreateNotePat, GetNotesByPatientID } from '../../services/https/notePat/notePat';
-
-const userLogin = {
-    imge: 'https://i.pinimg.com/474x/0f/44/6f/0f446fc154c16b2dd85413d50bc9c170.jpg',
-    name: "สมใจ ยิ้มแย้ม",
-    birthDate: "20 สิงหาคม 2003",
-    phone: "0801234567",
-    email: "somjai2003@gmail.com",
-    therapist: "ญาดา โภคาริตนกุล",
-}
 
 function Pat() {
     const [messageApi, contextHolder] = message.useMessage();

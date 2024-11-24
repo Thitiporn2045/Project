@@ -106,3 +106,51 @@ func GetDiaryByPatientID(c *gin.Context) {
 	// Return the found notes
 	c.JSON(http.StatusOK, gin.H{"data": diaries})
 }
+
+
+func UpdateDiaryPat(c *gin.Context) {
+	var diaries entity.Diary
+	var result entity.Diary
+
+	if err := c.ShouldBindJSON(&diaries); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if tx := entity.DB().Where("id = ?", diaries.ID).First(&result); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found"})
+		return
+	}
+
+	if err := entity.DB().Save(&diaries).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": diaries})
+	
+}
+
+func ToggleDiaryIsPublic(c *gin.Context) {
+    var diary entity.Diary
+
+    // ดึง ID ของ Diary จากพารามิเตอร์
+    diaryID := c.Param("id")
+
+    // ค้นหา Diary โดยใช้ ID
+    if err := entity.DB().Where("id = ?", diaryID).First(&diary).Error; err != nil {
+        c.JSON(http.StatusNotFound, gin.H{"error": "Diary not found"})
+        return
+    }
+
+    // สลับค่าของ IsPublic
+    diary.IsPublic = !diary.IsPublic
+
+    // บันทึกการเปลี่ยนแปลงลงในฐานข้อมูล
+    if err := entity.DB().Save(&diary).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+
+    // ส่งคืนข้อมูลที่อัปเดต
+    c.JSON(http.StatusOK, gin.H{"data": diary})
+}
