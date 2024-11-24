@@ -49,6 +49,8 @@ func main() {
 
 
 			//Psychologist Routes
+			r.GET("/patients/dash/:id",controller.ListPatientsForDashboard)
+
 			r.GET("/psychologists", controller.ListPsychologists)
 			r.GET("/psychologist/:id", controller.GetPsychologist)
 			r.PATCH("/psychologists", controller.UpdatePsychologist)
@@ -64,8 +66,17 @@ func main() {
 			r.DELETE("/typeOfPatient/:id",controller.DeleteTypeOfPatient)
 
 			r.GET("/diaries/psy/:id",controller.ListPublicDiariesByPatientType)
-			r.GET("/patients/dash/:id",controller.ListPatientsForDashboard)
-			
+
+			r.GET("/comments/:id",controller.ListCommentByDiaryId)
+			r.POST("/comment",controller.CreateComment)
+			r.PATCH("/comment",controller.UpdateComment)
+			r.DELETE("/comment/:id",controller.DeleteComment)
+
+			r.GET("/quickReplies/:id",controller.ListQuickReplies)
+			r.POST("/quickReply",controller.CreateQuickReply)
+			r.PATCH("/quickReply",controller.UpdateQuickReply)
+			r.DELETE("/quickReply/:id",controller.DeleteQuickReply)
+
 
 			//Connection Request Routes
 			r.POST("/connection/send",controller.SendConnectionRequest)

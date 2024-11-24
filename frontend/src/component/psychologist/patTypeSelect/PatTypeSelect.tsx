@@ -18,6 +18,7 @@ import { CiSearch } from 'react-icons/ci';
 
 function PatTypeSelect() {
   const [messageApi, contextHolder] = message.useMessage();
+  const [loading, setLoading] = useState(true);
 
   const [items, setItems] = useState<TypeOfPatientInterface[]>([]);
   const [selectedType, setSelectedType] = useState<string>('ทั้งหมด');
@@ -46,6 +47,9 @@ const listPatients = async () => {
   let res = await ListConnectedPatientByType(Number(psyID));
   if(res){
     setPat(res);
+    setTimeout(() => {
+      setLoading(false);
+    },1500)
   }
 }
 //=========================================================================
@@ -56,7 +60,6 @@ const listPatients = async () => {
     }
   }
 
-  
   useEffect(() => {
     listTypeOfPatient();
     listPatients();
@@ -66,7 +69,7 @@ const listPatients = async () => {
   useEffect(() => {
     // Fetch data and set pat array here, then run the filter
     filterPatients();
-  }, [searchTerm, selectedType, pat]);
+  }, [searchTerm, selectedType, pat,console.log(filteredPatients.length)]);
 
   const filterPatients = () => {
     // เริ่มต้นด้วยข้อมูลผู้ป่วยทั้งหมด
@@ -117,14 +120,6 @@ const listPatients = async () => {
     }
    
   }
-  //=================================================
-
-  //================Listed by Select=================
-  // const filteredPatients = selectedType === 'ทั้งหมด' 
-  //   ? pat 
-  //   : selectedType === 'ที่ยังไม่ระบุ'
-  //       ? pat.filter(pat => (pat.TypeID === null || pat.TypeOfPatient?.Name === null))
-  //       : pat.filter(pat => pat.TypeOfPatient?.Name === selectedType);
   //=================================================
 
   //======================Modal User Info============
@@ -212,8 +207,18 @@ const listPatients = async () => {
   const handleDeleteCancel = () => {
     setIsDeleteModalVisible(false);
   };
-  //=================================================
-  return (
+  //===========================================================================
+  const [animatedIndexes, setAnimatedIndexes] = useState<number[]>([]);
+
+  useEffect(() => {
+    pat.forEach((_, index) => {
+      setTimeout(() => {
+        setAnimatedIndexes((prev) => [...prev, index]);
+      }, (index + 1) * 100); // เพิ่ม delay ให้แสดงทีละรายการ
+    });
+  }, [pat]);
+  //===========================================================================
+    return (
     <ConfigProvider
       locale={thTH}
       theme={{
@@ -264,50 +269,65 @@ const listPatients = async () => {
               )}
               options={items.map((item) => ({ label: item.Name, value: item.Name }))}
             />
-            <div>
+            <div style={{display:'flex',flexGrow:1,justifyContent:'center'}}>
             <Input
               placeholder="ค้นหาผู้ป่วยตามชื่อหรือเลขบัตรประชาชน"
               suffix={<CiSearch style={{ color: '#63C592', fontSize: '20px', fontWeight: 'bolder' }} />}
               value={searchTerm}
               onChange={handleSearch}
-              style={{width:600}}
+              style={{width:'90%'}}
             />
             </div>
             <div><AddPat/></div>
           </div>
 
-          <div style={{
-            position:'relative', 
-            width:'100%',
-            marginTop:'0.5rem',
-            display:'flex',
-            flexDirection:'column',
-            alignItems:'center',
-            gap:'1rem',
-            flexGrow:1,
-            overflow:'auto',
-            flexShrink: 0,
-            scrollbarColor:'#c5c5c5 transparent',
-            scrollbarWidth:'thin',
-            }}
-          >              
-         {filteredPatients.map(pat =>(
-                
-                <div style={{
-                  position:'relative',
-                  height:'15%',
-                  maxHeight:'80px',
-                  width:'97%',
-                  display:'flex',
-                  flexDirection:'row', 
-                  justifyContent:'space-between',
-                  flexShrink:0,
-                  flexWrap:'wrap',
-                  background:'white',
-                  borderRadius:'10px',
-                  boxShadow: '0px 3px 8px rgba(0, 0, 0, 0.03)',
+          {loading? (
+              <div style={{ width:'100%',height:'100%', color: '#b9b9b9',display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center' }}>
+                <div className="Psy-Loading-Data"></div>
+                <div>กำลังโหลดข้อมูล...</div>
+              </div>
+            ):(pat.length === 0 || filteredPatients.length === 0? (
+            <div style={{width:'100%',height:'100%',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',}}>
+              <div className="Psy-No-Data"></div>
+              <div style={{color:'#b9b9b9'}}>ไม่มีข้อมูล...</div>
+            </div>
+            ) : (<div style={{
+              position:'relative', 
+              width:'100%',
+              marginTop:'0.5rem',
+              display:'flex',
+              flexDirection:'column',
+              alignItems:'center',
+              gap:'1rem',
+              flexGrow:1,
+              overflow:'auto',
+              flexShrink: 0,
+              scrollbarColor:'#c5c5c5 transparent',
+              scrollbarWidth:'thin',
+              }}
+            >
+                      
+              {filteredPatients.map((pat,index) =>(
                   
-                }}
+                <div 
+                key={pat.ID}
+                  className={`pat-list-info ${
+                    animatedIndexes.includes(index) ? 'animated' : ''
+                  }`}
+                  style={{
+                    position:'relative',
+                    height:'15%',
+                    maxHeight:'80px',
+                    width:'97%',
+                    display:'flex',
+                    flexDirection:'row', 
+                    justifyContent:'space-between',
+                    flexShrink:0,
+                    flexWrap:'wrap',
+                    background:'white',
+                    borderRadius:'10px',
+                    boxShadow: '0px 3px 8px rgba(0, 0, 0, 0.03)', 
+                  }}
                 >
                   <div style={{position:'relative',height:'100%',width:'50%',display:'flex', flexDirection:'row', alignItems:'center',gap:'1rem',marginLeft:'1rem',flexShrink:0,}}>
                   {pat.Picture && (pat.Picture !== "") && (pat.Picture !== undefined)?(
@@ -361,95 +381,100 @@ const listPatients = async () => {
                     
                   </div>
                 </div>
-                
+                  
               ))} 
-            </div>
+            </div>)
+          )}
 
-            {selectedPatient && (
-              <Modal 
-              open={isModalVisible} 
-              onOk={()=>handleUpdateOk(Number(selectedPatient.ID))} 
-              onCancel={handleCancel} 
-              okButtonProps={{ disabled: isSaveDisabled }} 
-              okText="บันทึก"
-              width={700}
-              >
-                <div style={{display:'flex',flexDirection:'row',gap:'2rem',paddingBottom:'1rem',paddingTop:'1rem'}}>
-                
-                  <div style={{width:220,height:220,borderRadius:'50%',marginTop:'0.5rem'}}>
-                    {selectedPatient.Picture && (selectedPatient.Picture !== "") && (selectedPatient.Picture !== undefined)?(  
-                      <img 
-                        src={selectedPatient.Picture}
-                        style={{width:'100%',height:'100%',objectFit:'cover',borderRadius:'50%'}}/>
-                      ) : (
-                      <img 
-                        src={userEmpty}
-                        style={{width:'100%',height:'100%',objectFit:'cover',borderRadius:'50%'}}/>
-                    )}
-                  </div>
+          
 
-                  <div style={{ width: '60%', display: 'flex', flexDirection: 'column',}}>
-                    <div style={{ display: 'flex', alignItems: 'center', width: '100%', height: '20%', borderBottom: 'solid 2px',borderColor:'#63C592' }}>
-                      <b style={{ fontSize: '24px' }}>{selectedPatient.Firstname} {selectedPatient.Lastname}</b>
-                    </div>
-                    <div style={{ display: 'flex',gap:'5.5rem',marginTop:'1rem'}}>
-                      <b>เพศ</b> <span style={{color:'#868686'}}>{selectedPatient.Gender?.Gender}</span>
-                    </div>
-                    <div style={{ display: 'flex',gap:'5.5rem'}}>
-                      <b>อายุ</b> <span style={{color:'#868686'}}>{calculateAge(String(selectedPatient.Dob))} ปี</span>
-                    </div>
-                    <div style={{ display: 'flex',gap:'4.5rem'}}>
-                      <b>วันเกิด</b> <span style={{color:'#868686'}}>{selectedPatient.Dob}</span>
-                    </div>
-                    <div style={{ display: 'flex',gap:'2rem'}}>
-                      <b>เบอร์โทรศัพท์</b> <span style={{color:'#868686'}}>{selectedPatient.Tel}</span>
-                    </div>
-                    <div style={{ display: 'flex',gap:'5rem'}}>
-                      <b>อีเมล</b> <span style={{color:'#868686'}}>{selectedPatient.Email}</span>
-                    </div>
-                    <div style={{ display: 'flex',gap:'2rem',marginTop:'1rem'}}>
-                      <b>อาการที่รักษา</b>
-                      <Input 
-                        value={editedSymptoms} 
-                        onChange={(e) => setEditedSymptoms(e.target.value)} 
-                        style={{ width: 150 }} 
-                      />
-                    </div>
-                    <div style={{ display: 'flex',gap:'3.6rem',marginTop:'1rem'}}>
-                      <b>หมวดหมู่</b>
-                      <Select 
-                        value={editedType} 
-                        onChange={(value) => setEditedType(value)} 
-                        style={{ width: 150 }}>
-                        {filteredItems.map((item, index) => (
-                          <Select.Option key={index} value={item.ID}>
-                            {item.Name}
-                          </Select.Option>
-                        ))}
-                      </Select>
-                    </div>
-                  </div>
+          
 
-
+          {selectedPatient && (
+            <Modal 
+            open={isModalVisible} 
+            onOk={()=>handleUpdateOk(Number(selectedPatient.ID))} 
+            onCancel={handleCancel} 
+            okButtonProps={{ disabled: isSaveDisabled }} 
+            okText="บันทึก"
+            width={700}
+            >
+              <div style={{display:'flex',flexDirection:'row',gap:'2rem',paddingBottom:'1rem',paddingTop:'1rem'}}>
+              
+                <div style={{width:220,height:220,borderRadius:'50%',marginTop:'0.5rem'}}>
+                  {selectedPatient.Picture && (selectedPatient.Picture !== "") && (selectedPatient.Picture !== undefined)?(  
+                    <img 
+                      src={selectedPatient.Picture}
+                      style={{width:'100%',height:'100%',objectFit:'cover',borderRadius:'50%'}}/>
+                    ) : (
+                    <img 
+                      src={userEmpty}
+                      style={{width:'100%',height:'100%',objectFit:'cover',borderRadius:'50%'}}/>
+                  )}
                 </div>
 
-                
-              </Modal>
+                <div style={{ width: '60%', display: 'flex', flexDirection: 'column',}}>
+                  <div style={{ display: 'flex', alignItems: 'center', width: '100%', height: '20%', borderBottom: 'solid 2px',borderColor:'#63C592' }}>
+                    <b style={{ fontSize: '24px' }}>{selectedPatient.Firstname} {selectedPatient.Lastname}</b>
+                  </div>
+                  <div style={{ display: 'flex',gap:'5.5rem',marginTop:'1rem'}}>
+                    <b>เพศ</b> <span style={{color:'#868686'}}>{selectedPatient.Gender?.Gender}</span>
+                  </div>
+                  <div style={{ display: 'flex',gap:'5.5rem'}}>
+                    <b>อายุ</b> <span style={{color:'#868686'}}>{calculateAge(String(selectedPatient.Dob))} ปี</span>
+                  </div>
+                  <div style={{ display: 'flex',gap:'4.5rem'}}>
+                    <b>วันเกิด</b> <span style={{color:'#868686'}}>{selectedPatient.Dob}</span>
+                  </div>
+                  <div style={{ display: 'flex',gap:'2rem'}}>
+                    <b>เบอร์โทรศัพท์</b> <span style={{color:'#868686'}}>{selectedPatient.Tel}</span>
+                  </div>
+                  <div style={{ display: 'flex',gap:'5rem'}}>
+                    <b>อีเมล</b> <span style={{color:'#868686'}}>{selectedPatient.Email}</span>
+                  </div>
+                  <div style={{ display: 'flex',gap:'2rem',marginTop:'1rem'}}>
+                    <b>อาการที่รักษา</b>
+                    <Input 
+                      value={editedSymptoms} 
+                      onChange={(e) => setEditedSymptoms(e.target.value)} 
+                      style={{ width: 150 }} 
+                    />
+                  </div>
+                  <div style={{ display: 'flex',gap:'3.6rem',marginTop:'1rem'}}>
+                    <b>หมวดหมู่</b>
+                    <Select 
+                      value={editedType} 
+                      onChange={(value) => setEditedType(value)} 
+                      style={{ width: 150 }}>
+                      {filteredItems.map((item, index) => (
+                        <Select.Option key={index} value={item.ID}>
+                          {item.Name}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  </div>
+                </div>
 
-            )}
-            {selectedPatient && (
-              <Modal
-                title="ยืนยันการลบ"
-                open={isDeleteModalVisible}
-                onOk={() => handleDeleteOk(Number(selectedPatient?.ID))}
-                onCancel={handleDeleteCancel}
-                okText="ยืนยัน"
-                okType='danger'
-                cancelText="ยกเลิก"
-              >
-                <p>คุณต้องการลบผู้ป่วย <b>{selectedPatient?.Firstname} {selectedPatient?.Lastname}</b> หรือไม่?</p>
-              </Modal>
-            )}
+
+              </div>
+
+              
+            </Modal>
+
+          )}
+          {selectedPatient && (
+            <Modal
+              title="ยืนยันการลบ"
+              open={isDeleteModalVisible}
+              onOk={() => handleDeleteOk(Number(selectedPatient?.ID))}
+              onCancel={handleDeleteCancel}
+              okText="ยืนยัน"
+              okType='danger'
+              cancelText="ยกเลิก"
+            >
+              <p>คุณต้องการลบผู้ป่วย <b>{selectedPatient?.Firstname} {selectedPatient?.Lastname}</b> หรือไม่?</p>
+            </Modal>
+          )}
         </div>
     </ConfigProvider>
   );

@@ -33,6 +33,7 @@ func SetupDatabase() (*gorm.DB, error) {
 		&Diary{},
 		&Emotion{},
 		// &FeelGoodType{},
+		&QuickReplies{},
 		&TypeOfPatient{},
 		&TimeOfDay{},
 		&WorkSchedule{},
@@ -148,6 +149,7 @@ func SetupDatabase() (*gorm.DB, error) {
 			Password: string(hashedPassword1),
 			Picture: "",
 			Symtoms: "",
+			IdNumber: "1309801416574",
 
 		},
 		{
@@ -160,6 +162,7 @@ func SetupDatabase() (*gorm.DB, error) {
 			Password: string(hashedPassword2),
 			Picture: "",
 			Symtoms: "",
+			IdNumber: "8657411918573",
 		},
 		{
 			Firstname: "วรัญญา",
@@ -171,6 +174,7 @@ func SetupDatabase() (*gorm.DB, error) {
 			Password: string(hashedPassword3),
 			Picture: "",
 			Symtoms: "",
+			IdNumber: "1756430584726",
 		},
 		{
 			Firstname: "ธนา",
@@ -182,17 +186,19 @@ func SetupDatabase() (*gorm.DB, error) {
 			Password: string(hashedPassword4),
 			Picture: "",
 			Symtoms: "",
+			IdNumber: "1609804532765",
 		},
 		{
 			Firstname: "พิมพ์ลดา",
 			Lastname: "อัครกุล",
 			Dob: "11-12-2001",
-			GenderID: &female.ID,
+			GenderID: &lgbtq.ID,
 			Tel: "0856789012",
 			Email: "pimlada@gmail.com",
 			Password: string(hashedPassword5),
 			Picture: "",
 			Symtoms: "",
+			IdNumber: "1048703254873",
 		},
 	}
 	for _, patient := range Patients {
