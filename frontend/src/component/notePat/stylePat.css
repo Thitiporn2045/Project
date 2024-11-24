@@ -145,3 +145,21 @@
     border: none;
     font-family: 'Noto Sans Thai', sans-serif;
 }
+
+.notePat .Loading-Data{
+    background: url('../../assets/noData.gif');
+    background-size: cover;
+    background-position: center;
+    width: 240px;
+    height: 110px; 
+    margin-top: 30px;
+    border: 5px solid transparent ; 
+    border-radius: 10px;
+    opacity: 0.5;
+
+}
+
+.notePat .text{
+    color: var(--color-font2);
+    font-family: 'Noto Sans Thai', sans-serif;
+}

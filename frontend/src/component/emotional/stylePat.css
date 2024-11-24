@@ -34,8 +34,12 @@
     --box-shadow: 0 2rem 3rem var(--color-light)
 }
 
+
+
 .emotional-web {
     text-align: center;
+    font-family: 'Noto Sans Thai', sans-serif;
+
 }
 
 .emotional-web .main-bg{
@@ -43,7 +47,19 @@
     grid-template-columns: auto auto;
 }
 
-.emoji-grid {
+.emotional-web .main-bg .bg-left{
+    width: 100%;
+    min-height: 100vh;
+    background-color: rgb(255, 255, 255);
+}
+
+.emotional-web .main-bg .bg-right{
+    width: 100%;
+    min-height: 100vh;
+    background-color: rgba(252, 252, 255, 0.506);
+}
+
+.emotional-web .emoji-grid {
     display: grid;
     grid-template-columns: repeat(3, 100px);
     gap: 20px;
@@ -51,7 +67,7 @@
     margin-top: 20px;
 }
 
-.emoji {
+.emotional-web .emoji {
     width: 80px;
     height: 80px;
     display: flex;
@@ -65,11 +81,127 @@
     transition: transform 0.2s;
 }
 
-.emoji:hover {
+.emotional-web .emoji:hover {
     transform: scale(1.1);
 }
 
-.selected-emotion {
+.emotional-web .selected-emotion {
     margin-top: 20px;
     font-size: 24px;
+}
+
+/* General container */
+.emotional-web .main-bg .bg-right .emotion-container {
+    margin: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: calc(100% -40px);
+    min-height: 90vh;
+    border-radius: var(--border-radius-3);
+}
+
+/* Main card containing all elements */
+.emotional-web .emotion-card {
+    width: 100%;
+    max-width: 500px;
+    height: 100%;
+    padding: 2rem;
+}
+
+/* Large emoji display section */
+.emotional-web .large-emoji {
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* padding: 2rem 4rem;
+    background-color: #FFFFFF; */
+}
+
+.emotional-web .emoji-circle {
+    width: 10rem;
+    height: 10rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.emotional-web .emoji-large {
+    font-size: 8rem;
+}
+
+/* Grid for selectable emotions */
+.emotional-web .emotion-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    justify-items: center;
+    margin-bottom: 3rem;
+}
+
+.emotional-web .emotion-button {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+    border: none;
+    cursor: pointer;
+}
+
+.emotional-web .emotion-button:hover {
+    transform: scale(1.1);
+}
+
+.emotional-web .emoji-small {
+    font-size: 2.5rem;
+}
+
+/* Create Emotion Button Section */
+.emotional-web .create-emotion {
+    display: flex;
+    justify-content: center;
+}
+
+.emotional-web .create-emotion-btn {
+    background-color: #FFFFFF;
+    color: #333f60;
+    padding: 0.75rem 2rem;
+    border-radius: 9999px;
+    transition: background-color 0.2s;
+    font-size: 1.125rem;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    font-family: 'Noto Sans Thai', sans-serif;
+}
+
+.emotional-web .create-emotion-btn:hover {
+    color: #FFFFFF;
+    background-color: var(--color-backgroun-main2);
+}
+
+
+
+.emotional-web .Loading-Data{
+    background: url('../../assets/noData.gif');
+    background-size: cover;
+    background-position: center;
+    width: 340px;
+    height: 210px; 
+    margin-top: -40px;
+    border: 5px solid transparent ; 
+    border-radius: 10px;
+    opacity: 0.5;
+}
+
+.emotional-web .text{
+    color: var(--color-font2);
+    font-family: 'Noto Sans Thai', sans-serif;
 }

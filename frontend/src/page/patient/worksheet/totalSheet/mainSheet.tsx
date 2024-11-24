@@ -319,21 +319,32 @@ const toggleIsPublic = async (diary: DiaryPatInterface) => {
                                 
                                 {/* Display categorized diary entries */}
                                 <div className="diary-categories">
-                                    {[
-                                        { title: "Planning Diary", diaries: categorizeDiaries().planning },
-                                        { title: "Activity Diary", diaries: categorizeDiaries().activity },
-                                        { title: "Behavioral Diary", diaries: categorizeDiaries().behavioral },
-                                        { title: "Cross Sectional Diary", diaries: categorizeDiaries().crossSectional }
-                                    ]
-                                        .filter(category => category.diaries.length > 0)
-                                        .map(category => (
-                                            <DiaryCategory 
-                                                key={category.title}
-                                                title={category.title} 
-                                                diaries={category.diaries}
-                                            />
-                                        ))
-                                    }
+                                {[
+                                    { title: "Planning Diary", diaries: categorizeDiaries().planning },
+                                    { title: "Activity Diary", diaries: categorizeDiaries().activity },
+                                    { title: "Behavioral Diary", diaries: categorizeDiaries().behavioral },
+                                    { title: "Cross Sectional Diary", diaries: categorizeDiaries().crossSectional }
+                                ]
+                                    .filter(category => category.diaries.length > 0) // คัดกรองหมวดหมู่ที่มีข้อมูล
+                                    .map(category => (
+                                        <DiaryCategory 
+                                            key={category.title}
+                                            title={category.title} 
+                                            diaries={category.diaries}
+                                        />
+                                ))}
+
+                                {[
+                                    { title: "Planning Diary", diaries: categorizeDiaries().planning },
+                                    { title: "Activity Diary", diaries: categorizeDiaries().activity },
+                                    { title: "Behavioral Diary", diaries: categorizeDiaries().behavioral },
+                                    { title: "Cross Sectional Diary", diaries: categorizeDiaries().crossSectional }
+                                ].every(category => category.diaries.length === 0) && (
+                                    <div style={{ width: '100%', height: '90vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
+                                        <div className="Loading-Data"></div>
+                                        <div className='text'>ไม่มีข้อมูล...</div>
+                                    </div>
+                                )}
                                 </div>
                             </div>
                         </div>

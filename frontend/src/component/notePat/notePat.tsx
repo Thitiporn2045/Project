@@ -116,7 +116,10 @@ function NotePat() {
         >
             <div className='notePat'>
                 {notePatients.length === 0 ? (
-                    <p>No notes available for this patient.</p>
+                    <div style={{width:'100%',height:'100%',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column'}}>
+                        <div className="Loading-Data"></div>
+                        <div className='text'>ไม่มีข้อมูล...</div>
+                    </div>
                 ) : (
                     notePatients.map((note, index) => (
                         <div 

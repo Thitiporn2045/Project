@@ -6,6 +6,7 @@
     box-sizing: border-box;
     font-family: "Poppins", sans-serif;
     font-family: 'Noto Sans Thai', sans-serif;
+    background: #F7F8FD;
 }
 
 
@@ -394,6 +395,25 @@
     padding: 24px;
     overflow: auto;
     background-color: var(--color-backgroun-secondary4);
+}
+
+
+.mainSheet .Loading-Data{
+    background: url('../../../../assets/noData.gif');
+    background-size: cover;
+    background-position: center;
+    margin-top: -150px;
+    width: 340px;
+    height: 210px; 
+    border: 5px solid transparent ; 
+    border-radius: 10px;
+    opacity: 0.5;
+
+}
+
+.mainSheet .text{
+    color: var(--color-font2);
+    font-family: 'Noto Sans Thai', sans-serif;
 }
 
 /* ------------  SheetCross   ------------------- */
