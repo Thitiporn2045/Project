@@ -44,7 +44,7 @@
 
 .emotional-web .main-bg{
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: repeat(2, 1fr);
 }
 
 .emotional-web .main-bg .bg-left{
@@ -138,9 +138,12 @@
 .emotional-web .emotion-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
+    gap: 2rem;
     justify-items: center;
     margin-bottom: 3rem;
+    padding: 1rem;
+    height: 200px;
+    overflow-x: auto;
 }
 
 .emotional-web .emotion-button {

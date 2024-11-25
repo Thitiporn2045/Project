@@ -10,12 +10,58 @@ type AddEmotion = {
     Emoticon: string; // อีโมจิที่แสดงถึงอารมณ์
 };
 
-const addEmotions: AddEmotion[] = [ // รายการอารมณ์เริ่มต้นที่สามารถเลือกได้
-    { ColorCode: '#A8E6CE', Emoticon: '😊' }, // อารมณ์ "Happy"
-    { ColorCode: '#FF91AE', Emoticon: '😡' }, // อารมณ์ "Angry"
-    { ColorCode: '#F4ED7F', Emoticon: '😕' }, // อารมณ์ "Confused"
-    { ColorCode: '#B78FCB', Emoticon: '😢' }, // อารมณ์ "Sad"
+const addEmotions: AddEmotion[] = [
+    // โกรธ (Angry)
+    { ColorCode: '#FF7171', Emoticon: '😡' }, // โกรธ
+    { ColorCode: '#FF7F7F', Emoticon: '😠' }, // หงุดหงิด
+    { ColorCode: '#FF9090', Emoticon: '😤' }, // รำคาญ
+
+    // ภูมิใจ (Pride)
+    { ColorCode: '#FFD875', Emoticon: '😌' }, // ภูมิใจ
+    { ColorCode: '#FFE798', Emoticon: '😊' }, // ยินดี
+
+    // สุข (Happy)
+    { ColorCode: '#FFFF8E', Emoticon: '😄' }, // สุข
+    { ColorCode: '#FFEC8C', Emoticon: '😂' }, // หัวเราะ
+
+    // สนใจ (Interested)
+    { ColorCode: '#B7EFFF', Emoticon: '🤩' }, // ตื่นเต้น
+    { ColorCode: '#A0E3FF', Emoticon: '🤔' }, // สงสัย
+
+    // มั่นใจ (Confident)
+    { ColorCode: '#94CDFF', Emoticon: '😎' }, // มั่นใจ
+    { ColorCode: '#93DBFF', Emoticon: '😇' }, // ปลอดภัย
+
+    // รัก/ชอบ (Love)
+    { ColorCode: '#FF91AE', Emoticon: '🥰' }, // รัก
+    { ColorCode: '#FFA5BF', Emoticon: '😘' }, // อบอุ่น
+    { ColorCode: '#FAA7C0', Emoticon: '😳' }, // อาย
+
+    // สันติ (Peaceful)
+    { ColorCode: '#ADEED5', Emoticon: '😌' }, // สงบ
+    { ColorCode: '#B2F3E7', Emoticon: '🧘‍♀️' }, // ผ่อนคลาย
+
+    // อับอาย (Embarrassed)
+    { ColorCode: '#C7F8BF', Emoticon: '😅' }, // กระอักกระอ่วน
+
+    // เสียใจ (Sad)
+    { ColorCode: '#AFDAFF', Emoticon: '😢' }, // เสียใจ
+    { ColorCode: '#97B9F0', Emoticon: '😭' }, // ร้องไห้
+
+    // ประหลาดใจ (Surprised)
+    { ColorCode: '#C1E6FF', Emoticon: '😮' }, // ตกใจ
+    { ColorCode: '#ACD6F8', Emoticon: '😱' }, // ช็อค
+
+    // กลัว (Fear)
+    { ColorCode: '#B7C3FF', Emoticon: '😨' }, // กลัว
+    { ColorCode: '#A8B4F7', Emoticon: '😰' }, // หวาดหวั่น
+
+    // รังเกียจ (Disgusted)
+    { ColorCode: '#E1C6F7', Emoticon: '😒' }, // รังเกียจ
+    { ColorCode: '#B78FCB', Emoticon: '😩' }, // ขยะแขยง
 ];
+
+
 
 const EmotionalWeb = () => { // คอมโพเนนต์หลักที่แสดงอารมณ์
     const [emotionPatients, setEmotionPatients] = useState<EmtionInterface[]>([]); // สถานะเก็บข้อมูลอารมณ์ของผู้ป่วย
@@ -145,18 +191,19 @@ const EmotionalWeb = () => { // คอมโพเนนต์หลักที
                         </div>
                         {/* Emotions Grid */}
                         <div className="emotion-grid">
-                        {addEmotions.map((emotion, index) => (
-                            <button
-                            key={index}
-                            className="emotion-button"
-                            style={{ backgroundColor: emotion.ColorCode }}
-                            onClick={() => handleSelectEmotion(emotion)} // เรียกฟังก์ชันเมื่อเลือกอารมณ์
-                            >
-                            <span className="emoji-small">{emotion.Emoticon}</span>
-                            </button>
-                        ))}
+                            {addEmotions.map((emotion, index) => (
+                                <button
+                                    key={index}
+                                    className="emotion-button"
+                                    style={{
+                                        backgroundColor: selectedEmotion?.Emoticon === emotion.Emoticon ? '#FFFFFF' : emotion.ColorCode,
+                                    }}
+                                    onClick={() => handleSelectEmotion(emotion)}
+                                >
+                                    <span className="emoji-small">{emotion.Emoticon}</span>
+                                </button>
+                            ))}
                         </div>
-
                         {/* Create Emotion Button */}
                         <div className="create-emotion">
                         <button 
