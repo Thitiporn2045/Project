@@ -43,3 +43,36 @@ func GetEmotionByPatientID(c *gin.Context) {
 	// Return the found notes
 	c.JSON(http.StatusOK, gin.H{"data": emotion})
 }
+
+
+func UpdateEmotionByID(c *gin.Context) {
+    var emotion entity.Emotion
+	var result entity.Emotion
+
+	if err := c.ShouldBindJSON(&emotion); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if tx := entity.DB().Where("id = ?", emotion.ID).First(&result); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found"})
+		return
+	}
+
+	if err := entity.DB().Save(&emotion).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": emotion})
+	
+}
+
+func DeleteEmotion(c *gin.Context) {
+	emotionID := c.Param("id")
+	if tx := entity.DB().Exec("DELETE FROM emotions WHERE id = ?", emotionID); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "data not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": emotionID})
+}

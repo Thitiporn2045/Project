@@ -38,14 +38,16 @@ func main() {
 			r.PATCH("/pat/update/Note",controller.UpdateNotePatient)
 			r.PATCH("/pat/update/DiaryPat", controller.UpdateDiaryPat)
 			r.PATCH("/diaries/:id/toggle-public", controller.ToggleDiaryIsPublic)
+			r.PATCH("/pat/update/Emotion", controller.UpdateEmotionByID)
 
 			r.POST("/pat/checkPassword",controller.CheckOldPasswordPatient)
 			r.POST("/pat/note",controller.CreateNotePat)
 			r.POST("/pat/creatDiary",controller.CreateDiaryPat)	
-			r.POST("/pat/creat/Emotion",controller.CreateDiaryPat)	
+			r.POST("/pat/creat/Emotion",controller.CreateEmotion)	
 			
 			r.DELETE("/patients/:id", controller.DeletePatient)
 			r.DELETE("/pat/delNote/:id", controller.DeleteNotePat)
+			r.DELETE("/pat/del/Emotion/:id", controller.DeleteEmotion)
 
 
 			//Psychologist Routes
