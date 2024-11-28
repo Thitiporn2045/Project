@@ -11,10 +11,9 @@ func ListCommentByDiaryId(c *gin.Context) {
 	var comments []entity.Comment
 
 	diaryID := c.Param("id")
-	if err := entity.DB().Preload("Psychologist").Raw("SELECT * FROM comments where diary_id = ?", diaryID).Find(&comments).Error; err != nil {
+	if err := entity.DB().Preload("Psychologist").Preload("Diary").Raw("SELECT * FROM comments where diary_id = ? ORDER BY created_at DESC", diaryID).Find(&comments).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
-
 	}
 
 	c.JSON(http.StatusOK, gin.H{"data": comments})

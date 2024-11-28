@@ -35,7 +35,7 @@ export default function PsyHomePage(){
       setPatients(res);
       setTimeout(() => {
         setLoading(false);
-      },1500)
+      },1000)
     }
     
   }

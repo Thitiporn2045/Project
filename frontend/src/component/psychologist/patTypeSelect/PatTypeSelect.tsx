@@ -49,7 +49,7 @@ const listPatients = async () => {
     setPat(res);
     setTimeout(() => {
       setLoading(false);
-    },1500)
+    },1000)
   }
 }
 //=========================================================================

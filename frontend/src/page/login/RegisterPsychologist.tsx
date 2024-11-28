@@ -104,9 +104,6 @@ const handleSubmitReg = async (values: any) => {
         messageApi.error(res.message || "การลงทะเบียนล้มเหลว");
     }
 
-   console.log("Registration Values: ", allValues);
-
-
 }
 //===============================================================================
 useEffect(() =>{
