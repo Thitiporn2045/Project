@@ -6,6 +6,7 @@ export interface DiaryInterface{//Psy only
     IsPublic?: boolean,
     Name?: string,
     WorksheetType?: string
+    Picture?: string,
 }
 
 export interface patientDiaryInterface{//Psy only

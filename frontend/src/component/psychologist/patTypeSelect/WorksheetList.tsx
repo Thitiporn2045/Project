@@ -40,7 +40,7 @@ const listDiaries = async () => {
     setDiaries(res);
     setTimeout(() => {
       setLoading(false);
-    },1500)
+    },1000)
   }
 
 }
@@ -270,20 +270,25 @@ useEffect(() => {
                     position:'relative', 
                     width:'98%',
                     height:'90%',
+                    paddingLeft:'1rem',
                     display:'flex',
                     flexDirection:'row',
                     alignItems:'center',
                     marginLeft:'1rem', 
-                    
+                    gap:'1.5rem', 
+                    overflowX:'auto',
+                    overflowY:'hidden',
+                    scrollbarColor:'#e5e5e5 transparent',
+                    scrollbarWidth:'thin',                   
                   }}
                 >
                   {item.diaries.map((item2) => (
-                    <div className='each-diary' onClick={() => navigateToDiaryPage(item2)} style={{position:'relative',width:'15%',height:'100%',display:'flex',flexDirection:'column',flexShrink:0, marginLeft:'1rem', marginRight:'1rem'}}>
+                    <div className='each-diary' onClick={() => navigateToDiaryPage(item2)} style={{position:'relative',width:'15%',minWidth:160,height:'100%',display:'flex',flexDirection:'column',flexShrink:0,cursor:'pointer'}}>
                       <div style={{
                         position:'relative',
-                        width:'100%',height:'80%',
+                        width:'100%',height:'80%',minWidth:160,
                         display:'flex',
-                        backgroundImage:`url(${cover})`,
+                        backgroundImage:`url(${item2.Picture})`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                         borderRadius:'5px 15px 15px 5px',
@@ -298,7 +303,8 @@ useEffect(() => {
                         display:'flex',
                         justifyContent:'center',
                         flexDirection:'column',
-                        flexShrink:0
+                        flexShrink:0,
+                        minWidth:160
                         }}
                       >
                         <b style={{fontSize:16,color:'#585858'}}>{item2.Name}</b>

@@ -53,6 +53,7 @@ func ListPublicDiariesByPatientType(c *gin.Context) {
         diaryData := map[string]interface{}{
             "ID":           diary.ID,
             "Name":         diary.Name,
+            "Picture":      diary.Picture,
             "IsPublic":     diary.IsPublic,
             "WorksheetType": diary.WorksheetType.Name,
         }

@@ -1,0 +1,156 @@
+.PsyCommentCS{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+    background: #F7F8FD;
+    font-family:'Noto Sans Thai', sans-serif;
+}
+
+.PsyCommentCS .SideBar{
+    position: relative;
+    height: 100%;
+    width: 75px;
+}
+
+.PsyCommentCS .Content{
+    position: relative;
+    flex-grow: 1;  
+    height: 100%;
+    background: #c7b285;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+
+.PsyCommentCS .Comment{
+    position: relative;
+    width: 40%;
+    /* flex-grow: 1;   */
+    max-width:415px;  
+    height: 100%;
+    background: white;
+    border-radius: 15px 0 0 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/*============================================================*/
+.PsyCommentBE{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+    background: #F7F8FD;
+    font-family:'Noto Sans Thai', sans-serif;
+}
+
+.PsyCommentBE .SideBar{
+    position: relative;
+    height: 100%;
+    width: 75px;
+}
+
+.PsyCommentBE .Content{
+    position: relative;
+    flex-grow: 1;  
+    height: 100%;
+    background: #92c785;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+
+.PsyCommentBE .Comment{
+    position: relative;
+    width: 40%;
+    /* flex-grow: 1;   */
+    max-width:415px;  
+    height: 100%;
+    background: white;
+    border-radius: 15px 0 0 0;
+    display: flex;
+    flex-direction: column;
+}
+/*============================================================*/
+.PsyCommentAP{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+    background: #F7F8FD;
+    font-family:'Noto Sans Thai', sans-serif;
+}
+
+.PsyCommentAP .SideBar{
+    position: relative;
+    height: 100%;
+    width: 75px;
+}
+
+.PsyCommentAP .Content{
+    position: relative;
+    flex-grow: 1;  
+    height: 100%;
+    background: #85c7c4;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+
+.PsyCommentAP .Comment{
+    position: relative;
+    width: 40%;
+    /* flex-grow: 1;   */
+    max-width:415px;  
+    height: 100%;
+    background: white;
+    border-radius: 15px 0 0 0;
+    display: flex;
+    flex-direction: column;
+}
+/*============================================================*/
+.PsyCommentAD{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+    background: #F7F8FD;
+    font-family:'Noto Sans Thai', sans-serif;
+}
+
+.PsyCommentAD .SideBar{
+    position: relative;
+    height: 100%;
+    width: 75px;
+}
+
+.PsyCommentAD .Content{
+    position: relative;
+    flex-grow: 1;  
+    height: 100%;
+    background: #c785c4;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+
+.PsyCommentAD .Comment{
+    position: relative;
+    width: 40%;
+    /* flex-grow: 1;   */
+    max-width:415px;  
+    height: 100%;
+    background: white;
+    border-radius: 15px 0 0 0;
+    display: flex;
+    flex-direction: column;
+}
