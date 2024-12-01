@@ -5,6 +5,7 @@ import { CreateDiaryPat, GetEmotionByPatientID, UpdateEmotionByID, DeleteEmtionB
 import { EmtionInterface } from '../../interfaces/emotion/IEmotion'; // นำเข้าอินเทอร์เฟซที่ใช้ในการจัดการข้อมูลอารมณ์
 import { RiEdit2Fill } from 'react-icons/ri';
 import { ImBin } from 'react-icons/im';
+import NavbarPat from '../navbarPat/navbarPat';
 
 
 type AddEmotion = {
@@ -35,8 +36,8 @@ const addEmotions: AddEmotion[] = [
     { ColorCode: '#93DBFF', Emoticon: '😇' }, // ปลอดภัย
 
     // รัก/ชอบ (Love)
-    { ColorCode: '#FF91AE', Emoticon: '🥰' }, // รัก
-    { ColorCode: '#FFA5BF', Emoticon: '😘' }, // อบอุ่น
+    { ColorCode: '#FF9BCB', Emoticon: '🥰' }, // รัก
+    { ColorCode: '#FF91AE', Emoticon: '😘' }, // อบอุ่น
     { ColorCode: '#FAA7C0', Emoticon: '😳' }, // อาย
 
     // สันติ (Peaceful)
@@ -217,6 +218,9 @@ const EmotionalWeb = () => { // คอมโพเนนต์หลักที
         <div className="emotional-web"> {/* คอมโพเนนต์หลัก */}
         {contextHolder}
             <div className="main-bg"> {/* แบ็คกราวด์หลัก */}
+            <div className='sidebar'>
+                            <NavbarPat></NavbarPat>
+                        </div>
             <div className="bg-left"> {/* ส่วนแสดงอารมณ์ที่ผู้ป่วยมี */}
                 <div className="emotion-container">
                     <h2>อารมณ์ของคุณ</h2>

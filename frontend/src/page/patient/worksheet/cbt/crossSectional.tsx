@@ -39,14 +39,11 @@ const CrossSectional: React.FC = () => {
     setTags(updatedTags);
   };
   
-  
-
   const createTagRender = (selectedTags: { value: number; label: string; color: string; emotion: string }[]) => {
     return (props: any) => {
       const { label, value, closable, onClose } = props;
       const selectedTag = selectedTags.find(tag => tag.value === value);
       const color = selectedTag?.color || '#d9d9d9'; // สี default ถ้าไม่เจอ
-      const emotion = selectedTag?.emotion || '';
       const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
         event.preventDefault();
         event.stopPropagation();
@@ -61,9 +58,11 @@ const CrossSectional: React.FC = () => {
           style={{
             marginInlineEnd: 4,
             color: 'white', // Ensure text is visible
+            textShadow: '1px 1px 2px rgba(192, 192, 192, 0.8)',
+            textAlign: 'center'
           }}
         >
-          {emotion}{label}
+          {label}
         </Tag>
       );
     };
@@ -130,8 +129,7 @@ const CrossSectional: React.FC = () => {
                               tagRender={createTagRender(thoughtsTags)}
                               options={emotionPatients.map(emotion => ({
                                 value: emotion.ID,
-                                label: emotion.Name,
-                                color: emotion.ColorCode, // ใช้ ColorCode โดยตรง
+                                label: `${emotion.Emoticon} ${emotion.Name}`,
                               }))}
                               placeholder="ความรู้สึก..."
                               optionLabelProp="label"
@@ -150,8 +148,7 @@ const CrossSectional: React.FC = () => {
                               tagRender={createTagRender(behaviorTags)}
                               options={emotionPatients.map(emotion => ({
                                 value: emotion.ID,
-                                label: emotion.Name,
-                                color: emotion.ColorCode, // ใช้ ColorCode โดยตรง
+                                label: `${emotion.Emoticon} ${emotion.Name}`,
                               }))}
                               placeholder="ความรู้สึก..."
                               optionLabelProp="label"
@@ -170,8 +167,7 @@ const CrossSectional: React.FC = () => {
                               tagRender={createTagRender(bodilySensationsTags)}
                               options={emotionPatients.map(emotion => ({
                                 value: emotion.ID,
-                                label: emotion.Name,
-                                color: emotion.ColorCode, // ใช้ ColorCode โดยตรง
+                                label: `${emotion.Emoticon} ${emotion.Name}`,
                               }))}
                               placeholder="ความรู้สึก..."
                               optionLabelProp="label"
@@ -190,8 +186,7 @@ const CrossSectional: React.FC = () => {
                               tagRender={createTagRender(emotionsTags)}
                               options={emotionPatients.map(emotion => ({
                                 value: emotion.ID,
-                                label: emotion.Name,
-                                color: emotion.ColorCode, // ใช้ ColorCode โดยตรง
+                                label: `${emotion.Emoticon} ${emotion.Name}`,
                               }))}
                               placeholder="ความรู้สึก..."
                               optionLabelProp="label"

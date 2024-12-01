@@ -6,6 +6,7 @@ import { FaSignOutAlt } from "react-icons/fa";
 import { IoBarChart, IoDocumentText, IoMenu, IoPerson } from "react-icons/io5";
 import './stylePat.css';
 import logo from '../../assets/logo4.png';
+import { RiEmotionFill } from 'react-icons/ri';
 
 function NavbarPat() {
     const [sidebarActive, setSidebarActive] = useState(false);
@@ -58,6 +59,15 @@ return (
                     <a href="/Worksheets">
                         <i><IoDocumentText /></i>
                         <span className="link-name" >CBT เวิร์คชีท</span>
+                    </a>
+                </li>
+                <li
+                    className={`list-item ${activeItem === 'emotion' ? 'active' : ''}`}
+                    data-name="emotion"
+                >
+                    <a href="/Emotional">
+                        <i><RiEmotionFill /></i>
+                        <span className="link-name" >อารมณ์</span>
                     </a>
                 </li>
                 <li

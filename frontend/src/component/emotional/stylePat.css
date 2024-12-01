@@ -44,7 +44,8 @@
 
 .emotional-web .main-bg{
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 3.2rem repeat(2, 1fr);
+
 }
 
 .emotional-web .main-bg .bg-left{

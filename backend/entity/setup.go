@@ -100,16 +100,16 @@ func SetupDatabase() (*gorm.DB, error) {
 		db.Where("number_type = ?", wst.NumberType).FirstOrCreate(&wst)
 	}
 //======================================================================
-	Emotions := []Emotion{
-		{Name: "Happy", Emoticon: "😊", ColorCode: "#A8E6CE", PatID: 1},
-		{Name: "Angry", Emoticon: "😡", ColorCode: "#FF91AE", PatID: 1},
-		{Name: "Confused", Emoticon: "😕", ColorCode: "#F4ED7F", PatID: 1},
-		{Name: "Sad", Emoticon: "😢", ColorCode: "#B78FCB", PatID: 1},
-	}
+	// Emotions := []Emotion{
+	// 	{Name: "Happy", Emoticon: "😊", ColorCode: "#A8E6CE", PatID: 1},
+	// 	{Name: "Angry", Emoticon: "😡", ColorCode: "#FF91AE", PatID: 1},
+	// 	{Name: "Confused", Emoticon: "😕", ColorCode: "#F4ED7F", PatID: 1},
+	// 	{Name: "Sad", Emoticon: "😢", ColorCode: "#B78FCB", PatID: 1},
+	// }
 
-	for _, emotion := range Emotions {
-		db.Create(&emotion) 
-	} 
+	// for _, emotion := range Emotions {
+	// 	db.Create(&emotion) 
+	// } 
 //======================================================================
 
 	// funny := FeelGoodType{
