@@ -114,6 +114,7 @@
     font-weight: 600;
     margin-top: 0px;
     margin-bottom: 8px;
+    text-align: end;
 }
 
 .Admin .card-body .card-value.I{
@@ -133,8 +134,7 @@
     position: relative;
     font-size: .8rem;
     font-weight: 500;
-    padding: 2px 0;
-    margin-left: 35%;
+    padding: 2px 8px;
     text-align: center;
     border-radius: 20px;
     background-color: #ffffff61;
@@ -159,13 +159,13 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1.2rem;
-    margin-bottom: -20px;
 }
 
 .Admin .middle .list{
     margin: 0 30px 30px 30px;
     /* display: grid;
     grid-template-columns: repeat(2, 1fr); */
+    margin-top: -10px;
     background: #ffffff;
     border-radius: 15px;
     border: 1px solid #EBF1F5;

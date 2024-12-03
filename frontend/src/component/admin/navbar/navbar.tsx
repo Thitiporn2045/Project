@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { AiFillHome } from "react-icons/ai";
-import { FaSignOutAlt } from "react-icons/fa";
+import { FaSignOutAlt, FaUserInjured } from "react-icons/fa";
 import { IoBarChart, IoDocumentText, IoMenu, IoPerson } from "react-icons/io5";
 import './styleAdmin.css';
 import logo from '../../../assets/logo4.png';
 import { RiEmotionFill } from 'react-icons/ri';
+import { FaUserDoctor } from 'react-icons/fa6';
 
 function Navbar() {
     const [sidebarActive, setSidebarActive] = useState(false);
@@ -57,7 +58,7 @@ return (
                 >
 
                     <a href="/ListPsycho">
-                        <i><IoDocumentText /></i>
+                        <i><FaUserDoctor /></i>
                         <span className="link-name" >นักจิตวิทยา</span>
                     </a>
                 </li>
@@ -66,7 +67,7 @@ return (
                     data-name="listPat"
                 >
                     <a href="/ListPat">
-                        <i><IoBarChart /></i>
+                        <i><FaUserInjured /></i>
                         <span className="link-name" >ผู้ป่วย</span>
                     </a>
                 </li>

@@ -89,25 +89,27 @@
 
 /* ปุ่ม Not Approved */
 .listPsycho button.not-approved {
-    background-color: #EDF2F8;
-    color: #24252C;
+    background-color: #d2e6ff;
+    color: #4f91d0;
     border: none;
     padding: 7px 14px;
     cursor: pointer;
     border-radius: 20px;
     width: 85%;
+    font-weight: 500;
 
 }
 
 /* ปุ่ม Approved */
 .listPsycho button.approved {
-    background-color: #24252C;
-    color: #ffffff;
+    background-color: #ede3ff;
+    color: #a27ee3;
     border: none;
     padding: 7px 14px;
     cursor: pointer;
     border-radius: 20px;
     width: 80%;
+    font-weight: 500;
 }
 
 /* ปุ่ม Delete */

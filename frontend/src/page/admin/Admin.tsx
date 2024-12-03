@@ -3,14 +3,17 @@ import { Modal, Button, message, ConfigProvider } from 'antd';
 import thTH from 'antd/lib/locale/th_TH';
 import './admin.css';
 import Navbar from '../../component/admin/navbar/navbar';
-import { FaUserDoctor } from "react-icons/fa6";
+import { FaHandHoldingHeart, FaUserDoctor, FaUserInjured, FaUsers } from "react-icons/fa6";
 import DonutGraph from '../../component/admin/Graph/donutGraph';
 import BarChart from '../../component/admin/Graph/barChart';
 import { PsychologistInterface } from '../../interfaces/psychologist/IPsychologist';
 import { ListPsychologists, UpdatePsychologist } from '../../services/https/psychologist/psy';
+import { ListPatients } from '../../services/https/patient';
+import { PatientInterface } from '../../interfaces/patient/IPatient';
 
 function Admin() {
   const [psychologist, setPsychologists] = useState<PsychologistInterface[]>([]);
+  const [pintien, setPintien] = useState<PatientInterface[]>([]);
   const [selectedCertificate, setSelectedCertificate] = useState<string | null>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
@@ -24,8 +27,17 @@ function Admin() {
     }
   };
 
+  const listPintiens = async () => {
+    const res = await ListPatients();
+    if (res) {
+      setPintien(res);
+    }
+  };
+
+
   useEffect(() => {
     listPsychologists();
+    listPintiens();
   }, []);
 
   // ฟังก์ชันเปิด Modal
@@ -59,9 +71,17 @@ function Admin() {
 
   };
 
-  const user = 102496;
-  const psychologists = 47403;
-  const patients = 55093;
+  const user = psychologist.length+pintien.length;
+  const psychologists = psychologist.length;
+  const patients = pintien.length;
+
+  const previousUser = 2; // จำนวนผู้ใช้ก่อนหน้า
+  const currentUser = user; // จำนวนผู้ใช้ปัจจุบัน (จากข้อมูลที่คำนวณไว้)
+
+  const percentageIncrease = (((currentUser - previousUser) / previousUser) * 100).toFixed(2);
+
+  const psychologistPercentage = ((psychologists / user) * 100).toFixed(2);
+  const patientPercentage = ((patients / user) * 100).toFixed(2);
 
   const cbtData = [
     { name: 'Activity Planning', value: 10 },
@@ -93,13 +113,13 @@ function Admin() {
               <div className="card">
                 <div className="card-header">
                   <div className="card-header-icon I">
-                    <i><FaUserDoctor /></i>
+                    <i><FaUsers /></i>
                   </div>
                   <h3 className='I'>จำนวนผู้ใช้ระบบ</h3>
                 </div>
                 <div className="card-body">
-                  <p className="card-value I">$11.67M</p>
-                  <p className="card-percentage I">+33.40%</p>
+                  <p className="card-value I">{user} คน</p>
+                  <p className="card-percentage I">100%</p>
                 </div>
               </div>
               <div className="card">
@@ -110,32 +130,32 @@ function Admin() {
                   <h3 className='II'>จำนวนนักจิตวิทยา</h3>
                 </div>
                 <div className="card-body">
-                  <p className="card-value II">47,403</p>
-                  <p className="card-percentage II">-12.4%</p>
+                  <p className="card-value II">{psychologist.length} คน</p>
+                  <p className="card-percentage II">{psychologistPercentage}%</p>
                 </div>
               </div>
               <div className="card">
                 <div className="card-header">
                   <div className="card-header-icon III">
-                    <i><FaUserDoctor /></i>
+                    <i><FaUserInjured /></i>
                   </div>
                   <h3 className='III'>จำนวนผู้ป่วย</h3>
                 </div>
                 <div className="card-body">
-                  <p className="card-value III">55,093</p>
-                  <p className="card-percentage III">+40%</p>
+                  <p className="card-value III">{pintien.length} คน</p>
+                  <p className="card-percentage III">{patientPercentage}%</p>
                 </div>
               </div>
               <div className="card">
                 <div className="card-header">
                   <div className="card-header-icon IV">
-                    <i><FaUserDoctor /></i>
+                    <i><FaHandHoldingHeart /></i>
                   </div>
                   <h3 className='IV'>เปอร์เซ็นต์รวม</h3>
                 </div>
                 <div className="card-body">
-                  <p className="card-value IV">$12.33B</p>
-                  <p className="card-percentage IV">+4.46%</p>
+                  <p className="card-value IV">{percentageIncrease}%</p>
+                  <p className="card-percentage IV">{percentageIncrease}%</p>
                 </div>
               </div>
             </div>
@@ -175,7 +195,11 @@ function Admin() {
                         </tr>
                       </thead>
                       <tbody>
-                      {psychologist.slice(0, 3).map((psychologist) => (
+                      {psychologist
+                        .filter((psy) => psy.ID !== undefined) // กรองข้อมูลที่ ID ไม่มีค่า
+                        .sort((a, b) => (b.ID ?? 0) - (a.ID ?? 0)) // ใช้ 0 เป็นค่าเริ่มต้นหาก ID เป็น undefined
+                        .slice(0, 3) // เลือก 3 รายการแรก
+                        .map((psychologist) => (                          
                           <tr key={psychologist.ID}>
                             <td>{psychologist.FirstName}</td>
                             <td>{psychologist.LastName}</td>
@@ -184,11 +208,25 @@ function Admin() {
                             <td>
                               {psychologist.CertificateFile ? (
                                 <span
-                                  style={{ color: '#FF88A8', cursor: 'pointer' }}
-                                  onClick={() => psychologist.CertificateFile && showModal(psychologist.CertificateFile)}
-                                >
-                                  แสดงไฟล์
-                                </span>
+                                style={{
+                                  color: '#24252C', 
+                                  cursor: 'pointer',
+                                  textShadow: '0 0 8px rgba(36, 37, 44, 0.2)', // เพิ่มเงาเรืองแสง
+                                  transition: '0.3s ease-in-out', // เพิ่มการเปลี่ยนแปลงที่ราบรื่น
+                                }}
+                                onMouseEnter={(e) => {
+                                  e.currentTarget.style.textShadow = '0 0 15px rgba(255, 136, 168, 0.8)'; // เรืองแสงเพิ่มเมื่อโฮเวอร์
+                                  e.currentTarget.style.color = '#FF88A8'; // เปลี่ยนสีตัวหนังสือเมื่อโฮเวอร์
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.currentTarget.style.textShadow = '0 0 8px rgba(36, 37, 44, 0.5)'; // กลับสู่ปกติ
+                                  e.currentTarget.style.color = '#24252C'; // คืนสีตัวหนังสือเดิม
+                                }}
+                                onClick={() => psychologist.CertificateFile && showModal(psychologist.CertificateFile)}
+                              >
+                                แสดงไฟล์
+                              </span>
+                              
                               ) : (
                                 <span>-</span>
                               )}
