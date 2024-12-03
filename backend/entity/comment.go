@@ -19,7 +19,8 @@ type Comment struct{
 
 type QuickReplies struct{
 	gorm.Model
-	Text string
+	Name string
+	Message string
 
 	PsyID *uint
 	Psychologist Psychologist `gorm:"foreignKey:PsyID"`

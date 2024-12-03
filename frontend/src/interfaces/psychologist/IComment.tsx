@@ -11,3 +11,12 @@ export interface CommentInterface{
     DiaryID?: number;
     Diary?: DiaryPatInterface;
 }
+
+export interface QuickRepliesInterface{
+    ID?: number;
+    Name?: string;
+    Message?: string;
+
+    PsyID?: number;
+    Psychologist?: PsychologistInterface;
+}
