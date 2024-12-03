@@ -13,5 +13,4 @@ export interface CrossSectionalInterface {
     Diary?: DiaryPatInterface;
 
     EmotionID?: number[];  // Array of Emotion IDs
-    Emotions?: EmtionInterface[];  // Array of Emotion objects
 }
