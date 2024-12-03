@@ -27,6 +27,8 @@ import PsyCommentAP from './page/psychologist/psyComment/PsyCommentAP';
 import PsyCommentAD from './page/psychologist/psyComment/PsyCommentAD';
 import PsyCommentBE from './page/psychologist/psyComment/PsyCommentBE';
 import PsyCommentCS from './page/psychologist/psyComment/PsyCommentCS';
+import ListPsycho from './page/admin/listPsycho/listPsycho';
+import ListPat from './page/admin/listPat/listPat';
 
 export default function App() {
 
@@ -34,6 +36,8 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path='admin' element={<Admin/>}/>
+        <Route path='/ListPsycho' element={<ListPsycho/>}/>
+        <Route path='/ListPat' element={<ListPat/>}/>
         {/* ========================================================================= */}
         <Route path='connection' element={<Connection/>}/>
         {/* ========================================================================= */}

@@ -45,8 +45,6 @@ function AntD() {
 
                 },
                 Button:{
-                  
-
                 }
             },
 
@@ -112,14 +110,13 @@ function AntD() {
                         alignItems: 'center',
                         gap: '8px',
                     }}
-                 
                 >
                     <FaSignOutAlt />
                     {!collapsed && 'ออกจากระบบ'}
                 </Button>
         </div>
     </ConfigProvider>
-  )
+    )
 }
 
 export default AntD

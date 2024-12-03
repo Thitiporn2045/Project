@@ -1,0 +1,26 @@
+.listPat{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family:'Noto Sans Thai', sans-serif;
+
+    .bg-main{
+        width: 100vw;
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 3rem auto;
+    }
+}
+
+.listPat .right{
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(141deg, #ffffff 0%, #edf0ff 100%);
+
+    .box-content{
+        margin: 30px;
+        width: calc(100% - 30px);
+        display: grid;
+        grid-template-rows: 4rem auto;
+    }
+}
