@@ -39,6 +39,7 @@ func SetupDatabase() (*gorm.DB, error) {
 		&WorkSchedule{},
 		&WorksheetType{},	
 		&NotePat{},
+		&QuickReplies{},
 	)
 //=========================================================
 	db = database

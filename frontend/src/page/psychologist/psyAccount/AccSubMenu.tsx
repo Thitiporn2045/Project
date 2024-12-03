@@ -3,6 +3,7 @@ import './AccSubMenu.css'
 import PsyProfile from './psyProfile';
 import PsyPassword from './psyPassword';
 import PsyDelAccount from './psyDelAccount';
+import PsyQuickReplies from './psyQuickReplies';
 
 function AccSubMenu() {
     const [activePage, setActivePage] = useState('profile');
@@ -26,6 +27,12 @@ function AccSubMenu() {
                         รหัสผ่าน
                     </li>
                     <li
+                        className={activePage === 'quickReplies' ? 'active' : ''}
+                        onClick={() => setActivePage('quickReplies')}
+                    >
+                        ข้อความตอบกลับ
+                    </li>
+                    <li
                         className={activePage === 'delete' ? 'active' : ''}
                         onClick={() => setActivePage('delete')}
                     >
@@ -36,6 +43,7 @@ function AccSubMenu() {
             <div className="Acc-content">
                 {activePage === 'profile' && <div style={{width:'100%',height:'100%'}}><PsyProfile/></div>}
                 {activePage === 'password' && <div style={{width:'100%',height:'100%'}}><PsyPassword/></div>}
+                {activePage === 'quickReplies' && <div style={{width:'100%',height:'100%'}}><PsyQuickReplies/></div>}
                 {activePage === 'delete' && <div style={{width:'100%',height:'100%'}}><PsyDelAccount/></div>}
             </div>
             
