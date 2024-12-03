@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Button, message, ConfigProvider } from 'antd';
 import { PsychologistInterface } from '../../interfaces/psychologist/IPsychologist';
 import { ListPsychologists, UpdatePsychologist, DeletePsychologistByID } from '../../services/https/psychologist/psy';
+import { RiDeleteBin6Line } from "react-icons/ri";
 import thTH from 'antd/lib/locale/th_TH';
+import logo from '../../assets/logo4.png';
 import './admin.css';
 
 function Admin() {
@@ -93,77 +95,98 @@ const showModalDel = (val: PsychologistInterface) => {
           token: {
               colorText: '#585858',
               fontFamily: 'Noto Sans Thai, sans-serif',
+              colorPrimary: '#24252C'
           }
       }}
   >
-    <div className='Admin' style={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center'}}>
+    <div className='Admin'>
       {contextHolder}
-      <div><h2>Psychologist Table</h2></div>
+      <div className='bg-main'>
 
-      <table>
-        <thead>
-        <tr>
-            <th className="col-first-name">ชื่อจริง</th>
-            <th className="col-last-name">นามสกุล</th>
-            <th className="col-tel">เบอร์โทรศัพท์</th>
-            <th className="col-email">อีเมล</th>
-            <th className="col-work-place">สถานที่ทำงาน</th>
-            <th className="col-certificate">ไฟล์ใบรับรอง</th>
-            <th className="col-working-number">เลขที่ใบรับรอง</th>
-            <th className="col-is-approved">สถานะ</th>
-            <th className="col-actions">จัดการ</th>
-        </tr>
-        </thead>
-        <tbody>
-          {psychologist.map((psychologist) => (
-            <tr key={psychologist.ID}>
-                <td>{psychologist.FirstName}</td>
-                <td>{psychologist.LastName}</td>
-                <td>{psychologist.Tel}</td>
-                <td>{psychologist.Email}</td>
-                <td>{psychologist.WorkPlace}</td>
-            
-                <td>
-                    {psychologist.CertificateFile ? (
-                    <span 
-                        style={{ color: 'blue', cursor: 'pointer' }}
-                        onClick={() => psychologist.CertificateFile && showModal(psychologist.CertificateFile)}
-                    >
-                        แสดงไฟล์
-                    </span>
-                    ) : (
-                    <span>-</span>
-                    )}
-                </td>
-                <td>{psychologist.WorkingNumber}</td>
-                <td>
-                {psychologist.IsApproved ? (
-                  <Button
-                    className="approved"
-                    onClick={()=> handleUpdate(Number(psychologist.ID),Boolean(psychologist.IsApproved))}
-          
-                >
-                    อนุมัติแล้ว
-                </Button>) : (
-                <Button
-                    className="not-approved"
-                    onClick={()=> handleUpdate(Number(psychologist.ID),Boolean(psychologist.IsApproved))}
-          
-                >
-                    รอการอนุมัติ
-                </Button>
-                )}
-                </td>
-                <td>
-                    <Button type="primary" danger
-                    onClick={()=>showModalDel(psychologist)}>
-                    ลบ
-                    </Button>
-                </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+        <div className='left'>
+          <div className="logo-menu">
+              <img className='logo' src={logo} alt="" />
+              {/* <h2 className="logo">CBT Buddies</h2> */}
+          </div>
+          <ul className="list">
+                <li className='list-item'>เมนูอะไรดี</li>
+                <li className='list-item'>เมนูอะไรดี</li>
+                <li className='list-item'>เมนูอะไรดี</li>
+                <li className='list-item'>เมนูอะไรดี</li>
+          </ul>
+        </div>
+        <div className='right'>
+          <div className="box-content">
+            <div className='mainText'><h2>Psychologist Table</h2></div>
+            <div className="boxTable">
+              <table>
+                <thead>
+                <tr>
+                    <th className="col-first-name">ชื่อจริง</th>
+                    <th className="col-last-name">นามสกุล</th>
+                    <th className="col-tel">เบอร์โทรศัพท์</th>
+                    <th className="col-email">อีเมล</th>
+                    <th className="col-work-place">สถานที่ทำงาน</th>
+                    <th className="col-certificate">ไฟล์ใบรับรอง</th>
+                    <th className="col-working-number">เลขที่ใบรับรอง</th>
+                    <th className="col-is-approved">สถานะ</th>
+                    <th className="col-actions">จัดการ</th>
+                </tr>
+                </thead>
+                <tbody>
+                  {psychologist.map((psychologist) => (
+                    <tr key={psychologist.ID}>
+                        <td>{psychologist.FirstName}</td>
+                        <td>{psychologist.LastName}</td>
+                        <td>{psychologist.Tel}</td>
+                        <td>{psychologist.Email}</td>
+                        <td>{psychologist.WorkPlace}</td>
+                    
+                        <td>
+                            {psychologist.CertificateFile ? (
+                            <span 
+                                style={{ color: '#FF88A8', cursor: 'pointer' }}
+                                onClick={() => psychologist.CertificateFile && showModal(psychologist.CertificateFile)}
+                            >
+                                แสดงไฟล์
+                            </span>
+                            ) : (
+                            <span>-</span>
+                            )}
+                        </td>
+                        <td>{psychologist.WorkingNumber}</td>
+                        <td>
+                        {psychologist.IsApproved ? (
+                          <Button
+                            className="approved"
+                            onClick={()=> handleUpdate(Number(psychologist.ID),Boolean(psychologist.IsApproved))}
+                  
+                        >
+                            อนุมัติแล้ว
+                        </Button>) : (
+                        <Button
+                            className="not-approved"
+                            onClick={()=> handleUpdate(Number(psychologist.ID),Boolean(psychologist.IsApproved))}
+                  
+                        >
+                            รอการอนุมัติ
+                        </Button>
+                        )}
+                        </td>
+                        <td>
+                            <Button type="primary" danger
+                            onClick={()=>showModalDel(psychologist)}>
+                            <RiDeleteBin6Line />
+                            </Button>
+                        </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <Modal
         visible={isModalVisible}

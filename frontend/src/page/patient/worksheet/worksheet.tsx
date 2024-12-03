@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import NavbarPat from '../../../component/navbarPat/navbarPat';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import defaultImg from '../../../assets/book cover/cover7.jpg'
+import defaultImg from '../../../assets/book cover/cover35.jpg'
 import './stylePat.css';
 import { WorksheetTypeInterface } from '../../../interfaces/worksheetType/IWorksheetType';
 import { ListWorkSheetType } from '../../../services/https/workSheetType/workSheetType';

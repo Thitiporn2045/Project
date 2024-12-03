@@ -1,18 +1,46 @@
 import React, { useEffect, useState } from 'react';
 import NavbarPat from '../../../../component/navbarPat/navbarPat';
 import './stylePat.css';
-import { Button, Input, Select, Tooltip, Tag, ConfigProvider } from 'antd';
+import { Button, Input, Select, Tooltip, Tag, ConfigProvider, message } from 'antd';
 import { BiSolidEditAlt, BiSolidLockOpen } from "react-icons/bi";
 import { GetEmotionByPatientID } from '../../../../services/https/emotion/emotion';
 import { EmtionInterface } from '../../../../interfaces/emotion/IEmotion';
+import { useSearchParams } from 'react-router-dom';
+import { DiaryPatInterface } from '../../../../interfaces/diary/IDiary';
+import { GetDiaryByDiaryID } from '../../../../services/https/diary';
+import { CreateCrossSectional } from '../../../../services/https/cbt/crossSectional/crossSectional';
+import { CrossSectionalInterface } from '../../../../interfaces/crossSectional/ICrossSectional';
 
 const CrossSectional: React.FC = () => {
   const patID = localStorage.getItem('patientID'); // ดึงค่า patientID จาก localStorage
   const [emotionPatients, setEmotionPatients] = useState<EmtionInterface[]>([]); // สถานะเก็บข้อมูลอารมณ์ของผู้ป่วย
-  const [thoughtsTags, setThoughtsTags] = useState<{ value: number; label: string; color: string; emotion: string }[]>([]);
-  const [behaviorTags, setBehaviorTags] = useState<{ value: number; label: string; color: string; emotion: string }[]>([]);
-  const [bodilySensationsTags, setBodilySensationsTags] = useState<{ value: number; label: string; color: string; emotion: string }[]>([]);
-  const [emotionsTags, setEmotionsTags] = useState<{ value: number; label: string; color: string; emotion: string }[]>([]);
+  const [selectEmotion, setSelectEmotion] = useState<{ value: number; label: string; color: string; emotion: string }[]>([]);
+  const [messageApi, contextHolder] = message.useMessage();
+
+
+  const [searchParams] = useSearchParams(); // ใช้สำหรับดึงค่าจาก query parameter
+  const diaryID = searchParams.get('id'); // ดึงค่าของ 'id' จาก URL
+  const [diary, setDiary] = useState<DiaryPatInterface | null>(null); // สถานะเก็บข้อมูลไดอารี่
+
+  // สถานะสำหรับข้อมูลฟอร์ม
+  const [situation, setSituation] = useState('');
+  const [thought, setThought] = useState('');
+  const [behavior, setBehavior] = useState('');
+  const [bodilySensation, setBodilySensation] = useState('');
+
+  const fetchDiaryByDiary = async () => {
+    if (diaryID) {
+      try {
+        const res = await GetDiaryByDiaryID(Number(diaryID)); // เรียกใช้ API โดยส่งค่า id
+        if (res) {
+          setDiary(res); // เก็บข้อมูลที่ได้จาก API ลงในสถานะ
+        }
+        console.log('Diary:', res); // แสดงข้อมูลที่ได้รับในคอนโซล
+      } catch (error) {
+        console.error('Error fetching diary:', error); // แสดงข้อผิดพลาด
+      }
+    }
+  };
   
   const fetchEmotionPatientData = async () => {
     const res = await GetEmotionByPatientID(Number(patID)); // เรียกฟังก์ชันเพื่อดึงข้อมูลจาก API
@@ -24,6 +52,7 @@ const CrossSectional: React.FC = () => {
 
   useEffect(() => {
     fetchEmotionPatientData();
+    fetchDiaryByDiary();
   }, []); // useEffect จะทำงานแค่ครั้งเดียวเมื่อคอมโพเนนต์ถูกแสดง
 
   const handleSelectChange = (selectedValues: number[], setTags: React.Dispatch<React.SetStateAction<{ value: number; label: string; color: string; emotion: string }[]>>) => {
@@ -68,6 +97,31 @@ const CrossSectional: React.FC = () => {
     };
   };
   
+  const handleSave = async () => {
+    const emotionIDs = selectEmotion.map(emotion => emotion.value);
+    const data: CrossSectionalInterface = {
+      Situation: situation,
+      Thought: thought,
+      Behavior: behavior,
+      BodilySensation: bodilySensation,
+      DiaryID: Number(diaryID),
+      EmotionID: emotionIDs,
+    };
+    // แสดงข้อมูลใน console.log ก่อนการบันทึก
+    console.log('ข้อมูลที่บันทึก:', data);
+  
+    try {
+      const response = await CreateCrossSectional(data);
+      if (response.status) {
+        messageApi.success("บันทึกข้อมูลสำเร็จ");
+      } else {
+        messageApi.error(response.message || "เกิดข้อผิดพลาดในการบันทึกข้อมูล");
+      }
+    } catch (error) {
+      messageApi.error("ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้");
+      console.error(error);
+    }
+  };  
 
   return (
     <ConfigProvider
@@ -78,6 +132,7 @@ const CrossSectional: React.FC = () => {
       }}
     >
       <div className="crossSectional">
+      {contextHolder} {/* Make sure this line is present */}
         <div className="befor-main">
           <div className='main-body'>
             <div className='sidebar'>
@@ -86,19 +141,28 @@ const CrossSectional: React.FC = () => {
             <div className="main-background">
               <header>
                 <div className='on'>
-                  <h1 className="title">Week1</h1>
+                  <h1 className="title">{diary?.Name}</h1>
                 </div>
                 <div className='lower'>
                   <div className="name">
-                    <h2 className="typebook">Activity crossSectional</h2>
+                    <h2 className="typebook">{diary?.WorksheetType?.Name || "ไม่มีข้อมูล"}</h2>
                   </div>
                   <div className="emo">
-                    <div className="content-emo"></div>
+                  <Select
+                    className='content-emo'
+                    mode="multiple"
+                    tagRender={createTagRender(selectEmotion)}
+                    options={emotionPatients.map(emotion => ({
+                      value: emotion.ID,
+                      label: `${emotion.Emoticon} ${emotion.Name}`,
+                    }))}
+                    placeholder="ความรู้สึก..."
+                    optionLabelProp="label"
+                    optionFilterProp="label"
+                    onChange={(values) => handleSelectChange(values, setSelectEmotion)} // ส่ง setThoughtsTags
+                  />
                     <div className='button'>
-                      <Tooltip title="STATUS">
-                        <Button type="primary" shape="circle" icon={<BiSolidLockOpen />} />
-                      </Tooltip>
-                      <Tooltip title="EDIT">
+                      <Tooltip title="แก้ไข">
                         <Button type="primary" shape="circle" icon={<BiSolidEditAlt />} />
                       </Tooltip>
                     </div>
@@ -111,10 +175,15 @@ const CrossSectional: React.FC = () => {
                     <div className='head'>
                       <div className='onTitle'>
                         <h2 className="title">Situation to Trigger</h2>
-                        <button className="btn-submit">บันทึก</button>
+                        <button className="btn-submit" onClick={handleSave}>บันทึก</button>
                       </div>
                       <div className='lowerInput'>
-                        <Input className='mainTitle' placeholder="เหตุการณ์หรือสิ่งที่กระตุ้น..." />
+                        <Input 
+                          className='mainTitle' 
+                          placeholder="เหตุการณ์หรือสิ่งที่กระตุ้น..." 
+                          value={situation} 
+                          onChange={(e) => setSituation(e.target.value)} 
+                        />
                       </div>
                     </div>
                     <div className="lower-content">
@@ -122,77 +191,40 @@ const CrossSectional: React.FC = () => {
                         <div className='content-box'>
                           <h3>Thoughts</h3>
                           <div className="bg-input">
-                            <textarea className='content-input' placeholder="ความคิด..." />
-                            <Select
-                              className='feeling-input'
-                              mode="multiple"
-                              tagRender={createTagRender(thoughtsTags)}
-                              options={emotionPatients.map(emotion => ({
-                                value: emotion.ID,
-                                label: `${emotion.Emoticon} ${emotion.Name}`,
-                              }))}
-                              placeholder="ความรู้สึก..."
-                              optionLabelProp="label"
-                              optionFilterProp="label"
-                              onChange={(values) => handleSelectChange(values, setThoughtsTags)} // ส่ง setThoughtsTags
-                            />
+                          <textarea 
+                            className='content-input' 
+                            placeholder="ความคิด..." 
+                            value={thought} 
+                            onChange={(e) => setThought(e.target.value)} 
+                          />
                           </div>
                         </div>
                         <div className='content-box'>
                           <h3>Behavior</h3>
                           <div className="bg-input">
-                            <textarea className='content-input' placeholder="พฤติกรรม..." />
-                            <Select
-                              className='feeling-input'
-                              mode="multiple"
-                              tagRender={createTagRender(behaviorTags)}
-                              options={emotionPatients.map(emotion => ({
-                                value: emotion.ID,
-                                label: `${emotion.Emoticon} ${emotion.Name}`,
-                              }))}
-                              placeholder="ความรู้สึก..."
-                              optionLabelProp="label"
-                              optionFilterProp="label"
-                              onChange={(values) => handleSelectChange(values, setBehaviorTags)} // ส่ง setThoughtsTags
+                          <textarea 
+                              className='content-input' 
+                              placeholder="พฤติกรรม..." 
+                              value={behavior} 
+                              onChange={(e) => setBehavior(e.target.value)} 
                             />
                           </div>
                         </div>
                         <div className='content-box'>
                           <h3>Bodily Sensations</h3>
                           <div className="bg-input">
-                            <textarea className='content-input' placeholder="พฤติกรรมผลกระทบที่ควบคุมไม่ได้..." />
-                            <Select
-                              className='feeling-input'
-                              mode="multiple"
-                              tagRender={createTagRender(bodilySensationsTags)}
-                              options={emotionPatients.map(emotion => ({
-                                value: emotion.ID,
-                                label: `${emotion.Emoticon} ${emotion.Name}`,
-                              }))}
-                              placeholder="ความรู้สึก..."
-                              optionLabelProp="label"
-                              optionFilterProp="label"
-                              onChange={(values) => handleSelectChange(values, setBodilySensationsTags)} // ส่ง setThoughtsTags
-                            />
+                          <textarea 
+                            className='content-input' 
+                            placeholder="พฤติกรรมผลกระทบที่ควบคุมไม่ได้..." 
+                            value={bodilySensation} 
+                            onChange={(e) => setBodilySensation(e.target.value)} 
+                          />
                           </div>
                         </div>
                         <div className='content-box'>
                           <h3>Emotions</h3>
                           <div className="bg-input">
                             <textarea className='content-input' placeholder="อารมณ์..." />
-                            <Select
-                              className='feeling-input'
-                              mode="multiple"
-                              tagRender={createTagRender(emotionsTags)}
-                              options={emotionPatients.map(emotion => ({
-                                value: emotion.ID,
-                                label: `${emotion.Emoticon} ${emotion.Name}`,
-                              }))}
-                              placeholder="ความรู้สึก..."
-                              optionLabelProp="label"
-                              optionFilterProp="label"
-                              onChange={(values) => handleSelectChange(values, setEmotionsTags)} // ส่ง setThoughtsTags
-                            />
                           </div>
                         </div>
                       </div>

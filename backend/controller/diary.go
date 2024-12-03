@@ -108,6 +108,26 @@ func GetDiaryByPatientID(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": diaries})
 }
 
+func GetDiaryByDiaryID(c *gin.Context) {
+    var diary entity.Diary
+
+    // ดึงค่า ID จาก Query Parameter
+    diaryID := c.Query("id")
+    if diaryID == "" {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Diary ID is required"})
+        return
+    }
+
+    // ใช้คำสั่ง SQL ในการดึงข้อมูลเฉพาะ Diary ที่มี ID ตรงกัน
+    if err := entity.DB().Preload("Patient").Preload("Patient.Gender").Preload("WorksheetType").Raw("SELECT * FROM diaries WHERE id = ?", diaryID).First(&diary).Error; err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
+
+    // Return the found diary
+    c.JSON(http.StatusOK, gin.H{"data": diary})
+}
+
 
 func UpdateDiaryPat(c *gin.Context) {
 	var diaries entity.Diary

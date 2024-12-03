@@ -153,7 +153,7 @@
 .crossSectional .main-body .main-background .bg-maincontent .bg-content .content{
     display: grid;
     grid-template-rows: 6rem auto;
-    width: 100%;
+    width: 88.5vw;
     height: 100%;
 }
 

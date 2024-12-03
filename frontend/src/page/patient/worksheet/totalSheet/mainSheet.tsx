@@ -42,6 +42,17 @@ function MainSheet() {
 
     // Function to navigate based on the WorksheetTypeID
     const navigateToDiaryPage = (diary: DiaryPatInterface) => {
+        const currentDate = dayjs();
+        const startDate = dayjs(diary.Start, 'DD-MM-YYYY');
+        const endDate = dayjs(diary.End, 'DD-MM-YYYY');
+    
+        if (currentDate.isBefore(startDate) || currentDate.isAfter(endDate)) {
+            if (!currentDate.isSame(startDate, 'day') && !currentDate.isSame(endDate, 'day')) {
+                messageApi.error('ไม่สามารถเข้าถึงไดอารี่ เนื่องจากอยู่นอกช่วงเวลาที่กำหนด');
+                return;
+            }
+        }        
+    
         let routePath = '';
         switch (diary.WorksheetTypeID) {
             case 1:
@@ -62,6 +73,7 @@ function MainSheet() {
         }
         navigate(`${routePath}?id=${diary.ID}`);
     };
+    
 
     // Toggle popup visibility
     function toggle() {

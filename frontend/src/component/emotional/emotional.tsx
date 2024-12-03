@@ -233,10 +233,11 @@ const EmotionalWeb = () => { // คอมโพเนนต์หลักที
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    flexDirection: 'column'
+                                    flexDirection: 'column',
+                                    marginLeft: '10rem',
                                 }}
                             >
-                                <div className="Loading-Data"></div>
+                                <div className="Loading-Data-Self"></div>
                                 <div className="text">ไม่มีข้อมูล...</div>
                             </div>
                         ) : (

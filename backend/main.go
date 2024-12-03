@@ -31,6 +31,7 @@ func main() {
 			r.GET("/pat/getNote/:id", controller.GetNotesByPatientID)
 			r.GET("/pat/workSheetType", controller.ListWorkSheetType)
 			r.GET("/pat/getDiary/:id", controller.GetDiaryByPatientID)
+			r.GET("/pat/getDiary/ByDiary", controller.GetDiaryByDiaryID)
 			r.GET("/pat/get/Emotion/:id", controller.GetEmotionByPatientID)
 
 			r.PATCH("/patients", controller.UpdatePatient)
@@ -43,7 +44,8 @@ func main() {
 			r.POST("/pat/checkPassword",controller.CheckOldPasswordPatient)
 			r.POST("/pat/note",controller.CreateNotePat)
 			r.POST("/pat/creatDiary",controller.CreateDiaryPat)	
-			r.POST("/pat/creat/Emotion",controller.CreateEmotion)	
+			r.POST("/pat/creat/Emotion",controller.CreateEmotion)
+			r.POST("/pat/creat/CrossSectional",controller.CreateCrossSectional)	
 			
 			r.DELETE("/patients/:id", controller.DeletePatient)
 			r.DELETE("/pat/delNote/:id", controller.DeleteNotePat)

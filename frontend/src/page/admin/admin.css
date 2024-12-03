@@ -1,77 +1,183 @@
 .Admin{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
     font-family:'Noto Sans Thai', sans-serif;
-}
-.Admin table {
-    width: 80%;
-    border-collapse: collapse;
-    font-family:'Noto Sans Thai', sans-serif;
-    color: #585858;
 
-  }
-  
-  .Admin th,.Admin td {
+    .bg-main{
+        width: 100vw;
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 15rem auto;
+    }
+}
+
+.Admin .left{
+    width: 100%;
+    height: 100%;
+    /* background-color: #ffffff; */
+    background-color: #24252C;
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border-right: 2px solid rgba(255, 255, 255, .2);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+
+
+    .logo-menu{
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: 70px;
+        margin-top: 10px;
+        margin-left: 10px;
+
+        .logo{
+            width: 90%;
+            height: 70px;
+            object-fit: cover;
+            transition: .3s;
+        }
+    }
+
+    .list{
+        top: 15%;
+        left: 30px;
+        position: absolute;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: .5s;
+
+        .list-item{
+            width: 100%;
+            height: 50px;
+            list-style: none;
+            line-height: 50px;
+            color: #edf0ff;
+        }
+    }
+
+    
+    
+}
+
+.Admin .right{
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(141deg, #ffffff 0%, #edf0ff 100%);
+
+    .box-content{
+        margin: 30px;
+        width: calc(100% - 30px);
+        display: grid;
+        grid-template-rows: 4rem auto;
+
+        .mainText{
+            width: 100%;
+            font-size: 3rem;
+            margin-top: -20px;
+        }
+
+
+        .boxTable{
+            width: 100%;
+
+        }
+    }
+}
+
+.Admin table {
+    width: 97.5%;
+    font-family:'Noto Sans Thai', sans-serif;
+    color: #9699aa;
+    border-spacing: 0 6px;
+    overflow: hidden;
+
+}
+
+.Admin th {
     border: 1px solid #ddd;
-    text-align: middle;
+    text-align: center;
     padding: 8px;
-  }
-  
-  .Admin thead th {
-    background-color: #525252;
-  }
-  
-  .Admin tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-  
-  .col-first-name { width: 10%; }
-  .col-last-name { width: 10%; }
-  .col-tel { width: 10%; }
-  .col-email { width: 10%; }
-  .col-work-place { width: 15%; }
-  .col-certificate { width: 8%; }
-  .col-working-number {width: 5%;}
-  .col-is-approved { width: 5%; }
-  .col-actions { width: 5%; }
+}
+
+.Admin td{
+    text-align: center;
+    padding: 18px 12px;
+    gap: 1rem;
+}
+
+.Admin thead th {
+    font-size: .9rem;
+    font-weight: 500;
+    color: #939ac2;
+    border: none;
+}
+
+
+.Admin tbody tr{
+    background-color: #ffffff;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+    /* box-shadow: 0 2rem 3rem rgba(132, 139, 200, 0.18); */
+}
+
+.Admin tbody tr td:nth-child(1){
+    border-radius: 10px 0 0 10px;
+}
+
+.Admin tbody tr td:last-child{
+    border-radius: 0 10px 10px 0;
+}
+
+
 
 /* ปรับสีพื้นหลังของแถว */
 .Admin tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-/* สีของส่วนหัวตาราง */
-.Admin th {
-    background-color: #4CAF50;
-    color: white;
+    background-color: #fafaff;
 }
 
 /* ปุ่ม Not Approved */
 .Admin button.not-approved {
-    background-color: #007bff;
-    color: white;
+    background-color: #b4d3ff;
+    color: #24252C;
     border: none;
-    padding: 8px 16px;
+    padding: 7px 14px;
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: 20px;
+    width: 85%;
+
 }
 
 /* ปุ่ม Approved */
 .Admin button.approved {
-    background-color: #28a745;
-    color: white;
+    background-color: #ffc4d5;
+    color: #F83968;
     border: none;
-    padding: 8px 16px;
+    padding: 7px 14px;
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: 20px;
+    width: 80%;
 }
 
 /* ปุ่ม Delete */
-.Admin button.delete {
-    background-color: #ff4d4d;
-    color: white;
+.Admin .ant-btn-color-dangerous.ant-btn-variant-solid {
+    font-size: 1.3rem;
+    color: #939ac2;
     border: none;
     padding: 8px 16px;
     cursor: pointer;
     border-radius: 4px;
+    background: none;
+    box-shadow: none;
+    transition: .3s;
+}
+
+.Admin .ant-btn-color-dangerous.ant-btn-variant-solid:hover{
+    background: none;
+    border-radius: 20px;
 }
 
 /* สไตล์ของลิงก์สำหรับดูไฟล์ */
@@ -87,17 +193,22 @@
     box-sizing: border-box;
 }
 
-/* กำหนดสีของสถานะ Approved */
-.Admin .approved {
-    color: #28a745;
-}
-
 /* ปุ่ม Not Approved */
 .Admin .not-approved {
-    background-color: #007bff;
-    color: white;
+    background-color: #FF9BB5;
+    color: #F83968;
     border: none;
     padding: 8px 16px;
     cursor: pointer;
     border-radius: 4px;
 }
+
+.col-first-name { width: 10%; }
+.col-last-name { width: 10%; }
+.col-tel { width: 10%; }
+.col-email { width: 10%; }
+.col-work-place { width: 15%; }
+.col-certificate { width: 8%; }
+.col-working-number {width: 5%;}
+.col-is-approved { width: 5%; }
+.col-actions { width: 5%; }

@@ -63,6 +63,25 @@ export async function GetDiaryByPatientID(id: Number | undefined) {
   return res;
 }
 
+
+export async function GetDiaryByDiaryID(id: Number | undefined) {
+  const requestOptions = {
+  method: "GET",
+  };
+
+  let res = await fetch(`${apiUrl}/pat/getDiary/ByDiary?id=${id}`, requestOptions)
+  .then((response) => response.json())
+  .then((res) => {
+      if (res.data) {
+      return res.data;
+      } else {
+      return false;
+      }
+  });
+
+  return res;
+}
+
 export async function UpdateDiaryPat(data: DiaryPatInterface) {
   const requestOptions = {
   method: "PATCH",

@@ -12,7 +12,7 @@ type Emotion struct{
 
 	ActivityDiary []ActivityDiary `gorm:"foreignKey:EmotionID"`
 	ActivityPlanning []ActivityPlanning `gorm:"foreignKey:EmotionID"`
-	CrossSectional []CrossSectional `gorm:"foreignKey:EmotionID"`
-	BehavioralExp []BehavioralExp `gorm:"foreignKey:EmotionID"`
+	CrossSectionals []CrossSectional `gorm:"many2many:cross_sectional_emotions;"`	
+	BehavioralExp []BehavioralExp `gorm:"many2many:cross_sectional_emotions;"`
 	Patient  Patient  `gorm:"foreignKey:PatID"` // Correct foreign key reference
 }
