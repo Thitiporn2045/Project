@@ -66,7 +66,8 @@ return(
         borderRadius: '15px',
         padding: '20px', // เพิ่ม padding
         border: '1px solid #EBF1F5',
-        boxShadow: '0 2rem 3rem rgba(132, 139, 200, 0.18)',
+        boxShadow: 'rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px',
+        zIndex: 1,  // เพิ่ม z-index เพื่อให้แน่ใจว่ามีลำดับซ้อนที่ถูกต้อง
     }}
     >
         <div ref={chartRef} style={{ height: 300, width: '100%' }} />

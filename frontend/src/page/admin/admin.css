@@ -159,9 +159,38 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1.2rem;
+    margin-bottom: -20px;
+}
+
+.Admin .middle .list{
+    margin: 0 30px 30px 30px;
+    /* display: grid;
+    grid-template-columns: repeat(2, 1fr); */
+    background: #ffffff;
+    border-radius: 15px;
+    border: 1px solid #EBF1F5;
+    box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
 }
 
 
 .Admin .right{
     background: #edf0ff;;
+}
+
+
+.Admin .Loading-Data{
+    background: url('../../assets/noData.gif');
+    background-size: cover;
+    background-position: center;
+    width: 340px;
+    height: 210px; 
+    margin-top: -40px;
+    border: 5px solid transparent ; 
+    border-radius: 10px;
+    opacity: 0.5;
+}
+
+.Admin .text{
+    color: var(--color-font2);
+    font-family: 'Noto Sans Thai', sans-serif;
 }

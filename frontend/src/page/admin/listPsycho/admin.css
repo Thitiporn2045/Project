@@ -40,7 +40,7 @@
 .listPsycho table {
     width: 97.5%;
     font-family:'Noto Sans Thai', sans-serif;
-    color: #9699aa;
+    color: #61626c;
     border-spacing: 0 6px;
     overflow: hidden;
 
@@ -61,7 +61,7 @@
 .listPsycho thead th {
     font-size: .9rem;
     font-weight: 500;
-    color: #939ac2;
+    color: #9095b2;
     border: none;
 }
 
@@ -83,13 +83,13 @@
 
 
 /* ปรับสีพื้นหลังของแถว */
-.listPsycho tr:nth-child(even) {
+/* .listPsycho tr:nth-child(even) {
     background-color: #fafaff;
-}
+} */
 
 /* ปุ่ม Not Approved */
 .listPsycho button.not-approved {
-    background-color: #b4d3ff;
+    background-color: #EDF2F8;
     color: #24252C;
     border: none;
     padding: 7px 14px;
@@ -101,8 +101,8 @@
 
 /* ปุ่ม Approved */
 .listPsycho button.approved {
-    background-color: #ffc4d5;
-    color: #F83968;
+    background-color: #24252C;
+    color: #ffffff;
     border: none;
     padding: 7px 14px;
     cursor: pointer;

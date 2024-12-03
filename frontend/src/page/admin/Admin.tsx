@@ -6,8 +6,59 @@ import Navbar from '../../component/admin/navbar/navbar';
 import { FaUserDoctor } from "react-icons/fa6";
 import DonutGraph from '../../component/admin/Graph/donutGraph';
 import BarChart from '../../component/admin/Graph/barChart';
+import { PsychologistInterface } from '../../interfaces/psychologist/IPsychologist';
+import { ListPsychologists, UpdatePsychologist } from '../../services/https/psychologist/psy';
 
 function Admin() {
+  const [psychologist, setPsychologists] = useState<PsychologistInterface[]>([]);
+  const [selectedCertificate, setSelectedCertificate] = useState<string | null>(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
+
+
+  // ดึงข้อมูลนักจิตวิทยาจาก API
+  const listPsychologists = async () => {
+    const res = await ListPsychologists();
+    if (res) {
+    setPsychologists(res);
+    }
+  };
+
+  useEffect(() => {
+    listPsychologists();
+  }, []);
+
+  // ฟังก์ชันเปิด Modal
+  const showModal = (base64: string) => {
+    setSelectedCertificate(base64);
+    setIsModalVisible(true);
+  };
+
+  // ฟังก์ชันปิด Modal
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    setSelectedCertificate(null);
+  };
+  //=====================================================================
+  const handleUpdate = async (id: number, isApproved: boolean) => {
+
+    const psychologistToUpdate = psychologist.find((psy) => psy.ID === id);
+
+    const updatedPsychologist = {
+    ...psychologistToUpdate,
+    IsApproved: !isApproved, // Toggle the approval status
+    };
+    const res = await UpdatePsychologist(updatedPsychologist);
+
+    if (res.status) {
+    messageApi.success("อัปเดตการอนุมัติแล้ว!");
+    listPsychologists(); 
+    } else {
+    messageApi.error(`เกิดข้อผิดพลาด: ${res.message}`);
+    }
+
+  };
+
   const user = 102496;
   const psychologists = 47403;
   const patients = 55093;
@@ -32,6 +83,7 @@ function Admin() {
       }}
     >
       <div className='Admin'>
+      {contextHolder}
         <div className='bg-main'>
           <div className='left'>
             <Navbar></Navbar>
@@ -92,13 +144,118 @@ function Admin() {
               <DonutGraph users={user} psychologists={psychologists} patients={patients} />
             </div>
             <div className="list">
-              
+              <div className="listPsycho">
+                <div className="boxTable">
+                  {psychologist.length === 0 ? (
+                    <div
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexDirection: 'column',
+                        transition: '.3s',
+                      }}
+                    >
+                      <div className="Loading-Data"></div>
+                      <div className="text">ยังไม่ได้เลือกอิโมจิ...</div>
+                    </div>
+                  ) : (
+                    <table>
+                      <thead>
+                        <tr>
+                          <th className="col-first-name">ชื่อจริง</th>
+                          <th className="col-last-name">นามสกุล</th>
+                          <th className="col-email">อีเมล</th>
+                          <th className="col-work-place">สถานที่ทำงาน</th>
+                          <th className="col-certificate">ไฟล์ใบรับรอง</th>
+                          <th className="col-working-number">เลขที่ใบรับรอง</th>
+                          <th className="col-is-approved">สถานะ</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {psychologist.slice(0, 3).map((psychologist) => (
+                          <tr key={psychologist.ID}>
+                            <td>{psychologist.FirstName}</td>
+                            <td>{psychologist.LastName}</td>
+                            <td>{psychologist.Email}</td>
+                            <td>{psychologist.WorkPlace}</td>
+                            <td>
+                              {psychologist.CertificateFile ? (
+                                <span
+                                  style={{ color: '#FF88A8', cursor: 'pointer' }}
+                                  onClick={() => psychologist.CertificateFile && showModal(psychologist.CertificateFile)}
+                                >
+                                  แสดงไฟล์
+                                </span>
+                              ) : (
+                                <span>-</span>
+                              )}
+                            </td>
+                            <td>{psychologist.WorkingNumber}</td>
+                            <td>
+                              {psychologist.IsApproved ? (
+                                <Button
+                                  className="approved"
+                                  onClick={() => handleUpdate(Number(psychologist.ID), Boolean(psychologist.IsApproved))}
+                                >
+                                  อนุมัติแล้ว
+                                </Button>
+                              ) : (
+                                <Button
+                                  className="not-approved"
+                                  onClick={() => handleUpdate(Number(psychologist.ID), Boolean(psychologist.IsApproved))}
+                                >
+                                  รอการอนุมัติ
+                                </Button>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}
+                  <div style={{
+                    width: '100%',
+                    textAlign: 'center',
+                    color: '#EBF1F5',
+                    textDecoration: 'none',
+                    marginTop: '5px'
+                  }}>
+                    <a 
+                      href="/ListPsycho" 
+                      style={{ 
+                        textDecoration: 'none',  // เอาเส้นใต้ลิงก์ออก
+                        color: '#9095b2' // เปลี่ยนสีตัวหนังสือ
+                      }}
+                    >
+                      ดูเพิ่มเติม
+                    </a>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           {/* <div className='right'>
           </div> */}
         </div>
       </div>
+      <Modal
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        footer={null}
+        style={{top:0,paddingTop:20,paddingBottom:0}} 
+        width="50%" // ตั้งกว้างเต็ม
+        height="100%" // ตั้งสูงเต็ม
+    >
+        <iframe
+            src={`${selectedCertificate}`}
+            width="100%"
+            height="640px"
+            style={{marginTop:25,border:'none',borderRadius:'10px'}}
+        />
+    </Modal>
     </ConfigProvider>
   );
 }
