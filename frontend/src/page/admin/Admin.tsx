@@ -211,7 +211,7 @@ function Admin() {
                                 style={{
                                   color: '#24252C', 
                                   cursor: 'pointer',
-                                  textShadow: '0 0 8px rgba(36, 37, 44, 0.2)', // เพิ่มเงาเรืองแสง
+                                  textShadow: '0 0 8px rgba(36, 37, 44, 0.1)', // เพิ่มเงาเรืองแสง
                                   transition: '0.3s ease-in-out', // เพิ่มการเปลี่ยนแปลงที่ราบรื่น
                                 }}
                                 onMouseEnter={(e) => {
@@ -275,8 +275,24 @@ function Admin() {
               </div>
             </div>
           </div>
-          {/* <div className='right'>
-          </div> */}
+          <div className='right'>
+            <div className="bgBox">
+              <div className="profile">
+                  <div className="textContent">
+                      <h3>มาสเตอร์</h3>
+                      <h4>admin@gmail.com</h4>
+                  </div>
+                  <div className="picture">
+                      <div className="bdImg">
+                        <img src="https://i.pinimg.com/474x/b2/34/e8/b234e836124d89bbb72bb4363fc9e3bd.jpg" alt="" />
+                      </div>
+                  </div>
+              </div>
+              <div className="boxContent">
+
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <Modal

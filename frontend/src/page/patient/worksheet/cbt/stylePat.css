@@ -70,21 +70,47 @@
 
 .crossSectional .main-body .main-background{
     width: 100%;
-    height: 115vh;
-    background-color: var(--color-backgroun-secondary1);
+    height: 100vh;
+    background: var(--color-backgroun-secondary4);
+    display: grid;
+    grid-template-columns: auto 19rem;
 }
 
 .crossSectional .main-body .main-background header{
-    margin: 0 40px;
-    width: calc(100% -20px);
-    height: 130px;
-    display: block;
+    margin: 10px -10px;
+    width: 97%;
+    height: 96%;
     align-items: center;
+    background-color: var(--color-backgroun-secondary2);
+    border-radius: var(--border-radius-3);
+
+    .btn-submit{
+        margin: 25px 20px;
+        height: 40px;
+        width: 87%;
+        color: #ffffff;
+        background: var(--color-backgroun-main2);
+        font-size: 1rem;
+        font-weight: 600;
+        border: none;
+        border-radius: var(--border-radius-1);
+        box-shadow: rgba(230, 224, 255, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
+        font-family: 'Noto Sans Thai', sans-serif;
+        cursor: pointer;
+        transition: .3s;
+    }
+    
+    .btn-submit:hover{
+        color: var(--color-font1);
+        background: var(--color-backgroun-secondary1);
+        transform: scale(1.05);
+        transition: .3s;
+    }
 }
 
 .crossSectional .main-body .main-background header .on{
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
 }
 
@@ -97,25 +123,54 @@
 .crossSectional .main-body .main-background header .lower{
     margin-top: -30px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-
 }
 
 .crossSectional .main-body .main-background header .lower .typebook{
     font-size: 1rem;
 }
 
-.crossSectional .main-body .main-background header .lower .emo{
-    display: flex;
-    gap: 20px;
+.crossSectional .main-body .main-background header .emo{
+    margin: 20px;
+    width: calc(100% -20px);
+    height: 70%;
+    background-color: var(--color-backgroun-secondary4);
+    border-radius: var(--border-radius-2);
+    display: grid;
+    grid-template-rows: 15fr 1fr;
+
+    .showEmo {
+        margin: 20px auto; /* Center the container */
+        max-width: 600px; /* จำกัดความกว้าง */
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        justify-content: center;
+        align-content: flex-start;
+    }      
 }
 
-.crossSectional .main-body .main-background header .lower .emo .content-emo{
-    width: 60vw;
+.crossSectional .hover-menu{
+    position: absolute;
+    margin-top: .6rem;
+    margin-bottom: 4rem;
+    z-index: 100;
+    color: var(--color-font1);
+    display: flex;
+    gap: .5rem;
+    background-color: rgba(255, 255, 255, 0.658);
+    padding: .5rem .5rem;
+    transition: 0.3s;
+    border: none;
+    border-radius: var(--border-radius-2);
+}
+
+.crossSectional .ant-select-multiple .ant-select-selection-overflow {
+    position: relative;
+    width: 100%;
     height: 35px;
-    border-radius: var(--border-radius-3);
-    background-color: var(--color-backgroun-secondary2);
+    display: flex;
 }
 
 .crossSectional .main-body .main-background header .lower .emo .button{
@@ -133,8 +188,8 @@
 
 /* ------------  header   ------------------- */
 .crossSectional .main-body .main-background .bg-maincontent{
-    margin: -10px 40px;
-    width: calc(100% -20px);
+    margin: 10px 20px;
+    width: 73vw;
     height: 98vh;
     display: flex;
     align-items: center;
@@ -144,7 +199,7 @@
 
 .crossSectional .main-body .main-background .bg-maincontent .bg-content{
     margin: 5px 20px 0 20px;
-    width: calc(100% -20px);
+    width: 70.2vw;
     height: 94%;
     border-radius: var(--border-radius-3);
     background-color: var(--color-backgroun-secondary4);
@@ -153,7 +208,7 @@
 .crossSectional .main-body .main-background .bg-maincontent .bg-content .content{
     display: grid;
     grid-template-rows: 6rem auto;
-    width: 88.5vw;
+    width: 68.5vw;
     height: 100%;
 }
 
@@ -165,7 +220,7 @@
 }
 
 .crossSectional .main-body .main-background .bg-maincontent .bg-content .head{
-    margin: 0 40px 0 40px;
+    margin: 0 20px 0 20px;
     width: calc(100% -20px);
     height: 94%;
 }
@@ -174,25 +229,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-.crossSectional .main-body .main-background .bg-maincontent .bg-content .head .onTitle .btn-submit{
-    height: 30px;
-    width: 80px;
-    color: var(--color-font2);
-    background: var(--color-backgroun-secondary3);
-    font-weight: 600;
-    border: none;
-    border-radius: var(--border-radius-1);
-    box-shadow: rgba(230, 224, 255, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
-    font-family: 'Noto Sans Thai', sans-serif;
-}
-
-.crossSectional .main-body .main-background .bg-maincontent .bg-content .head .onTitle .btn-submit:hover{
-    color: var(--color-backgroun-secondary2);
-    background: var(--color-secondary1);
-    transform: scale(1.05);
-    transition: .5s;
 }
 
 .crossSectional .main-body .main-background .bg-maincontent .bg-content .head .lowerInput{
@@ -210,8 +246,8 @@
 }
 
 .crossSectional .main-body .main-background .bg-maincontent .bg-content .lower-content{
-    margin: 30px 40px 0 40px;
-    width: calc(100% -20px);
+    margin: 30px 20px 0 20px;
+    width: 67.5vw;
     height: 92%;
     border-radius: var(--border-radius-1);
     background-color: var(--color-backgroun-secondary2);

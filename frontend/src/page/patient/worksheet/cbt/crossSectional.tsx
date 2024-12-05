@@ -10,6 +10,7 @@ import { DiaryPatInterface } from '../../../../interfaces/diary/IDiary';
 import { GetDiaryByDiaryID } from '../../../../services/https/diary';
 import { CreateCrossSectional } from '../../../../services/https/cbt/crossSectional/crossSectional';
 import { CrossSectionalInterface } from '../../../../interfaces/crossSectional/ICrossSectional';
+import dayjs from 'dayjs';
 
 const CrossSectional: React.FC = () => {
   const patID = localStorage.getItem('patientID'); // ดึงค่า patientID จาก localStorage
@@ -21,6 +22,7 @@ const CrossSectional: React.FC = () => {
   const [searchParams] = useSearchParams(); // ใช้สำหรับดึงค่าจาก query parameter
   const diaryID = searchParams.get('id'); // ดึงค่าของ 'id' จาก URL
   const [diary, setDiary] = useState<DiaryPatInterface | null>(null); // สถานะเก็บข้อมูลไดอารี่
+  const [hoveredEmoji, setHoveredEmoji] = useState<string | null>(null); 
 
   // สถานะสำหรับข้อมูลฟอร์ม
   const [situation, setSituation] = useState('');
@@ -99,6 +101,7 @@ const CrossSectional: React.FC = () => {
   
   const handleSave = async () => {
     const emotionIDs = selectEmotion.map(emotion => emotion.value);
+    const currentDate = dayjs().format('DD-MM-YYYY');
     const data: CrossSectionalInterface = {
       Situation: situation,
       Thought: thought,
@@ -106,6 +109,7 @@ const CrossSectional: React.FC = () => {
       BodilySensation: bodilySensation,
       DiaryID: Number(diaryID),
       EmotionID: emotionIDs,
+      Date: currentDate,
     };
     // แสดงข้อมูลใน console.log ก่อนการบันทึก
     console.log('ข้อมูลที่บันทึก:', data);
@@ -139,43 +143,12 @@ const CrossSectional: React.FC = () => {
               <NavbarPat />
             </div>
             <div className="main-background">
-              <header>
-                <div className='on'>
-                  <h1 className="title">{diary?.Name}</h1>
-                </div>
-                <div className='lower'>
-                  <div className="name">
-                    <h2 className="typebook">{diary?.WorksheetType?.Name || "ไม่มีข้อมูล"}</h2>
-                  </div>
-                  <div className="emo">
-                  <Select
-                    className='content-emo'
-                    mode="multiple"
-                    tagRender={createTagRender(selectEmotion)}
-                    options={emotionPatients.map(emotion => ({
-                      value: emotion.ID,
-                      label: `${emotion.Emoticon} ${emotion.Name}`,
-                    }))}
-                    placeholder="ความรู้สึก..."
-                    optionLabelProp="label"
-                    optionFilterProp="label"
-                    onChange={(values) => handleSelectChange(values, setSelectEmotion)} // ส่ง setThoughtsTags
-                  />
-                    <div className='button'>
-                      <Tooltip title="แก้ไข">
-                        <Button type="primary" shape="circle" icon={<BiSolidEditAlt />} />
-                      </Tooltip>
-                    </div>
-                  </div>
-                </div>
-              </header>
               <div className="bg-maincontent">
                 <div className="bg-content">
                   <div className="content">
                     <div className='head'>
                       <div className='onTitle'>
                         <h2 className="title">Situation to Trigger</h2>
-                        <button className="btn-submit" onClick={handleSave}>บันทึก</button>
                       </div>
                       <div className='lowerInput'>
                         <Input 
@@ -232,6 +205,67 @@ const CrossSectional: React.FC = () => {
                   </div>
                 </div>
               </div>
+              <header>
+                <div className='on'>
+                  <h1 className="title">{diary?.Name}</h1>
+                </div>
+                <div className='lower'>
+                  <div className="name">
+                    <h2 className="typebook">{diary?.WorksheetType?.Name || "ไม่มีข้อมูล"}</h2>
+                  </div>
+                </div>
+                <div className="emo">
+                <div className="showEmo">
+                    {selectEmotion.map((emotion) => (
+                      <span
+                        key={emotion.value}
+                        onMouseEnter={() => setHoveredEmoji(emotion.label)} // ตั้งค่าอิโมจิที่ถูกวางเมาส์
+                        onMouseLeave={() => setHoveredEmoji(null)} // รีเซ็ตเมื่อเอาเมาส์ออก
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: '1.5em',
+                          backgroundColor: emotion.color,
+                          borderRadius: '50%',
+                          width: '2em',
+                          height: '2em',
+                          color: '#fff',
+                          textShadow: '0px 1px 2px rgba(0, 0, 0, 0.5)',
+                          cursor: 'pointer', // เพิ่มตัวชี้เมื่อโฮเวอร์
+                        }}
+                      >
+                        {emotion.emotion}
+                      </span>
+                    ))}
+                  </div>
+                  {hoveredEmoji && (
+                    <div className="hover-menu">
+                      {hoveredEmoji}
+                    </div>
+                  )}
+                  <Select
+                    className='content-emo'
+                    mode="multiple"
+                    tagRender={createTagRender(selectEmotion)}
+                    options={emotionPatients.map(emotion => ({
+                      value: emotion.ID,
+                      label: `${emotion.Emoticon} ${emotion.Name}`,
+                    }))}
+                    placeholder="ความรู้สึก..."
+                    optionLabelProp="label"
+                    optionFilterProp="label"
+                    onChange={(values) => handleSelectChange(values, setSelectEmotion)} // ส่ง setThoughtsTags
+                    />
+
+                    </div>
+                      <button className="btn-submit" onClick={handleSave}>บันทึก</button>
+                    {/* <div className='button'>
+                      <Tooltip title="แก้ไข">
+                        <Button type="primary" shape="circle" icon={<BiSolidEditAlt />} />
+                      </Tooltip>
+                    </div> */}
+              </header>
             </div>
           </div>
         </div>
