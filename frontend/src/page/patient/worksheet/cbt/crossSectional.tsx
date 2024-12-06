@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import NavbarPat from '../../../../component/navbarPat/navbarPat';
 import './stylePat.css';
 import { Button, Input, Select, Tooltip, Tag, ConfigProvider, message } from 'antd';
-import { BiSolidEditAlt, BiSolidLockOpen } from "react-icons/bi";
 import { GetEmotionByPatientID } from '../../../../services/https/emotion/emotion';
 import { EmtionInterface } from '../../../../interfaces/emotion/IEmotion';
 import { useSearchParams } from 'react-router-dom';
@@ -29,6 +28,7 @@ const CrossSectional: React.FC = () => {
   const [thought, setThought] = useState('');
   const [behavior, setBehavior] = useState('');
   const [bodilySensation, setBodilySensation] = useState('');
+  const [textEmotions, setTextEmotions] = useState('');
 
   const fetchDiaryByDiary = async () => {
     if (diaryID) {
@@ -107,6 +107,7 @@ const CrossSectional: React.FC = () => {
       Thought: thought,
       Behavior: behavior,
       BodilySensation: bodilySensation,
+      TextEmotions: textEmotions,
       DiaryID: Number(diaryID),
       EmotionID: emotionIDs,
       Date: currentDate,
@@ -197,7 +198,12 @@ const CrossSectional: React.FC = () => {
                         <div className='content-box'>
                           <h3>Emotions</h3>
                           <div className="bg-input">
-                            <textarea className='content-input' placeholder="อารมณ์..." />
+                            <textarea 
+                              className='content-input' 
+                              placeholder="อารมณ์..."
+                              value={textEmotions}
+                              onChange={(e) => setTextEmotions(e.target.value)}
+                            />
                           </div>
                         </div>
                       </div>
@@ -260,11 +266,6 @@ const CrossSectional: React.FC = () => {
 
                     </div>
                       <button className="btn-submit" onClick={handleSave}>บันทึก</button>
-                    {/* <div className='button'>
-                      <Tooltip title="แก้ไข">
-                        <Button type="primary" shape="circle" icon={<BiSolidEditAlt />} />
-                      </Tooltip>
-                    </div> */}
               </header>
             </div>
           </div>

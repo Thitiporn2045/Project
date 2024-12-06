@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import NavbarPat from '../../../../component/navbarPat/navbarPat';
 import './stylePat.css';
-import { Button, Input, Select, Tooltip, Tag, ConfigProvider } from 'antd';
+import { Button, Input, Select, Tooltip, Tag, ConfigProvider, message } from 'antd';
 import { BiSolidEditAlt, BiSolidLockOpen } from "react-icons/bi";
 import type { SelectProps } from 'antd';
+import { useSearchParams } from 'react-router-dom';
+import { DiaryPatInterface } from '../../../../interfaces/diary/IDiary';
+import { EmtionInterface } from '../../../../interfaces/emotion/IEmotion';
 
 interface OptionType {
 value: string;
@@ -43,6 +46,23 @@ return (
 };
 
 const Behavioural: React.FC = () => {
+
+    const patID = localStorage.getItem('patientID'); // ดึงค่า patientID จาก localStorage
+    const [emotionPatients, setEmotionPatients] = useState<EmtionInterface[]>([]); // สถานะเก็บข้อมูลอารมณ์ของผู้ป่วย
+    const [selectEmotion, setSelectEmotion] = useState<{ value: number; label: string; color: string; emotion: string }[]>([]);
+    const [messageApi, contextHolder] = message.useMessage();
+
+    const [searchParams] = useSearchParams(); // ใช้สำหรับดึงค่าจาก query parameter
+    const diaryID = searchParams.get('id'); // ดึงค่าของ 'id' จาก URL
+    const [diary, setDiary] = useState<DiaryPatInterface | null>(null); // สถานะเก็บข้อมูลไดอารี่
+    const [hoveredEmoji, setHoveredEmoji] = useState<string | null>(null);   
+
+      // สถานะสำหรับข้อมูลฟอร์ม
+    const [situation, setSituation] = useState('');
+    const [thought, setThought] = useState('');
+    const [behavior, setBehavior] = useState('');
+    const [bodilySensation, setBodilySensation] = useState('');
+
 return (
     <ConfigProvider
     theme={{
@@ -51,118 +71,137 @@ return (
         },
     }}
     >
-
-    <div className="crossSectional">
-    <div className="befor-main">
-        <div className='main-body'>
-        <div className='sidebar'>
-            <NavbarPat />
-        </div>
-        <div className="main-background">
-            <header>
-            <div className='on'>
-                <h1 className="title">Week1</h1>
+ <div className="crossSectional">
+      {contextHolder} {/* Make sure this line is present */}
+        {/* <div className="befor-main">
+          <div className='main-body'>
+            <div className='sidebar'>
+              <NavbarPat />
             </div>
-            <div className='lower'>
-                <div className="name">
-                <h2 className="typebook">Activity crossSectional</h2>
+            <div className="main-background">
+              <div className="bg-maincontent">
+                <div className="bg-content">
+                  <div className="content">
+                    <div className='head'>
+                      <div className='onTitle'>
+                        <h2 className="title">Situation to Trigger</h2>
+                      </div>
+                      <div className='lowerInput'>
+                        <Input 
+                          className='mainTitle' 
+                          placeholder="เหตุการณ์หรือสิ่งที่กระตุ้น..." 
+                          value={situation} 
+                          onChange={(e) => setSituation(e.target.value)} 
+                        />
+                      </div>
+                    </div>
+                    <div className="lower-content">
+                      <div className="bg-Content">
+                        <div className='content-box'>
+                          <h3>Thoughts</h3>
+                          <div className="bg-input">
+                          <textarea 
+                            className='content-input' 
+                            placeholder="ความคิด..." 
+                            value={thought} 
+                            onChange={(e) => setThought(e.target.value)} 
+                          />
+                          </div>
+                        </div>
+                        <div className='content-box'>
+                          <h3>Behavior</h3>
+                          <div className="bg-input">
+                          <textarea 
+                              className='content-input' 
+                              placeholder="พฤติกรรม..." 
+                              value={behavior} 
+                              onChange={(e) => setBehavior(e.target.value)} 
+                            />
+                          </div>
+                        </div>
+                        <div className='content-box'>
+                          <h3>Bodily Sensations</h3>
+                          <div className="bg-input">
+                          <textarea 
+                            className='content-input' 
+                            placeholder="พฤติกรรมผลกระทบที่ควบคุมไม่ได้..." 
+                            value={bodilySensation} 
+                            onChange={(e) => setBodilySensation(e.target.value)} 
+                          />
+                          </div>
+                        </div>
+                        <div className='content-box'>
+                          <h3>Emotions</h3>
+                          <div className="bg-input">
+                            <textarea className='content-input' placeholder="อารมณ์..." />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <header>
+                <div className='on'>
+                  <h1 className="title">{diary?.Name}</h1>
+                </div>
+                <div className='lower'>
+                  <div className="name">
+                    <h2 className="typebook">{diary?.WorksheetType?.Name || "ไม่มีข้อมูล"}</h2>
+                  </div>
                 </div>
                 <div className="emo">
-                <div className="content-emo"></div>
-                <div className='button'>
-                    <Tooltip title="STATUS">
-                    <Button type="primary" shape="circle" icon={<BiSolidLockOpen />} />
-                    </Tooltip>
-                    <Tooltip title="EDIT">
-                    <Button type="primary" shape="circle" icon={<BiSolidEditAlt />} />
-                    </Tooltip>
-                </div>
-                </div>
+                <div className="showEmo">
+                    {selectEmotion.map((emotion) => (
+                      <span
+                        key={emotion.value}
+                        onMouseEnter={() => setHoveredEmoji(emotion.label)} // ตั้งค่าอิโมจิที่ถูกวางเมาส์
+                        onMouseLeave={() => setHoveredEmoji(null)} // รีเซ็ตเมื่อเอาเมาส์ออก
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: '1.5em',
+                          backgroundColor: emotion.color,
+                          borderRadius: '50%',
+                          width: '2em',
+                          height: '2em',
+                          color: '#fff',
+                          textShadow: '0px 1px 2px rgba(0, 0, 0, 0.5)',
+                          cursor: 'pointer', // เพิ่มตัวชี้เมื่อโฮเวอร์
+                        }}
+                      >
+                        {emotion.emotion}
+                      </span>
+                    ))}
+                  </div>
+                  {hoveredEmoji && (
+                    <div className="hover-menu">
+                      {hoveredEmoji}
+                    </div>
+                  )}
+                  <Select
+                    className='content-emo'
+                    mode="multiple"
+                    tagRender={createTagRender(selectEmotion)}
+                    options={emotionPatients.map(emotion => ({
+                      value: emotion.ID,
+                      label: `${emotion.Emoticon} ${emotion.Name}`,
+                    }))}
+                    placeholder="ความรู้สึก..."
+                    optionLabelProp="label"
+                    optionFilterProp="label"
+                    onChange={(values) => handleSelectChange(values, setSelectEmotion)} // ส่ง setThoughtsTags
+                    />
+
+                    </div>
+                      <button className="btn-submit" onClick={handleSave}>บันทึก</button>
+
+              </header>
             </div>
-            </header>
-            <div className="bg-maincontent">
-            <div className="bg-content">
-                <div className="content-behavioural">
-                <div className='head'>
-                    <div className='onTitle'>
-                    <h2 className="title">Behavioural</h2>
-                    <button className="btn-submit">บันทึก</button>
-                    </div>
-                    {/* <div className='lowerInput'>
-                    <Input className='mainTitle' placeholder="เหตุการณ์หรือสิ่งที่กระตุ้น..." />
-                    </div> */}
-                </div>
-                <div className="lower-content">
-                    <div className="bg-Content-behavioural">
-                    <div className='content-box'>
-                        <h3>Target cognition</h3>
-                        <div className="bg-input">
-                        <textarea className='content-input' placeholder="ความคิด..." />
-                        <Select
-                            className='feeling-input'
-                            mode="multiple"
-                            tagRender={tagRender}
-                            options={options}
-                            placeholder="ความรู้สึก..."
-                            optionLabelProp="label"
-                            optionFilterProp="label"
-                        />
-                        </div>
-                    </div>
-                    <div className='content-box'>
-                        <h3>Experiment</h3>
-                        <div className="bg-input">
-                        <textarea className='content-input' placeholder="เหตุการณ์จริง..." />
-                        <Select
-                            className='feeling-input'
-                            mode="multiple"
-                            tagRender={tagRender}
-                            options={options}
-                            placeholder="ความรู้สึก..."
-                            optionLabelProp="label"
-                            optionFilterProp="label"
-                        />
-                        </div>
-                    </div>
-                    <div className='content-box'>
-                        <h3>Outcome & learning</h3>
-                        <div className="bg-input">
-                        <textarea className='content-input' placeholder="ผลลัพธ์..." />
-                        <Select
-                            className='feeling-input'
-                            mode="multiple"
-                            tagRender={tagRender}
-                            options={options}
-                            placeholder="ความรู้สึก..."
-                            optionLabelProp="label"
-                            optionFilterProp="label"
-                        />
-                        </div>
-                    </div>
-                    <div className='content-box'>
-                        <h3>What next?</h3>
-                        <div className="bg-input">
-                        <textarea className='content-input' placeholder="ทำอย่างไงต่อ..." />
-                        <Select
-                            className='feeling-input'
-                            mode="multiple"
-                            tagRender={tagRender}
-                            options={options}
-                            placeholder="ความรู้สึก..."
-                            optionLabelProp="label"
-                            optionFilterProp="label"
-                        />
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                </div>
-            </div>
-            </div>
-        </div>
-        </div>
-    </div>
-    </div>
+          </div>
+        </div> */}
+      </div>
     </ConfigProvider>
 );
 };

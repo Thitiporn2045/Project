@@ -284,7 +284,7 @@ function Admin() {
                   </div>
                   <div className="picture">
                       <div className="bdImg">
-                        <img src="https://i.pinimg.com/474x/b2/34/e8/b234e836124d89bbb72bb4363fc9e3bd.jpg" alt="" />
+                        <img src="https://i.pinimg.com/736x/1a/03/0e/1a030eca98e7532e0806b78cef764137.jpg" alt="" />
                       </div>
                   </div>
               </div>
