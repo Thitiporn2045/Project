@@ -8,6 +8,7 @@ import { CreateComment, DeleteComment, ListCommentByDiaryId, UpdateComment } fro
 import userEmpty from '../../../assets/userEmty.png'
 import { IoIosMore } from "react-icons/io";
 import { number } from 'echarts';
+import QuickRepliesBtn from '../../../component/psychologist/quickReplies/QuickRepliesBtn';
 
 const { TextArea } = Input;
 
@@ -23,6 +24,8 @@ function PsyCommentMain() {
 
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [deleteID, setDeleteID] = useState<number | null>();
+
+  const [commentText, setCommentText] = useState<string>(""); //เอาไว้เช็ค disable ปุ่ม Submit
 
 
   const [form] = Form.useForm();
@@ -40,10 +43,22 @@ function PsyCommentMain() {
     listComments();
   },[]);
   //===============================================================================
+
+   // Callback สำหรับเพิ่มข้อความในช่อง Input
+   const handleReplySelect = (reply: string) => {
+    setCommentText((prev) => (prev ? `${prev} ${reply}` : reply)); // ต่อข้อความที่เลือก
+  };
+  //===============================================================================
+  const isDisabled = !commentText.trim();
+  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setCommentText(e.target.value); // อัปเดตค่าเมื่อผู้ใช้พิมพ์
+  };
+
   const handleSubmitComment = async (values: CommentInterface) => {
 
     const CommentData: CommentInterface = {
       ...values,
+      Comment: commentText,
       PsyID: Number(psyID),
       DiaryID: Number(diaryID), 
     }
@@ -54,7 +69,8 @@ function PsyCommentMain() {
       form.resetFields();
       setTimeout(() =>{
         listComments();
-    },1000);
+      },1000);
+      setCommentText("");
       
     } 
     else{
@@ -144,7 +160,7 @@ function PsyCommentMain() {
           style={{
             width:'95%',
             height:'75%',
-            minHeight:'525px',
+            // minHeight:'525px',
             borderRadius: '18px',
             display:'flex',
             alignItems:'center',
@@ -258,7 +274,7 @@ function PsyCommentMain() {
         <div className='Comments-Input'
             style={{
                 width:'100%',
-                minHeight:'160px',
+                // minHeight:'160px',
                 flexGrow:1,
                 display:'flex',
                 flexDirection:'column',
@@ -281,6 +297,8 @@ function PsyCommentMain() {
                   <TextArea
                     placeholder="แสดงความคิดเห็นหรือคำแนะนำของคุณ"
                     autoSize={{ minRows: 2, maxRows: 3 }}
+                    value={commentText} // ผูกค่ากับ state
+                    onChange={(e) => setCommentText(e.target.value)} // เรียกฟังก์ชันตอนข้อความเปลี่ยน
                     style={{
                       border:'none',
                       width:'94%',
@@ -298,15 +316,17 @@ function PsyCommentMain() {
 
               <div className='Input-btn' style={{width:'98%',height:'38%',minHeight:'25px',display:'flex',alignItems:'center',justifyContent:'center',background:'#e8e8e8',borderRadius:'0 0 30px 30px',}}>
                   <div style={{width:'95%',display:'flex',flexDirection:'row',alignItems:'center',justifyContent:'space-between',marginBottom:'0.5rem'}}>
-                    <Button type='default' size='large' style={{borderRadius:30}}>
+                    <QuickRepliesBtn onReplySelect={handleReplySelect}/>
+                    {/* <Button type='default' size='large' style={{borderRadius:30}}>
                       <IoFlash />Quick Replies
-                    </Button>
+                    </Button> */}
                     <Button 
                       type='default'
                       htmlType='submit' 
                       size='large' 
                       shape='circle' 
-                      style={{fontSize:20, color:'white',background:'#585858'}}
+                      style={{fontSize:20, color:'white',background: isDisabled? '#d2d2d2':'#585858'}}
+                      disabled={isDisabled}
                     >
                       <FaArrowUp/>
                     </Button>
