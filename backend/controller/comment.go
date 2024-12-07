@@ -55,7 +55,7 @@ func UpdateComment(c *gin.Context) {
 		return
 	}
 	if tx := entity.DB().Where("id = ?", comment.ID).First(&result); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "type not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "comment not found"})
 		return
 	}
 	if err := entity.DB().Save(&comment).Error; err != nil {
@@ -73,7 +73,7 @@ func ListQuickReplies(c *gin.Context) {
 	var quickReplies []entity.QuickReplies
 
 	psyID := c.Param("id")
-	if err := entity.DB().Preload("Psychologist").Raw("SELECT * FROM quick_relies where psy_id = ?", psyID).Find(&quickReplies).Error; err != nil {
+	if err := entity.DB().Preload("Psychologist").Raw("SELECT * FROM quick_replies where psy_id = ?", psyID).Find(&quickReplies).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 

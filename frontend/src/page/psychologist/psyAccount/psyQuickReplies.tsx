@@ -1,17 +1,31 @@
-import { Button, ConfigProvider, Form, Input, message, Modal, Tooltip } from 'antd'
+import { Button, ConfigProvider, Form, Input, message, Modal, Table, TableProps, Tooltip } from 'antd'
 import TextArea from 'antd/es/input/TextArea';
 import thTH from 'antd/lib/locale/th_TH'; 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { QuickRepliesInterface } from '../../../interfaces/psychologist/IComment';
-import { CreateQuickReplies } from '../../../services/https/psychologist/comment';
+import { CreateQuickReplies, DeleteQuickReplies, ListQuickReplies, UpdateQuickReplies } from '../../../services/https/psychologist/comment';
 
 function PsyQuickReplies() {
   const [messageApi, contextHolder] = message.useMessage();
+  const [quickReplies, setQuickReplies] = useState<QuickRepliesInterface[]>([]);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const psyID = localStorage.getItem('psychologistID');
 
   const [form] = Form.useForm();
+  //=========================================================================
+  const listQuickReplies = async () => {
+    let res = await ListQuickReplies(Number(psyID));
+    if(res){
+      setQuickReplies(res);
+    }console.log(quickReplies)
+  }
+  //=========================================================================
+  useEffect(()=>{
+    listQuickReplies();
+  
+  },[])
+  //=========================================================================
 
   const handleSubmit = async(values:QuickRepliesInterface) =>{
     
@@ -25,8 +39,8 @@ function PsyQuickReplies() {
       messageApi.success("สำเร็จ !");
       form.resetFields();
       setTimeout(() =>{
-        // listComments();
-    },1000);
+        listQuickReplies();    
+      },1000);
       
     } 
     else{
@@ -35,14 +49,122 @@ function PsyQuickReplies() {
     setIsModalVisible(false);
 
   }
-
+//=========================================================================
   const showModal = () =>{
     setIsModalVisible(true);
   }
   const handleCancel = () => {
     setIsModalVisible(false);
   };
+//==============================Update function============================
+const [editingKey, setEditingKey] = useState<number | null>();
+const [editingMessage, setEditingMessage] = useState<string | undefined>('');
+const [editingName, setEditingName] = useState<string | undefined>('');
 
+const handleEdit = (record: QuickRepliesInterface) => {
+  setEditingKey(record.ID);
+  setEditingName(record.Name);
+  setEditingMessage(record.Message);
+};
+
+const handleCancelEdit = () => {
+  setEditingKey(null);
+  setEditingName('');
+  setEditingMessage('');
+};
+
+const handleSaveEdit = async (record: QuickRepliesInterface) => {
+  let updatedRecord = { ...record,Name: editingName, Message: editingMessage };
+  let res = await UpdateQuickReplies(updatedRecord);
+  if (res.status) {
+    messageApi.success('แก้ไขสำเร็จ!');
+    setEditingKey(null);
+    listQuickReplies();
+  } else {
+    messageApi.error(res.message || 'เกิดข้อผิดพลาด');
+  }
+};
+//=========================================================================
+const handleDelete = async (id: number) => {
+  Modal.confirm({
+    title: 'ยืนยันการลบ',
+    content: 'คุณต้องการลบข้อความตอบกลับนี้หรือไม่?',
+    okText: 'ยืนยัน',
+    cancelText: 'ยกเลิก',
+    onOk: async () => {
+      let res = await DeleteQuickReplies(id);
+      if (res.status) {
+        messageApi.success('ลบสำเร็จ!');
+        listQuickReplies();
+      } else {
+        messageApi.error(res.message || 'เกิดข้อผิดพลาด');
+      }
+    },
+  });
+};
+
+//=========================================================================
+const columns: TableProps<QuickRepliesInterface>['columns'] = [
+  {
+    title: 'ชื่อ',
+    dataIndex: 'Name',
+    key: 'Name',
+    width: '25%',
+    render: (text: string, record: QuickRepliesInterface) => {
+      return editingKey === record.ID ? (
+        <Input
+          value={editingName}
+          onChange={(e) => setEditingName(e.target.value)}
+        />
+      ) : (
+        text
+      );
+    },
+  },
+  {
+    title: 'ข้อความที่แสดง',
+    dataIndex: 'Message',
+    key: 'Message',
+    width: '50%',
+    render: (text: string, record: QuickRepliesInterface) => {
+      return editingKey === record.ID ? (
+        <TextArea
+          value={editingMessage}
+          onChange={(e) => setEditingMessage(e.target.value)}
+        />
+      ) : (
+        text
+      );
+    },
+  },
+  {
+    title: 'จัดการ',
+    dataIndex: 'action',
+    key: 'Action',
+    width: '25%',
+    render: (_: any, record: QuickRepliesInterface) => (
+      <div style={{ display: 'flex', gap: '0.5rem' }}>
+        {editingKey === record.ID ? (
+          <>
+            <Button type="primary" onClick={() => handleSaveEdit(record)}>
+              บันทึก
+            </Button>
+            <Button onClick={handleCancelEdit}>ยกเลิก</Button>
+          </>
+        ) : (
+          <>
+            <Button type="link" onClick={() => handleEdit(record)}>
+              แก้ไข
+            </Button>
+            <Button type="link" danger onClick={() => handleDelete(Number(record.ID))}>
+              ลบ
+            </Button>
+          </>
+        )}
+      </div>
+    ),
+  },
+];
   return (
     <ConfigProvider
       locale={thTH}
@@ -63,8 +185,8 @@ function PsyQuickReplies() {
     >     
     {contextHolder}  
       <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', marginLeft: '6%',}}>
-        <div style={{ width: '95%', height: '70%', background: 'transparent', display: 'flex', flexDirection: 'column',}}>
-          <div style={{width:'100%',display:'flex',flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
+        <div style={{ width: '100%', height: '70%', background: 'transparent', display: 'flex', flexDirection: 'column',}}>
+          <div style={{width:'100%',display:'flex',flexDirection:'row',paddingBottom:'0.5rem',alignItems:'center',justifyContent:'space-between'}}>
             <div style={{ fontSize: '20px', fontWeight: 'bold' }}>ตั้งค่าข้อความตอบกลับ</div>
             <Button type='primary' onClick={showModal}>+ สร้างใหม่</Button>
             <Modal
@@ -108,22 +230,23 @@ function PsyQuickReplies() {
               </Form>
 
             </Modal>
+
           </div>
-            <div
-              className="quickRpliesSetting-container"
-              style={{
-                position: 'relative',
-                width: '100%',
-                height: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '1rem',
-                border:'solid'
-              }}
-            >
-          
-              
-            </div>
+          <div
+            className="quickRpliesSetting-container"
+            style={{
+              position: 'relative',
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1rem',
+            }}
+          >
+            <Table dataSource={quickReplies} columns={columns}  pagination={{ pageSize: 5 }}  />
+        
+            
+          </div>
 
         </div>
       </div>

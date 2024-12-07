@@ -32,14 +32,14 @@
 
 .Acc-content{
     position: relative;
-    width: 50%;
+    width: 60%;
     display: flex;
     /* background: #f1f6cd; */
 }
 
 .Acc-menu{
     position: relative;
-    width: 23%;
+    width: 20%;
     height: 100%;
     margin-left: 1%;
     border-right: solid 1px #dfdfdf;

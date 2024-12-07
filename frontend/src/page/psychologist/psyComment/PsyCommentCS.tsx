@@ -18,7 +18,7 @@ function PsyCommentCS() {
       </div>
       
       <div className='Comment'>
-        <div style={{width:'100%',height:'10%',minHeight:'50px',display:'flex',alignItems:'center'}}>
+        <div style={{width:'100%',height:'10%',display:'flex',alignItems:'center'}}>
           <b style={{fontSize:20,color:'#585858',marginLeft:'0.8rem'}}>แสดงความคิดเห็น/คำแนะนำ</b>
         </div>
         <PsyCommentMain/>

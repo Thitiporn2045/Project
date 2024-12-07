@@ -38,10 +38,11 @@ const listDiaries = async () => {
   let res = await ListPublicDiariesByPatientType(Number(psyID));
   if(res){
     setDiaries(res);
-    setTimeout(() => {
-      setLoading(false);
-    },1000)
+    
   }
+  setTimeout(() => {
+    setLoading(false);
+  },1000)
 
 }
 //=========================================================================
@@ -150,6 +151,18 @@ useEffect(() => {
   });
 }, [diaries]);
 //===========================================================================
+ // สร้าง refs แยกสำหรับแต่ละแถว
+ const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+ const scrollLeft = (index: number) => {
+   rowRefs.current[index]?.scrollBy({ left: -280, behavior: 'smooth' });
+ };
+
+ const scrollRight = (index: number) => {
+   rowRefs.current[index]?.scrollBy({ left: 280, behavior: 'smooth' });
+ };
+//===========================================================================
+
  return(
   <ConfigProvider
       locale={thTH}
@@ -231,8 +244,9 @@ useEffect(() => {
             flexGrow:1,
             overflow:'auto',
             flexShrink: 0,
-            scrollbarColor:'#c5c5c5 transparent',
+            scrollbarColor:'#e5e5e5 transparent',
             scrollbarWidth:'thin',
+            // background:'green'
             }}
             >
             {filteredPatients.map((item,index) =>(
@@ -247,6 +261,7 @@ useEffect(() => {
                   height:'55%',
                   display:'flex',
                   flexDirection:'column',
+                  alignItems:'center',
                   gap:'0.5rem',
                   flexShrink: 0,
                 }}
@@ -254,36 +269,42 @@ useEffect(() => {
                 <div className='diary-owner-name' 
                   style={{
                     position:'relative',
-                    width:'98%',height:'10%',
+                    width:'100%',height:'10%',
                     display:'flex',
                     flexDirection:'row',
+                    justifyContent:'space-between',
                     alignItems:'center',
-                    marginLeft:'1rem', 
-
                   }}
                 >
-                  <b style={{fontSize:20,color:'#585858'}}>{item.patient.FirstName} {item.patient.LastName}</b>
+                  <b style={{fontSize:20,color:'#585858',marginLeft:'1rem'}}>{item.patient.FirstName} {item.patient.LastName} ({item.diaries.length})</b>
+                  {item.diaries.length > 3 && (
+                    <div className='Scrolling-btn' style={{display: 'flex',marginRight:'1rem',gap:'0.3rem'}}>
+                      <Button shape='circle' onClick={() => scrollLeft(index)} style={{background:'transparent'}}>{`<<`}</Button>
+                      <Button shape='circle' onClick={() => scrollRight(index)} style={{background:'transparent'}}>{`>>`}</Button>
+                    </div>
+                  )}
                 </div>
                 
                 <div className='diary-row-container' 
+                  ref={(el) => (rowRefs.current[index] = el)}
                   style={{
                     position:'relative', 
-                    width:'98%',
+                    width:'96%',
                     height:'90%',
-                    paddingLeft:'1rem',
+                    // paddingLeft:'1rem',
                     display:'flex',
                     flexDirection:'row',
                     alignItems:'center',
-                    marginLeft:'1rem', 
                     gap:'1.5rem', 
                     overflowX:'auto',
                     overflowY:'hidden',
-                    scrollbarColor:'#e5e5e5 transparent',
-                    scrollbarWidth:'thin',                   
+                    scrollbarColor:'transparent transparent',
+                    scrollbarWidth:'thin',
+                    // background:'yellow'                   
                   }}
                 >
                   {item.diaries.map((item2) => (
-                    <div className='each-diary' onClick={() => navigateToDiaryPage(item2)} style={{position:'relative',width:'15%',minWidth:160,height:'100%',display:'flex',flexDirection:'column',flexShrink:0,cursor:'pointer'}}>
+                    <div className='each-diary' onClick={() => navigateToDiaryPage(item2)} style={{position:'relative',width:'15%',minWidth:160,height:'100%',display:'flex',flexDirection:'column',flexShrink:0,cursor:'pointer',margin:'0.5rem'}}>
                       <div style={{
                         position:'relative',
                         width:'100%',height:'80%',minWidth:160,
@@ -313,7 +334,14 @@ useEffect(() => {
                     </div>)) 
                   }
 
-                </div>
+                  {/* {item.diaries.length > 3 && (
+                    <div style={{ position:'absolute',display: 'flex', justifyContent: 'space-between', width: '99%',zIndex:5 }}>
+                      <Button onClick={scrollLeft} style={{ background: '#2C9F99', color: '#fff' }}>เลื่อนซ้าย</Button>
+                      <Button onClick={scrollRight} style={{ background: '#2C9F99', color: '#fff' }}>เลื่อนขวา</Button>
+                    </div>
+                  )} */}
+                </div> 
+                
             
               </div>))
               
