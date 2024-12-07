@@ -18,7 +18,7 @@
     background: linear-gradient(141deg, #ffffff 0%, #edf0ff 100%);
 
     .box-content{
-        margin: 30px;
+        margin: 10px 30px 30px 30px;
         width: calc(100% - 30px);
         display: grid;
         grid-template-rows: 4rem auto;

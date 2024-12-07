@@ -7,6 +7,7 @@ export interface CrossSectionalInterface {
     Thought?: string;
     Behavior?: string;
     BodilySensation?: string;
+    TextEmotions?: string;
     Date?: string;
 
     DiaryID?: number;

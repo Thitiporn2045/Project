@@ -14,44 +14,58 @@ useEffect(() => {
 
     const option = {
         tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-            type: 'shadow', // ใช้ pointer เป็นเงา
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow', // ใช้ pointer เป็นเงา
+            },
         },
+        grid: {
+            left: '5%', // ลดระยะห่างด้านซ้าย
+            right: '5%', // ลดระยะห่างด้านขวา
+            top: '10%', // ลดระยะห่างด้านบน
+            bottom: '10%', // ลดระยะห่างด้านล่าง
+            containLabel: true, // ให้ labels อยู่ในพื้นที่กราฟ
         },
         xAxis: {
-        type: 'category',
-        data: data.map((item) => item.name), // ชื่อประเภท CBT
-        axisLabel: {
-            fontSize: 14,
-            color: '#555',
-        },
+            type: 'category',
+            data: data.map((item) => item.name), // ชื่อประเภท CBT
+            axisLabel: {
+                fontSize: 14,
+                color: '#555',
+            },
         },
         yAxis: {
-        type: 'value',
-        axisLabel: {
-            fontSize: 14,
-            color: '#555',
-        },
+            type: 'value',
+            axisLabel: {
+                fontSize: 14,
+                color: '#555',
+            },
         },
         series: [
-        {
-            data: data.map((item) => item.value), // ค่าที่จะแสดงในกราฟ
-            type: 'bar',
-            itemStyle: {
-                color: '#c8b0f6', // สีของแท่งกราฟ
-                shadowColor: 'rgba(200, 176, 246, 0.6)',  // เงาของสี (ใช้ rgba เพื่อควบคุมความโปร่งใส)
-                shadowBlur: 10, 
-                borderRadius: [5, 5, 0, 0], // มุมโค้งด้านบน
+            {
+                data: data.map((item) => item.value), // ค่าที่จะแสดงในกราฟ
+                type: 'bar',
+                itemStyle: {
+                    color: '#c8b0f6', // สีของแท่งกราฟ
+                    shadowColor: 'rgba(200, 176, 246, 0.6)', // เงาของสี (ใช้ rgba เพื่อควบคุมความโปร่งใส)
+                    shadowBlur: 10,
+                    borderRadius: [5, 5, 0, 0], // มุมโค้งด้านบน
+                },
+                barWidth: '50%', // เพิ่มความกว้างของแท่งกราฟ
             },
-            barWidth: '50%', // ความกว้างของแท่งกราฟ
-        },
         ],
-    };
+    };    
 
     chartInstance.setOption(option);
 
+    const handleResize = () => {
+        chartInstance.resize(); // เรียก resize เมื่อ container เปลี่ยนขนาด
+    };
+
+    window.addEventListener('resize', handleResize);
+
     return () => {
+        window.removeEventListener('resize', handleResize);
         chartInstance.dispose();
     };
     }
@@ -62,7 +76,7 @@ return(
     style={{ 
         background: '#ffffff',
         width: '40vw',
-        height: '30vh',
+        height: '28.5vh',
         borderRadius: '15px',
         padding: '20px', // เพิ่ม padding
         border: '1px solid #EBF1F5',
@@ -70,7 +84,7 @@ return(
         zIndex: 1,  // เพิ่ม z-index เพื่อให้แน่ใจว่ามีลำดับซ้อนที่ถูกต้อง
     }}
     >
-        <div ref={chartRef} style={{ height: 300, width: '100%' }} />
+        <div ref={chartRef} style={{ height: '100%', width: '100%', maxHeight: '400px' }} />
     </div>
 ); 
 };

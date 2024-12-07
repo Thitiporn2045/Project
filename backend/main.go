@@ -33,6 +33,11 @@ func main() {
 			r.GET("/pat/getDiary/:id", controller.GetDiaryByPatientID)
 			r.GET("/pat/getDiary/ByDiary", controller.GetDiaryByDiaryID)
 			r.GET("/pat/get/Emotion/:id", controller.GetEmotionByPatientID)
+			r.GET("/pat/get/CrossSectional/ByDiary", controller.GetCrossSectionalByDiaryID)
+			r.GET("/pat/get/CrossSectional/Emotion/ByDiary", controller.GetEmotionsByDiaryID)
+			r.GET("/pat/get/CrossSectional/Date/Emotion/ByDiary", controller.GetEmotionsHaveDateByDiaryID)
+
+
 
 			r.PATCH("/patients", controller.UpdatePatient)
 			r.PATCH("/pat/update/Password",controller.UpdatePasswordPatient)
@@ -40,6 +45,7 @@ func main() {
 			r.PATCH("/pat/update/DiaryPat", controller.UpdateDiaryPat)
 			r.PATCH("/diaries/:id/toggle-public", controller.ToggleDiaryIsPublic)
 			r.PATCH("/pat/update/Emotion", controller.UpdateEmotionByID)
+			r.PATCH("/pat/update/CrossSectional", controller.UpdateCrossSectional)
 
 			r.POST("/pat/checkPassword",controller.CheckOldPasswordPatient)
 			r.POST("/pat/note",controller.CreateNotePat)

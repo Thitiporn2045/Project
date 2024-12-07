@@ -252,7 +252,6 @@ const toggleIsPublic = async (diary: DiaryPatInterface) => {
                                     <p>สิ้นสุด: {diary.End}</p>
                                 </div>
                             </div>
-    
                             {/* แสดงเมนูเมื่อเมาส์โฮเวอร์ */}
                             {hoveredDiaryID === diary.ID && (
                                 <div className="hover-menu">
@@ -279,9 +278,18 @@ const toggleIsPublic = async (diary: DiaryPatInterface) => {
                                     >
                                         {diary.IsPublic === true ? <FaLock /> : <FaUnlockAlt />}
                                     </button>
-                                    <button onClick={(e) => {
-                                        e.stopPropagation();
-                                    }}>
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation(); // ป้องกันการ navigate อัตโนมัติของการคลิก parent
+                                            if (diary.WorksheetType?.Name === "Cross Sectional") {
+                                                navigate(`/SheetCross?id=${diary.ID}`); // เปลี่ยนหน้าไปยัง SheetCross พร้อมส่งไอดี
+                                            } else if (diary.WorksheetType?.Name === "Behavioral Experiment") {
+                                                navigate(`/SheetBehav?id=${diary.ID}`); // เปลี่ยนหน้าไปยัง SheetBehav พร้อมส่งไอดี
+                                            } else {
+                                                messageApi.error('ไม่รองรับประเภทไดอารี่นี้'); // แจ้งเตือนหากเป็นประเภทอื่น
+                                            }
+                                        }}
+                                    >
                                         <FaComment />
                                     </button>
                                     <button onClick={(e) => {

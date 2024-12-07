@@ -9,6 +9,7 @@ type CrossSectional struct{
 	Thought string
 	Behavior string
 	BodilySensation string
+	TextEmotions string
 	Date string
 
 	DiaryID *uint
