@@ -1,7 +1,7 @@
 import { Button, ConfigProvider, Form, Input, message, Modal, Table, TableProps, Tooltip } from 'antd'
 import TextArea from 'antd/es/input/TextArea';
 import thTH from 'antd/lib/locale/th_TH'; 
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { QuickRepliesInterface } from '../../../interfaces/psychologist/IComment';
 import { CreateQuickReplies, DeleteQuickReplies, ListQuickReplies, UpdateQuickReplies } from '../../../services/https/psychologist/comment';
 

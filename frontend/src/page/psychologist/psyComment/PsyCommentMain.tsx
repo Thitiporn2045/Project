@@ -2,12 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { Button, ConfigProvider, Input, Form, message, Card, Dropdown, Menu, Modal, Empty } from 'antd';
 import thTH from 'antd/lib/locale/th_TH';
 import { FaArrowUp } from 'react-icons/fa';
-import { IoFlash } from 'react-icons/io5';
 import { CommentInterface } from '../../../interfaces/psychologist/IComment';
 import { CreateComment, DeleteComment, ListCommentByDiaryId, UpdateComment } from '../../../services/https/psychologist/comment';
 import userEmpty from '../../../assets/userEmty.png'
 import { IoIosMore } from "react-icons/io";
-import { number } from 'echarts';
 import QuickRepliesBtn from '../../../component/psychologist/quickReplies/QuickRepliesBtn';
 
 const { TextArea } = Input;
