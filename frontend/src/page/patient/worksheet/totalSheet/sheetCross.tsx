@@ -12,27 +12,29 @@ import { BiSolidEditAlt, BiSolidLockOpen } from "react-icons/bi";
 import dayjs from 'dayjs';
 import { GetEmotionByPatientID } from '../../../../services/https/emotion/emotion';
 import { EmtionInterface } from '../../../../interfaces/emotion/IEmotion';
+import { ListCommentByDiaryId } from '../../../../services/https/psychologist/comment';
+import { CommentInterface } from '../../../../interfaces/psychologist/IComment';
 
-const comments = [
-    {
-        user: "John Doe",
-        date: '25/08/2024',
-        comment: "The psychologist was very attentive and gave practical advice on managing stress. I felt heard and understood throughout the session.",
-        image: 'https://i.pinimg.com/736x/ae/b3/0b/aeb30b5e52ee5578af71b98312c67055.jpg'
-    },
-    {
-        user: "Jane Smith",
-        date: '25/08/2024',
-        comment: "The session was insightful, but I felt like there could have been more focus on solutions. However, the psychologist was very compassionate.",
-        image: 'https://i.pinimg.com/736x/ae/b3/0b/aeb30b5e52ee5578af71b98312c67055.jpg'
-    },
-    {
-        user: "David Brown",
-        date: '28/08/2024',
-        comment: "I appreciated the psychologist's approach to mindfulness exercises. It helped me stay grounded during stressful moments.",
-        image: 'https://i.pinimg.com/736x/ae/b3/0b/aeb30b5e52ee5578af71b98312c67055.jpg'
-    }
-];
+// const comments = [
+//     {
+//         user: "John Doe",
+//         date: '25/08/2024',
+//         comment: "The psychologist was very attentive and gave practical advice on managing stress. I felt heard and understood throughout the session.",
+//         image: 'https://i.pinimg.com/736x/ae/b3/0b/aeb30b5e52ee5578af71b98312c67055.jpg'
+//     },
+//     {
+//         user: "Jane Smith",
+//         date: '25/08/2024',
+//         comment: "The session was insightful, but I felt like there could have been more focus on solutions. However, the psychologist was very compassionate.",
+//         image: 'https://i.pinimg.com/736x/ae/b3/0b/aeb30b5e52ee5578af71b98312c67055.jpg'
+//     },
+//     {
+//         user: "David Brown",
+//         date: '28/08/2024',
+//         comment: "I appreciated the psychologist's approach to mindfulness exercises. It helped me stay grounded during stressful moments.",
+//         image: 'https://i.pinimg.com/736x/ae/b3/0b/aeb30b5e52ee5578af71b98312c67055.jpg'
+//     }
+// ];
 
 function SheetCross() {
     const patID = localStorage.getItem('patientID'); // ดึงค่า patientID จาก localStorage
@@ -41,6 +43,7 @@ function SheetCross() {
     const numericDiaryID = diaryID ? Number(diaryID) : undefined; // แปลงเป็น number หรือ undefined ถ้าไม่มีค่า
 
     const [diary, setDiary] = useState<DiaryPatInterface | null>(null); // สถานะเก็บข้อมูลไดอารี่
+    const [comments, setComments] = useState<CommentInterface[]>([]); // ตั้งค่าประเภทของ emotionPatients เป็น EmtionInterface[]
     const [crossSectional, setCrossSectional] = useState<CrossSectionalInterface[] | null>(null); // เปลี่ยนเป็น array เพื่อรองรับหลายรายการ
     const [emotionPatients, setEmotionPatients] = useState<EmtionInterface[]>([]); // ตั้งค่าประเภทของ emotionPatients เป็น EmtionInterface[]
     const [dateRange, setDateRange] = useState<Date[]>([]);
@@ -122,6 +125,16 @@ function SheetCross() {
     const onDateClick = (date: any) => {
         setSelectedDate(date); // อัปเดต state เมื่อเลือกวัน
         handleDateChange(date); // เรียกฟังก์ชัน handleDateChange
+
+        // เลื่อนวันที่ที่เลือกมาอยู่ตรงกลาง
+        const element = document.getElementById(`day-${date.toDateString()}`);
+        if (element) {
+            element.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',  // เปลี่ยนจาก 'center' เป็น 'nearest'
+                inline: 'center'   // เลื่อนให้วันที่อยู่กลางในแนวนอน
+            });
+        }
     };
 
 
@@ -133,6 +146,20 @@ function SheetCross() {
                     setDiary(res); // เก็บข้อมูลที่ได้จาก API ลงในสถานะ
                 }
                 console.log('Diary:', res); // แสดงข้อมูลที่ได้รับในคอนโซล
+            } catch (error) {
+                console.error('Error fetching diary:', error); // แสดงข้อผิดพลาด
+            }
+        }
+    };
+
+    const fetchCommentsByDiaryID = async () => {
+        if (diaryID) {
+            try {
+                const res = await ListCommentByDiaryId(Number(diaryID)); // เรียกใช้ API โดยส่งค่า id
+                if (res) {
+                    setComments(res); // เก็บข้อมูลที่ได้จาก API ลงในสถานะ
+                }
+                console.log('comments:', res); // แสดงข้อมูลที่ได้รับในคอนโซล
             } catch (error) {
                 console.error('Error fetching diary:', error); // แสดงข้อผิดพลาด
             }
@@ -199,6 +226,7 @@ function SheetCross() {
         fetchDiaryByDiary();
         fetchCrossSectionalByDiary();
         fetchEmotions();
+        fetchCommentsByDiaryID();
     }, []); // useEffect จะทำงานแค่ครั้งเดียวเมื่อคอมโพเนนต์ถูกแสดง
     
 
@@ -567,15 +595,16 @@ const handleSelectChange = (values: (number | undefined)[], setSelectEmotion: Re
                                     <p>เลือกวันที่</p>
                                 </div>
                                 <div className="date-range">
-                                {dateRange.map((date, index) => (
-                                    <div
-                                        key={index}
-                                        className={`day ${selectedDate && date.toDateString() === selectedDate.toDateString() ? 'selected' : ''}`}
-                                        onClick={() => onDateClick(date)} // เลือกวันที่เมื่อคลิก
-                                    >
-                                        {formatDate(date)}
-                                    </div>
-                                ))}
+                                    {dateRange.map((date, index) => (
+                                        <div
+                                            key={index}
+                                            id={`day-${date.toDateString()}`} // เพิ่ม id ให้แต่ละวัน
+                                            className={`day ${selectedDate && date.toDateString() === selectedDate.toDateString() ? 'selected' : ''}`}
+                                            onClick={() => onDateClick(date)} // เลือกวันที่เมื่อคลิก
+                                        >
+                                            {formatDate(date)}
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                             <div className='box2'>
@@ -586,16 +615,16 @@ const handleSelectChange = (values: (number | undefined)[], setSelectEmotion: Re
                                             <div key={index} className="comment-box">
                                                 <div className="comment-content">
                                                     <div className="comment-user">
-                                                        <strong>{comment.user}</strong>
-                                                        {/* <span className="comment-date">{formattedDate}</span> */}
+                                                        <strong>{comment.Psychologist?.FirstName}{comment.Psychologist?.LastName}</strong>
+                                                        <span className="comment-date">นักจิตวิทยา</span>
                                                     </div>
                                                     <div className="comment-text">
-                                                        {comment.comment}
+                                                        {comment.Comment}
                                                     </div>
                                                 </div>
                                                 {/* Avatar at the bottom */}
                                                 <div className="comment-avatar">
-                                                    <img src={comment.image} />
+                                                    <img src={comment.Psychologist?.Picture} />
                                                 </div>
                                             </div>
                                         ))}

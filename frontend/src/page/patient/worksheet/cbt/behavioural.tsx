@@ -31,6 +31,7 @@ const CrossSectional: React.FC = () => {
   const [oldBelief, setOldBelief] = useState('');
   const [newBelief, setNewBelief] = useState('');
 
+
   const fetchDiaryByDiary = async () => {
     if (diaryID) {
       try {
@@ -99,6 +100,11 @@ const CrossSectional: React.FC = () => {
       );
     };
   };
+
+  const TestSave = () => {
+    const Tough = negativeThought +","+ alternativeThought
+    console.log("Tough", Tough)
+  }
   
   const handleSave = async () => {
     const emotionIDs = selectEmotion.map(emotion => emotion.value);
@@ -298,7 +304,8 @@ const CrossSectional: React.FC = () => {
                     />
 
                     </div>
-                      <button className="btn-submit" onClick={handleSave}>บันทึก</button>
+                    {/* <button className="btn-submit" onClick={handleSave}>บันทึก</button> */}
+                    <button className="btn-submit" onClick={TestSave}>บันทึก</button>
               </header>
             </div>
           </div>
