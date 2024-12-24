@@ -63,23 +63,33 @@ export async function GetEmotionsByDiaryID(id: Number | undefined) {
     return res;
 }
 
-export async function GetEmotionsHaveDateByDiaryID(id: Number | undefined) {
+export async function GetEmotionsHaveDateByDiaryID(id: number | undefined, date: string | undefined) {
     const requestOptions = {
-    method: "GET",
+        method: "GET",
     };
 
-    let res = await fetch(`${apiUrl}/pat/get/CrossSectional/Date/Emotion/ByDiary?id=${id}`, requestOptions)
-    .then((response) => response.json())
-    .then((res) => {
-        if (res.data) {
-        return res.data;
-        } else {
+    // เช็คว่า id หรือ date เป็น undefined หรือไม่
+    if (id === undefined || date === undefined) {
         return false;
-        }
-    });
+    }
+
+    // สร้าง URL ที่รวม id และ date
+    const url = `${apiUrl}/pat/get/CrossSectional/Date/Emotion/ByDiary?id=${id}&date=${date}`;
+
+    // เรียก API
+    let res = await fetch(url, requestOptions)
+        .then((response) => response.json())
+        .then((res) => {
+            if (res.data) {
+                return res.data;
+            } else {
+                return false;
+            }
+        });
 
     return res;
 }
+
 
 export async function UpdateCrossSectional(data: CrossSectionalInterface) {
     const requestOptions = {

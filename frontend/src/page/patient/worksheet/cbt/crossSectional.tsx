@@ -221,29 +221,45 @@ const CrossSectional: React.FC = () => {
                   </div>
                 </div>
                 <div className="emo">
-                <div className="showEmo">
-                    {selectEmotion.map((emotion) => (
-                      <span
-                        key={emotion.value}
-                        onMouseEnter={() => setHoveredEmoji(emotion.label)} // ตั้งค่าอิโมจิที่ถูกวางเมาส์
-                        onMouseLeave={() => setHoveredEmoji(null)} // รีเซ็ตเมื่อเอาเมาส์ออก
+                  <div className="showEmo">
+                    {selectEmotion && selectEmotion.length > 0 ? (
+                      selectEmotion.map((emotion) => (
+                        <span
+                          key={emotion.value}
+                          onMouseEnter={() => setHoveredEmoji(emotion.label)} // ตั้งค่าอิโมจิที่ถูกวางเมาส์
+                          onMouseLeave={() => setHoveredEmoji(null)} // รีเซ็ตเมื่อเอาเมาส์ออก
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: '1.5em',
+                            backgroundColor: emotion.color,
+                            borderRadius: '50%',
+                            width: '2em',
+                            height: '2em',
+                            color: '#fff',
+                            textShadow: '0px 1px 2px rgba(0, 0, 0, 0.5)',
+                            cursor: 'pointer', // เพิ่มตัวชี้เมื่อโฮเวอร์
+                          }}
+                        >
+                          {emotion.emotion}
+                        </span>
+                      ))
+                    ) : (
+                      <div
                         style={{
-                          display: 'inline-flex',
+                          width: '100%',
+                          height: '100%',
+                          display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          fontSize: '1.5em',
-                          backgroundColor: emotion.color,
-                          borderRadius: '50%',
-                          width: '2em',
-                          height: '2em',
-                          color: '#fff',
-                          textShadow: '0px 1px 2px rgba(0, 0, 0, 0.5)',
-                          cursor: 'pointer', // เพิ่มตัวชี้เมื่อโฮเวอร์
+                          flexDirection: 'column',
                         }}
                       >
-                        {emotion.emotion}
-                      </span>
-                    ))}
+                        <div className="Loading-Data-Self"></div>
+                        <div className="text">โปรดเลือกอิโมจิตามอารมณ์ของคุณ</div>
+                      </div>
+                    )}
                   </div>
                   {hoveredEmoji && (
                     <div className="hover-menu">

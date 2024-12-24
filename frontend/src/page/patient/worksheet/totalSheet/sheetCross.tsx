@@ -38,33 +38,45 @@ function SheetCross() {
     const patID = localStorage.getItem('patientID'); // ดึงค่า patientID จาก localStorage
     const [searchParams] = useSearchParams(); // ใช้สำหรับดึงค่าจาก query parameter
     const diaryID = searchParams.get('id'); // ดึงค่าของ 'id' จาก URL
+    const numericDiaryID = diaryID ? Number(diaryID) : undefined; // แปลงเป็น number หรือ undefined ถ้าไม่มีค่า
+
     const [diary, setDiary] = useState<DiaryPatInterface | null>(null); // สถานะเก็บข้อมูลไดอารี่
     const [crossSectional, setCrossSectional] = useState<CrossSectionalInterface[] | null>(null); // เปลี่ยนเป็น array เพื่อรองรับหลายรายการ
-    const [emotionPatients, setEmotionPatients] = useState<EmtionInterface[]>([]); // สถานะเก็บข้อมูลอารมณ์ของผู้ป่วย
+    const [emotionPatients, setEmotionPatients] = useState<EmtionInterface[]>([]); // ตั้งค่าประเภทของ emotionPatients เป็น EmtionInterface[]
     const [dateRange, setDateRange] = useState<Date[]>([]);
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
     const [isEditing, setIsEditing] = useState(false); // State สำหรับโหมดแก้ไข
     const [editContent, setEditContent] = useState<CrossSectionalInterface | null>(null); // เก็บข้อมูลที่จะแก้ไข
-    const [emotions, setEmotions] = useState<Array<string>>([]); // เก็บข้อมูลอารมณ์
-    const [selectEmotion, setSelectEmotion] = useState<{ value: number; label: string; color: string; emotion: string }[]>([]);
-    
+    const [emotions, setEmotions] = useState<EmtionInterface[]>([]);     
+    const [selectEmotion, setSelectEmotion] = useState<EmtionInterface[]>([]);
 
 
     const [messageApi, contextHolder] = message.useMessage();
 
-    const handleEditClick = (date: Date) => {
-        // ดึงข้อมูลของวันที่เลือกเพื่อแก้ไข
+    const handleEditClick = async (date: Date) => {
         const formattedDate = dayjs(date).format('DD/MM/YYYY');
         const contentToEdit = crossSectional?.find(item => 
             dayjs(item.Date, 'DD/MM/YYYY').isSame(dayjs(formattedDate, 'DD/MM/YYYY'))
         );
-
+    
         if (contentToEdit) {
-            setEditContent({ ...contentToEdit }); // ตั้งค่าเนื้อหาที่จะแก้ไข
-            setIsEditing(true); // เปิดโหมดแก้ไข
+            setEditContent({ ...contentToEdit });
+            setIsEditing(true);
+            setSelectedDate(date);
+    
+            try {
+                await fetchEmotionPatientData(); // ดึงข้อมูลที่เลือกไว้ก่อน
+                await fetchEmotions(); // ดึงข้อมูลทั้งหมด
+            } catch (error) {
+                console.error('Error fetching emotions:', error);
+            }
+        } else {
+            console.error('No content found for the selected date');
         }
     };
+    
+    
 
     const handleInputChange = (key: keyof CrossSectionalInterface, value: string) => {
         if (editContent) {
@@ -78,7 +90,14 @@ function SheetCross() {
     const saveEditedContent = async () => {
         if (editContent) {
             try {
-                const res = await UpdateCrossSectional(editContent); // เรียก API เพื่ออัปเดตข้อมูล
+                // เพิ่มข้อมูลอิโมจิที่เลือกไว้ลงใน editContent
+                const updatedContent = {
+                    ...editContent,
+                    EmotionIDs: emotionPatients.map(emotion => emotion.ID), // ส่ง ID ของอิโมจิที่เลือก
+                };
+    
+                const res = await UpdateCrossSectional(updatedContent); // เรียก API เพื่ออัปเดตข้อมูล
+                console.log(updatedContent)
                 if (res.status) {
                     console.log('Update successful:', res.message);
                     messageApi.success('อัปเดตข้อมูลในไดอารี่สำเร็จ');
@@ -86,13 +105,23 @@ function SheetCross() {
                     fetchCrossSectionalByDiary(); // อัปเดตข้อมูลในหน้า
                 } else {
                     console.error('Error updating data:', res.message);
-                    messageApi.error('เกิดข้อผิดพลาด โปรดลองใหม่ในภายหลัง');
-
+                    messageApi.error('ไม่สามารถแก้ไขได้ เนื่องจากเลยกำหนดเวลาที่สามารถแก้ไขได้แล้ว');
                 }
             } catch (error) {
                 console.error('Error during update:', error);
             }
         }
+    };    
+
+    // ตั้งค่าเริ่มต้นเป็นวันที่ปัจจุบัน
+    useEffect(() => {
+        const today = new Date(); // วันปัจจุบัน
+        setSelectedDate(today);
+    }, []);
+
+    const onDateClick = (date: any) => {
+        setSelectedDate(date); // อัปเดต state เมื่อเลือกวัน
+        handleDateChange(date); // เรียกฟังก์ชัน handleDateChange
     };
 
 
@@ -124,76 +153,110 @@ function SheetCross() {
         }
     };
 
+    // ฟังก์ชันในการดึงข้อมูลอารมณ์จาก API
     const fetchEmotions = async () => {
-        try {
-            const res = await GetEmotionsHaveDateByDiaryID(Number(diaryID)); // เรียกใช้ API โดยส่งค่า id
-            if (res.status === 200) {
-                setEmotions(res.data); // เก็บข้อมูลอารมณ์จาก API
-            } else {
-                console.error('Failed to fetch emotions');
-            }
-        } catch (error) {
-            console.error('Error fetching emotions:', error);
-        }
-    };
-
-    const fetchEmotionPatientData = async () => {
         const res = await GetEmotionByPatientID(Number(patID)); // เรียกฟังก์ชันเพื่อดึงข้อมูลจาก API
         if (res) {
-          setEmotionPatients(res); // เก็บข้อมูลที่ได้จาก API ลงในสถานะ
+            setEmotions(res); // เก็บข้อมูลที่ได้จาก API ลงในสถานะ
         }
         console.log('res', res); // แสดงข้อมูลที่ได้รับจาก API ในคอนโซล
     };
+
+    const fetchEmotionPatientData = async () => {
+        if (!diaryID || !selectedDate) {
+            console.error("Diary ID or date is missing");
+            return;
+        }
+    
+        const dateString = dayjs(selectedDate).format('DD-MM-YYYY');
+    
+        try {
+            const res = await GetEmotionsHaveDateByDiaryID(numericDiaryID, dateString);
+    
+            if (res) {
+                // แปลงคีย์ของข้อมูลจาก API ให้ตรงกับ EmtionInterface
+                const transformedEmotions = res.map((emotion: any) => ({
+                    ID: emotion.emotion_id,
+                    Name: emotion.emotion_name,
+                    Emoticon: emotion.emoticon, // สมมติว่ามีอยู่ใน API
+                    ColorCode: emotion.color_code,
+                    PatID: emotion.PatID, // สมมติว่ามีอยู่ใน API
+                    Patient: emotion.Patient, // สมมติว่ามีอยู่ใน API
+                }));
+    
+                setEmotionPatients(transformedEmotions); // เก็บข้อมูลหลังจากแปลง
+                console.log("setEmotionPatients", transformedEmotions);
+            } else {
+                console.error("Failed to fetch emotions");
+            }
+        } catch (error) {
+            console.error("Error fetching emotions:", error);
+        }
+    };    
     
 
     useEffect(() => {
         fetchDiaryByDiary();
         fetchCrossSectionalByDiary();
         fetchEmotions();
-        fetchEmotionPatientData();
     }, []); // useEffect จะทำงานแค่ครั้งเดียวเมื่อคอมโพเนนต์ถูกแสดง
+    
 
-    const handleSelectChange = (selectedValues: number[], setTags: React.Dispatch<React.SetStateAction<{ value: number; label: string; color: string; emotion: string }[]>>) => {
-        const updatedTags = selectedValues.map(value => {
-        const emotion = emotionPatients.find(emotion => emotion.ID === value);
-        return {
-            value: emotion?.ID || value,
-            label: emotion?.Name || '',
-            color: emotion?.ColorCode || '#d9d9d9',
-            emotion: emotion?.Emoticon || ''
-        };
-        });
-        setTags(updatedTags);
-    };
+    const [selectedEmotions, setSelectedEmotions] = useState<EmtionInterface[]>([]);
 
+    // ฟังก์ชัน handleSelectChange
+const handleSelectChange = (values: (number | undefined)[], setSelectEmotion: React.Dispatch<React.SetStateAction<EmtionInterface[]>>) => {
+    // กรองค่า undefined ออกก่อน
+    const validValues = values.filter((value): value is number => value !== undefined);
+    
+    // คัดลอกข้อมูลอารมณ์ที่ตรงกับ ID ที่เลือก
+    const selectedData = emotions.filter(emotion => validValues.includes(emotion.ID!));
+    
+    setSelectedEmotions(selectedData); // เก็บข้อมูลอารมณ์ที่เลือก
+    setSelectEmotion(selectedData); // ส่งข้อมูลที่เลือกไปยังฟังก์ชันที่เกี่ยวข้อง
+};
     const createTagRender = (selectedTags: { value: number; label: string; color: string; emotion: string }[]) => {
         return (props: any) => {
-        const { label, value, closable, onClose } = props;
-        const selectedTag = selectedTags.find(tag => tag.value === value);
-        const color = selectedTag?.color || '#d9d9d9'; // สี default ถ้าไม่เจอ
-        const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
-            event.preventDefault();
-            event.stopPropagation();
-        };
+            const { label, value, closable, onClose } = props;
+            const selectedTag = selectedTags.find(tag => tag.value === value);
+            const color = selectedTag?.color || '#d9d9d9'; // สี default ถ้าไม่เจอ
+            const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
+                event.preventDefault();
+                event.stopPropagation();
+            };
     
-        return (
-            <Tag
-            color={color}
-            onMouseDown={onPreventMouseDown}
-            closable={closable}
-            onClose={onClose}
-            style={{
-                marginInlineEnd: 4,
-                color: 'white', // Ensure text is visible
-                textShadow: '1px 1px 2px rgba(192, 192, 192, 0.8)',
-                textAlign: 'center'
-            }}
-            >
-            {label}
-            </Tag>
-        );
+            return (
+                <Tag
+                    color={color}
+                    onMouseDown={onPreventMouseDown}
+                    closable={closable}
+                    onClose={onClose}
+                    style={{
+                        marginInlineEnd: 4,
+                        color: 'white', // Ensure text is visible
+                        textShadow: '1px 1px 2px rgba(192, 192, 192, 0.8)',
+                        textAlign: 'center'
+                    }}
+                >
+                    {label}
+                </Tag>
+            );
         };
     };
+    
+    const transformedEmotions = emotionPatients
+    .filter(emotion => emotion.ID !== undefined && emotion.Name !== undefined && emotion.ColorCode !== undefined && emotion.Emoticon !== undefined) // กรองข้อมูลที่เป็น undefined
+    .map(emotion => ({
+        value: emotion.ID!, // ใช้การบังคับให้ไม่เป็น undefined
+        label: emotion.Name!, // ใช้การบังคับให้ไม่เป็น undefined
+        color: emotion.ColorCode!, // ใช้การบังคับให้ไม่เป็น undefined
+        emotion: emotion.Emoticon! // ใช้การบังคับให้ไม่เป็น undefined
+    }));
+
+    // ตรวจสอบว่า transformedEmotions ไม่ว่างเปล่า
+    if (transformedEmotions.length === 0) {
+        console.error("No valid emotions found");
+    }
 
     useEffect(() => {
         if (diary && diary.Start && diary.End) {
@@ -348,71 +411,131 @@ function SheetCross() {
                             <div className="content-display">
                                 {isEditing && editContent ? ( // ถ้าอยู่ในโหมดแก้ไข ให้แสดงฟอร์มแก้ไข
                                     <div className="day-content">
-                                        <h3>แก้ไขข้อมูล</h3>
-                                        <textarea
-                                            value={editContent.Situation || ''}
-                                            onChange={(e) => handleInputChange('Situation', e.target.value)} // อัปเดต State
-                                        />
-                                        <textarea
-                                            value={editContent.Thought || ''}
-                                            className="content-input"
-                                            onChange={(e) => handleInputChange('Thought', e.target.value)}
-                                        />
-                                        <textarea
-                                            value={editContent.Behavior || ''}
-                                            className="content-input"
-                                            onChange={(e) => handleInputChange('Behavior', e.target.value)}
-                                        />
-                                        <textarea
-                                            value={editContent.BodilySensation || ''}
-                                            className="content-input"
-                                            onChange={(e) => handleInputChange('BodilySensation', e.target.value)}
-                                        />
-                                        <textarea
-                                            value={editContent.TextEmotions || ''}
-                                            className="content-input"
-                                            onChange={(e) => handleInputChange('TextEmotions', e.target.value)}
-                                        />
-
+                                        <div className='content'>
+                                            <div className="head">
+                                            <div className="onTitle">
+                                                <h2 className="title">Situation to Trigger</h2>
+                                                <div className="showEmo">
+                                                    {emotionPatients && emotionPatients.length > 0 ? (
+                                                        emotionPatients.map((emotion) => (
+                                                            <span
+                                                                key={emotion.ID} // ใช้ emotion_id แทน ID
+                                                                style={{
+                                                                    display: 'inline-flex',
+                                                                    alignItems: 'center',
+                                                                    justifyContent: 'center',
+                                                                    fontSize: '1.2em',
+                                                                    backgroundColor: emotion.ColorCode, // ใช้ color_code แทน ColorCode
+                                                                    borderRadius: '50%',
+                                                                    width: '30px',
+                                                                    height: '30px',
+                                                                    color: '#fff',
+                                                                    textShadow: '0px 1px 2px rgba(0, 0, 0, 0.5)',
+                                                                    cursor: 'pointer', // เพิ่มตัวชี้เมื่อโฮเวอร์
+                                                                }}
+                                                            >
+                                                                {emotion.Emoticon} {/* ใช้ emotion_name แทน Emoticon */}
+                                                            </span>
+                                                        ))
+                                                    ) : (
+                                                        <div
+                                                            style={{
+                                                                width: '100%',
+                                                                height: '100%',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                justifyContent: 'center',
+                                                            }}
+                                                        >
+                                                            <div className="Loading-Data-SelfEmo"></div>
+                                                            <div className="text">โปรดเลือกอิโมจิตามอารมณ์ของคุณ</div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                        </div>
+                                                <div className="lowerInput">
+                                                    <div className="mainTitle">
+                                                        <textarea
+                                                            className="titleEdit"
+                                                            value={editContent.Situation || ''}
+                                                            onChange={(e) => handleInputChange('Situation', e.target.value)} // อัปเดต State
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="lower-content Edit">
+                                                <div className="bg-Content">
+                                                    <div className="content-box">
+                                                    <h3>Thoughts</h3>
+                                                        <div className="bg-input">
+                                                            <textarea
+                                                                value={editContent.Thought || ''}
+                                                                className="content-input"
+                                                                onChange={(e) => handleInputChange('Thought', e.target.value)}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div className="content-box">
+                                                    <h3>Behavior</h3>
+                                                        <div className="bg-input">
+                                                            <textarea
+                                                                value={editContent.Behavior || ''}
+                                                                className="content-input"
+                                                                onChange={(e) => handleInputChange('Behavior', e.target.value)}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div className="content-box">
+                                                    <h3>Bodily Sensations</h3>
+                                                        <div className="bg-input">
+                                                            <textarea
+                                                                value={editContent.BodilySensation || ''}
+                                                                className="content-input"
+                                                                onChange={(e) => handleInputChange('BodilySensation', e.target.value)}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div className="content-box">
+                                                    <h3>Emotions</h3>
+                                                        <div className="bg-input">
+                                                            <textarea
+                                                                value={editContent.TextEmotions || ''}
+                                                                className="content-input"
+                                                                onChange={(e) => handleInputChange('TextEmotions', e.target.value)}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         {/* แสดงอารมณ์ให้เลือก */}
-                                        <label htmlFor="emotion">Select Emotion:</label>
-                                        <div className="showEmo">
-                                        {selectEmotion.map((emotion) => (
-                                        <span
-                                            key={emotion.value}
-                                            style={{
-                                            display: 'inline-flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            fontSize: '1.5em',
-                                            backgroundColor: emotion.color,
-                                            borderRadius: '50%',
-                                            width: '2em',
-                                            height: '2em',
-                                            color: '#fff',
-                                            textShadow: '0px 1px 2px rgba(0, 0, 0, 0.5)',
-                                            cursor: 'pointer',
-                                            }}
-                                        >
-                                            {emotion.emotion}
-                                        </span>
-                                        ))}
-                                    </div>
-                                        <Select
-                                            className='content-emo'
-                                            mode="multiple"
-                                            tagRender={(props) => createTagRender(selectEmotion)(props)} // ใช้ฟังก์ชัน tagRender
-                                            options={emotionPatients.map((emotion) => ({
-                                                value: emotion.ID,    // ใช้ ID เป็น value
-                                                label: `${emotion.Emoticon} ${emotion.Name}`,  // แสดงอารมณ์และชื่อ
-                                            }))}
-                                            placeholder="ความรู้สึก..."
-                                            optionLabelProp="label"
-                                            optionFilterProp="label"
-                                            onChange={(values) => handleSelectChange(values, setSelectEmotion)} // ส่ง setSelectEmotion
-                                        />
-                                        <Button onClick={saveEditedContent}>บันทึก</Button> {/* ปุ่มบันทึก */}
-                                        <Button onClick={() => setIsEditing(false)}>ยกเลิก</Button> {/* ปุ่มยกเลิก */}
+                                        <div className='bg-select'>
+                                            <div>
+                                                <label htmlFor="emotion" style={{marginRight: '20px'}}>เลือกอารมณ์</label>    
+                                                <Select
+                                                    className="content-emo"
+                                                    mode="multiple"
+                                                    tagRender={createTagRender(transformedEmotions)}
+                                                    options={emotions.map(emotion => ({
+                                                        value: emotion.ID,
+                                                        label: `${emotion.Emoticon} ${emotion.Name}`,
+                                                    }))}
+                                                    placeholder="ความรู้สึก..."
+                                                    optionLabelProp="label"
+                                                    optionFilterProp="label"
+                                                    value={emotionPatients?.map(emotion => emotion.ID)} // แสดงอิโมจิที่ผู้ใช้เลือกไว้
+                                                    onChange={(selectedIDs) => {
+                                                        const selectedEmotions = emotions.filter(emotion => selectedIDs.includes(emotion.ID));
+                                                        setEmotionPatients(selectedEmotions); // อัปเดตสถานะอิโมจิที่เลือกไว้
+                                                        handleSelectChange(selectedIDs, setSelectEmotion); // จัดการข้อมูลเพิ่มเติม (ถ้าจำเป็น)
+                                                    }}
+                                                />
+                                            </div>
+                                            <div>
+                                                <Button onClick={() => setIsEditing(false)}>ยกเลิก</Button> {/* ปุ่มยกเลิก */}
+                                                <Button onClick={saveEditedContent}>บันทึก</Button> {/* ปุ่มบันทึก */}
+                                            </div>
+                                        </div>
                                     </div>
                                 ) : (
                                     getContentForDay(selectedDate) || (
@@ -427,7 +550,7 @@ function SheetCross() {
                                             }}
                                         >
                                             <div className="Loading-Data-Self"></div>
-                                            <div className="text">ยังไม่ได้เลือกวันที่...</div>
+                                            <div className="text">ไม่มีข้อมูล...</div>
                                         </div>
                                     )
                                 )}
@@ -448,7 +571,7 @@ function SheetCross() {
                                     <div
                                         key={index}
                                         className={`day ${selectedDate && date.toDateString() === selectedDate.toDateString() ? 'selected' : ''}`}
-                                        onClick={() => handleDateChange(date)} // เลือกวันที่เมื่อคลิก
+                                        onClick={() => onDateClick(date)} // เลือกวันที่เมื่อคลิก
                                     >
                                         {formatDate(date)}
                                     </div>

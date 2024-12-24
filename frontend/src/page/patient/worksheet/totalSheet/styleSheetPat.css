@@ -581,6 +581,14 @@
     background-color: var(--color-backgroun-secondary3);
 }
 
+.SheetCross .day-content .lower-content.Edit{
+    margin: 30px 20px 0 0px;
+    width: 100%;
+    height: 91%;
+    border-radius: var(--border-radius-1);
+    background-color: var(--color-backgroun-secondary3);
+}
+
 .SheetCross .day-content .lower-content .bg-Content{
     margin: 20px 20px 0 20px;
     width: calc(100% -20px);
@@ -591,7 +599,7 @@
     gap: 20px;
 }
 
-.SheetCross .day-content .lower-content .bg-Content .content-box {
+.SheetCross .day-content .content-box {
     flex: 1 1 calc(50% - 10px);
     margin-top: 10px;
     min-width: 150px;
@@ -631,6 +639,20 @@
     background-color: var(--color-backgroun-secondary2);
 }
 
+.SheetCross .titleEdit{
+    margin-top: 10px;
+    margin-left: 10px;
+    width: 99%;
+    height: 84%;
+    font-size: 1.1rem;
+    border: none;
+    resize: none;
+    outline: none; 
+    color: var(--color-font1);
+    background: transparent;
+    font-family: 'Noto Sans Thai', sans-serif;
+}
+
 .SheetCross .day-content .lower-content .bg-Content .content-box .bg-input .content-input {
     margin-top: 10px;
     width: 99%;
@@ -665,6 +687,9 @@
     white-space: nowrap; /* ป้องกันการห่อข้อความ */
 }
 
+.SheetCross Button{
+    color: var(--color-font1);
+}
 
 
 
@@ -863,6 +888,31 @@
     object-fit: cover;
 }
 
+.SheetCross .showEmo{
+    max-width: 600px; /* จำกัดความกว้าง */
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    text-align: end;
+    overflow-y: auto;
+}
+
+.SheetCross .bg-select{
+    display: flex;
+    justify-content: space-between;
+    margin-top: -15px;
+}
+
+.SheetCross .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+    position: relative;
+    width: 100%; /* จำกัดความกว้าง */
+    height: 30px;
+    display: flex;
+    gap: .5rem;
+    margin-bottom: 10px;
+    overflow-x: auto;
+}
+
 .SheetCross .Loading-Data-Self{
     background: url('../../../../assets/noData.gif');
     background-size: cover;
@@ -870,6 +920,17 @@
     width: 440px;
     height: 250px; 
     margin-top: -100px;
+    border: 5px solid transparent ; 
+    border-radius: 10px;
+    opacity: 0.5;
+}
+
+.SheetCross .Loading-Data-SelfEmo{
+    background: url('../../../../assets/noData.gif');
+    background-size: cover;
+    background-position: center;
+    width: 80px;
+    height: 50px; 
     border: 5px solid transparent ; 
     border-radius: 10px;
     opacity: 0.5;

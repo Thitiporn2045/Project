@@ -276,7 +276,7 @@ const toggleIsPublic = async (diary: DiaryPatInterface) => {
                                             toggleIsPublic(diary); // เรียกใช้ฟังก์ชัน
                                         }}
                                     >
-                                        {diary.IsPublic === true ? <FaLock /> : <FaUnlockAlt />}
+                                        {diary.IsPublic === true ? <FaUnlockAlt /> :<FaLock />}
                                     </button>
                                     <button
                                         onClick={(e) => {

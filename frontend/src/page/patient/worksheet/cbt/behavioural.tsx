@@ -1,79 +1,145 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import NavbarPat from '../../../../component/navbarPat/navbarPat';
 import './stylePat.css';
 import { Button, Input, Select, Tooltip, Tag, ConfigProvider, message } from 'antd';
-import { BiSolidEditAlt, BiSolidLockOpen } from "react-icons/bi";
-import type { SelectProps } from 'antd';
+import { GetEmotionByPatientID } from '../../../../services/https/emotion/emotion';
+import { EmtionInterface } from '../../../../interfaces/emotion/IEmotion';
 import { useSearchParams } from 'react-router-dom';
 import { DiaryPatInterface } from '../../../../interfaces/diary/IDiary';
-import { EmtionInterface } from '../../../../interfaces/emotion/IEmotion';
+import { GetDiaryByDiaryID } from '../../../../services/https/diary';
+import { CreateCrossSectional } from '../../../../services/https/cbt/crossSectional/crossSectional';
+import { CrossSectionalInterface } from '../../../../interfaces/crossSectional/ICrossSectional';
+import dayjs from 'dayjs';
 
-interface OptionType {
-value: string;
-emotion: string;
-label: string;
-}
+const CrossSectional: React.FC = () => {
+  const patID = localStorage.getItem('patientID'); // ดึงค่า patientID จาก localStorage
+  const [emotionPatients, setEmotionPatients] = useState<EmtionInterface[]>([]); // สถานะเก็บข้อมูลอารมณ์ของผู้ป่วย
+  const [selectEmotion, setSelectEmotion] = useState<{ value: number; label: string; color: string; emotion: string }[]>([]);
+  const [messageApi, contextHolder] = message.useMessage();
 
-const options: OptionType[] = [
-{ value: '#A8E6CE', emotion: '🙂', label: 'Happy' },
-{ value: '#FF91AE', emotion: '😡', label: 'Angry' },
-{ value: '#F4ED7F', emotion: '😕', label: 'Confused' },
-{ value: '#B78FCB', emotion: '😢', label: 'Sad' },
-];
 
-// Define the TagRender function outside the component
-const tagRender: SelectProps['tagRender'] = (props) => {
-const { label, value, closable, onClose } = props;
-const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-};
+  const [searchParams] = useSearchParams(); // ใช้สำหรับดึงค่าจาก query parameter
+  const diaryID = searchParams.get('id'); // ดึงค่าของ 'id' จาก URL
+  const [diary, setDiary] = useState<DiaryPatInterface | null>(null); // สถานะเก็บข้อมูลไดอารี่
+  const [hoveredEmoji, setHoveredEmoji] = useState<string | null>(null); 
 
-// Find the option that matches the value
-const option = options.find(opt => opt.value === value);
+  // สถานะสำหรับข้อมูลฟอร์ม
+  const [negativeThought, setNegativeThought] = useState('');
+  const [alternativeThought, setAlternativeThought] = useState('');
+  const [experiment, setExperiment] = useState('');
+  const [outcome, setOutcome] = useState('');
+  const [oldBelief, setOldBelief] = useState('');
+  const [newBelief, setNewBelief] = useState('');
 
-return (
-    <Tag
-    color={value as string}
-    onMouseDown={onPreventMouseDown}
-    closable={closable}
-    onClose={onClose}
-    style={{ marginInlineEnd: 4 }}
-    >
-    {option?.emotion} {label}
-    </Tag>
-);
-};
+  const fetchDiaryByDiary = async () => {
+    if (diaryID) {
+      try {
+        const res = await GetDiaryByDiaryID(Number(diaryID)); // เรียกใช้ API โดยส่งค่า id
+        if (res) {
+          setDiary(res); // เก็บข้อมูลที่ได้จาก API ลงในสถานะ
+        }
+        console.log('Diary:', res); // แสดงข้อมูลที่ได้รับในคอนโซล
+      } catch (error) {
+        console.error('Error fetching diary:', error); // แสดงข้อผิดพลาด
+      }
+    }
+  };
+  
+  const fetchEmotionPatientData = async () => {
+    const res = await GetEmotionByPatientID(Number(patID)); // เรียกฟังก์ชันเพื่อดึงข้อมูลจาก API
+    if (res) {
+      setEmotionPatients(res); // เก็บข้อมูลที่ได้จาก API ลงในสถานะ
+    }
+    console.log('res', res); // แสดงข้อมูลที่ได้รับจาก API ในคอนโซล
+  };
 
-const Behavioural: React.FC = () => {
+  useEffect(() => {
+    fetchEmotionPatientData();
+    fetchDiaryByDiary();
+  }, []); // useEffect จะทำงานแค่ครั้งเดียวเมื่อคอมโพเนนต์ถูกแสดง
 
-    const patID = localStorage.getItem('patientID'); // ดึงค่า patientID จาก localStorage
-    const [emotionPatients, setEmotionPatients] = useState<EmtionInterface[]>([]); // สถานะเก็บข้อมูลอารมณ์ของผู้ป่วย
-    const [selectEmotion, setSelectEmotion] = useState<{ value: number; label: string; color: string; emotion: string }[]>([]);
-    const [messageApi, contextHolder] = message.useMessage();
+  const handleSelectChange = (selectedValues: number[], setTags: React.Dispatch<React.SetStateAction<{ value: number; label: string; color: string; emotion: string }[]>>) => {
+    const updatedTags = selectedValues.map(value => {
+      const emotion = emotionPatients.find(emotion => emotion.ID === value);
+      return {
+        value: emotion?.ID || value,
+        label: emotion?.Name || '',
+        color: emotion?.ColorCode || '#d9d9d9',
+        emotion: emotion?.Emoticon || ''
+      };
+    });
+    setTags(updatedTags);
+  };
+  
+  const createTagRender = (selectedTags: { value: number; label: string; color: string; emotion: string }[]) => {
+    return (props: any) => {
+      const { label, value, closable, onClose } = props;
+      const selectedTag = selectedTags.find(tag => tag.value === value);
+      const color = selectedTag?.color || '#d9d9d9'; // สี default ถ้าไม่เจอ
+      const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
+        event.preventDefault();
+        event.stopPropagation();
+      };
+  
+      return (
+        <Tag
+          color={color}
+          onMouseDown={onPreventMouseDown}
+          closable={closable}
+          onClose={onClose}
+          style={{
+            marginInlineEnd: 4,
+            color: 'white', // Ensure text is visible
+            textShadow: '1px 1px 2px rgba(192, 192, 192, 0.8)',
+            textAlign: 'center'
+          }}
+        >
+          {label}
+        </Tag>
+      );
+    };
+  };
+  
+  const handleSave = async () => {
+    const emotionIDs = selectEmotion.map(emotion => emotion.value);
+    const currentDate = dayjs().format('DD-MM-YYYY');
+    const data: CrossSectionalInterface = {
+      // Situation: situation,
+      // Thought: thought,
+      // Behavior: behavior,
+      // BodilySensation: bodilySensation,
+      // TextEmotions: textEmotions,
+      DiaryID: Number(diaryID),
+      EmotionID: emotionIDs,
+      Date: currentDate,
+    };
+    // แสดงข้อมูลใน console.log ก่อนการบันทึก
+    console.log('ข้อมูลที่บันทึก:', data);
+  
+    try {
+      const response = await CreateCrossSectional(data);
+      if (response.status) {
+        messageApi.success("บันทึกข้อมูลสำเร็จ");
+      } else {
+        messageApi.error(response.message || "เกิดข้อผิดพลาดในการบันทึกข้อมูล");
+      }
+    } catch (error) {
+      messageApi.error("ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้");
+      console.error(error);
+    }
+  };  
 
-    const [searchParams] = useSearchParams(); // ใช้สำหรับดึงค่าจาก query parameter
-    const diaryID = searchParams.get('id'); // ดึงค่าของ 'id' จาก URL
-    const [diary, setDiary] = useState<DiaryPatInterface | null>(null); // สถานะเก็บข้อมูลไดอารี่
-    const [hoveredEmoji, setHoveredEmoji] = useState<string | null>(null);   
-
-      // สถานะสำหรับข้อมูลฟอร์ม
-    const [situation, setSituation] = useState('');
-    const [thought, setThought] = useState('');
-    const [behavior, setBehavior] = useState('');
-    const [bodilySensation, setBodilySensation] = useState('');
-
-return (
+  return (
     <ConfigProvider
-    theme={{
+      theme={{
         token: {
-        colorPrimary: '#9BA5F6', // Example of primary color customization
+          colorPrimary: '#9BA5F6', // Example of primary color customization
         },
-    }}
+      }}
     >
- <div className="crossSectional">
+      <div className="crossSectional">
       {contextHolder} {/* Make sure this line is present */}
-        {/* <div className="befor-main">
+        <div className="befor-main">
           <div className='main-body'>
             <div className='sidebar'>
               <NavbarPat />
@@ -81,59 +147,80 @@ return (
             <div className="main-background">
               <div className="bg-maincontent">
                 <div className="bg-content">
-                  <div className="content">
+                  <div className="content-behavioural">
                     <div className='head'>
                       <div className='onTitle'>
-                        <h2 className="title">Situation to Trigger</h2>
-                      </div>
-                      <div className='lowerInput'>
-                        <Input 
-                          className='mainTitle' 
-                          placeholder="เหตุการณ์หรือสิ่งที่กระตุ้น..." 
-                          value={situation} 
-                          onChange={(e) => setSituation(e.target.value)} 
-                        />
-                      </div>
+                        <h2 className="title">Behavioural</h2>
+                      </div>                  
                     </div>
                     <div className="lower-content">
                       <div className="bg-Content">
                         <div className='content-box'>
-                          <h3>Thoughts</h3>
-                          <div className="bg-input">
-                          <textarea 
-                            className='content-input' 
-                            placeholder="ความคิด..." 
-                            value={thought} 
-                            onChange={(e) => setThought(e.target.value)} 
-                          />
+                          <h3>Target cognition</h3>
+                          <div className="bg-input-ex">
+                            <div className="thought-box">
+                              <label className="thought-label">ความคิดเชิงลบ:</label>
+                              <textarea
+                                className="thought-textarea"
+                                placeholder="ตัวอย่าง:/	ความคิดเชิงลบ: ถ้าฉันพูดในที่ประชุม คนจะหัวเราะหรือวิจารณ์ฉัน"
+                                value={negativeThought} 
+                                onChange={(e) => setNegativeThought(e.target.value)} 
+                              />
+                            </div>
+                            <div className="thought-box">
+                              <label className="thought-label">ความคิดทางเลือก:</label>
+                              <textarea
+                                className="thought-textarea"
+                                placeholder="ตัวอย่าง:/ ความคิดทางเลือก: อาจไม่มีใครวิจารณ์ฉัน และบางคนอาจเห็นว่าความเห็นของฉันมีค่า"
+                                value={alternativeThought} 
+                                onChange={(e) => setAlternativeThought(e.target.value)} 
+                              />
+                            </div>
                           </div>
                         </div>
                         <div className='content-box'>
-                          <h3>Behavior</h3>
+                          <h3>Experiment</h3>
                           <div className="bg-input">
                           <textarea 
                               className='content-input' 
-                              placeholder="พฤติกรรม..." 
-                              value={behavior} 
-                              onChange={(e) => setBehavior(e.target.value)} 
+                              placeholder="ตัวอย่าง:/	ทดลองพูดในที่ประชุมสั้น ๆ เช่น แสดงความเห็นในหัวข้อที่ตัวเองมั่นใจ และสังเกตปฏิกิริยาของคนรอบตัว" 
+                              value={experiment} 
+                              onChange={(e) => setExperiment(e.target.value)} 
                             />
                           </div>
                         </div>
                         <div className='content-box'>
-                          <h3>Bodily Sensations</h3>
+                          <h3>Outcome & learning</h3>
                           <div className="bg-input">
                           <textarea 
                             className='content-input' 
-                            placeholder="พฤติกรรมผลกระทบที่ควบคุมไม่ได้..." 
-                            value={bodilySensation} 
-                            onChange={(e) => setBodilySensation(e.target.value)} 
+                            placeholder="ตัวอย่าง:/	สอบถามผู้เข้าร่วมประชุมบางคน หรือสังเกตปฏิกิริยา เช่น ไม่มีใครหัวเราะ หรือบางคนอาจพยักหน้าเห็นด้วย" 
+                            value={outcome} 
+                            onChange={(e) => setOutcome(e.target.value)} 
                           />
                           </div>
                         </div>
                         <div className='content-box'>
-                          <h3>Emotions</h3>
-                          <div className="bg-input">
-                            <textarea className='content-input' placeholder="อารมณ์..." />
+                          <h3>What next?</h3>
+                          <div className="bg-input-ex">
+                            <div className="thought-box">
+                                <label className="thought-label">ความเชื่อเดิม:</label>
+                                <textarea
+                                  className="thought-textarea"
+                                  placeholder="ตัวอย่าง:/ ความเชื่อเดิม: “คนจะหัวเราะฉัน”  ซึ่งไม่จริง"
+                                  value={oldBelief}
+                                  onChange={(e) => setOldBelief(e.target.value)}
+                                />
+                            </div>
+                            <div className="thought-box">
+                                <label className="thought-label">ความเชื่อใหม่:</label>
+                                <textarea
+                                  className="thought-textarea"
+                                  placeholder="ตัวอย่าง:/ ความเชื่อใหม่: การพูดในที่ประชุมอาจไม่เลวร้ายอย่างที่คิด และบางคนสนใจในสิ่งที่ฉันพูด"
+                                  value={newBelief}
+                                  onChange={(e) => setNewBelief(e.target.value)}
+                                />
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -151,29 +238,45 @@ return (
                   </div>
                 </div>
                 <div className="emo">
-                <div className="showEmo">
-                    {selectEmotion.map((emotion) => (
-                      <span
-                        key={emotion.value}
-                        onMouseEnter={() => setHoveredEmoji(emotion.label)} // ตั้งค่าอิโมจิที่ถูกวางเมาส์
-                        onMouseLeave={() => setHoveredEmoji(null)} // รีเซ็ตเมื่อเอาเมาส์ออก
+                  <div className="showEmo">
+                    {selectEmotion && selectEmotion.length > 0 ? (
+                      selectEmotion.map((emotion) => (
+                        <span
+                          key={emotion.value}
+                          onMouseEnter={() => setHoveredEmoji(emotion.label)} // ตั้งค่าอิโมจิที่ถูกวางเมาส์
+                          onMouseLeave={() => setHoveredEmoji(null)} // รีเซ็ตเมื่อเอาเมาส์ออก
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: '1.5em',
+                            backgroundColor: emotion.color,
+                            borderRadius: '50%',
+                            width: '2em',
+                            height: '2em',
+                            color: '#fff',
+                            textShadow: '0px 1px 2px rgba(0, 0, 0, 0.5)',
+                            cursor: 'pointer', // เพิ่มตัวชี้เมื่อโฮเวอร์
+                          }}
+                        >
+                          {emotion.emotion}
+                        </span>
+                      ))
+                    ) : (
+                      <div
                         style={{
-                          display: 'inline-flex',
+                          width: '100%',
+                          height: '100%',
+                          display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          fontSize: '1.5em',
-                          backgroundColor: emotion.color,
-                          borderRadius: '50%',
-                          width: '2em',
-                          height: '2em',
-                          color: '#fff',
-                          textShadow: '0px 1px 2px rgba(0, 0, 0, 0.5)',
-                          cursor: 'pointer', // เพิ่มตัวชี้เมื่อโฮเวอร์
+                          flexDirection: 'column',
                         }}
                       >
-                        {emotion.emotion}
-                      </span>
-                    ))}
+                        <div className="Loading-Data-Self"></div>
+                        <div className="text">โปรดเลือกอิโมจิตามอารมณ์ของคุณ</div>
+                      </div>
+                    )}
                   </div>
                   {hoveredEmoji && (
                     <div className="hover-menu">
@@ -196,14 +299,13 @@ return (
 
                     </div>
                       <button className="btn-submit" onClick={handleSave}>บันทึก</button>
-
               </header>
             </div>
           </div>
-        </div> */}
+        </div>
       </div>
     </ConfigProvider>
-);
+  );
 };
 
-export default Behavioural;
+export default CrossSectional;
