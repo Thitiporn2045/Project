@@ -36,8 +36,11 @@ func main() {
 			r.GET("/pat/get/CrossSectional/ByDiary", controller.GetCrossSectionalByDiaryID)
 			r.GET("/pat/get/CrossSectional/Emotion/ByDiary", controller.GetEmotionsByDiaryID)
 			r.GET("/pat/get/CrossSectional/Date/Emotion/ByDiary", controller.GetEmotionsHaveDateByDiaryID)
-
-
+			r.GET("/pat/get/Behavioral/ByDiary", controller.GetBehavioralExpByDiaryID)
+			r.GET("/pat/get/Behavioral/Date/Emotion/ByDiary", controller.GetEmotionsBehavioralExpHaveDateByDiaryID)
+			r.GET("/pat/get/ActivityDiary/ByDiary", controller.GetActivityDiaryByDiaryID)
+			r.GET("/pat/get/ActivityPlanning/ByDiary", controller.GetActivityPlanningByDiaryID)
+			r.GET("/pat/get/TimeOfDay", controller.ListTimeOfDays)
 
 			r.PATCH("/patients", controller.UpdatePatient)
 			r.PATCH("/pat/update/Password",controller.UpdatePasswordPatient)
@@ -46,12 +49,18 @@ func main() {
 			r.PATCH("/diaries/:id/toggle-public", controller.ToggleDiaryIsPublic)
 			r.PATCH("/pat/update/Emotion", controller.UpdateEmotionByID)
 			r.PATCH("/pat/update/CrossSectional", controller.UpdateCrossSectional)
+			r.PATCH("/pat/update/Behavioral", controller.UpdateBehavioralExp)
+			r.PATCH("/pat/update/ActivityDiary", controller.UpdateActivityDiary)
+			r.PATCH("/pat/update/ActivityPlanning", controller.UpdateActivityPlanning)
 
 			r.POST("/pat/checkPassword",controller.CheckOldPasswordPatient)
 			r.POST("/pat/note",controller.CreateNotePat)
 			r.POST("/pat/creatDiary",controller.CreateDiaryPat)	
 			r.POST("/pat/creat/Emotion",controller.CreateEmotion)
 			r.POST("/pat/creat/CrossSectional",controller.CreateCrossSectional)	
+			r.POST("/pat/creat/Behavioral",controller.CreateBehavioralExp)	
+			r.POST("/pat/creat/ActivityDiary",controller.CreateActivityDiary)	
+			r.POST("/pat/creat/ActivityPlanning",controller.CreateActivityPlanning)	
 			
 			r.DELETE("/patients/:id", controller.DeletePatient)
 			r.DELETE("/pat/delNote/:id", controller.DeleteNotePat)

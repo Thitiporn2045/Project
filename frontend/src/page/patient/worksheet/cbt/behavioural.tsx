@@ -7,16 +7,17 @@ import { EmtionInterface } from '../../../../interfaces/emotion/IEmotion';
 import { useSearchParams } from 'react-router-dom';
 import { DiaryPatInterface } from '../../../../interfaces/diary/IDiary';
 import { GetDiaryByDiaryID } from '../../../../services/https/diary';
-import { CreateCrossSectional } from '../../../../services/https/cbt/crossSectional/crossSectional';
-import { CrossSectionalInterface } from '../../../../interfaces/crossSectional/ICrossSectional';
 import dayjs from 'dayjs';
+import { BehavioralExpInterface } from '../../../../interfaces/behavioralExp/IBehavioralExp';
+import { CreateBehavioralExp } from '../../../../services/https/cbt/behavioralExp/behavioralExp';
+import { useNavigate } from 'react-router-dom';
 
-const CrossSectional: React.FC = () => {
+const BehavioralExp: React.FC = () => {
   const patID = localStorage.getItem('patientID'); // ดึงค่า patientID จาก localStorage
   const [emotionPatients, setEmotionPatients] = useState<EmtionInterface[]>([]); // สถานะเก็บข้อมูลอารมณ์ของผู้ป่วย
   const [selectEmotion, setSelectEmotion] = useState<{ value: number; label: string; color: string; emotion: string }[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
-
+  const navigate = useNavigate();
 
   const [searchParams] = useSearchParams(); // ใช้สำหรับดึงค่าจาก query parameter
   const diaryID = searchParams.get('id'); // ดึงค่าของ 'id' จาก URL
@@ -24,9 +25,11 @@ const CrossSectional: React.FC = () => {
   const [hoveredEmoji, setHoveredEmoji] = useState<string | null>(null); 
 
   // สถานะสำหรับข้อมูลฟอร์ม
+  const [thoughtToTest, setThoughtToTest] = useState('');
   const [negativeThought, setNegativeThought] = useState('');
   const [alternativeThought, setAlternativeThought] = useState('');
   const [experiment, setExperiment] = useState('');
+  const [newThought, setNewThought] = useState('');
   const [outcome, setOutcome] = useState('');
   const [oldBelief, setOldBelief] = useState('');
   const [newBelief, setNewBelief] = useState('');
@@ -100,21 +103,18 @@ const CrossSectional: React.FC = () => {
       );
     };
   };
-
-  const TestSave = () => {
-    const Tough = negativeThought +","+ alternativeThought
-    console.log("Tough", Tough)
-  }
   
   const handleSave = async () => {
     const emotionIDs = selectEmotion.map(emotion => emotion.value);
     const currentDate = dayjs().format('DD-MM-YYYY');
-    const data: CrossSectionalInterface = {
-      // Situation: situation,
-      // Thought: thought,
-      // Behavior: behavior,
-      // BodilySensation: bodilySensation,
-      // TextEmotions: textEmotions,
+    const thoughtToTest = negativeThought +"#$"+ alternativeThought;
+    const newThought = outcome +"#$"+ oldBelief;
+
+    const data: BehavioralExpInterface = {
+      ThoughtToTest: thoughtToTest,
+      Experiment: experiment,
+      Outcome: outcome,
+      NewThought: newThought,
       DiaryID: Number(diaryID),
       EmotionID: emotionIDs,
       Date: currentDate,
@@ -123,9 +123,12 @@ const CrossSectional: React.FC = () => {
     console.log('ข้อมูลที่บันทึก:', data);
   
     try {
-      const response = await CreateCrossSectional(data);
+      const response = await CreateBehavioralExp(data);
       if (response.status) {
         messageApi.success("บันทึกข้อมูลสำเร็จ");
+        setTimeout(() => {
+          navigate('/mainSheet');
+        }, 2000);
       } else {
         messageApi.error(response.message || "เกิดข้อผิดพลาดในการบันทึกข้อมูล");
       }
@@ -156,7 +159,7 @@ const CrossSectional: React.FC = () => {
                   <div className="content-behavioural">
                     <div className='head'>
                       <div className='onTitle'>
-                        <h2 className="title">Behavioural</h2>
+                        <h2 className="title">Behavioral Experiment</h2>
                       </div>                  
                     </div>
                     <div className="lower-content">
@@ -304,8 +307,7 @@ const CrossSectional: React.FC = () => {
                     />
 
                     </div>
-                    {/* <button className="btn-submit" onClick={handleSave}>บันทึก</button> */}
-                    <button className="btn-submit" onClick={TestSave}>บันทึก</button>
+                    <button className="btn-submit" onClick={handleSave}>บันทึก</button>
               </header>
             </div>
           </div>
@@ -315,4 +317,4 @@ const CrossSectional: React.FC = () => {
   );
 };
 
-export default CrossSectional;
+export default BehavioralExp;

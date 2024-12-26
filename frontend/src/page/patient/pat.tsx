@@ -13,6 +13,7 @@ import { ConnectionRequestInterface } from '../../interfaces/connectionRequest/I
 import { AcceptConnectionRequest, GetConnectionPatientById, ListConnectionPatientById, RejectConnectionRequest } from '../../services/https/connectionRequest';
 import { Avatar, Badge, Button, List, message } from 'antd';
 import { CreateNotePat, GetNotesByPatientID } from '../../services/https/notePat/notePat';
+import BookPat from '../../component/bookPat/bookPat';
 
 function Pat() {
     const [messageApi, contextHolder] = message.useMessage();
@@ -227,7 +228,7 @@ function toggle() {
                                     </div>
                                     <div className='book-board'>
                                         <div className="content">
-                                        {/* <BookPat month={selectedMonth} /> */}
+                                            {/* <BookPat limit={4} /> */}
                                         </div>
                                     </div>
                                 </div>

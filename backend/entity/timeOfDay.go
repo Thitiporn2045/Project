@@ -6,7 +6,9 @@ import (
 
 type TimeOfDay struct{
 	gorm.Model
-	Name string
+	Name string `gorm:"uniqueIndex"`
+	Emoticon string
+	ColorCode string
 
 	ActivityPlanning []ActivityPlanning `gorm:"foreignKey:TimeOfDayID"`
 }

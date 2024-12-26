@@ -8,7 +8,6 @@ type ActivityPlanning struct{
 	Date string
 	Time string
 	Activity string
-	IsDone bool
 
 	TimeOfDayID *uint
 	TimeOfDay TimeOfDay `gorm:"foreignKey:TimeOfDayID"`

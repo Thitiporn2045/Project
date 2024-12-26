@@ -607,6 +607,7 @@
 
 .planning .events {
     width: 100%;
+    font-family:'Noto Sans Thai',sans-serif;
 }
 
 .planning .events li{
@@ -728,4 +729,50 @@
     height: 35px;
     border-radius: 50%;
     object-fit: cover;
+}
+
+.planning .day-Planning{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;  
+
+    .mainTetx{
+        color: var(--color-font1);
+        font-weight: 600;
+    }
+
+    .text{
+        color: var(--color-font2);
+    }
+}
+
+.planning .title-event{
+    color: rgba(0, 0, 0, 0.45);  
+
+}
+
+.planning .ant-btn-variant-text {
+    font-size: 1rem;
+    font-weight: 700;
+    color: rgba(0, 0, 0, 0.88);
+    box-shadow: none;
+}
+
+.planning .Loading-Data-SelfDay{
+    background: url('../../../../assets/noData.gif');
+    background-size: cover;
+    background-position: center;
+    width: 240px;
+    height: 150px; 
+    margin-top: -250px;
+    margin-left: 10px;
+    border: 5px solid transparent ; 
+    border-radius: 10px;
+    opacity: 0.5;
+}
+
+.planning .text{
+    font-size: .9rem;
+    color: var(--color-font2);
+    font-family: 'Noto Sans Thai', sans-serif;
 }

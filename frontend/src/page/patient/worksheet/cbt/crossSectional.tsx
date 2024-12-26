@@ -10,13 +10,14 @@ import { GetDiaryByDiaryID } from '../../../../services/https/diary';
 import { CreateCrossSectional } from '../../../../services/https/cbt/crossSectional/crossSectional';
 import { CrossSectionalInterface } from '../../../../interfaces/crossSectional/ICrossSectional';
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
 
 const CrossSectional: React.FC = () => {
   const patID = localStorage.getItem('patientID'); // ดึงค่า patientID จาก localStorage
   const [emotionPatients, setEmotionPatients] = useState<EmtionInterface[]>([]); // สถานะเก็บข้อมูลอารมณ์ของผู้ป่วย
   const [selectEmotion, setSelectEmotion] = useState<{ value: number; label: string; color: string; emotion: string }[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
-
+  const navigate = useNavigate();
 
   const [searchParams] = useSearchParams(); // ใช้สำหรับดึงค่าจาก query parameter
   const diaryID = searchParams.get('id'); // ดึงค่าของ 'id' จาก URL
@@ -119,6 +120,9 @@ const CrossSectional: React.FC = () => {
       const response = await CreateCrossSectional(data);
       if (response.status) {
         messageApi.success("บันทึกข้อมูลสำเร็จ");
+        setTimeout(() => {
+          navigate('/mainSheet');
+        }, 2000); // 2000 ms = 2 วินาที
       } else {
         messageApi.error(response.message || "เกิดข้อผิดพลาดในการบันทึกข้อมูล");
       }

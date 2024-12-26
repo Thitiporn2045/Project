@@ -61,14 +61,17 @@ func SetupDatabase() (*gorm.DB, error) {
 	db.Model(&Gender{}).Create(&lgbtq)
 	db.Model(&Gender{}).Create(&other)
 //======================================================================
-	timeOfDat := []TimeOfDay{
-		{Name: "ช่วงเช้า",},
-		{Name: "ช่วงกลางวัน"},
-		{Name: "ช่วงเย็น"},
-	}
-	for _, tmd := range timeOfDat {
-		db.Create(&tmd) 
-	}
+timeOfDat := []TimeOfDay{
+    {ColorCode: "#A8E6CE", Emoticon: "🌤️", Name: "เช้า"},
+    {ColorCode: "#FF91AE", Emoticon: "⛅", Name: "กลางวัน"},
+    {ColorCode: "#F4ED7F", Emoticon: "🌙", Name: "เย็น"},
+}
+
+for _, tmd := range timeOfDat {
+    // ใช้ FirstOrCreate เพื่อหาข้อมูลที่มีอยู่แล้ว หรือสร้างใหม่ถ้าไม่มี
+    db.Where("name = ?", tmd.Name).FirstOrCreate(&tmd, TimeOfDay{ColorCode: tmd.ColorCode, Emoticon: tmd.Emoticon})
+}
+
 //======================================================================
 	worksheetType := []WorksheetType{
 		{	

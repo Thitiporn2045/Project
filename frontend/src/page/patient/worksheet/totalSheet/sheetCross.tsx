@@ -15,27 +15,6 @@ import { EmtionInterface } from '../../../../interfaces/emotion/IEmotion';
 import { ListCommentByDiaryId } from '../../../../services/https/psychologist/comment';
 import { CommentInterface } from '../../../../interfaces/psychologist/IComment';
 
-// const comments = [
-//     {
-//         user: "John Doe",
-//         date: '25/08/2024',
-//         comment: "The psychologist was very attentive and gave practical advice on managing stress. I felt heard and understood throughout the session.",
-//         image: 'https://i.pinimg.com/736x/ae/b3/0b/aeb30b5e52ee5578af71b98312c67055.jpg'
-//     },
-//     {
-//         user: "Jane Smith",
-//         date: '25/08/2024',
-//         comment: "The session was insightful, but I felt like there could have been more focus on solutions. However, the psychologist was very compassionate.",
-//         image: 'https://i.pinimg.com/736x/ae/b3/0b/aeb30b5e52ee5578af71b98312c67055.jpg'
-//     },
-//     {
-//         user: "David Brown",
-//         date: '28/08/2024',
-//         comment: "I appreciated the psychologist's approach to mindfulness exercises. It helped me stay grounded during stressful moments.",
-//         image: 'https://i.pinimg.com/736x/ae/b3/0b/aeb30b5e52ee5578af71b98312c67055.jpg'
-//     }
-// ];
-
 function SheetCross() {
     const patID = localStorage.getItem('patientID'); // ดึงค่า patientID จาก localStorage
     const [searchParams] = useSearchParams(); // ใช้สำหรับดึงค่าจาก query parameter
@@ -611,23 +590,39 @@ const handleSelectChange = (values: (number | undefined)[], setSelectEmotion: Re
                                 <div className="contentComment">
                                     <h3>คำแนะนำ</h3>
                                     <div className="day-comments">
-                                        {comments.map((comment, index) => (
+                                    {comments && comments.length > 0 ? (
+                                        comments.map((comment, index) => (
                                             <div key={index} className="comment-box">
-                                                <div className="comment-content">
-                                                    <div className="comment-user">
-                                                        <strong>{comment.Psychologist?.FirstName}{comment.Psychologist?.LastName}</strong>
-                                                        <span className="comment-date">นักจิตวิทยา</span>
-                                                    </div>
-                                                    <div className="comment-text">
-                                                        {comment.Comment}
-                                                    </div>
+                                            <div className="comment-content">
+                                                <div className="comment-user">
+                                                <strong>
+                                                    {comment.Psychologist?.FirstName} {comment.Psychologist?.LastName}
+                                                </strong>
+                                                <span className="comment-date">นักจิตวิทยา</span>
                                                 </div>
-                                                {/* Avatar at the bottom */}
-                                                <div className="comment-avatar">
-                                                    <img src={comment.Psychologist?.Picture} />
-                                                </div>
+                                                <div className="comment-text">{comment.Comment}</div>
                                             </div>
-                                        ))}
+                                            {/* Avatar at the bottom */}
+                                            <div className="comment-avatar">
+                                                <img src={comment.Psychologist?.Picture} alt="Avatar" />
+                                            </div>
+                                            </div>
+                                        ))
+                                        ) : (
+                                        <div
+                                            style={{
+                                                width: '100%',
+                                                height: '100%',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                flexDirection: 'column',
+                                            }}
+                                        >
+                                            <div className="Loading-Data-SelfCom"></div>
+                                            <div className="text">ยังไม่มีคำแนะนำ</div>
+                                        </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>

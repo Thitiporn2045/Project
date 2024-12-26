@@ -13,31 +13,16 @@ const Books = [
 ];
 
 interface BookPatProps {
-    month: number;
+    limit: number;
 }
 
-function BookPat({ month }: BookPatProps) {
+function BookPat({ limit }: BookPatProps){
     const navigate = useNavigate();
-
-    const filteredBooks = Books.filter(book => {
-        // แยกวันที่ออกเป็นส่วน ๆ โดยใช้เครื่องหมาย '/'
-        const dateParts = book.startDay.split('/');
-        // เอาค่าของเดือน (ตำแหน่งที่ 2) ออกมา และแปลงเป็นตัวเลข
-        const bookMonth = parseInt(dateParts[1], 10);
-    
-        // เปรียบเทียบเดือนที่ได้กับเดือนที่ส่งเข้ามาใน props
-        return bookMonth === month + 1; // บวก 1 เนื่องจาก `month` เริ่มจาก 0 สำหรับมกราคม
-    });
-
-    const handleBookClick = (book: any) => {
-        navigate(`/SheetCross?name=${book.name}&image=${encodeURIComponent(book.image)}`);
-    };
-
     
     return (
         <div className='bookPat'>
-            {filteredBooks.map((book, index) => (
-                <div key={index} className='book-item' onClick={() => handleBookClick(book)}>
+            {Books.map((book, index) => (
+                <div key={index} className='book-item'>
                     <div className="img-book">
                         <img src={book.image} alt={book.name} />
                     </div>
