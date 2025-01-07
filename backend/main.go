@@ -76,6 +76,7 @@ func main() {
 			r.DELETE("/typeOfPatient/:id",controller.DeleteTypeOfPatient)
 
 			r.GET("/diaries/psy/:id",controller.ListPublicDiariesByPatientType)
+			r.GET("/crossSectional/psy/:id",controller.GetCrossSectionalByDiaryIDForPsy)
 
 			r.GET("/comments/:id",controller.ListCommentByDiaryId)
 			r.POST("/comment",controller.CreateComment)

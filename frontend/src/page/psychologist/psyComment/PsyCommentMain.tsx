@@ -4,7 +4,7 @@ import thTH from 'antd/lib/locale/th_TH';
 import { FaArrowUp } from 'react-icons/fa';
 import { CommentInterface } from '../../../interfaces/psychologist/IComment';
 import { CreateComment, DeleteComment, ListCommentByDiaryId, UpdateComment } from '../../../services/https/psychologist/comment';
-import userEmpty from '../../../assets/userEmty.png'
+import userEmpty from '../../../assets/userEmty.jpg'
 import { IoIosMore } from "react-icons/io";
 import QuickRepliesBtn from '../../../component/psychologist/quickReplies/QuickRepliesBtn';
 

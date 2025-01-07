@@ -90,7 +90,7 @@ export async function ListQuickReplies(id:number) {
   const requestOptions = {
       method:"GET",
       header:{
-          "Content-Type": "application/json",
+        "Content-Type": "application/json",
       },
   };
 
