@@ -244,8 +244,6 @@ func UpdateCrossSectional(c *gin.Context) {
 }
 
 
-
-
 //========================[Psychologist]==============================================
 func GetCrossSectionalByDiaryIDForPsy(c *gin.Context) {
 	var diary entity.Diary
