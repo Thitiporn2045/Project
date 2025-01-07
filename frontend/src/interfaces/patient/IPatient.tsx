@@ -19,6 +19,8 @@ export interface PatientInterface{
 	GenderID?: number;
 	Gender?: GenderInterface;
 
+	gender?: String;
+
 	TypeID?: number;
 	TypeOfPatient?: TypeOfPatientInterface;
 	

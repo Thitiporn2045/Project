@@ -9,7 +9,7 @@ import { PsychologistInterface } from "../../../interfaces/psychologist/IPsychol
 import { GetPsychologistById } from "../../../services/https/psychologist/psy";
 import { PatienForDashboardInterface } from "../../../interfaces/patient/IPatient";
 import { ListPatientsForDashboard } from "../../../services/https/patient";
-import userEmpty from "../../../assets/userEmty.png"
+import userEmpty from "../../../assets/userEmty.jpg"
 import { Button } from "antd";
 
 
