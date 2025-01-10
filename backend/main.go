@@ -35,12 +35,15 @@ func main() {
 			r.GET("/pat/get/Emotion/:id", controller.GetEmotionByPatientID)
 			r.GET("/pat/get/CrossSectional/ByDiary", controller.GetCrossSectionalByDiaryID)
 			r.GET("/pat/get/CrossSectional/Emotion/ByDiary", controller.GetEmotionsByDiaryID)
+			r.GET("/pat/get/CrossSectional/Emotion/Date/ByDiary", controller.GetDateEmotionsByDiaryID)
 			r.GET("/pat/get/CrossSectional/Date/Emotion/ByDiary", controller.GetEmotionsHaveDateByDiaryID)
 			r.GET("/pat/get/Behavioral/ByDiary", controller.GetBehavioralExpByDiaryID)
 			r.GET("/pat/get/Behavioral/Date/Emotion/ByDiary", controller.GetEmotionsBehavioralExpHaveDateByDiaryID)
 			r.GET("/pat/get/ActivityDiary/ByDiary", controller.GetActivityDiaryByDiaryID)
 			r.GET("/pat/get/ActivityPlanning/ByDiary", controller.GetActivityPlanningByDiaryID)
 			r.GET("/pat/get/TimeOfDay", controller.ListTimeOfDays)
+			r.GET("/pat/get/CrossSectional/WritingDates", controller.GetDiaryWritingDates)
+
 
 			r.PATCH("/patients", controller.UpdatePatient)
 			r.PATCH("/pat/update/Password",controller.UpdatePasswordPatient)

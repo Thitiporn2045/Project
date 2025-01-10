@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { FaUnlockAlt } from "react-icons/fa";
 import NavbarPat from '../../../../component/navbarPat/navbarPat';
 import { Button, ConfigProvider, message, Result, Select, Tag, Tooltip } from 'antd';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { GetDiaryByDiaryID } from '../../../../services/https/diary';
 import { GetCrossSectionalByDiaryID, GetEmotionsHaveDateByDiaryID, UpdateCrossSectional } from '../../../../services/https/cbt/crossSectional/crossSectional';
 import { DiaryPatInterface } from '../../../../interfaces/diary/IDiary';
 import { CrossSectionalInterface } from '../../../../interfaces/crossSectional/ICrossSectional';
 import { BiSolidEditAlt, BiSolidLockOpen } from "react-icons/bi";
-
+import { AiFillSignal } from "react-icons/ai";
 import dayjs from 'dayjs';
 import { GetEmotionByPatientID } from '../../../../services/https/emotion/emotion';
 import { EmtionInterface } from '../../../../interfaces/emotion/IEmotion';
@@ -303,6 +303,15 @@ const handleSelectChange = (values: (number | undefined)[], setSelectEmotion: Re
         setSelectedDate(date); 
     };    
     
+    const navigate = useNavigate();
+
+    const handleNavigateToSummary = () => {
+        if (diary && diary.ID) {
+            navigate(`/Summary?id=${diary.ID}`); // ใช้ query parameter แทน
+        } else {
+            console.warn("Diary ID is missing");
+        }
+    };
 
     // ฟังก์ชันที่ดึงข้อมูลตามวันที่
     const getContentForDay = (date: Date | null) => {
@@ -330,6 +339,14 @@ const handleSelectChange = (values: (number | undefined)[], setSelectEmotion: Re
                                         icon={<BiSolidEditAlt />}
                                         onClick={() => selectedDate && handleEditClick(selectedDate)} // กดเพื่อแก้ไขวันที่ที่เลือก
                                     />                                    
+                                    </Tooltip>
+                                    <Tooltip title="สรุปข้อมูล">
+                                        <Button
+                                            type="primary"
+                                            shape="circle"
+                                            icon={<AiFillSignal />}
+                                            onClick={handleNavigateToSummary} // ใช้ชื่อฟังก์ชันใหม่
+                                        />
                                     </Tooltip>
                                 </div>
                             </div>

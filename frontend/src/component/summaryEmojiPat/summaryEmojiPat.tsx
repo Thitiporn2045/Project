@@ -72,11 +72,11 @@ function SummaryEmojiPat() {
                         borderRadius: [20, 20, 20, 20] // กำหนดความโค้งมนของขอบ
                     }
                 })),
-                barWidth: '40%', // กำหนดความกว้างของแท่งกราฟ
+                barWidth: '20%', // กำหนดความกว้างของแท่งกราฟ
                 label: { // กำหนด label ของแท่งกราฟ
                     show: true, // แสดง label
                     position: 'right', // วาง label ที่ด้านขวาของแท่ง
-                    offset: [10, 0], // กำหนดระยะห่างจากแท่ง
+                    offset: [5, 0], // กำหนดระยะห่างจากแท่ง
                     fontSize: 14, // ขนาดฟอนต์ของ label
                     formatter: '{c}' // รูปแบบของ label
                 }
@@ -96,7 +96,7 @@ function SummaryEmojiPat() {
 
     return (
         <div className='summaryEmojiPat'>
-            <div className='bg-emoji' ref={chartRef} style={{ height: '400px', width: '100%' }}></div> {/* แสดงกราฟ */}
+            <div className='bg-emoji' ref={chartRef} style={{ height: '400px', width: '50%' }}></div> {/* แสดงกราฟ */}
             Summary {/* ข้อความที่แสดงด้านล่างกราฟ */}
         </div>
     )

@@ -45,19 +45,19 @@
 .emotional-web .main-bg{
     display: grid;
     grid-template-columns: 3.2rem repeat(2, 1fr);
+    background: linear-gradient(141deg, #ffffff 0%, #edf0ff 100%);
+
 
 }
 
 .emotional-web .main-bg .bg-left{
     width: 100%;
     min-height: 100vh;
-    background-color: var(--color-backgroun-secondary3);
 }
 
 .emotional-web .main-bg .bg-right{
     width: 100%;
     min-height: 100vh;
-    background-color: var(--color-backgroun-secondary3);
 }
 
 .emotional-web .emoji-grid {

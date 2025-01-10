@@ -573,7 +573,6 @@ const handleSubmitEdit = async () => {
                       </Form.Item>
                   </Form>
               </Modal>
-
               {/* Modal for feeling after event */}
               <Modal
                   title="เลือกอารมณ์หลังจากกิจกรรมนี้"

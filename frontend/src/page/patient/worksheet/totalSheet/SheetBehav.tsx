@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaUnlockAlt } from "react-icons/fa";
 import NavbarPat from '../../../../component/navbarPat/navbarPat';
 import { Button, ConfigProvider, message, Result, Select, Tag, Tooltip } from 'antd';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { GetDiaryByDiaryID } from '../../../../services/https/diary';
 import { DiaryPatInterface } from '../../../../interfaces/diary/IDiary';
 import { BiSolidEditAlt, BiSolidLockOpen } from "react-icons/bi";
@@ -13,6 +13,7 @@ import { ListCommentByDiaryId } from '../../../../services/https/psychologist/co
 import { CommentInterface } from '../../../../interfaces/psychologist/IComment';
 import { GetBehavioralExpByDiaryID, GetEmotionsBehavioralExpHaveDateByDiaryID, UpdateBehavioralExp } from '../../../../services/https/cbt/behavioralExp/behavioralExp';
 import { BehavioralExpInterface } from '../../../../interfaces/behavioralExp/IBehavioralExp';
+import { AiFillSignal } from 'react-icons/ai';
 
 function SheetBehav() {
     const patID = localStorage.getItem('patientID'); // ดึงค่า patientID จาก localStorage
@@ -334,6 +335,16 @@ const handleSelectChange = (values: (number | undefined)[], setSelectEmotion: Re
         return { oldBelief, newBelief };
     };
 
+    const navigate = useNavigate();
+
+    const handleNavigateToSummary = () => {
+        if (diary && diary.ID) {
+            navigate(`/Summary?id=${diary.ID}`); // ใช้ query parameter แทน
+        } else {
+            console.warn("Diary ID is missing");
+        }
+    };
+
     const getContentForDay = (date: Date | null) => {
         if (!date || !isDateInRange(date)) return null;
     
@@ -362,6 +373,14 @@ const handleSelectChange = (values: (number | undefined)[], setSelectEmotion: Re
                                             shape="circle"
                                             icon={<BiSolidEditAlt />}
                                             onClick={() => selectedDate && handleEditClick(selectedDate)}
+                                        />
+                                    </Tooltip>
+                                    <Tooltip title="สรุปข้อมูล">
+                                        <Button
+                                            type="primary"
+                                            shape="circle"
+                                            icon={<AiFillSignal />}
+                                            onClick={handleNavigateToSummary} // ใช้ชื่อฟังก์ชันใหม่
                                         />
                                     </Tooltip>
                                 </div>

@@ -14,4 +14,10 @@ export interface CrossSectionalInterface {
     Diary?: DiaryPatInterface;
 
     EmotionID?: number[];  // Array of Emotion IDs
+    
+}
+
+export interface WritingDatesProps {
+    DiaryID: number;
+    WritingDates: string[]
 }

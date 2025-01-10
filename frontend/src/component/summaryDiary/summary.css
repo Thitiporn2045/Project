@@ -1,0 +1,46 @@
+.mostCommon {
+    display: flex;
+    overflow-x: auto;
+    margin-left: 10px;
+    border-radius: var(--border-radius-3);
+}
+
+.mostCommon div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    min-width: 3rem;
+    height: 3rem;
+    margin-right: 1rem;
+    background-color: rgba(255, 255, 255, 0.447);
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+    transition: transform 0.2s ease-in-out;
+}
+
+.mostCommon div:hover {
+    transform: scale(1.1);
+}
+
+.mostCommon span:first-child {
+    font-size: 1.5rem;
+}
+
+.mostCommon span:last-child {
+    font-size: .5rem;
+    font-weight: bold;
+    text-align: center;
+    color: #000;
+}
+
+/* Hide scrollbar for all browsers */
+.mostCommon::-webkit-scrollbar {
+    display: none;
+}
+
+.mostCommon {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}

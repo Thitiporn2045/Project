@@ -62,16 +62,59 @@ func GetCrossSectionalByDiaryID(c *gin.Context) {
         return
     }
 
-    // ดึงข้อมูลทั้งหมดในตาราง CrossSectional ที่มี diary_id ตรงกัน
+    // ดึงข้อมูลทั้งหมดในตาราง CrossSectional พร้อมข้อมูลที่เกี่ยวข้องในตารางอื่น ๆ
     if err := entity.DB().
-        Where("diary_id = ?", diaryID).
-        Find(&crosses).Error; err != nil { // Find ใช้สำหรับดึงข้อมูลหลายแถว
+        Preload("Diary").              // Preload ข้อมูลจากตาราง Diary
+        Preload("Diary.Patient").      // Preload ข้อมูลจาก Patient ที่เกี่ยวข้องกับ Diary
+        Preload("Diary.WorksheetType"). // Preload ข้อมูลจาก WorksheetType ที่เกี่ยวข้องกับ Diary
+        Where("diary_id = ?", diaryID). // คัดกรองข้อมูลโดยใช้ diary_id
+        Find(&crosses).Error; err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve data"})
         return
     }
 
     // ส่งข้อมูลกลับในรูปแบบ JSON
     c.JSON(http.StatusOK, gin.H{"data": crosses})
+}
+func GetDateEmotionsByDiaryID(c *gin.Context) {
+	// รับ DiaryID จาก Query
+	diaryID := c.Query("id")
+
+	// ตรวจสอบว่า id มีการส่งมาหรือไม่
+	if diaryID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "DiaryID is required"})
+		return
+	}
+
+	var emotions []struct {
+		EmotionID   uint   `json:"EmotionID"`
+		Name        string `json:"Name"`
+		ColorCode   string `json:"ColorCode"`
+		Emoticon    string `json:"Emoticon"`
+		Date        string `json:"Date"` // เปลี่ยนประเภทเป็น string
+	}
+	
+	// Query เพื่อดึงข้อมูลพร้อมแสดง emotion_id
+	err := entity.DB().Model(&entity.CrossSectional{}).
+		Select("emotions.id as EmotionID, emotions.name as Name, emotions.color_code as ColorCode, emotions.emoticon as Emoticon, cross_sectionals.date as Date").
+		Joins("JOIN cross_sectional_emotions ON cross_sectionals.id = cross_sectional_emotions.cross_sectional_id").
+		Joins("JOIN emotions ON emotions.id = cross_sectional_emotions.emotion_id").
+		Where("cross_sectionals.diary_id = ?", diaryID).
+		Scan(&emotions).Error
+	
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch data", "details": err.Error()})
+		return
+	}
+
+	// หากไม่พบข้อมูล
+	if len(emotions) == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No emotions found for the given DiaryID"})
+		return
+	}
+
+	// ส่งข้อมูลกลับในรูป JSON
+	c.JSON(http.StatusOK, gin.H{"data": emotions})
 }
 
 func GetEmotionsByDiaryID(c *gin.Context) {
@@ -85,19 +128,22 @@ func GetEmotionsByDiaryID(c *gin.Context) {
 	}
 
 	var emotions []struct {
-		EmotionID   uint   `json:"emotion_id"`
-		EmotionName string `json:"emotion_name"`
-		ColorCode   string `json:"color_code"`
+		EmotionID   uint   `json:"EmotionID"`
+		Name 		string `json:"Name"`
+		ColorCode   string `json:"ColorCode"`
+		Emoticon    string `json:"Emoticon"`
+		Count       int    `json:"Count"`
 	}
-
-	// Query เพื่อดึงข้อมูล
+	
+	// Query เพื่อดึงข้อมูลพร้อมนับจำนวนอิโมจิที่ซ้ำกันและแสดง emotion_id
 	err := entity.DB().Model(&entity.CrossSectional{}).
-		Select("emotions.id as emotion_id, emotions.name as emotion_name, emotions.color_code").
+		Select("emotions.id as EmotionID, emotions.name as Name, emotions.color_code as ColorCode, emotions.emoticon as Emoticon, COUNT(emotions.emoticon) as Count").
 		Joins("JOIN cross_sectional_emotions ON cross_sectionals.id = cross_sectional_emotions.cross_sectional_id").
 		Joins("JOIN emotions ON emotions.id = cross_sectional_emotions.emotion_id").
 		Where("cross_sectionals.diary_id = ?", diaryID).
+		Group("emotions.id, emotions.emoticon, emotions.name, emotions.color_code").
 		Scan(&emotions).Error
-
+	
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch data", "details": err.Error()})
 		return
@@ -241,4 +287,38 @@ func UpdateCrossSectional(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"data": cross})
+}
+
+func GetDiaryWritingDates(c *gin.Context) {
+    // รับ DiaryID จาก Query
+    diaryID := c.Query("id")
+    if diaryID == "" {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "DiaryID is required"})
+        return
+    }
+
+    var writingDates []string
+
+    // Query ดึงวันที่ไม่ซ้ำในตาราง CrossSectional
+    if err := entity.DB().
+        Model(&entity.CrossSectional{}).
+        Select("DISTINCT date"). // เลือกวันที่ไม่ซ้ำ
+        Where("diary_id = ?", diaryID).
+        Order("date ASC"). // เรียงตามลำดับวันที่
+        Scan(&writingDates).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch writing dates", "details": err.Error()})
+        return
+    }
+
+    // หากไม่พบข้อมูล
+    if len(writingDates) == 0 {
+        c.JSON(http.StatusNotFound, gin.H{"message": "No writing dates found for the given DiaryID"})
+        return
+    }
+
+    // ส่งวันที่ที่เขียนไดอารี่กลับในรูป JSON
+    c.JSON(http.StatusOK, gin.H{
+        "DiaryID":      diaryID,
+        "WritingDates": writingDates, // รายการวันที่ที่เขียน
+    })
 }
