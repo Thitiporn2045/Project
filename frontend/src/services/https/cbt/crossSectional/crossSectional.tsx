@@ -45,6 +45,25 @@ export async function GetCrossSectionalByDiaryID(id: Number | undefined) {
     return res;
 }
 
+export async function GetDateEmotionsByDiaryID(id: Number | undefined) {
+    const requestOptions = {
+    method: "GET",
+    };
+
+    let res = await fetch(`${apiUrl}/pat/get/CrossSectional/Emotion/Date/ByDiary?id=${id}`, requestOptions)
+    .then((response) => response.json())
+    .then((res) => {
+        if (res.data) {
+        return res.data;
+        } else {
+        return false;
+        }
+    });
+
+    return res;
+}
+
+
 export async function GetEmotionsByDiaryID(id: Number | undefined) {
     const requestOptions = {
     method: "GET",
@@ -136,4 +155,23 @@ export async function GetCrossSectionalByDiaryIdForPsy(id: Number | undefined) {
       });
   
     return res;
+}
+export async function GetDiaryWritingDates(id: number | undefined) {
+    console.log("Fetching Writing Dates for DiaryID:", id);
+    
+    const requestOptions = {
+        method: "GET",
+    };
+
+    if (id === undefined) return false;
+
+    const url = `${apiUrl}/pat/get/CrossSectional/WritingDates?id=${id}`;
+    try {
+        const response = await fetch(url, requestOptions);
+        const res = await response.json();
+        return res.data || [];
+    } catch (error) {
+        console.error('Error fetching writing dates:', error);
+        return [];
+    }
 }

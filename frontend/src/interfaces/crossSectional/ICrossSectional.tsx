@@ -41,4 +41,11 @@ export interface CrossSectionalInterfaceForPsy { //รับมาแบบไ�
     Patient?: PatientInterface;
     CrossSectionals: CrossSectionalInterface2[];
     
+
+    
+}
+
+export interface WritingDatesProps {
+    DiaryID: number;
+    WritingDates: string[]
 }

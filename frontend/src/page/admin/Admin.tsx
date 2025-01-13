@@ -275,7 +275,7 @@ function Admin() {
               </div>
             </div>
           </div>
-          <div className='right'>
+          {/* <div className='right'>
             <div className="bgBox">
               <div className="profile">
                   <div className="textContent">
@@ -292,7 +292,7 @@ function Admin() {
 
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
       <Modal

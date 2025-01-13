@@ -221,7 +221,7 @@ function Profile() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="infoPsy">
+                                {/* <div className="infoPsy">
                                     <div className="head">
                                         <img src={userLogin.imge} alt="therapist" className="pro" />
                                         <strong>{connectedPsy?.Psychologist?.FirstName} {connectedPsy?.Psychologist?.LastName}</strong>
@@ -235,7 +235,7 @@ function Profile() {
                                             <label className="label-wrapper"><p>{connectedPsy?.Psychologist?.Tel}</p></label>
                                     </div>
                                     
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </motion.div>
