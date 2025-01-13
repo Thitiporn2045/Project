@@ -7,6 +7,7 @@
     align-items: center;
     background: #F7F8FD;
     font-family:'Noto Sans Thai', sans-serif;
+    color: #585858;
 }
 
 .PsyCommentCS .SideBar{
@@ -19,10 +20,239 @@
     position: relative;
     flex-grow: 1;  
     height: 100%;
-    background: #c7b285;
+    /* background: #c7b285; */
     display: flex;
     flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
     overflow: auto;
+
+    .Patient-card-info{
+        width: 98%;
+        height: 15%;
+        background: #ffffff;
+        border-radius: 15px;
+        margin-top: 10px;
+        display: flex;
+        flex-direction: row;
+        box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.03);
+
+        .Patient-card-info-left{
+            width: 45%;
+            height: 100%;
+            background-color: #85c7c4;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            .Patient-name-age-gender-id{
+                height: 85%;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                /* background-color: #c785c4; */
+                margin: 0.5rem;
+            }
+        }
+        .Patient-card-info-right{
+            width: 45%;
+            height: 100%;
+            display: flex;
+            flex-direction: row;
+            /* background:#e9eb96; */
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+
+            .Patient-email-tel-symtom-dob{
+                height: 100%;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 2rem;
+            }
+        }
+    }
+    .Records-select{
+        width: 98%;
+        height: 11%;
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        background:  #ffffff;
+        border-radius: 15px;
+    }
+
+    .Record-situation{
+        width: 98%;
+        height: 5%;
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        background:  #ffffff;
+        border-radius: 8px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .Record-info {
+        width: 98%;
+        flex-grow: 1;
+        border-radius: 15px;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr; /* 3 คอลัมน์ที่ขนาดเท่ากัน */
+        grid-template-rows: 1fr 1fr 1fr ;
+        /* gap: 1.5rem;  */
+        justify-content: center;
+        align-items: center; 
+        box-sizing: border-box; /* รวม padding และ border ในขนาดองค์ประกอบ */
+    }
+    
+    .Record-info > div {
+        background-color: #ffffff;
+        font-size: 16px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* จัดเนื้อหาให้อยู่ตรงกลาง */
+        padding: 10px;
+        border-radius: 15px;
+        width: 100%; 
+        max-width: 300px;
+        height: 95%;
+        max-height: 200px; 
+        box-sizing: border-box; 
+        gap: 0.5 rem;
+
+        .thought-header,
+        .emotion-header,
+        .behavior-header,
+        .bodily-sensation-header{
+            width: 100%;
+            height: 15%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .thought-detail,
+        .emotion-detail,
+        .behavior-detail,
+        .bodily-sensation-detail{
+            width: 100%;
+            flex-grow: 1;
+        }
+          
+        /* ลูกศรสองหัวแนวทแยง */
+        .arrow-diagonal1 {
+        position: relative;
+        width: 2px;
+        height: 100%;
+        background-color: black;
+        transform: rotate(60deg);
+        }
+        .arrow-diagonal2 {
+            position: relative;
+            width: 2px;
+            height: 100%;
+            background-color: black;
+            transform: rotate(-60deg);
+        }
+        .arrow-diagonal-center1 {
+            position: absolute;
+            width: 2px;
+            height: 90px;
+            background-color: black;
+            transform: rotate(180deg);
+        }
+        .arrow-diagonal-center2 {
+            position: absolute;
+            width: 2px;
+            height: 90px;
+            background-color: black;
+            transform: rotate(90deg);
+        }
+        .arrow-diagonal4 {
+            position: relative;
+            width: 2px;
+            height: 100%;
+            background-color: black;
+            transform: rotate(-60deg);
+        }
+        .arrow-diagonal5 {
+            position: relative;
+            width: 2px;
+            height: 100%;
+            background-color: black;
+            transform: rotate(60deg);
+        }
+        .arrow-diagonal1::before,
+        .arrow-diagonal1::after,
+        .arrow-diagonal2::before,
+        .arrow-diagonal2::after,
+        .arrow-diagonal4::before,
+        .arrow-diagonal4::after,
+        .arrow-diagonal5::before,
+        .arrow-diagonal5::after,
+        .arrow-diagonal-center1::before,
+        .arrow-diagonal-center1::after,
+        .arrow-diagonal-center2::before,
+        .arrow-diagonal-center2::after{
+        position: relative;
+        content: '';
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border: solid black;
+        border-width: 2px 2px 0 0;
+        }
+        
+        .arrow-diagonal1::before,
+        .arrow-diagonal2::before,
+        .arrow-diagonal4::before,
+        .arrow-diagonal5::before,
+        .arrow-diagonal-center1::before,
+        .arrow-diagonal-center2::before{
+        top: 0;
+        left: -4px;
+        transform: rotate(-45deg);
+        }
+        
+        .arrow-diagonal1::after,
+        .arrow-diagonal2::after,
+        .arrow-diagonal4::after,
+        .arrow-diagonal5::after,
+        .arrow-diagonal-center1::after,
+        .arrow-diagonal-center2::after{
+        bottom: 0;
+        right: -4px;
+        transform: rotate(135deg);
+        }
+
+        
+
+    }
+    
+    /* เส้นขอบสีดำที่ช่อง 2, 4, 6, 8 */
+    .Record-info > div:nth-child(2),
+    .Record-info > div:nth-child(4),
+    .Record-info > div:nth-child(6),
+    .Record-info > div:nth-child(8) {
+        /* border: 1px solid rgb(65, 65, 65);  */
+        background-color: #ffffff; 
+        border-radius: 15px;
+        box-shadow: rgba(104, 104, 104, 0.08) 0px 4px 12px;
+    }
+    
+    /* ช่องอื่น ๆ ไม่มีเส้นขอบ */
+    .Record-info > div:not(:nth-child(2)):not(:nth-child(4)):not(:nth-child(6)):not(:nth-child(8)) {
+        border: none;
+        background-color: transparent;
+    }
+    
+
+    
 }
 
 .PsyCommentCS .Comment{
@@ -36,6 +266,7 @@
     display: flex;
     flex-direction: column;
 }
+
 
 /*============================================================*/
 .PsyCommentBE{
@@ -141,6 +372,12 @@
     display: flex;
     flex-direction: column;
     overflow: auto;
+
+    .Patient-card-info{
+        width: 95%;
+        height: 10%;
+        background: #a2aee9;
+    }
 }
 
 .PsyCommentAD .Comment{

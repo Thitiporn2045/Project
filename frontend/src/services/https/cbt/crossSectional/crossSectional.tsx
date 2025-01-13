@@ -135,6 +135,27 @@ export async function UpdateCrossSectional(data: CrossSectionalInterface) {
     }
 }
 
+
+//=============================== Psychologist ========================================================================
+
+export async function GetCrossSectionalByDiaryIdForPsy(id: Number | undefined) {
+    const requestOptions = {
+      method: "GET",
+    };
+  
+    let res = await fetch(`${apiUrl}/crossSectional/psy/${id}`, requestOptions)
+      .then((response) => response.json())
+      .then((res) => {
+        if (res.data) {
+          return res.data;
+        } 
+        else {
+          return false;
+        }
+      });
+  
+    return res;
+}
 export async function GetDiaryWritingDates(id: number | undefined) {
     console.log("Fetching Writing Dates for DiaryID:", id);
     

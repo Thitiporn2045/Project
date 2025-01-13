@@ -289,6 +289,73 @@ func UpdateCrossSectional(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": cross})
 }
 
+
+//========================[Psychologist]==============================================
+func GetCrossSectionalByDiaryIDForPsy(c *gin.Context) {
+	var diary entity.Diary
+
+	diaryID := c.Param("id")
+
+	if err := entity.DB().
+		Preload("Patient").
+		Preload("Patient.Gender").
+		Preload("CrossSectional.Emotion").       
+		Preload("CrossSectional").             
+		Where("id = ?", diaryID).             
+		First(&diary).Error; err != nil {    
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	response := gin.H{
+		"ID":       diary.ID,
+		"Name":     diary.Name,
+		"IsPublic": diary.IsPublic,
+		"Start":    diary.Start,
+		"End":      diary.End,
+		"Patient": gin.H{
+			"ID":   diary.Patient.ID,
+			"Firstname": diary.Patient.Firstname,
+			"Lastname": diary.Patient.Lastname,
+			"gender": diary.Patient.Gender.Gender,
+			"Picture": diary.Patient.Picture,
+			"Dob": diary.Patient.Dob,
+			"Tel": diary.Patient.Tel,
+			"Email": diary.Patient.Email,
+			"Symtoms": diary.Patient.Symtoms,
+			"IdNumber": diary.Patient.IdNumber,
+		},
+		"CrossSectionals": func() []gin.H {
+			crossSectionals := []gin.H{}
+			for _, cs := range diary.CrossSectional {
+				emotions := []gin.H{}
+				for _, emotion := range cs.Emotion {
+					emotions = append(emotions, gin.H{
+						"ID":        emotion.ID,
+						"Name":      emotion.Name,
+						"Emoticon":  emotion.Emoticon,
+						"ColorCode": emotion.ColorCode,
+					})
+				}
+				crossSectionals = append(crossSectionals, gin.H{
+					"ID":              cs.ID,
+					"Situation":       cs.Situation,
+					"Thought":         cs.Thought,
+					"Behavior":        cs.Behavior,
+					"BodilySensation": cs.BodilySensation,
+					"TextEmotion":     cs.TextEmotions,
+					"Date":            cs.Date,
+					"Emotions":        emotions,
+				})
+			}
+			return crossSectionals
+		}(),
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": response})
+}
+
+
 func GetDiaryWritingDates(c *gin.Context) {
     // รับ DiaryID จาก Query
     diaryID := c.Query("id")

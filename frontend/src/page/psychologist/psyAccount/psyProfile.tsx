@@ -1,7 +1,7 @@
 import { Button, ConfigProvider, Form, Input, message } from 'antd'
 import thTH from 'antd/lib/locale/th_TH';
 import React, { useEffect, useState } from 'react'
-import userEmpty from '../../../assets/userEmty.png';
+import userEmpty from '../../../assets/userEmty.jpg';
 import { PsychologistInterface } from '../../../interfaces/psychologist/IPsychologist';
 import { GetPsychologistById, UpdatePsychologist } from '../../../services/https/psychologist/psy';
 

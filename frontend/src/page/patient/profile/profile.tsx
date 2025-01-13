@@ -7,7 +7,7 @@ import { ConnectionRequestInterface } from '../../../interfaces/connectionReques
 import { Button, Form, Input, message } from 'antd';
 import { GetConnectionPatientById } from '../../../services/https/connectionRequest';
 import { CheckPasswordPatient, GetPatientById, UpdatePasswordPatient, UpdatePatient } from '../../../services/https/patient';
-import userEmpty from '../../../assets/userEmty.png';
+import userEmpty from '../../../assets/userEmty.jpg';
 
 const userLogin = {
     imge: 'https://i.pinimg.com/474x/0f/44/6f/0f446fc154c16b2dd85413d50bc9c170.jpg',
