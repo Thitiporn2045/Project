@@ -13,6 +13,8 @@ import { EmtionInterface } from '../../../interfaces/emotion/IEmotion';
 import OverallMood from '../../../component/summaryDiary/overallMood';
 import MostCommon from '../../../component/summaryDiary/mostCommon';
 import FilterEmotions from '../../../component/summaryDiary/filterEmotions';
+import { CommentInterface } from '../../../interfaces/psychologist/IComment';
+import { ListCommentByDiaryId } from '../../../services/https/psychologist/comment';
 
 const Summary: React.FC = () => {
     const [searchParams] = useSearchParams();
@@ -25,7 +27,7 @@ const Summary: React.FC = () => {
     const [numberOfDays, setNumberOfDays] = useState<number | null>(null);  // Add this state for numberOfDays
     const [crossSectional, setCrossSectional] = useState<CrossSectionalInterface[]>([]); // ใช้ array ว่างแทน null
     const [datesWithData, setDatesWithData] = useState<string[]>([]); // สถานะเก็บวันที่ที่ไม่มีข้อมูล
-    const [emotionPatients, setEmotionPatients] = useState<EmtionInterface[]>([]); // ตั้งค่าประเภทของ emotionPatients เป็น EmtionInterface[]
+    const [comments, setComments] = useState<CommentInterface[]>([]); // ตั้งค่าประเภทของ emotionPatients เป็น EmtionInterface[]
     
     const bookRef = useRef<HTMLDivElement>(null);
     const [prev, setPrev] = useState(0);
@@ -58,42 +60,25 @@ const Summary: React.FC = () => {
         }
     };
 
-    const fetchEmotionPatientData = async () => {
-        if (!diaryID || !selectedDate) {
-            console.error("Diary ID or date is missing");
-            return;
-        }
-    
-        const dateString = dayjs(selectedDate).format('DD-MM-YYYY');
-    
-        try {
-            const res = await GetEmotionsHaveDateByDiaryID(numericDiaryID, dateString);
-    
-            if (res) {
-                // แปลงคีย์ของข้อมูลจาก API ให้ตรงกับ EmtionInterface
-                const transformedEmotions = res.map((emotion: any) => ({
-                    ID: emotion.emotion_id,
-                    Name: emotion.emotion_name,
-                    Emoticon: emotion.emoticon, // สมมติว่ามีอยู่ใน API
-                    ColorCode: emotion.color_code,
-                    PatID: emotion.PatID, // สมมติว่ามีอยู่ใน API
-                    Patient: emotion.Patient, // สมมติว่ามีอยู่ใน API
-                }));
-    
-                setEmotionPatients(transformedEmotions); // เก็บข้อมูลหลังจากแปลง
-                console.log("setEmotionPatients", transformedEmotions);
-            } else {
-                console.error("Failed to fetch emotions");
+    const fetchCommentsByDiaryID = async () => {
+        if (diaryID) {
+            try {
+                const res = await ListCommentByDiaryId(Number(diaryID)); // เรียกใช้ API โดยส่งค่า id
+                if (res) {
+                    setComments(res); // เก็บข้อมูลที่ได้จาก API ลงในสถานะ
+                }
+                console.log('comments:', res); // แสดงข้อมูลที่ได้รับในคอนโซล
+            } catch (error) {
+                console.error('Error fetching diary:', error); // แสดงข้อผิดพลาด
             }
-        } catch (error) {
-            console.error("Error fetching emotions:", error);
         }
-    };    
+    };
         
 
     useEffect(() => {
         fetchDiaryByDiary();
         fetchCrossSectionalByDiary();
+        fetchCommentsByDiaryID();
     }, []);
 
     useEffect(() => {
@@ -153,13 +138,6 @@ const Summary: React.FC = () => {
         console.log('Selected Date:', date);
         setSelectedDate(date);
     };
-
-    useEffect(() => {
-        if (selectedDate) {
-            fetchEmotionPatientData(); // เรียก fetchEmotionPatientData เมื่อ selectedDate เปลี่ยน
-        }
-    }, [selectedDate]);
-    
 
     const rotateBookAutomatically = () => {
         let currentRotation = prev;
@@ -229,36 +207,12 @@ const Summary: React.FC = () => {
                                     </section>
                                     
                                 <div className='cardEmotion'>
-                                    <div className="card-container">
-                                        <div className="labelShowDay">
-                                            <small className="text-muted">อารมณ์วันที่ {selectedDate ? formatDate(selectedDate) : 'ไม่ระบุ'}</small>
-                                        </div>
-                                            {emotionPatients.map((emoPat, index) => (
-                                                <div className="card" key={index}>
-                                                    <div className="card-header">
-                                                        <div 
-                                                            className="card-header-icon"
-                                                            style={{
-                                                                color: String(emoPat.ColorCode) || 'transparent',
-                                                                backgroundColor: String(emoPat.ColorCode) || 'transparent',
-                                                            }}
-                                                        >
-                                                            {emoPat.Emoticon}
-                                                        </div>
-                                                    </div>
-                                                    <div className="card-body">
-                                                        <p 
-                                                            className="card-value"
-                                                        >{emoPat.Name}</p>
-                                                        {/* <p className="card-percentage II">{emoPat.percentage}%</p> */}
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
+                                    
+                                        <FilterEmotions diaryID={numericDiaryID} date={selectedDate ? dayjs(selectedDate).format('DD-MM-YYYY') : ''} />
+
                                     </div>
                                 </div>
                                 <OverallMood diaryID={numericDiaryID} />
-                                    {/* <FilterEmotions diaryID={numericDiaryID}/> */}
                                 {/* <SummaryEmojiPat/> */}
                             </div>
                         </div>
@@ -336,11 +290,49 @@ const Summary: React.FC = () => {
                                         </div>
 
                                         <div className='boxContent2'>
-                                            
+                                            <div className="contentComment">
+                                                <div className="day-comments">
+                                                {comments && comments.length > 0 ? (
+                                                    comments.map((comment, index) => (
+                                                        <div key={index} className="comment-box">
+                                                        <div className="comment-content">
+                                                            <div className="comment-user">
+                                                            <strong>
+                                                                {comment.Psychologist?.FirstName} {comment.Psychologist?.LastName}
+                                                            </strong>
+                                                            <span className="comment-date">นักจิตวิทยา</span>
+                                                            </div>
+                                                            <div className="comment-text">{comment.Comment}</div>
+                                                        </div>
+                                                        {/* Avatar at the bottom */}
+                                                        <div className="comment-avatar">
+                                                            <img src={comment.Psychologist?.Picture} alt="Avatar" />
+                                                        </div>
+                                                        </div>
+                                                    ))
+                                                    ) : (
+                                                    <div
+                                                        style={{
+                                                            width: '100%',
+                                                            height: '100%',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            flexDirection: 'column',
+                                                        }}
+                                                    >
+                                                        <div className="Loading-Data-SelfCom"></div>
+                                                        <div className="text">ยังไม่มีคำแนะนำ</div>
+                                                    </div>
+                                                    )}
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <div className="boxContent3">
-                                            อารมณ์ที่พบบ่อย
+                                            <div className='titleEmoticon'>
+                                                อารมณ์ที่พบบ่อย
+                                            </div>
                                             <MostCommon diaryID={numericDiaryID}/>
                                         </div>
                                     </div>

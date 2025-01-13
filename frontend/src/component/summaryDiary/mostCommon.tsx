@@ -55,7 +55,7 @@ function MostCommon({ diaryID }: DiaryID) {
     return (
         <div className='mostCommon'>
             {mostCommonEmotions.map(emotion => (
-                <div key={emotion.EmotionID} style={{  padding: '10px', margin: '5px', borderRadius: '5px' }}>
+                <div key={emotion.EmotionID} style={{  padding: '10px', margin: '5px', borderRadius: '.8rem' }}>
                     <span>{emotion.Emoticon}</span>
                     <span>{emotion.Name}</span>
                 </div>

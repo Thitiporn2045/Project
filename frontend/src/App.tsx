@@ -71,7 +71,6 @@ export default function App() {
         <Route path='/Behavioural' element={<Behavioural/>} />
         <Route path='/Emotional' element={<Emotional/>} />
         <Route path='/SheetBehav' element={<SheetBehav/>} />
-        <Route path='/FilterEmotions' element={<FilterEmotions/>} />
       </Routes>
     </BrowserRouter>
   );

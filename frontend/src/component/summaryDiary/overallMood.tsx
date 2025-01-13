@@ -60,6 +60,9 @@ function OverallMood({ diaryID }: DiaryID) {
                         return `${emojis[index]} ${dataAxis[index]}: ${data[index]} ครั้ง`;
                     }
                 },
+                textStyle: {
+                    fontFamily: 'Noto Sans Thai', // กำหนดฟอนต์สำหรับข้อความทั้งหมดในกราฟ
+                },
                 xAxis: {
                     type: 'category',
                     data: dataAxis,
@@ -90,7 +93,7 @@ function OverallMood({ diaryID }: DiaryID) {
                 yAxis: {
                     type: 'value',
                     axisLabel: {
-                        formatter: '{value}',
+                        formatter: '{value} ',
                         rich: {
                             value: {
                                 padding: [0, 0, 0, 10], // เพิ่มระยะห่างด้านซ้าย
