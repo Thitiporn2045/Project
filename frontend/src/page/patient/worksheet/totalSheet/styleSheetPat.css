@@ -1,8 +1,7 @@
 .mainSheet{
     margin: 0;
     padding: 0;
-    width: 100vw;
-    min-height: 100vh;
+
     box-sizing: border-box;
     font-family: "Poppins", sans-serif;
     font-family: 'Noto Sans Thai', sans-serif;
@@ -502,7 +501,6 @@
         background-color: var(--color-backgroun-secondary3);
     }
 }
-
 
 .SheetCross .main-body .main-background .main-content{
     position: relative;

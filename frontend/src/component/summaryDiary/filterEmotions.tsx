@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as echarts from 'echarts';
+import { GetDateEmotionsByDiaryID } from '../../services/https/cbt/crossSectional/crossSectional';
 
 interface EmotionByData {
   EmotionID: number;
@@ -9,153 +10,108 @@ interface EmotionByData {
   Date: string;
 }
 
-interface DiaryID {
-  diaryID: number | undefined;
-}
-
-
-function FilterEmotions({ diaryID }: DiaryID) {
+function FilterEmotions() {
   const [allMoodByDate, setAllMoodByDate] = useState<EmotionByData[]>([]);
   const [filterType, setFilterType] = useState('day');
+  const [chart, setChart] = useState<echarts.ECharts | null>(null);
+  const diaryID = 8;
 
-  const groupDataByDate = (data: EmotionByData[], type: string) => {
-    return data.reduce((acc: Record<string, EmotionByData[]>, current) => {
-      const date = new Date(current.Date);
-      let key: string | undefined;
-  
-      if (type === 'day') {
-        key = date.toISOString().split('T')[0];
-      } else if (type === 'week') {
-        const weekNumber = Math.ceil((date.getDate() + new Date(date.getFullYear(), date.getMonth(), 1).getDay()) / 7);
-        key = `Week ${weekNumber}, ${date.toLocaleString('default', { month: 'short' })}`;
-      } else if (type === 'month') {
-        key = date.toLocaleString('default', { month: 'long', year: 'numeric' });
+  const fetchFilterEmotionsByDiary = async () => {
+    try {
+      const res = await GetDateEmotionsByDiaryID(Number(diaryID));
+      if (res && res.length > 0) {
+        setAllMoodByDate(res);
+      } else {
+        setAllMoodByDate([]);
       }
-  
-      if (key && !acc[key]) {
-        acc[key] = [];
-      }
-  
-      if (key) {
-        acc[key].push(current);
-      }
-  
-      return acc;
-    }, {} as Record<string, EmotionByData[]>);
+    } catch (error) {
+      console.error('Error fetching diary:', error);
+      setAllMoodByDate([]);
+    }
   };
-  
 
-  const renderChart = (data: EmotionByData[]) => {
-    const chartDom = document.getElementById('emotionsChart');
-    if (!chartDom) return;
+  const processData = (data: EmotionByData[]) => {
+    const emotionCounts = data.reduce((acc, item) => {
+      acc[item.Name] = (acc[item.Name] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
 
-    const chart = echarts.init(chartDom);
-    const groupedData = groupDataByDate(data, filterType);
+    const pieData = Object.keys(emotionCounts).map(name => ({
+      value: emotionCounts[name],
+      name,
+    }));
 
-    // Get unique emotions
-    const uniqueEmotions = Array.from(new Set(data.map(item => item.Name)));
+    return pieData;
+  };
 
-    // Prepare series data
-    const series = uniqueEmotions.map(emotion => {
-      return {
-        name: emotion,
-        type: 'bar',
-        stack: 'total',
-        label: {
-          show: true,
-          formatter: (params: any) => params.value > 0 ? params.value : ''
-        },
-        data: Object.keys(groupedData).map(date => {
-          return groupedData[date].filter(item => item.Name === emotion).length;
-        })
-      };
-    });
+  const renderChart = () => {
+    if (!chart) {
+      const chartDom = document.getElementById('chart')!;
+      const newChart = echarts.init(chartDom);
+      setChart(newChart);
+    }
 
-    const option = {
-      title: {
-        text: `Emotion Distribution by ${filterType.charAt(0).toUpperCase() + filterType.slice(1)}`,
-        left: 'center'
-      },
+    const pieData = processData(allMoodByDate);
+    const options = {
       tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'shadow'
-        }
+        trigger: 'item',
       },
       legend: {
-        top: 30,
-        data: uniqueEmotions
+        top: '5%',
+        left: 'center',
       },
-      grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true
-      },
-      xAxis: {
-        type: 'category',
-        data: Object.keys(groupedData),
-        axisLabel: {
-          rotate: 45
-        }
-      },
-      yAxis: {
-        type: 'value'
-      },
-      series: series,
-      color: Array.from(new Set(data.map(item => item.ColorCode)))
+      series: [
+        {
+          name: 'Emotions',
+          type: 'pie',
+          radius: ['40%', '70%'],
+          avoidLabelOverlap: false,
+          itemStyle: {
+            borderRadius: 10,
+          },
+          label: {
+            show: false,
+            position: 'center',
+          },
+          emphasis: {
+            label: {
+              show: true,
+              fontSize: '40',
+              fontWeight: 'bold',
+            },
+          },
+          labelLine: {
+            show: false,
+          },
+          data: pieData,
+        },
+      ],
     };
 
-    chart.setOption(option);
-
-    // Handle resize
-    window.addEventListener('resize', () => {
-      chart.resize();
-    });
-
-    return () => {
-      window.removeEventListener('resize', () => {
-        chart.resize();
-      });
-      chart.dispose();
-    };
+    chart?.setOption(options);
   };
 
   useEffect(() => {
-    if (diaryID) {
-      setAllMoodByDate(allMoodByDate);
-    }
+    fetchFilterEmotionsByDiary();
   }, [diaryID]);
 
   useEffect(() => {
-    if (allMoodByDate.length > 0) {
-      renderChart(allMoodByDate);
+    if (allMoodByDate.length) {
+      renderChart();
     }
   }, [allMoodByDate, filterType]);
 
+  const handleFilterChange = (type: string) => {
+    setFilterType(type);
+  };
+
   return (
-    <div className="w-full p-4">
-      <div className="flex gap-4 mb-4">
-        <button
-          className={`px-4 py-2 rounded ${filterType === 'day' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-          onClick={() => setFilterType('day')}
-        >
-          Day
-        </button>
-        <button
-          className={`px-4 py-2 rounded ${filterType === 'week' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-          onClick={() => setFilterType('week')}
-        >
-          Week
-        </button>
-        <button
-          className={`px-4 py-2 rounded ${filterType === 'month' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-          onClick={() => setFilterType('month')}
-        >
-          Month
-        </button>
+    <div>
+      <div>
+        <button onClick={() => handleFilterChange('week')}>Weekly</button>
+        <button onClick={() => handleFilterChange('month')}>Monthly</button>
       </div>
-      <div id="emotionsChart" className="w-full h-96" />
+      <div id="chart" style={{ width: '100%', height: '400px' }}></div>
     </div>
   );
 }

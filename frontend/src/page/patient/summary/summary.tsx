@@ -258,7 +258,7 @@ const Summary: React.FC = () => {
                                     </div>
                                 </div>
                                 <OverallMood diaryID={numericDiaryID} />
-                                    <FilterEmotions diaryID={numericDiaryID}/>
+                                    {/* <FilterEmotions diaryID={numericDiaryID}/> */}
                                 {/* <SummaryEmojiPat/> */}
                             </div>
                         </div>

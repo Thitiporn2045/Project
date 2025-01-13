@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -76,6 +77,7 @@ func GetCrossSectionalByDiaryID(c *gin.Context) {
     // ส่งข้อมูลกลับในรูปแบบ JSON
     c.JSON(http.StatusOK, gin.H{"data": crosses})
 }
+
 func GetDateEmotionsByDiaryID(c *gin.Context) {
 	// รับ DiaryID จาก Query
 	diaryID := c.Query("id")
@@ -158,6 +160,119 @@ func GetEmotionsByDiaryID(c *gin.Context) {
 	// ส่งข้อมูลกลับในรูป JSON
 	c.JSON(http.StatusOK, gin.H{"data": emotions})
 }
+
+func GetWeekEmotionsByDiaryID(c *gin.Context) {
+	// รับ DiaryID จาก Query
+	diaryID := c.Query("id")
+
+	// ตรวจสอบว่า id มีการส่งมาหรือไม่
+	if diaryID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "DiaryID is required"})
+		return
+	}
+
+	var emotions []struct {
+		EmotionID uint   `json:"EmotionID"`
+		Name      string `json:"Name"`
+		ColorCode string `json:"ColorCode"`
+		Emoticon  string `json:"Emoticon"`
+		Date      string `json:"Date"`
+	}
+
+	// Query เพื่อดึงข้อมูล
+	err := entity.DB().Model(&entity.CrossSectional{}).
+		Select("emotions.id as EmotionID, emotions.name as Name, emotions.color_code as ColorCode, emotions.emoticon as Emoticon, cross_sectionals.date as Date").
+		Joins("JOIN cross_sectional_emotions ON cross_sectionals.id = cross_sectional_emotions.cross_sectional_id").
+		Joins("JOIN emotions ON emotions.id = cross_sectional_emotions.emotion_id").
+		Where("cross_sectionals.diary_id = ?", diaryID).
+		Scan(&emotions).Error
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch data", "details": err.Error()})
+		return
+	}
+
+	// หากไม่พบข้อมูล
+	if len(emotions) == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No emotions found for the given DiaryID"})
+		return
+	}
+
+	// Group emotions by week and count them
+	weeklyEmotions := make(map[string]map[string]struct {
+		EmotionID uint   `json:"EmotionID"`
+		Name      string `json:"Name"`
+		ColorCode string `json:"ColorCode"`
+		Emoticon  string `json:"Emoticon"`
+		Count     int    `json:"Count"`
+	})
+
+	for _, emotion := range emotions {
+		// Parse the date to time.Time
+		date, err := time.Parse("02-01-2006", emotion.Date) // แก้ไขรูปแบบวันที่เป็น "02-01-2006"
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to parse date", "details": err.Error()})
+			return
+		}
+
+		// Get the week of the year
+		year, week := date.ISOWeek()
+		weekKey := fmt.Sprintf("%d-W%02d", year, week)
+
+		// Initialize week map if not already done
+		if _, exists := weeklyEmotions[weekKey]; !exists {
+			weeklyEmotions[weekKey] = make(map[string]struct {
+				EmotionID uint   `json:"EmotionID"`
+				Name      string `json:"Name"`
+				ColorCode string `json:"ColorCode"`
+				Emoticon  string `json:"Emoticon"`
+				Count     int    `json:"Count"`
+			})
+		}
+
+		// Create a unique key for the emotion based on its ID
+		emotionKey := fmt.Sprintf("%d", emotion.EmotionID)
+
+		// Increment count if the emotion exists, else initialize it
+		if e, exists := weeklyEmotions[weekKey][emotionKey]; exists {
+			e.Count++
+			weeklyEmotions[weekKey][emotionKey] = e
+		} else {
+			weeklyEmotions[weekKey][emotionKey] = struct {
+				EmotionID uint   `json:"EmotionID"`
+				Name      string `json:"Name"`
+				ColorCode string `json:"ColorCode"`
+				Emoticon  string `json:"Emoticon"`
+				Count     int    `json:"Count"`
+			}{
+				EmotionID: emotion.EmotionID,
+				Name:      emotion.Name,
+				ColorCode: emotion.ColorCode,
+				Emoticon:  emotion.Emoticon,
+				Count:     1,
+			}
+		}
+	}
+
+	// Prepare the final response format
+	response := make(map[string][]struct {
+		EmotionID uint   `json:"EmotionID"`
+		Name      string `json:"Name"`
+		ColorCode string `json:"ColorCode"`
+		Emoticon  string `json:"Emoticon"`
+		Count     int    `json:"Count"`
+	})
+
+	for week, emotions := range weeklyEmotions {
+		for _, e := range emotions {
+			response[week] = append(response[week], e)
+		}
+	}
+
+	// ส่งข้อมูลกลับในรูป JSON
+	c.JSON(http.StatusOK, gin.H{"data": response})
+}
+
 
 func GetEmotionsHaveDateByDiaryID(c *gin.Context) {
 	// รับ DiaryID และ Date จาก Query
