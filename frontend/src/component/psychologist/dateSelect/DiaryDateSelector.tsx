@@ -47,7 +47,7 @@ const DiaryDateSelector: React.FC<DiaryDateSelectorProps> = ({ start, end, onDat
         <div
           style={{
             textAlign: 'center',
-            fontSize: '1.2rem',
+            fontSize: '1rem',
             fontWeight: 'bold',
           }}
         >
@@ -73,12 +73,13 @@ const DiaryDateSelector: React.FC<DiaryDateSelectorProps> = ({ start, end, onDat
                 flexShrink:0,
                 flexDirection: 'column',
                 alignItems: 'center',
-                padding: '0.3rem',
+                // padding: '0.3rem',
                 borderRadius: '8px',
                 backgroundColor: selectedDate === date ? '#e9eb96' : '#e0e0e0',
                 color: selectedDate === date ? '#fff' : '#000',
                 cursor: 'pointer',
-                width: '40px',
+                width: '4%',
+                height: '20%',
                 border: 'none',
                 textAlign: 'center',
               }}

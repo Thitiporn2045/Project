@@ -16,8 +16,19 @@ export interface CrossSectionalInterface {
     Diary?: DiaryPatInterface;
 
     EmotionID?: number[];  // Array of Emotion IDs
+
 }
 
+export interface CrossSectionalInterface2 {
+    Behavior: string;
+    BodilySensation: string;
+    Date: string;
+    Emotions: EmtionInterface[];
+    ID: number;
+    Situation: string;
+    TextEmotion: string;
+    Thought: string;
+  }
 
 export interface CrossSectionalInterfaceForPsy { //รับมาแบบไดอารี่1เล่ม ที่มีCross หลายเรคคอร์ด
     ID?: number,
@@ -28,6 +39,6 @@ export interface CrossSectionalInterfaceForPsy { //รับมาแบบไ�
     End?: string,
 
     Patient?: PatientInterface;
-    CrossSectionals: CrossSectionalInterface[];
+    CrossSectionals: CrossSectionalInterface2[];
     
 }
