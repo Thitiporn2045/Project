@@ -6,7 +6,7 @@ import { Button, ConfigProvider, Divider, Input, Modal, Select, Space,Form, mess
 import thTH from 'antd/lib/locale/th_TH';
 import { LuUserMinus2 } from "react-icons/lu";
 import { FiEdit3 } from "react-icons/fi";
-import userEmpty from '../../../assets/userEmty.png';
+import userEmpty from '../../../assets/userEmty.jpg';
 import './PatTypeSelect.css';
 import { PatientInterface } from '../../../interfaces/patient/IPatient';
 import { calculateAge } from '../../../page/calculateAge';

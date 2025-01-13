@@ -10,6 +10,8 @@ function PsyCommentAD() {
       </div>
 
       <div className='Content'>
+        <div className='Patient-card-info'></div>
+
         
       </div>
       
