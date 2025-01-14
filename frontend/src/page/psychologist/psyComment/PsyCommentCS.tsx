@@ -3,18 +3,15 @@ import AntD from '../../../component/psychologist/sideBar/AntD'
 import './psyComment.css';
 import thTH from 'antd/lib/locale/th_TH';
 import PsyCommentMain from './PsyCommentMain';
-import { Button, ConfigProvider, message } from 'antd';
+import { ConfigProvider } from 'antd';
 import { CrossSectionalInterfaceForPsy,CrossSectionalInterface2 } from '../../../interfaces/crossSectional/ICrossSectional';
 import { GetCrossSectionalByDiaryIdForPsy } from '../../../services/https/cbt/crossSectional/crossSectional';
 import userEmpty from "../../../assets/userEmty.jpg"
 import { calculateAge } from '../../calculateAge';
-import dayjs from 'dayjs';
 import 'dayjs/locale/th'; // สำหรับแสดงภาษาไทย
 import DiaryDateSelector from '../../../component/psychologist/dateSelect/DiaryDateSelector';
-import Item from 'antd/es/list/Item';
 
 function PsyCommentCS() {
-  const [messageApi, contextHolder] = message.useMessage();
   const [crossSectional, setCrossSectional] = useState<CrossSectionalInterfaceForPsy>();
   const diaryID = localStorage.getItem('diaryID')
 
