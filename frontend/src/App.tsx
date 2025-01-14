@@ -29,7 +29,7 @@ import PsyCommentBE from './page/psychologist/psyComment/PsyCommentBE';
 import PsyCommentCS from './page/psychologist/psyComment/PsyCommentCS';
 import ListPsycho from './page/admin/listPsycho/listPsycho';
 import ListPat from './page/admin/listPat/listPat';
-import SheetBehav from './page/patient/worksheet/totalSheet/sheetBehav';
+import SheetBehav from './page/patient/worksheet/totalSheet/SheetBehav';
 import FilterEmotions from './component/summaryDiary/filterEmotions';
 
 export default function App() {
