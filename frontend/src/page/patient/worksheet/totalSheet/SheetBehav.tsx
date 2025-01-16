@@ -339,7 +339,7 @@ const handleSelectChange = (values: (number | undefined)[], setSelectEmotion: Re
 
     const handleNavigateToSummary = () => {
         if (diary && diary.ID) {
-            navigate(`/Summary?id=${diary.ID}`); // ใช้ query parameter แทน
+            navigate(`/SummaryBehav?id=${diary.ID}`); // ใช้ query parameter แทน
         } else {
             console.warn("Diary ID is missing");
         }

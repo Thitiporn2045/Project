@@ -7,13 +7,14 @@ import { DiaryPatInterface } from '../../../interfaces/diary/IDiary';
 import dayjs from 'dayjs';
 import { CrossSectionalInterface } from '../../../interfaces/crossSectional/ICrossSectional';
 import { GetCrossSectionalByDiaryID} from '../../../services/https/cbt/crossSectional/crossSectional';
-import OverallMood from '../../../component/summaryDiary/overallMood';
-import MostCommon from '../../../component/summaryDiary/mostCommon';
-import FilterEmotions from '../../../component/summaryDiary/filterEmotions';
 import { CommentInterface } from '../../../interfaces/psychologist/IComment';
 import { ListCommentByDiaryId } from '../../../services/https/psychologist/comment';
+import FilterEmotionsBehav from '../../../component/summaryDiaryBehav/filterEmotionsBehav';
+import OverallMoodBehav from '../../../component/summaryDiaryBehav/overallMoodBehav';
+import MostCommonBehav from '../../../component/summaryDiaryBehav/mostCommonBehav';
+import { GetBehavioralExpByDiaryID } from '../../../services/https/cbt/behavioralExp/behavioralExp';
 
-const Summary: React.FC = () => {
+const SummaryBehav: React.FC = () => {
     const [searchParams] = useSearchParams();
     const diaryID = searchParams.get('id');
     const numericDiaryID = diaryID ? Number(diaryID) : undefined;
@@ -22,7 +23,7 @@ const Summary: React.FC = () => {
     const [dateRange, setDateRange] = useState<Date[]>([]);
     const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
     const [numberOfDays, setNumberOfDays] = useState<number | null>(null);  // Add this state for numberOfDays
-    const [crossSectional, setCrossSectional] = useState<CrossSectionalInterface[]>([]); // ใช้ array ว่างแทน null
+    const [BehavioralExp, setBehavioralExp] = useState<CrossSectionalInterface[]>([]); // ใช้ array ว่างแทน null
     const [datesWithData, setDatesWithData] = useState<string[]>([]); // สถานะเก็บวันที่ที่ไม่มีข้อมูล
     const [comments, setComments] = useState<CommentInterface[]>([]); // ตั้งค่าประเภทของ emotionPatients เป็น EmtionInterface[]
     
@@ -44,16 +45,16 @@ const Summary: React.FC = () => {
         }
     };    
 
-    const fetchCrossSectionalByDiary = async () => {
+    const fetchBehavioralExpByDiary = async () => {
         if (diaryID) {
             try {
-                const res = await GetCrossSectionalByDiaryID(Number(diaryID)); // เรียกใช้ API โดยส่งค่า id
+                const res = await GetBehavioralExpByDiaryID(Number(diaryID)); // เรียกใช้ API โดยส่งค่า id
                 if (res) {
-                    setCrossSectional(res); // เก็บข้อมูลที่ได้จาก API ลงในสถานะ
+                    setBehavioralExp(res); // เก็บข้อมูลที่ได้จาก API ลงในสถานะ
                 }
-                console.log('Cross Sectional:', res); // แสดงข้อมูลที่ได้รับในคอนโซล
+                console.log('BehavioralExp:', res); // แสดงข้อมูลที่ได้รับในคอนโซล
             } catch (error) {
-                console.error('Error fetching cross-sectional data:', error); // แสดงข้อผิดพลาด
+                console.error('Error fetching BehavioralExp data:', error); // แสดงข้อผิดพลาด
             }
         }
     };
@@ -75,7 +76,7 @@ const Summary: React.FC = () => {
 
     useEffect(() => {
         fetchDiaryByDiary();
-        fetchCrossSectionalByDiary();
+        fetchBehavioralExpByDiary();
         fetchCommentsByDiaryID();
     }, []);
 
@@ -98,7 +99,7 @@ const Summary: React.FC = () => {
             setNumberOfDays(totalDays);
 
             // สร้าง Set เพื่อเก็บวันที่ที่มีข้อมูลจาก CrossSectional (ฟอร์แมตเป็น 'DD-MM-YYYY')
-        const existingDates = new Set(crossSectional.map((entry: any) => dayjs(entry.Date, 'DD-MM-YYYY').format('DD-MM-YYYY')));
+        const existingDates = new Set(BehavioralExp.map((entry: any) => dayjs(entry.Date, 'DD-MM-YYYY').format('DD-MM-YYYY')));
 
         // ตรวจสอบวันที่ที่มีข้อมูล
         const datesWithData: string[] = [];
@@ -111,7 +112,7 @@ const Summary: React.FC = () => {
 
         setDatesWithData(datesWithData); // เก็บวันที่ที่มีข้อมูล
         }
-    }, [diary, crossSectional]); // เพิ่ม crossSectional ใน dependencies เพื่อให้การคำนวณวันที่ไม่ถูกบันทึกทำงานทุกครั้งที่ข้อมูลเปลี่ยน
+    }, [diary, BehavioralExp]); // เพิ่ม crossSectional ใน dependencies เพื่อให้การคำนวณวันที่ไม่ถูกบันทึกทำงานทุกครั้งที่ข้อมูลเปลี่ยน
 
     
     const formatDate = (date: Date) => {
@@ -214,10 +215,10 @@ const Summary: React.FC = () => {
                                     </section>
                                     
                                 <div className='cardEmotion'>
-                                        <FilterEmotions diaryID={numericDiaryID} date={selectedDate ? dayjs(selectedDate).format('DD-MM-YYYY') : ''} />
+                                        <FilterEmotionsBehav diaryID={numericDiaryID} date={selectedDate ? dayjs(selectedDate).format('DD-MM-YYYY') : ''} />
                                     </div>
                                 </div>
-                                <OverallMood diaryID={numericDiaryID} />
+                                <OverallMoodBehav diaryID={numericDiaryID} />
                                 {/* <SummaryEmojiPat/> */}
                             </div>
                         </div>
@@ -323,7 +324,7 @@ const Summary: React.FC = () => {
                                                             display: 'flex',
                                                             alignItems: 'center',
                                                             justifyContent: 'center',
-                                                            flexDirection: 'column',
+                                                            flexDirection: 'column',                                                           
                                                         }}
                                                     >
                                                         <div className="Loading-Data-Self-Summary"></div>
@@ -338,7 +339,7 @@ const Summary: React.FC = () => {
                                             <div className='titleEmoticon'>
                                                 อารมณ์ที่พบบ่อย
                                             </div>
-                                            <MostCommon diaryID={numericDiaryID}/>
+                                            <MostCommonBehav diaryID={numericDiaryID}/>
                                         </div>
                                     </div>
                                 </div>
@@ -351,4 +352,4 @@ const Summary: React.FC = () => {
     );
 };
 
-export default Summary;
+export default SummaryBehav;

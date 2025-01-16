@@ -30,7 +30,7 @@ import PsyCommentCS from './page/psychologist/psyComment/PsyCommentCS';
 import ListPsycho from './page/admin/listPsycho/listPsycho';
 import ListPat from './page/admin/listPat/listPat';
 import SheetBehav from './page/patient/worksheet/totalSheet/sheetBehav';
-import FilterEmotions from './component/summaryDiary/filterEmotions';
+import SummaryBehav from './page/patient/summary/summaryBehav';
 
 export default function App() {
 
@@ -71,6 +71,7 @@ export default function App() {
         <Route path='/Behavioural' element={<Behavioural/>} />
         <Route path='/Emotional' element={<Emotional/>} />
         <Route path='/SheetBehav' element={<SheetBehav/>} />
+        <Route path='/SummaryBehav' element={<SummaryBehav/>} />
       </Routes>
     </BrowserRouter>
   );

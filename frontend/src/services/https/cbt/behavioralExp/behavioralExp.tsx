@@ -118,6 +118,23 @@ export async function GetWeekEmotionsBehavioralExpByDiaryID(id: number | undefin
     return res;
 }
 
+export async function GetEmotionsBehavioralExpByDiaryID(id: Number | undefined) {
+    const requestOptions = {
+    method: "GET",
+    };
+
+    let res = await fetch(`${apiUrl}/pat/get/Behavioral/Emotion/ByDiary?id=${id}`, requestOptions)
+    .then((response) => response.json())
+    .then((res) => {
+        if (res.data) {
+        return res.data;
+        } else {
+        return false;
+        }
+    });
+
+    return res;
+}
 
 export async function GetMonthEmotionsBehavioralExpByDiaryID(id: number | undefined, date: string | undefined) {
     const requestOptions = {

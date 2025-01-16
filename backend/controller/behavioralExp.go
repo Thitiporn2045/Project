@@ -87,20 +87,22 @@ func GetEmotionsBehavioralExpByDiaryID(c *gin.Context) {
 	}
 
 	var emotions []struct {
-		EmotionID   uint   `json:"emotion_id"`
-		EmotionName string `json:"emotion_name"`
-		ColorCode   string `json:"color_code"`
+		EmotionID   uint   `json:"EmotionID"`
+		Name 		string `json:"Name"`
+		ColorCode   string `json:"ColorCode"`
+		Emoticon    string `json:"Emoticon"`
+		Count       int    `json:"Count"`
 	}
-
-	// Query เพื่อดึงข้อมูล
+	
+	// Query เพื่อดึงข้อมูลพร้อมนับจำนวนอิโมจิที่ซ้ำกันและแสดง emotion_id
 	err := entity.DB().Model(&entity.BehavioralExp{}).
-	Select("emotions.id as emotion_id, emotions.name as emotion_name, emotions.color_code").
-	Joins("JOIN behavioral_exp_emotions ON behavioral_exps.id = behavioral_exp_emotions.behavioral_exps_id").
-	Joins("JOIN emotions ON emotions.id = behavioral_exp_emotions.emotion_id").
-	Where("behavioral_exps.diary_id = ?", diaryID).
-	Scan(&emotions).Error
-
-
+		Select("emotions.id as EmotionID, emotions.name as Name, emotions.color_code as ColorCode, emotions.emoticon as Emoticon, COUNT(emotions.emoticon) as Count").
+		Joins("JOIN behavioral_exp_emotions ON behavioral_exps.id = behavioral_exp_emotions.behavioral_exp_id").
+		Joins("JOIN emotions ON emotions.id = behavioral_exp_emotions.emotion_id").
+		Where("behavioral_exps.diary_id = ?", diaryID).
+		Group("emotions.id, emotions.emoticon, emotions.name, emotions.color_code").
+		Scan(&emotions).Error
+	
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch data", "details": err.Error()})
 		return
@@ -136,9 +138,9 @@ func GetDateEmotionsBehavioralExpByDiaryID(c *gin.Context) {
 	}
 	
 	// Query เพื่อดึงข้อมูลพร้อมแสดง emotion_id
-	err := entity.DB().Model(&entity.CrossSectional{}).
+	err := entity.DB().Model(&entity.BehavioralExp{}).
 		Select("emotions.id as EmotionID, emotions.name as Name, emotions.color_code as ColorCode, emotions.emoticon as Emoticon, behavioral_exps.date as Date").
-		Joins("JOIN behavioral_exp_emotions ON behavioral_exps.id = behavioral_exp_emotions.cross_sectional_id").
+		Joins("JOIN behavioral_exp_emotions ON behavioral_exps.id = behavioral_exp_emotions.behavioral_exp_id").
 		Joins("JOIN emotions ON emotions.id = behavioral_exp_emotions.emotion_id").
 		Where("behavioral_exps.diary_id = ?", diaryID).
 		Scan(&emotions).Error
@@ -157,7 +159,6 @@ func GetDateEmotionsBehavioralExpByDiaryID(c *gin.Context) {
 	// ส่งข้อมูลกลับในรูป JSON
 	c.JSON(http.StatusOK, gin.H{"data": emotions})
 }
-
 
 func GetWeekEmotionsBehavioralExpByDiaryID(c *gin.Context) {
 	// รับ DiaryID จาก Query
@@ -197,9 +198,9 @@ func GetWeekEmotionsBehavioralExpByDiaryID(c *gin.Context) {
 		Count       int    `json:"Count"`
 	}
 
-	err = entity.DB().Model(&entity.CrossSectional{}).
+	err = entity.DB().Model(&entity.BehavioralExp{}).
 		Select("emotions.id as EmotionID, emotions.name as Name, emotions.color_code as ColorCode, emotions.emoticon as Emoticon, behavioral_exps.date as Date").
-		Joins("JOIN behavioral_exp_emotions ON behavioral_exps.id = behavioral_exp_emotions.cross_sectional_id").
+		Joins("JOIN behavioral_exp_emotions ON behavioral_exps.id = behavioral_exp_emotions.behavioral_exp_id").
 		Joins("JOIN emotions ON emotions.id = behavioral_exp_emotions.emotion_id").
 		Where("behavioral_exps.diary_id = ?", diaryID).
 		Scan(&emotions).Error
@@ -329,9 +330,9 @@ func GetMonthEmotionsBehavioralExpByDiaryID(c *gin.Context) {
 		Count       int    `json:"Count"`
 	}
 
-	err = entity.DB().Model(&entity.CrossSectional{}).
+	err = entity.DB().Model(&entity.BehavioralExp{}).
 		Select("emotions.id as EmotionID, emotions.name as Name, emotions.color_code as ColorCode, emotions.emoticon as Emoticon, behavioral_exps.date as Date").
-		Joins("JOIN behavioral_exp_emotions ON behavioral_exps.id = behavioral_exp_emotions.cross_sectional_id").
+		Joins("JOIN behavioral_exp_emotions ON behavioral_exps.id = behavioral_exp_emotions.behavioral_exp_id").
 		Joins("JOIN emotions ON emotions.id = behavioral_exp_emotions.emotion_id").
 		Where("behavioral_exps.diary_id = ?", diaryID).
 		Scan(&emotions).Error

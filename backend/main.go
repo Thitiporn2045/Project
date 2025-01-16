@@ -40,6 +40,7 @@ func main() {
 			r.GET("/pat/get/CrossSectional/Emotion/Month/ByDiary", controller.GetMonthEmotionsByDiaryID)
 			r.GET("/pat/get/CrossSectional/Date/Emotion/ByDiary", controller.GetEmotionsHaveDateByDiaryID)
 			r.GET("/pat/get/Behavioral/ByDiary", controller.GetBehavioralExpByDiaryID)
+			r.GET("/pat/get/Behavioral/Emotion/ByDiary", controller.GetEmotionsBehavioralExpByDiaryID)
 			r.GET("/pat/get/Behavioral/Emotion/Date/ByDiary", controller.GetDateEmotionsBehavioralExpByDiaryID)
 			r.GET("/pat/get/Behavioral/Emotion/Week/ByDiary", controller.GetWeekEmotionsBehavioralExpByDiaryID)
 			r.GET("/pat/get/Behavioral/Emotion/Month/ByDiary", controller.GetMonthEmotionsBehavioralExpByDiaryID)
