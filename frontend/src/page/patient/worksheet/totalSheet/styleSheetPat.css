@@ -500,6 +500,10 @@
         font-weight: 700;
         background-color: var(--color-backgroun-secondary3);
     }
+
+    h2{
+        color: var(--color-font1);
+    }
 }
 
 .SheetCross .main-body .main-background .main-content{
@@ -546,13 +550,17 @@
     padding-left: 10px;
     width: 99%;
     height: 45px;
-    font-size: 1.2rem;
-    color: var(--color-font1);
     border-radius: var(--border-radius-1);
     background-color: var(--color-backgroun-secondary2);
     font-family: 'Noto Sans Thai', sans-serif;
     display: flex;
     align-items: center;
+    
+    div{
+        color: var(--color-font1);
+        font-size: 1.2rem;
+        font-weight: 500;
+    }
 }
 
 .SheetCross .thought, .behavior, .bodily, .emotion {

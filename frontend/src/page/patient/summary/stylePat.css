@@ -237,7 +237,7 @@
 
 /* Adjust the font size if necessary */
 .summary .book-showcase {
-    font-size: 8.5px;
+    font-size: .5rem;
 }
 
 /* Add a radial gradient with some colors */
@@ -479,7 +479,7 @@
         width: 100%;
         height:calc(100% -2rem);
         overflow-x: auto;
-        margin-top: 2rem;
+        margin-top: 3rem;
     }
 
     .boxContent3{

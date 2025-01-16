@@ -19,26 +19,43 @@ interface DiaryID {
   date: string;
 }
 
+// เพิ่ม interfaces ใหม่ที่ด้านบนของไฟล์
+interface ChartDataItem {
+  value: number;
+  name: string;
+  itemStyle: {
+    color: string;
+    emoticon: string;
+  };
+  percentage?: string;
+}
+
 function FilterEmotions({ diaryID, date }: DiaryID) {
   const [allMoodByWeek, setAllMoodByWeek] = useState<{ [key: string]: EmotionByWeek[] }>({});
   const [allMoodByMonth, setAllMoodByMonth] = useState<{ [key: string]: EmotionByWeek[] }>({});
   const [emotionPatients, setEmotionPatients] = useState<EmtionInterface[]>([]);
-  const [chart, setChart] = useState<echarts.ECharts | null>(null);
   const [view, setView] = useState<'week' | 'month' | 'day'>('week');
-  const chartRef = useRef<HTMLDivElement | null>(null);
+  const chartContainerRef = useRef<HTMLDivElement | null>(null);
+  const chartInstance = useRef<echarts.ECharts | null>(null);
+
+  const hasData = () => {
+    switch (view) {
+      case 'day':
+        return emotionPatients && emotionPatients.length > 0;
+      case 'week':
+        return allMoodByWeek && Object.keys(allMoodByWeek).length > 0;
+      case 'month':
+        return allMoodByMonth && Object.keys(allMoodByMonth).length > 0;
+      default:
+        return false;
+    }
+  };
 
   const fetchFilterWeekEmotionsByDiary = async () => {
-    if (!diaryID || !date) {
-      console.error("Diary ID or date is missing");
-      return;
-    }
+    if (!diaryID || !date) return;
     try {
       const res = await GetWeekEmotionsByDiaryID(diaryID, date);
-      if (res) {
-        setAllMoodByWeek(res);
-      } else {
-        setAllMoodByWeek({});
-      }
+      setAllMoodByWeek(res || {});
     } catch (error) {
       console.error('Error fetching diary:', error);
       setAllMoodByWeek({});
@@ -46,17 +63,10 @@ function FilterEmotions({ diaryID, date }: DiaryID) {
   };
 
   const fetchFilterMonthEmotionsByDiary = async () => {
-    if (!diaryID || !date) {
-      console.error("Diary ID or date is missing");
-      return;
-    }
+    if (!diaryID || !date) return;
     try {
       const res = await GetMonthEmotionsByDiaryID(diaryID, date);
-      if (res) {
-        setAllMoodByMonth(res);
-      } else {
-        setAllMoodByMonth({});
-      }
+      setAllMoodByMonth(res || {});
     } catch (error) {
       console.error('Error fetching diary:', error);
       setAllMoodByMonth({});
@@ -64,6 +74,7 @@ function FilterEmotions({ diaryID, date }: DiaryID) {
   };
 
   const fetchEmotionPatientData = async () => {
+    if (!diaryID || !date) return;
     try {
       const res = await GetEmotionsHaveDateByDiaryID(diaryID, date);
       if (res) {
@@ -77,10 +88,11 @@ function FilterEmotions({ diaryID, date }: DiaryID) {
         }));
         setEmotionPatients(transformedEmotions);
       } else {
-        console.error("Failed to fetch emotions");
+        setEmotionPatients([]);
       }
     } catch (error) {
       console.error("Error fetching emotions:", error);
+      setEmotionPatients([]);
     }
   };
 
@@ -90,178 +102,117 @@ function FilterEmotions({ diaryID, date }: DiaryID) {
     fetchEmotionPatientData();
   }, [diaryID, date]);
 
-  useEffect(() => {
-    if (view === 'week' && Object.keys(allMoodByWeek).length > 0) {
-      const chartInstance = echarts.init(chartRef.current as HTMLElement);
-      const chartData = Object.values(allMoodByWeek).flat().map((emotion) => ({
-        value: emotion.Count,
-        name: emotion.Name,
-        itemStyle: {
-          emoticon: emotion.Emoticon,
-          color: emotion.ColorCode,
-        },
-      }));
-      const totalCount = chartData.reduce((sum, emotion) => sum + emotion.value, 0);
-      const chartDataWithPercentage = chartData.map((emotion) => ({
-        ...emotion,
-        percentage: ((emotion.value / totalCount) * 100).toFixed(2),
-      }));
+// แก้ไขส่วนของ createChartOption
+const createChartOption = () => {
+  let data: any[] = [];
+  if (view === 'week' && Object.keys(allMoodByWeek).length > 0) {
+    data = Object.values(allMoodByWeek).flat();
+  } else if (view === 'month' && Object.keys(allMoodByMonth).length > 0) {
+    data = Object.values(allMoodByMonth).flat();
+  } else if (view === 'day' && emotionPatients.length > 0) {
+    data = emotionPatients;
+  }
 
-      const option = {
-        tooltip: {
-          trigger: 'item',
-          formatter: (params: any) => {
-            const emotion = params.data;
-            return `${emotion.name} ${emotion.itemStyle.emoticon}<br/>${emotion.value} (${emotion.percentage}%)`;
-          },
-        },
-        textStyle: {
-          fontFamily: 'Noto Sans Thai', 
-        },
-        series: [
-          {
-            name: 'Emotions',
-            type: 'pie',
-            radius: '50%',
-            data: chartDataWithPercentage,
-            emphasis: {
-              itemStyle: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: 'rgba(0, 0, 0, 0.5)',
-              },
-            },
-            label: {
-              formatter: '{b}: {d}%',
-            },
-          },
-        ],
-      };
+  if (data.length === 0) return null;
 
-      chartInstance.setOption(option);
-      setChart(chartInstance);
-
-      const handleResize = () => {
-        chartInstance.resize();
-      };
-      window.addEventListener('resize', handleResize);
-
-      return () => {
-        window.removeEventListener('resize', handleResize);
-      };
-    } else if (view === 'month' && Object.keys(allMoodByMonth).length > 0) {
-      const chartInstance = echarts.init(chartRef.current as HTMLElement);
-      const chartData = Object.values(allMoodByMonth).flat().map((emotion) => ({
-        value: emotion.Count,
-        name: emotion.Name,
-        itemStyle: {
-          emoticon: emotion.Emoticon,
-          color: emotion.ColorCode,
-        },
-      }));
-      const totalCount = chartData.reduce((sum, emotion) => sum + emotion.value, 0);
-      const chartDataWithPercentage = chartData.map((emotion) => ({
-        ...emotion,
-        percentage: ((emotion.value / totalCount) * 100).toFixed(2),
-      }));
-
-      const option = {
-        tooltip: {
-          trigger: 'item',
-          formatter: (params: any) => {
-            const emotion = params.data;
-            return `${emotion.name} ${emotion.itemStyle.emoticon}<br/>${emotion.value} (${emotion.percentage}%)`;
-          },
-        },
-        textStyle: {
-          fontFamily: 'Noto Sans Thai', 
-        },
-        series: [
-          {
-            name: 'Emotions',
-            type: 'pie',
-            radius: '50%',
-            data: chartDataWithPercentage,
-            emphasis: {
-              itemStyle: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: 'rgba(0, 0, 0, 0.5)',
-              },
-            },
-            label: {
-              formatter: '{b}: {d}%',
-            },
-          },
-        ],
-      };
-
-      chartInstance.setOption(option);
-      setChart(chartInstance);
-
-      const handleResize = () => {
-        chartInstance.resize();
-      };
-      window.addEventListener('resize', handleResize);
-
-      return () => {
-        window.removeEventListener('resize', handleResize);
-      };
-    } else if (view === 'day' && emotionPatients.length > 0) {
-      const chartInstance = echarts.init(chartRef.current as HTMLElement);
-      const chartData = emotionPatients.map((emotion) => ({
+  const chartData: ChartDataItem[] = view === 'day'
+    ? data.map(emotion => ({
         value: 1,
         name: emotion.Name,
         itemStyle: {
           color: emotion.ColorCode,
           emoticon: emotion.Emoticon,
         },
+      }))
+    : data.map(emotion => ({
+        value: emotion.Count,
+        name: emotion.Name,
+        itemStyle: {
+          color: emotion.ColorCode,
+          emoticon: emotion.Emoticon,
+        },
       }));
 
-      const option = {
-        tooltip: {
-          trigger: 'item',
-          formatter: '{b}',
-        },
-        textStyle: {
-          fontFamily: 'Noto Sans Thai', 
-        },
-        series: [
-          {
-            name: 'Emotions',
-            type: 'pie',
-            radius: '50%',
-            data: chartData,
-            emphasis: {
-              itemStyle: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: 'rgba(0, 0, 0, 0.5)',
-              },
-            },
-            label: {
-              formatter: (params: any) => {
-                const emotion = params.data;
-                return `${emotion.name} ${emotion.itemStyle.emoticon}`;
-              },
-            },
+  if (!view.includes('day')) {
+    const totalCount = chartData.reduce((sum, emotion) => sum + emotion.value, 0);
+    chartData.forEach(item => {
+      item.percentage = ((item.value / totalCount) * 100).toFixed(2);
+    });
+  }
+  return {
+    tooltip: {
+      trigger: 'item',
+      formatter: (params: any) => {
+        const emotion = params.data;
+        return view === 'day'
+          ? `${emotion.name} ${emotion.itemStyle.emoticon}`
+          : `${emotion.name} ${emotion.itemStyle.emoticon}<br/>${emotion.value} (${emotion.percentage}%)`;
+      },
+    },
+    textStyle: {
+      fontFamily: 'Noto Sans Thai',
+    },
+    series: [
+      {
+        name: 'Emotions',
+        type: 'pie',
+        radius: '50%',
+        data: chartData,
+        emphasis: {
+          itemStyle: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
           },
-        ],
-      };
+        },
+        label: {
+          formatter: view === 'day'
+            ? (params: any) => `${params.data.name} ${params.data.itemStyle.emoticon}`
+            : '{b}: {d}%',
+        },
+      },
+    ],
+  };
+};
 
-      chartInstance.setOption(option);
-      setChart(chartInstance);
+  useEffect(() => {
+    const initChart = () => {
+      if (!chartContainerRef.current) return;
 
-      const handleResize = () => {
-        chartInstance.resize();
-      };
-      window.addEventListener('resize', handleResize);
+      // Dispose existing chart if any
+      if (chartInstance.current) {
+        chartInstance.current.dispose();
+      }
 
-      return () => {
-        window.removeEventListener('resize', handleResize);
-      };
-    }
-  }, [allMoodByWeek, allMoodByMonth, emotionPatients, view]);
+      // Clear the container
+      chartContainerRef.current.innerHTML = '';
+
+      if (!hasData()) return;
+
+      // Create new chart
+      const newChart = echarts.init(chartContainerRef.current);
+      const option = createChartOption();
+      
+      if (option) {
+        newChart.setOption(option);
+        chartInstance.current = newChart;
+      }
+    };
+
+    initChart();
+
+    const handleResize = () => {
+      if (chartInstance.current) {
+        chartInstance.current.resize();
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [view, allMoodByWeek, allMoodByMonth, emotionPatients]);
 
   const getGraphTitle = () => {
     switch (view) {
@@ -276,10 +227,29 @@ function FilterEmotions({ diaryID, date }: DiaryID) {
     }
   };
 
+  const NoDataMessage = () => (
+    <div 
+      style={{ 
+        width: '100%', 
+        height: '100%', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        flexDirection: 'column',
+        position: 'absolute',
+        top: 30,
+        left: 0,
+      }}
+    >
+      <div className="noDataGraph"></div>
+      <div className="textNoDataGraph">ไม่มีข้อมูล</div>
+    </div>
+  );
+
   return (
     <div
       style={{
-        width: '100%', 
+        width: '100%',
         height: '47vh',
         background: 'rgba(255, 255, 255, 0.5)',
         backdropFilter: 'blur(20px)',
@@ -295,7 +265,7 @@ function FilterEmotions({ diaryID, date }: DiaryID) {
           alignItems: 'center',
           margin: '1rem',
           zIndex: 100,
-          width: '95%' // กำหนดความกว้างให้คอนเทนเนอร์
+          width: '95%'
         }}
       >
         <div className='title'>{getGraphTitle()}</div>
@@ -303,7 +273,6 @@ function FilterEmotions({ diaryID, date }: DiaryID) {
           style={{
             display: 'flex',
             gap: '.4rem',
-
           }}
         >
           <button className='btnSummary' onClick={() => setView('day')}>รายวัน</button>
@@ -311,13 +280,22 @@ function FilterEmotions({ diaryID, date }: DiaryID) {
           <button className='btnSummary' onClick={() => setView('month')}>รายเดือน</button>
         </div>
       </div>
-      <div 
-        ref={chartRef} 
-        style={{ 
-          width: '100%', 
+      <div
+        style={{
+          width: '100%',
           height: '50vh',
-        }} 
-      />
+          position: 'relative'
+        }}
+      >
+        <div
+          ref={chartContainerRef}
+          style={{
+            width: '100%',
+            height: '100%'
+          }}
+        />
+        {!hasData() && <NoDataMessage />}
+      </div>
     </div>
   );
 }

@@ -38,10 +38,11 @@ func main() {
 			r.GET("/pat/get/CrossSectional/Emotion/Date/ByDiary", controller.GetDateEmotionsByDiaryID)
 			r.GET("/pat/get/CrossSectional/Emotion/Week/ByDiary", controller.GetWeekEmotionsByDiaryID)
 			r.GET("/pat/get/CrossSectional/Emotion/Month/ByDiary", controller.GetMonthEmotionsByDiaryID)
-
-
 			r.GET("/pat/get/CrossSectional/Date/Emotion/ByDiary", controller.GetEmotionsHaveDateByDiaryID)
 			r.GET("/pat/get/Behavioral/ByDiary", controller.GetBehavioralExpByDiaryID)
+			r.GET("/pat/get/Behavioral/Emotion/Date/ByDiary", controller.GetDateEmotionsBehavioralExpByDiaryID)
+			r.GET("/pat/get/Behavioral/Emotion/Week/ByDiary", controller.GetWeekEmotionsBehavioralExpByDiaryID)
+			r.GET("/pat/get/Behavioral/Emotion/Month/ByDiary", controller.GetMonthEmotionsBehavioralExpByDiaryID)
 			r.GET("/pat/get/Behavioral/Date/Emotion/ByDiary", controller.GetEmotionsBehavioralExpHaveDateByDiaryID)
 			r.GET("/pat/get/ActivityDiary/ByDiary", controller.GetActivityDiaryByDiaryID)
 			r.GET("/pat/get/ActivityPlanning/ByDiary", controller.GetActivityPlanningByDiaryID)
