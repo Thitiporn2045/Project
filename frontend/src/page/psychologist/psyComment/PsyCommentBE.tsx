@@ -155,27 +155,27 @@ function PsyCommentBE() {
         {/* Display data*/}
         <div className='Record-info'>
           <div className='behav-target'>
-            <div style={{marginLeft:'1rem',fontSize:'18px',}}><b>ความคิดที่ต้องการทดสอบ</b></div>
-            <div style={{marginLeft:'1.5rem'}}>
+            <div  style={{marginLeft:'1rem',fontSize:'18px',height:'30%',display:'flex',alignItems:'center',}}><b>ความคิดที่ต้องการทดสอบ</b></div>
+            <div style={{marginLeft:'1.5rem',flexGrow:1}}>
               <b style={{color:'#989898'}}>ความคิดเชิงลบ:</b> {negativeThought}<p></p>
               <b style={{color:'#989898'}}>ความคิดทางเลือก:</b> {alternativeThought}
             </div>
           </div>
           <div className='behav-experiment'>
-            <div style={{marginLeft:'1rem',fontSize:'18px'}}><b>การวางแผนและปฏิบัติ</b></div>
-            <div style={{marginLeft:'1.5rem'}}>
+            <div style={{marginLeft:'1rem',fontSize:'18px',height:'30%',display:'flex',alignItems:'center',}}><b>การวางแผนและปฏิบัติ</b></div>
+            <div style={{marginLeft:'1.5rem',flexGrow:1}}>
               {filteredBehaviorals.map((item)=>(item.Experiment))}
             </div>
           </div>
           <div className='behav-outcome'>
-            <div style={{marginLeft:'1rem',fontSize:'18px'}}><b>การประเมินผล</b></div>
-            <div style={{marginLeft:'1.5rem'}}>
+            <div style={{marginLeft:'1rem',fontSize:'18px',height:'30%',display:'flex',alignItems:'center',}}><b>การประเมินผล</b></div>
+            <div style={{marginLeft:'1.5rem',flexGrow:1}}>
               {filteredBehaviorals.map((item)=>(item.Outcome))}
             </div>
           </div>
           <div className='behav-learned'>
-            <div style={{marginLeft:'1rem',fontSize:'18px'}}><b>บทเรียนที่ได้</b></div>
-            <div style={{marginLeft:'1.5rem'}}>
+            <div style={{marginLeft:'1rem',fontSize:'18px',height:'30%',display:'flex',alignItems:'center',}}><b>บทเรียนที่ได้</b></div>
+            <div style={{marginLeft:'1.5rem',flexGrow:1}}>
               <b style={{color:'#989898'}}>ความคิดเดิม: </b>{oldBelief}<p></p>
               <b style={{color:'#989898'}}>ความคิดใหม่: </b>{newBelief}
             </div>

@@ -356,35 +356,34 @@
     }
 
    .Record-info{
-    width: 98%;
-    flex-grow: 1;
-    border-radius: 15px;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr ;
-    gap: 1rem; 
-    justify-content: center;
-    align-items: center; 
-    box-sizing: border-box; /* รวม padding และ border ในขนาดองค์ประกอบ */
-
-    .behav-target,
-    .behav-experiment,
-    .behav-outcome,
-    .behav-learned{
-        width: 100%;
-        height: 98%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        border: 0.5px solid rgb(230, 230, 230); 
-        background-color: #ffffff; 
+        width: 98%;
+        flex-grow: 1;
         border-radius: 15px;
-        background: #ffffff;
-        box-shadow:  5px 5px 12px #f7f7f7,-5px -5px 12px #ffffff;
-    
-    }
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr ;
+        gap: 1rem; 
+        justify-content: center;
+        align-items: center; 
+        box-sizing: border-box; /* รวม padding และ border ในขนาดองค์ประกอบ */
 
-   }
+        .behav-target,
+        .behav-experiment,
+        .behav-outcome,
+        .behav-learned{
+            width: 100%;
+            height: 98%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border: 0.5px solid rgb(230, 230, 230); 
+            background-color: #ffffff; 
+            border-radius: 15px;
+            background: #ffffff;
+            box-shadow:  5px 5px 12px #f7f7f7,-5px -5px 12px #ffffff;
+        
+        }
+    }
 }
 
 .PsyCommentBE .Comment{
@@ -459,10 +458,13 @@
     position: relative;
     flex-grow: 1;  
     height: 100%;
-    background: #c785c4;
+    background: #c7b285;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
     overflow: auto;
+
 
     .Patient-card-info{
         width: 95%;
