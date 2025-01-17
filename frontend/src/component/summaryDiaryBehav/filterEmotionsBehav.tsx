@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/th'; 
 import './summary.css';
 import { EmtionInterface } from '../../interfaces/emotion/IEmotion';
+import { GetEmotionsBehavioralExpHaveDateByDiaryID, GetMonthEmotionsBehavioralExpByDiaryID, GetWeekEmotionsBehavioralExpByDiaryID } from '../../services/https/cbt/behavioralExp/behavioralExp';
 dayjs.locale('th');
 
 interface EmotionByWeek {
@@ -32,7 +33,7 @@ interface ChartDataItem {
   percentage?: string;
 }
 
-function FilterEmotions({ diaryID, date }: DiaryID) {
+function FilterEmotionsBehav({ diaryID, date }: DiaryID) {
   const [allMoodByWeek, setAllMoodByWeek] = useState<{ [key: string]: EmotionByWeek[] }>({});
   const [allMoodByMonth, setAllMoodByMonth] = useState<{ [key: string]: EmotionByWeek[] }>({});
   const [emotionPatients, setEmotionPatients] = useState<EmtionInterface[]>([]);
@@ -56,7 +57,7 @@ function FilterEmotions({ diaryID, date }: DiaryID) {
   const fetchFilterWeekEmotionsByDiary = async () => {
     if (!diaryID || !date) return;
     try {
-      const res = await GetWeekEmotionsByDiaryID(diaryID, date);
+      const res = await GetWeekEmotionsBehavioralExpByDiaryID(diaryID, date);
       setAllMoodByWeek(res || {});
     } catch (error) {
       console.error('Error fetching diary:', error);
@@ -67,7 +68,7 @@ function FilterEmotions({ diaryID, date }: DiaryID) {
   const fetchFilterMonthEmotionsByDiary = async () => {
     if (!diaryID || !date) return;
     try {
-      const res = await GetMonthEmotionsByDiaryID(diaryID, date);
+      const res = await GetMonthEmotionsBehavioralExpByDiaryID(diaryID, date);
       setAllMoodByMonth(res || {});
     } catch (error) {
       console.error('Error fetching diary:', error);
@@ -78,7 +79,7 @@ function FilterEmotions({ diaryID, date }: DiaryID) {
   const fetchEmotionPatientData = async () => {
     if (!diaryID || !date) return;
     try {
-      const res = await GetEmotionsHaveDateByDiaryID(diaryID, date);
+      const res = await GetEmotionsBehavioralExpHaveDateByDiaryID(diaryID, date);
       if (res) {
         const transformedEmotions = res.map((emotion: any) => ({
           ID: emotion.emotion_id,
@@ -302,4 +303,4 @@ const createChartOption = () => {
   );
 }
 
-export default FilterEmotions;
+export default FilterEmotionsBehav;
