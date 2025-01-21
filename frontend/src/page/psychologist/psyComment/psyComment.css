@@ -458,7 +458,7 @@
     position: relative;
     flex-grow: 1;  
     height: 100%;
-    background: #c7b285;
+    /* background: #c7b285; */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -467,9 +467,132 @@
 
 
     .Patient-card-info{
-        width: 95%;
-        height: 10%;
-        background: #a2aee9;
+        width: 98%;
+        height: 15%;
+        background: #ffffff;
+        border-radius: 15px;
+        margin-top: 10px;
+        display: flex;
+        flex-direction: row;
+        box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.03);
+
+        .Patient-card-info-left{
+            width: 45%;
+            height: 100%;
+            background-color: #85c7c4;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            .Patient-name-age-gender-id{
+                height: 85%;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                /* background-color: #c785c4; */
+                margin: 0.5rem;
+            }
+        }
+        .Patient-card-info-right{
+            width: 45%;
+            height: 100%;
+            display: flex;
+            flex-direction: row;
+            /* background:#e9eb96; */
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+
+            .Patient-email-tel-symtom-dob{
+                height: 100%;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 2rem;
+            }
+        }
+    }
+
+    .Record-info{
+        position: relative;
+        /* background: #85c7c4; */
+        width: 98%;
+        flex-grow: 1;
+        border-radius: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center; 
+        box-sizing: border-box; /* รวม padding และ border ในขนาดองค์ประกอบ */
+        overflow: auto;
+        
+        .table-wrapper {
+            position: relative;
+            background: #ffffff00;
+            width: 100%;
+            height: 100%;
+            max-width: 1024px;
+            overflow-y: auto;
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #d8d8d8b0 transparent;
+            border-radius: 15px;
+          }
+          
+          .custom-table {
+            width: max-content; /* ตารางปรับตามขนาดเนื้อหา */
+            border-collapse:collapse; 
+            min-width: 120px;
+            background: #ffffff;
+            color: #585858;
+            font-size: 10px;
+            
+          }
+          
+          .custom-table th, 
+          .custom-table td {
+            text-align: center;
+            word-wrap: break-word;
+            white-space: normal;
+          }
+
+          .custom-table td {
+            height: 50px;
+            max-width: 180px;
+            padding: 5px;
+            z-index: 2;
+
+          }
+
+          .custom-table td:not(.fixed-column){
+            border: 0.5px solid #efefef;            
+          }
+          .custom-table th:not(.fixed-column){
+            background-color: #d4d4d4ea;
+
+          }
+          
+          .custom-table th { 
+            font-weight: bold;
+            position: sticky;
+            padding: 4px;
+            top: 0;
+            z-index: 1;
+            border: none;
+          }
+
+          .custom-table tr:hover {
+            background-color: #f0f0f0b9;
+            cursor: pointer; 
+          }
+          
+          .fixed-column {
+            position: sticky;
+            left: 0;
+            background-color: #d4d4d4;
+            z-index: 3;
+            border: none;
+          }
     }
 }
 
@@ -484,3 +607,5 @@
     display: flex;
     flex-direction: column;
 }
+
+/*============================================================*/
