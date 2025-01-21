@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import NavbarPat from '../../../../component/navbarPat/navbarPat';
-import { Calendar, Badge, Modal, Form, Select, Input, ConfigProvider, Dropdown, Button, Menu, Timeline, Drawer, message } from 'antd';
+import { Calendar, Badge, Modal, Form, Select, Input, ConfigProvider, Dropdown, Button, Menu, Timeline, Drawer, message, Tooltip } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
-import { AiOutlineMore } from 'react-icons/ai';
+import { AiFillSignal, AiOutlineMore } from 'react-icons/ai';
 import { EmtionInterface } from '../../../../interfaces/emotion/IEmotion';
 import { ActivityPlanningInterface } from '../../../../interfaces/activityPlanning/IActivityPlanning';
 import { CommentInterface } from '../../../../interfaces/psychologist/IComment';
 import { TimeOfDayInterface } from '../../../../interfaces/timeOfDay/ITimeOfDay';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { DiaryPatInterface } from '../../../../interfaces/diary/IDiary';
 import { GetDiaryByDiaryID } from '../../../../services/https/diary';
 import { ListCommentByDiaryId } from '../../../../services/https/psychologist/comment';
@@ -220,6 +220,15 @@ const Planning: React.FC = () => {
         ))}
       </ul>
     );
+  };
+
+  const navigate = useNavigate();
+  const handleNavigateToSummary = () => {
+      if (diary && diary.ID) {
+          navigate(`/SummaryPlanning?id=${diary.ID}`); // ใช้ query parameter แทน
+      } else {
+          console.warn("Diary ID is missing");
+      }
   };
   
   const getContentForDay = (date: Date | null) => {
@@ -473,7 +482,7 @@ const handleSubmitEdit = async () => {
                         <div style={{ display: 'flex', justifyContent: 'space-between', padding: 10 }}>
                           <div className='titleCalender'>{diary?.Name}</div>
                           <div>
-                            <Select
+                            {/* <Select
                               value={current.month()}
                               onChange={(month) => {
                                 const newValue = current.clone().month(month);
@@ -486,7 +495,15 @@ const handleSubmitEdit = async () => {
                                   {dayjs().month(i).format('MMMM')}
                                 </Select.Option>
                               ))}
-                            </Select>
+                            </Select> */}
+                            <Tooltip title="สรุปข้อมูล">
+                                <Button
+                                    type="primary"
+                                    shape="circle"
+                                    icon={<AiFillSignal />}
+                                    onClick={handleNavigateToSummary} // ใช้ชื่อฟังก์ชันใหม่
+                                />
+                            </Tooltip>
                           </div>
                         </div>
                       );

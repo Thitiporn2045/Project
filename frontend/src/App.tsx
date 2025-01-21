@@ -29,8 +29,10 @@ import PsyCommentBE from './page/psychologist/psyComment/PsyCommentBE';
 import PsyCommentCS from './page/psychologist/psyComment/PsyCommentCS';
 import ListPsycho from './page/admin/listPsycho/listPsycho';
 import ListPat from './page/admin/listPat/listPat';
-import SheetBehav from './page/patient/worksheet/totalSheet/SheetBehav';
+import SheetBehav from './page/patient/worksheet/totalSheet/sheetBehav';
 import SummaryBehav from './page/patient/summary/summaryBehav';
+import SummaryActivity from './page/patient/summary/summaryActivity';
+import SummaryPlanning from './page/patient/summary/summaryPlanning';
 
 export default function App() {
 
@@ -72,6 +74,9 @@ export default function App() {
         <Route path='/Emotional' element={<Emotional/>} />
         <Route path='/SheetBehav' element={<SheetBehav/>} />
         <Route path='/SummaryBehav' element={<SummaryBehav/>} />
+        <Route path='/SummaryActivity' element={<SummaryActivity/>} />
+        <Route path='/SummaryPlanning' element={<SummaryPlanning/>} />
+
       </Routes>
     </BrowserRouter>
   );

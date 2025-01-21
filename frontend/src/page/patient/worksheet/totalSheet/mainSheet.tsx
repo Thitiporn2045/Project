@@ -40,18 +40,20 @@ function MainSheet() {
         fetchDiaryByPatientID();
     }, []);
 
-    // Function to navigate based on the WorksheetTypeID
     const navigateToDiaryPage = (diary: DiaryPatInterface) => {
         const currentDate = dayjs();
         const startDate = dayjs(diary.Start, 'DD-MM-YYYY');
         const endDate = dayjs(diary.End, 'DD-MM-YYYY');
-    
-        if (currentDate.isBefore(startDate) || currentDate.isAfter(endDate)) {
-            if (!currentDate.isSame(startDate, 'day') && !currentDate.isSame(endDate, 'day')) {
-                messageApi.error('ไม่สามารถเข้าถึงไดอารี่ เนื่องจากอยู่นอกช่วงเวลาที่กำหนด');
-                return;
+        
+        // Check if it's not a Planning or Activity WorksheetTypeID
+        if (![1, 2].includes(Number(diary.WorksheetTypeID))) {
+            if (currentDate.isBefore(startDate) || currentDate.isAfter(endDate)) {
+                if (!currentDate.isSame(startDate, 'day') && !currentDate.isSame(endDate, 'day')) {
+                    messageApi.error('ไม่สามารถเข้าถึงไดอารี่ เนื่องจากอยู่นอกช่วงเวลาที่กำหนด');
+                    return;
+                }
             }
-        }        
+        }
     
         let routePath = '';
         switch (diary.WorksheetTypeID) {
@@ -71,8 +73,9 @@ function MainSheet() {
                 console.error('Unknown worksheet type');
                 return;
         }
+    
         navigate(`${routePath}?id=${diary.ID}`);
-    };
+    };    
     
 
     // Toggle popup visibility

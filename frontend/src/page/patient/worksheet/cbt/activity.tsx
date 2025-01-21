@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import NavbarPat from '../../../../component/navbarPat/navbarPat';
-import { Calendar, Badge, Modal, Form, Select, List, Input, ConfigProvider, Dropdown, Button, Menu, Timeline, Drawer, message } from 'antd';
+import { Calendar, Badge, Modal, Form, Select, List, Input, ConfigProvider, Dropdown, Button, Menu, Timeline, Drawer, message, Tooltip } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import 'dayjs/locale/th';  // นำเข้า locale ภาษาไทย
-import { AiOutlineMore } from 'react-icons/ai';
+import { AiFillSignal, AiOutlineMore } from 'react-icons/ai';
 import { EmtionInterface } from '../../../../interfaces/emotion/IEmotion';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { DiaryPatInterface } from '../../../../interfaces/diary/IDiary';
 import { GetDiaryByDiaryID } from '../../../../services/https/diary';
 import { GetEmotionByPatientID } from '../../../../services/https/emotion/emotion';
@@ -379,6 +379,15 @@ const menu = (event: ActivityDiaryInterface) => (
     </Menu>
 );
 
+const navigate = useNavigate();
+const handleNavigateToSummary = () => {
+    if (diary && diary.ID) {
+        navigate(`/SummaryActivity?id=${diary.ID}`); // ใช้ query parameter แทน
+    } else {
+        console.warn("Diary ID is missing");
+    }
+};
+
 return (
     <ConfigProvider
     theme={{
@@ -432,6 +441,15 @@ return (
                                             </Select.Option>
                                         ))}
                                     </Select>
+
+                                    <Tooltip title="สรุปข้อมูล">
+                                        <Button
+                                            type="primary"
+                                            shape="circle"
+                                            icon={<AiFillSignal />}
+                                            onClick={handleNavigateToSummary} // ใช้ชื่อฟังก์ชันใหม่
+                                        />
+                                    </Tooltip>
                                 </div>
                             </div>
                         );

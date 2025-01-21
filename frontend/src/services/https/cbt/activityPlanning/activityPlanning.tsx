@@ -91,3 +91,135 @@ export async function UpdateActivityPlanning(data: ActivityPlanningInterface) {
         return { status: false, message: "Network error or server unavailable" };
     }
 }
+
+
+export async function GetPlanningEmotionsByDateTimeAndDiaryID(id: number | undefined, date: string | undefined) {
+    const requestOptions = {
+        method: "GET",
+    };
+
+    // เช็คว่า id หรือ date เป็น undefined หรือไม่
+    if (id === undefined || date === undefined) {
+        return false;
+    }
+
+    // สร้าง URL ที่รวม id และ date
+    const url = `${apiUrl}/pat/get/ActivityPlanning/DateTime/ByDiary?id=${id}&date=${date}`;
+
+    // เรียก API
+    let res = await fetch(url, requestOptions)
+        .then((response) => response.json())
+        .then((res) => {
+            if (res.data) {
+                return res.data;
+            } else {
+                return false;
+            }
+        });
+
+    return res;
+}
+
+export async function GetPlanningEmotionsByDateAndDiaryID(id: number | undefined, date: string | undefined) {
+    const requestOptions = {
+        method: "GET",
+    };
+
+    // เช็คว่า id หรือ date เป็น undefined หรือไม่
+    if (id === undefined || date === undefined) {
+        return false;
+    }
+
+    // สร้าง URL ที่รวม id และ date
+    const url = `${apiUrl}/pat/get/ActivityPlanning/Date/ByDiary?id=${id}&date=${date}`;
+
+    // เรียก API
+    let res = await fetch(url, requestOptions)
+        .then((response) => response.json())
+        .then((res) => {
+            if (res.data) {
+                return res.data;
+            } else {
+                return false;
+            }
+        });
+
+    return res;
+}
+
+export async function GetPlanningEmotionsByWeekAndDiaryID(id: number | undefined, date: string | undefined) {
+    const requestOptions = {
+        method: "GET",
+    };
+
+    // เช็คว่า id หรือ date เป็น undefined หรือไม่
+    if (id === undefined || date === undefined) {
+        return false;
+    }
+
+    // สร้าง URL ที่รวม id และ date
+    const url = `${apiUrl}/pat/get/ActivityPlanning/Week/ByDiary?id=${id}&date=${date}`;
+
+    // เรียก API
+    let res = await fetch(url, requestOptions)
+        .then((response) => response.json())
+        .then((res) => {
+            if (res.data) {
+                return res.data;
+            } else {
+                return false;
+            }
+        });
+
+    return res;
+}
+
+export async function GetPlanningEmotionsByMonthAndDiaryID(id: number | undefined, date: string | undefined) {
+    const requestOptions = {
+        method: "GET",
+    };
+
+    // เช็คว่า id หรือ date เป็น undefined หรือไม่
+    if (id === undefined || date === undefined) {
+        return false;
+    }
+
+    // สร้าง URL ที่รวม id และ date
+    const url = `${apiUrl}/pat/get/ActivityPlanning/Month/ByDiary?id=${id}&date=${date}`;
+
+    // เรียก API
+    let res = await fetch(url, requestOptions)
+        .then((response) => response.json())
+        .then((res) => {
+            if (res.data) {
+                return res.data;
+            } else {
+                return false;
+            }
+        });
+
+    return res;
+}
+
+
+export async function GetAllPlanningEmotionsByDiaryID(id: number | undefined) {
+    const requestOptions = {
+        method: "GET",
+    };
+
+    // สร้าง URL ที่รวม id และ date
+    const url = `${apiUrl}/pat/get/ActivityPlanning/All/ByDiary?id=${id}`;
+
+    // เรียก API
+    let res = await fetch(url, requestOptions)
+        .then((response) => response.json())
+        .then((res) => {
+            if (res.data) {
+                return res.data;
+            } else {
+                return false;
+            }
+        });
+
+    return res;
+}
