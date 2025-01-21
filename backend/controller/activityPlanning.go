@@ -122,3 +122,52 @@ func UpdateActivityPlanning(c *gin.Context) {
     // ตอบกลับผลลัพธ์
     c.JSON(http.StatusOK, gin.H{"data": planning})
 }
+
+//=============== Psy ===========================================================================
+func GetActivityPlanningByDiaryIDForPsy(c *gin.Context) {
+    var planning []entity.ActivityPlanning
+
+    diaryID := c.Param("id")
+    if diaryID == "" {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Diary ID is required"})
+        return
+    }
+
+    if err := entity.DB().
+        Preload("TimeOfDay").
+        Preload("Emotion").  
+        Where("diary_id = ?", diaryID).
+        Find(&planning).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+
+    if len(planning) == 0 {
+        c.JSON(http.StatusNotFound, gin.H{"error": "No planning found for the given Diary ID"})
+        return
+    }
+
+    result := make(map[string][]map[string]string)
+    for _, p := range planning {
+        timeOfDay := p.TimeOfDay.Name // เช่น "เช้า", "กลางวัน", "เย็น"
+
+        // เพิ่มข้อมูลกิจกรรมในรูปแบบ JSON
+        entry := map[string]string{
+            "Date":     p.Date, 
+            "Time":     p.Time,     
+            "Activity": p.Activity,                
+            "Emotion":  p.Emotion.Name, 
+            "Emoticon": p.Emotion.Emoticon,
+            "ColorCode": p.Emotion.ColorCode,
+            "TimeOfDayEmoticon": p.TimeOfDay.Emoticon,
+            "TimeOfDayName": p.TimeOfDay.Name,
+
+        }
+
+        // เพิ่ม entry ไปในกลุ่มของ timeOfDay
+        result[timeOfDay] = append(result[timeOfDay], entry)
+    }
+
+    // ส่งข้อมูลกลับในรูปแบบ JSON
+    c.JSON(http.StatusOK, result)
+}

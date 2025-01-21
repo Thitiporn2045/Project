@@ -568,7 +568,7 @@
             border: 0.5px solid #efefef;            
           }
           .custom-table th:not(.fixed-column){
-            background-color: #d4d4d4ea;
+            background-color: #efefefea;
 
           }
           
@@ -582,14 +582,14 @@
           }
 
           .custom-table tr:hover {
-            background-color: #f0f0f0b9;
+            background-color: #efefefea;
             cursor: pointer; 
           }
           
           .fixed-column {
             position: sticky;
             left: 0;
-            background-color: #d4d4d4;
+            background-color: #efefef;
             z-index: 3;
             border: none;
           }
