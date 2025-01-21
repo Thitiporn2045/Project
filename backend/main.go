@@ -108,6 +108,7 @@ func main() {
 
 			r.GET("/diaries/psy/:id",controller.ListPublicDiariesByPatientType)
 			r.GET("/crossSectional/psy/:id",controller.GetCrossSectionalByDiaryIDForPsy)
+			r.GET("/activity/psy/:id",controller.GetActivityPlanningByDiaryIDForPsy)
 
 			r.GET("/comments/:id",controller.ListCommentByDiaryId)
 			r.POST("/comment",controller.CreateComment)

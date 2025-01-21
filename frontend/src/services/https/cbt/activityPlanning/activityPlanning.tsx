@@ -92,7 +92,6 @@ export async function UpdateActivityPlanning(data: ActivityPlanningInterface) {
     }
 }
 
-
 export async function GetPlanningEmotionsByDateTimeAndDiaryID(id: number | undefined, date: string | undefined) {
     const requestOptions = {
         method: "GET",
@@ -220,6 +219,24 @@ export async function GetAllPlanningEmotionsByDiaryID(id: number | undefined) {
                 return false;
             }
         });
+
+    return res;
+}
+//==================== psy ======================================================
+export async function GetActivityPlanningByDiaryIDForPsy(id: Number | undefined) {
+    const requestOptions = {
+    method: "GET",
+    };
+
+    let res = await fetch(`${apiUrl}/activity/psy/${id}`, requestOptions)
+    .then((response) => response.json())
+    .then((res) => {
+        if (res.data) {
+        return res.data;
+        } else {
+        return false;
+        }
+    });
 
     return res;
 }
