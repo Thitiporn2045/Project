@@ -2,6 +2,14 @@ import React from 'react'
 import './psyComment.css'
 import AntD from '../../../component/psychologist/sideBar/AntD'
 import PsyCommentMain from './PsyCommentMain'
+import { ConfigProvider, Table, TableColumnsType } from "antd";
+import { ActivityPlanningInterfaceForPsy } from '../../../interfaces/activityPlanning/IActivityPlanning';
+import { DiaryPatInterface } from '../../../interfaces/diary/IDiary';
+import { GetDiaryByDiaryID } from '../../../services/https/diary';
+import { calculateAge } from '../../calculateAge';
+import userEmpty from "../../../assets/userEmty.jpg"
+import { GetActivityPlanningByDiaryIDForPsy } from '../../../services/https/cbt/activityPlanning/activityPlanning';
+import dayjs from 'dayjs';
 
 function PsyCommentAP() {
   return (

@@ -23,8 +23,6 @@ interface ColumnType {
 function PsyCommentAD() {
   const [diary, setDiary] = useState<DiaryPatInterface>();
   const [activityDiary, setActivityDiary] = useState<ActivityDiaryInterface[]>([]);
-  const [columns, setColumns] = useState<ColumnType[]>([]);
-  const [dataSource, setDataSource] = useState<{ [key: string]: string | null }[]>([]);
   const diaryID = localStorage.getItem('diaryID');
 
   const getDiaryByID = async () => {

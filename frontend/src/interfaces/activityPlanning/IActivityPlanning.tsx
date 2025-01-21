@@ -17,3 +17,14 @@ export interface ActivityPlanningInterface{
     EmotionID?: number;
     Emotion?: EmtionInterface;
 }
+
+export interface ActivityPlanningInterfaceForPsy{
+    Date?: string;
+    Time?: string;     
+    Activity?: string;                
+    Emotion?: string; 
+    Emoticon?: string;
+    ColorCode?: string;
+    TimeOfDayEmoticon?: string;
+    TimeOfDayName?: string;
+}
