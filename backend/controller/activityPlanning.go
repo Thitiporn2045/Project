@@ -135,7 +135,7 @@ func GetPlanningEmotionsByDateTimeAndDiaryID(c *gin.Context) {
 		return
 	}
 
-	// Query เพื่อดึงข้อมูลอารมณ์จากฐานข้อมูลและแบ่งข้อมูลตามช่วงชั่วโมง
+	// Query เพื่อดึงข้อมูลอารมณ์จากฐานข้อมูลและนับข้อมูลตามช่วงเวลา
 	type EmotionSummary struct {
 		EmotionID      uint   `json:"EmotionID"`
 		Name           string `json:"Name"`
@@ -147,12 +147,13 @@ func GetPlanningEmotionsByDateTimeAndDiaryID(c *gin.Context) {
 
 	var emotions []EmotionSummary
 
+	// Query เพื่อดึงข้อมูลอารมณ์จากฐานข้อมูล
 	err := entity.DB().Model(&entity.ActivityPlanning{}).
-		Select("emotions.id AS EmotionID, emotions.name AS Name, emotions.color_code AS ColorCode, COALESCE(emotions.emoticon, 'No Emoji') AS Emoticon, time_of_days.name AS TimeOfDay, COUNT(*) AS Count").
+		Select("emotions.id AS EmotionID, emotions.name AS Name, emotions.color_code AS ColorCode, COALESCE(emotions.emoticon, '🤕') AS Emoticon,COALESCE(emotions.name, 'ไม่สำเร็จ') AS Name, time_of_days.name AS TimeOfDay, COUNT(*) AS Count").
 		Joins("LEFT JOIN emotions ON activity_plannings.emotion_id = emotions.id").
 		Joins("JOIN time_of_days ON activity_plannings.time_of_day_id = time_of_days.id").
 		Where("activity_plannings.diary_id = ? AND activity_plannings.date = ?", diaryID, dateParam).
-		Group("emotions.id, time_of_days.name").
+		Group("emotions.id, time_of_days.name"). // รวมข้อมูลเพื่อคำนวณจำนวน
 		Scan(&emotions).Error
 
 	if err != nil {
@@ -160,33 +161,8 @@ func GetPlanningEmotionsByDateTimeAndDiaryID(c *gin.Context) {
 		return
 	}
 
-	// Create a map to group emotions by TimeOfDay
-	groupedEmotions := make(map[string][]EmotionSummary)
-
-	for _, emotion := range emotions {
-		// Group by TimeOfDay
-		groupedEmotions[emotion.TimeOfDay] = append(groupedEmotions[emotion.TimeOfDay], emotion)
-	}
-
-	// Prepare final response
-	var result []struct {
-		TimeOfDay  string            `json:"TimeOfDay"`
-		Emotions   []EmotionSummary `json:"Emotions"`
-	}
-
-	// Loop through the grouped emotions and format them
-	for timeOfDay, emotionsGroup := range groupedEmotions {
-		result = append(result, struct {
-			TimeOfDay  string            `json:"TimeOfDay"`
-			Emotions   []EmotionSummary `json:"Emotions"`
-		}{
-			TimeOfDay: timeOfDay,
-			Emotions:  emotionsGroup,
-		})
-	}
-
 	// ส่งข้อมูลกลับในรูปแบบ JSON
-	c.JSON(http.StatusOK, gin.H{"data": result})
+	c.JSON(http.StatusOK, gin.H{"data": emotions})
 }
 
 func GetPlanningEmotionsByDateAndDiaryID(c *gin.Context) {

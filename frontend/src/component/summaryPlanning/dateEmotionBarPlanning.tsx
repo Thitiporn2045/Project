@@ -55,6 +55,7 @@ function DateEmotionBarPlanning({ diaryID, date }: DiaryID) {
                 const res = await GetPlanningEmotionsByDateTimeAndDiaryID(diaryID, date);
                 if (mountedRef.current) {
                     setAllMoodByDateTime(res || {});
+                    console.log("setAllMoodByDateTime", res)
                     setHasData(!!res && Object.keys(res).length > 0);
                 }
             } catch (error) {
@@ -69,25 +70,23 @@ function DateEmotionBarPlanning({ diaryID, date }: DiaryID) {
         fetchAllMoodByDateTime();
     }, [diaryID, date]);
 
-    // Chart initialization and update effect
     useEffect(() => {
         if (!hasData || !chartContainerRef.current || !mountedRef.current) {
             cleanupChart();
             return;
         }
-
+    
         // Ensure cleanup before creating new chart
         cleanupChart();
-
+    
         // Small delay to ensure DOM is ready
         const timer = setTimeout(() => {
             if (!mountedRef.current || !chartContainerRef.current) return;
-
+    
             try {
                 // Initialize chart
                 chartRef.current = echarts.init(chartContainerRef.current);
-
-                // Prepare chart data...
+    
                 const prepareChartData = () => {
                     const allEmotions = new Set<string>();
                     const timeRanges = new Set<string>();
@@ -95,7 +94,8 @@ function DateEmotionBarPlanning({ diaryID, date }: DiaryID) {
                     const emotionEmoticons: { [key: string]: string } = {};
                     const emotionCounts: { [key: string]: { [key: string]: number } } = {};
                     const emotionIDs: { [key: string]: number } = {};
-
+                
+                    // Add emotions and time ranges from the data
                     Object.values(allMoodByDateTime).flat().forEach(item => {
                         allEmotions.add(item.Name);
                         timeRanges.add(item.TimeOfDay);
@@ -105,89 +105,105 @@ function DateEmotionBarPlanning({ diaryID, date }: DiaryID) {
                         if (!emotionCounts[item.Name]) emotionCounts[item.Name] = {};
                         emotionCounts[item.Name][item.TimeOfDay] = item.Count;
                     });
-
-                    const timeRangesArray = Array.from(timeRanges).sort();
+                
+                    // Define custom time order (เช้า, กลางวัน, เย็น)
+                    const timeOrder: { [key: string]: number } = {
+                        "เช้า": 0,
+                        "กลางวัน": 1,
+                        "เย็น": 2
+                    };
+                
+                    // Sort the time ranges based on the defined order
+                    const timeRangesArray = Array.from(timeRanges).sort((a, b) => timeOrder[a] - timeOrder[b]);
+                
+                    // Sort emotions alphabetically by EmotionID
                     const emotionsArray = Array.from(allEmotions).sort((a, b) => emotionIDs[a] - emotionIDs[b]);
-
+                
                     const rawData = emotionsArray.map(emotion =>
                         timeRangesArray.map(timeRange => emotionCounts[emotion]?.[timeRange] || 0)
                     );
-
+                
                     const totalData = timeRangesArray.map((_, idx) =>
                         rawData.reduce((sum, emotionCounts) => sum + emotionCounts[idx], 0)
                     );
-
-                    return { emotionsArray, timeRangesArray, rawData, totalData, emotionColors, emotionEmoticons };
-                };
-
-                const { emotionsArray, timeRangesArray, rawData, totalData, emotionColors, emotionEmoticons } = prepareChartData();
-
+                
+                    return { emotionsArray, timeRangesArray, rawData, totalData, emotionColors, emotionEmoticons, emotionIDs };
+                };                
+    
+                const { emotionsArray, timeRangesArray, rawData, totalData, emotionColors, emotionEmoticons, emotionIDs } = prepareChartData();
+    
                 const darkenColor = (color: string, amount: number) => {
                     let usePound = false;
-
+    
                     if (color[0] === "#") {
                         color = color.slice(1);
                         usePound = true;
                     }
-
+    
                     const num = parseInt(color, 16);
-
+    
                     let r = (num >> 16) - amount;
                     let b = ((num >> 8) & 0x00FF) - amount;
                     let g = (num & 0x0000FF) - amount;
-
+    
                     r = r < 0 ? 0 : r;
                     b = b < 0 ? 0 : b;
                     g = g < 0 ? 0 : g;
-
+    
                     return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16).padStart(6, '0');
                 };
-
-                // Add special handling for No Emoji
-                const series = emotionsArray.map((name, idx) => ({
-                    name: `${name === 'No Emoji' ? 'No Emoji' : name} ${emotionEmoticons[name] || ''}`,
-                    type: 'bar',
-                    stack: 'total',
-                    barWidth: '40%',
-                    itemStyle: {
-                        color: name === 'No Emoji' ? '#d3d3d3' : emotionColors[name],  // Gray for "No Emoji"
-                        borderRadius: [15, 15, 15, 15],
-                    },
-                    label: {
-                        show: true,
-                        position: 'inside',
-                        fontSize: 14,
-                        rich: {
-                            emoji: {
-                                fontSize: 20,
-                                lineHeight: 25,
-                                align: 'center',
-                                verticalAlign: 'middle',
+    
+                const series = emotionsArray.map((name, idx) => {
+                    const emotionID = emotionIDs[name];
+                    const barColor = emotionID === 0 ? '#f0f0ff' : emotionColors[name];  // Check for EmotionID 0
+                
+                    return {
+                        name: `${name} ${emotionEmoticons[name]}`,
+                        type: 'bar',
+                        stack: 'total',
+                        barWidth: '40%',
+                        itemStyle: {
+                            color: barColor,  // Use grey color if EmotionID is 0, otherwise use the defined color
+                            borderRadius: [15, 15, 15, 15],
+                        },
+                        label: {
+                            show: true,
+                            position: 'inside',
+                            fontSize: 14,
+                            rich: {
+                                emoji: {
+                                    fontSize: 20,
+                                    lineHeight: 25,
+                                    align: 'center',
+                                    verticalAlign: 'middle',
+                                },
+                                percentage: {
+                                    fontSize: 12,
+                                    fontWeight: 550,
+                                    color: darkenColor(barColor, 100),  // Darken the grey color or the original color
+                                    align: 'center',  // Center alignment for percentage text
+                                    verticalAlign: 'middle',  // Center vertically
+                                    padding: [0, 0, 0, 0],  // Ensure no padding interferes with centering
+                                },
                             },
-                            percentage: {
-                                fontSize: 12,
-                                fontWeight: 550,
-                                color: darkenColor(emotionColors[name], 100),
+                            formatter: (params: any) => {
+                                const value = params.value;
+                                if (value > 0) {
+                                    const percentage =
+                                        totalData[params.dataIndex] > 0
+                                            ? ((value / totalData[params.dataIndex]) * 100).toFixed(1) + '%'
+                                            : '';
+                                    return `{emoji|${emotionEmoticons[name]}}\n{percentage|${percentage}}`;
+                                }
+                                return '';
                             },
                         },
-                        formatter: (params: any) => {
-                            const value = params.value;
-                            if (value > 0) {
-                                const percentage =
-                                    totalData[params.dataIndex] > 0
-                                        ? ((value / totalData[params.dataIndex]) * 100).toFixed(1) + '%'
-                                        : '';
-                                return `{emoji|${emotionEmoticons[name]}}\n{percentage|${percentage}}`;
-                            }
-                            return '';
-                        },
-                    },
-                    data: rawData[idx],
-                }));
-
-                // Ensure "No Emoji" series is first in the stack
+                        data: rawData[idx],
+                    };
+                });                
+    
                 if (!mountedRef.current || !chartRef.current) return;
-
+    
                 chartRef.current.setOption({
                     tooltip: {
                         trigger: 'axis',
@@ -209,7 +225,7 @@ function DateEmotionBarPlanning({ diaryID, date }: DiaryID) {
                     },
                     legend: {
                         bottom: '0',
-                        data: emotionsArray.map(name => `${name === 'No Emoji' ? 'No Emoji' : name} ${emotionEmoticons[name] || ''}`),
+                        data: emotionsArray.map(name => `${name} ${emotionEmoticons[name]}`),
                     },
                     grid: {
                         left: '3%',
@@ -233,28 +249,29 @@ function DateEmotionBarPlanning({ diaryID, date }: DiaryID) {
                     yAxis: {
                         type: 'value',
                     },
-                    series: series,
+                    series,
                 });
             } catch (error) {
                 console.error('Error initializing chart:', error);
                 cleanupChart();
             }
         }, 100);
-
+    
         const handleResize = () => {
             if (chartRef.current && mountedRef.current) {
                 chartRef.current.resize();
             }
         };
-
+    
         window.addEventListener('resize', handleResize);
-
+    
         return () => {
             window.removeEventListener('resize', handleResize);
             clearTimeout(timer);
             cleanupChart();
         };
     }, [allMoodByDateTime, hasData, date]);
+    
 
     return hasData ? (
         <div 

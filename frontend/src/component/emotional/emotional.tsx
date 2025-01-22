@@ -18,7 +18,7 @@ const addEmotions: AddEmotion[] = [
     { ColorCode: '#FF7171', Emoticon: '😡' }, // โกรธ
     { ColorCode: '#FF7F7F', Emoticon: '😠' }, // หงุดหงิด
     { ColorCode: '#FF9090', Emoticon: '😤' }, // รำคาญ
-
+    
     // ภูมิใจ (Pride)
     { ColorCode: '#FFD875', Emoticon: '😌' }, // ภูมิใจ
     { ColorCode: '#FFE798', Emoticon: '😊' }, // ยินดี
@@ -62,6 +62,8 @@ const addEmotions: AddEmotion[] = [
     // รังเกียจ (Disgusted)
     { ColorCode: '#E1C6F7', Emoticon: '😒' }, // รังเกียจ
     { ColorCode: '#B78FCB', Emoticon: '😩' }, // ขยะแขยง
+
+    
 ];
 
 

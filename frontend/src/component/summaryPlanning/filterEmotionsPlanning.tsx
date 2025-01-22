@@ -111,7 +111,7 @@ const createChartOption = () => {
         value: 1,
         name: emotion.Name,
         itemStyle: {
-          color: emotion.ColorCode,
+          color: emotion.EmotionID === 0 ? '#f0f0ff' : emotion.ColorCode,
           emoticon: emotion.Emoticon,
         },
       }))
@@ -119,7 +119,7 @@ const createChartOption = () => {
         value: emotion.Count,
         name: emotion.Name,
         itemStyle: {
-          color: emotion.ColorCode,
+          color: emotion.EmotionID === 0 ? '#f0f0ff' : emotion.ColorCode,
           emoticon: emotion.Emoticon,
         },
       }));

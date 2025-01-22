@@ -8,14 +8,10 @@ import dayjs from 'dayjs';
 import { CrossSectionalInterface } from '../../../interfaces/crossSectional/ICrossSectional';
 import { CommentInterface } from '../../../interfaces/psychologist/IComment';
 import { ListCommentByDiaryId } from '../../../services/https/psychologist/comment';
-import DateEmotionBar from '../../../component/summaryActivity/dateEmotionBar';
-import MostCommonActivity from '../../../component/summaryActivity/mostCommonActivity';
-import FilterEmotionsActivity from '../../../component/summaryActivity/filterEmotionsActivity';
-import { GetActivityDiaryByDiaryID } from '../../../services/https/cbt/activityDiary/activityDiary';
-import OverallMoodActivity from '../../../component/summaryActivity/overallMoodActivity';
 import DateEmotionBarPlanning from '../../../component/summaryPlanning/dateEmotionBarPlanning';
 import FilterEmotionsPlanning from '../../../component/summaryPlanning/filterEmotionsPlanning';
 import { GetActivityPlanningByDiaryID } from '../../../services/https/cbt/activityPlanning/activityPlanning';
+import MostCommonPlanning from '../../../component/summaryPlanning/mostCommonPlanning';
 
 const SummaryPlanning: React.FC = () => {
     const [searchParams] = useSearchParams();
@@ -342,7 +338,7 @@ const SummaryPlanning: React.FC = () => {
                                             <div className='titleEmoticon'>
                                                 อารมณ์ที่พบบ่อย
                                             </div>
-                                            <MostCommonActivity diaryID={numericDiaryID}/>
+                                            <MostCommonPlanning diaryID={numericDiaryID}/>
                                         </div>
                                     </div>
                                 </div>

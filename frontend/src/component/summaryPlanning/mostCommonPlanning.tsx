@@ -15,7 +15,7 @@ interface DiaryID {
     diaryID: number | undefined;
 }
 
-function MostCommonActivity({ diaryID }: DiaryID) {
+function MostCommonPlanning({ diaryID }: DiaryID) {
     const [overallMood, setOverallMood] = useState<EmotionData[]>([]);
 
     const fetchOverallMoodByDiary = async () => {
@@ -65,4 +65,4 @@ function MostCommonActivity({ diaryID }: DiaryID) {
     );
 }
 
-export default MostCommonActivity;
+export default MostCommonPlanning;
