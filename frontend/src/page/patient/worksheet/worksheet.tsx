@@ -11,6 +11,11 @@ import { DiaryPatInterface } from '../../../interfaces/diary/IDiary';
 import { CreateDiaryPat } from '../../../services/https/diary';
 import { Button, Drawer, message } from 'antd';
 import dayjs from 'dayjs';
+import sheetActivity from '../../../assets/sheet1.png'
+import sheetBeHav from  '../../../assets/sheet2.png'
+import sheetCross from  '../../../assets/sheet3.png'
+import sheetPlanning from '../../../assets/sheet4.png'
+import { motion } from "framer-motion";  // Import framer-motion
 
     // global.d.ts หรือ index.d.ts
     declare var require: {
@@ -330,6 +335,21 @@ function Worksheets() {
         }
     };
 
+    const getWorksheetContentImg = (): string | undefined => {
+        switch (selectedWorksheet?.ID) {
+            case 1:
+                return sheetPlanning;
+            case 2:
+                return sheetActivity;
+            case 3:
+                return sheetBeHav;
+            case 4:
+                return sheetCross;
+            default:
+                return undefined; // Changed from `null` to `undefined`
+        }
+    };      
+
     return (
         <div className={`worksheets ${showDatePicker ? 'show-blur-background' : ''}`}>
             {contextHolder}
@@ -339,43 +359,63 @@ function Worksheets() {
                 </div>
                 <div className="main-background">
                     <div className="bg-content">
-                        <div className="content-img">
-                            {selectedWorksheet && (
-                                <img 
-                                    src={selectedWorksheet.Picture} 
-                                    alt={selectedWorksheet.Name}
-                                    style={{ opacity: 1, transition: 'opacity 0.5s' }}
-                                />
-                            )}
-                        </div>
-                        <div className="content-text">
-                            {selectedWorksheet && (
-                                <>
-                                    {getWorksheetContent() ? ( 
-                                        <div>
-                                            <h2>{selectedWorksheet.Name}</h2>
-                                            <p>{getWorksheetContent()}</p>  {/* แสดงเนื้อหาที่ดึงมา */}
-                                            <button className="btn" onClick={() => setShowDatePicker(true)}>
-                                                <span>เริ่มสร้าง</span>
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        <p>กำลังโหลดเนื้อหาของแบบฝึกหัด...</p>
-                                    )}
-                                </>
-                            )}
-                        </div>
+                    <motion.div 
+                        className="content-img"
+                        initial={{ opacity: 0, y: 50 }}  // Start off-screen and transparent
+                        animate={{ opacity: 1, y: 0 }}    // Fade in and move to the normal position
+                        transition={{ duration: 0.5 }}    // Smooth transition for 0.5s
+                    >
+                        {selectedWorksheet && (
+                            <>
+                                {getWorksheetContentImg() ? ( 
+                                    <img 
+                                        className='ImgSheet'
+                                        src={getWorksheetContentImg()} 
+                                        alt={selectedWorksheet.Name}
+                                        style={{ opacity: 1, transition: 'opacity 0.5s' }}
+                                    />
+                                ) : (
+                                    <p>กำลังโหลดเนื้อหาของแบบฝึกหัด...</p>
+                                )}
+                            </>
+                        )}
+                    </motion.div>
+                    <motion.div 
+                        className="content-text"
+                        initial={{ opacity: 0, y: 50 }}  // Start off-screen and transparent
+                        animate={{ opacity: 1, y: 0 }}    // Fade in and move to the normal position
+                        transition={{ duration: 0.5 }}    // Smooth transition for 0.5s
+                    >
+                        {selectedWorksheet && (
+                            <>
+                                {getWorksheetContent() ? ( 
+                                    <div>
+                                        <h2>{selectedWorksheet.Name}</h2>
+                                        <p>{getWorksheetContent()}</p>  {/* แสดงเนื้อหาที่ดึงมา */}
+                                        <button className="btn" onClick={() => setShowDatePicker(true)}>
+                                            <span>เริ่มสร้าง</span>
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <p>กำลังโหลดเนื้อหาของแบบฝึกหัด...</p>
+                                )}
+                            </>
+                        )}
+                    </motion.div>
                     </div>
                     <div className="thumbnail">
                         {worksheets.map((item) => (
-                            <div 
+                            <motion.div 
                                 key={item.ID}
                                 className={`thumbnail-item ${selectedWorksheet?.ID === item.ID ? 'active' : ''}`}
                                 onClick={() => handleThumbnailClick(item)}
                                 style={{ cursor: 'pointer' }}
+                                initial={{ opacity: 0, y: 50 }}  // Start above and transparent
+                                animate={{ opacity: 1, y: 0 }}    // Fade in and move to normal position
+                                transition={{ duration: 0.3 }}    // Duration for the animation
                             >
                                 {item.NumberType}
-                            </div>
+                            </motion.div>
                         ))}
                     </div>
                 </div>
@@ -431,6 +471,7 @@ function Worksheets() {
                                 <div className="input-group">
                                     <label>วันเริ่มต้น</label>
                                     <DatePicker
+                                        calendarClassName="custom-calendar"
                                         selected={diaryStart}
                                         onChange={(date: Date | null) => {
                                             if (date) setDiaryStart(date);
@@ -439,11 +480,13 @@ function Worksheets() {
                                         startDate={diaryStart}
                                         endDate={diaryEnd}
                                         dateFormat="dd/MM/yyyy"
+                                        minDate={new Date()} // ไม่อนุญาตให้เลือกวันที่ย้อนหลัง
                                     />
                                 </div>
                                 <div className="input-group">
                                     <label>วันสิ้นสุด</label>
                                     <DatePicker
+                                        calendarClassName="custom-calendar"
                                         selected={diaryEnd}
                                         onChange={(date: Date | null) => {
                                             if (date) {

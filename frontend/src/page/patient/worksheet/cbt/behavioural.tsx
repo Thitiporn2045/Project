@@ -165,7 +165,7 @@ const BehavioralExp: React.FC = () => {
                     <div className="lower-content">
                       <div className="bg-Content">
                         <div className='content-box'>
-                          <h3>Target cognition</h3>
+                          <h3>ตั้งสมมติฐาน</h3>
                           <div className="bg-input-ex">
                             <div className="thought-box">
                               <label className="thought-label">ความคิดเชิงลบ:</label>
@@ -188,7 +188,7 @@ const BehavioralExp: React.FC = () => {
                           </div>
                         </div>
                         <div className='content-box'>
-                          <h3>Experiment</h3>
+                          <h3>การวางแผนและปฏิบัติ</h3>
                           <div className="bg-input">
                           <textarea 
                               className='content-input' 
@@ -199,7 +199,7 @@ const BehavioralExp: React.FC = () => {
                           </div>
                         </div>
                         <div className='content-box'>
-                          <h3>Outcome & learning</h3>
+                          <h3>การประเมินผล</h3>
                           <div className="bg-input">
                           <textarea 
                             className='content-input' 
@@ -210,7 +210,7 @@ const BehavioralExp: React.FC = () => {
                           </div>
                         </div>
                         <div className='content-box'>
-                          <h3>What next?</h3>
+                          <h3>บทเรียนที่ได้</h3>
                           <div className="bg-input-ex">
                             <div className="thought-box">
                                 <label className="thought-label">ความเชื่อเดิม:</label>

@@ -175,3 +175,14 @@ func ToggleDiaryIsPublic(c *gin.Context) {
     // ส่งคืนข้อมูลที่อัปเดต
     c.JSON(http.StatusOK, gin.H{"data": diary})
 }
+
+
+func DeleteDiary(c *gin.Context) {
+    diaries := c.Param("id") 
+    if tx := entity.DB().Exec("DELETE FROM diaries WHERE id = ?", diaries); tx.RowsAffected == 0 {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "data not found"})
+        return
+    }
+
+    c.JSON(http.StatusOK, gin.H{"data": diaries})
+}

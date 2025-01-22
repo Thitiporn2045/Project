@@ -87,6 +87,7 @@ func main() {
 			r.DELETE("/patients/:id", controller.DeletePatient)
 			r.DELETE("/pat/delNote/:id", controller.DeleteNotePat)
 			r.DELETE("/pat/del/Emotion/:id", controller.DeleteEmotion)
+			r.DELETE("/pat/del/Diary/:id", controller.DeleteDiary)
 
 
 			//Psychologist Routes

@@ -33,11 +33,6 @@ function SheetBehav() {
     const [emotions, setEmotions] = useState<EmtionInterface[]>([]);     
     const [selectEmotion, setSelectEmotion] = useState<EmtionInterface[]>([]);
 
-    const [negativeThought, setNegativeThought] = useState('');
-    const [alternativeThought, setAlternativeThought] = useState('');
-    const [oldBelief, setOldBelief] = useState('');
-    const [newBelief, setNewBelief] = useState('');
-
     const [messageApi, contextHolder] = message.useMessage();
 
     const handleEditClick = async (date: Date) => {
@@ -367,14 +362,6 @@ const handleSelectChange = (values: (number | undefined)[], setSelectEmotion: Re
                             <div className="onTitle">
                                 <h2 className="title">Behavioral Experiment</h2>
                                 <div className="button">
-                                    <Tooltip title="แก้ไข">
-                                        <Button
-                                            type="primary"
-                                            shape="circle"
-                                            icon={<BiSolidEditAlt />}
-                                            onClick={() => selectedDate && handleEditClick(selectedDate)}
-                                        />
-                                    </Tooltip>
                                     <Tooltip title="สรุปข้อมูล">
                                         <Button
                                             type="primary"
@@ -383,13 +370,21 @@ const handleSelectChange = (values: (number | undefined)[], setSelectEmotion: Re
                                             onClick={handleNavigateToSummary} // ใช้ชื่อฟังก์ชันใหม่
                                         />
                                     </Tooltip>
+                                    <Tooltip title="แก้ไข">
+                                        <Button
+                                            type="primary"
+                                            shape="circle"
+                                            icon={<BiSolidEditAlt />}
+                                            onClick={() => selectedDate && handleEditClick(selectedDate)}
+                                        />
+                                    </Tooltip>
                                 </div>
                             </div>
                         </div>
                         <div className="lower-content behavior">
                             <div className="bg-Content">
                                 <div className="content-box">
-                                    <h3>Target cognition</h3>
+                                    <h3>ตั้งสมมติฐาน</h3>
                                     <div className="bg-input-ex">
                                         <div className="thought-box">
                                             <label className="thought-label">ความคิดเชิงลบ:</label>
@@ -410,19 +405,19 @@ const handleSelectChange = (values: (number | undefined)[], setSelectEmotion: Re
                                     </div>
                                 </div>
                                 <div className="content-box">
-                                    <h3>Experiment</h3>
+                                    <h3>การวางแผนและปฏิบัติ</h3>
                                     <div className="bg-input">
                                         <textarea className="content-input" value={Experiment || ''} readOnly />
                                     </div>
                                 </div>
                                 <div className="content-box">
-                                    <h3>Outcome & learning</h3>
+                                    <h3>การประเมินผล</h3>
                                     <div className="bg-input">
                                         <textarea className="content-input" value={Outcome || ''} readOnly />
                                     </div>
                                 </div>
                                 <div className="content-box">
-                                    <h3>What next?</h3>
+                                    <h3>บทเรียนที่ได้</h3>
                                     <div className="bg-input-ex">
                                         <div className="thought-box">
                                             <label className="thought-label">ความคิดเชิงลบ:</label>
@@ -540,7 +535,7 @@ const handleSelectChange = (values: (number | undefined)[], setSelectEmotion: Re
                                             <div className="lower-content behaviorEdit">
                                                 <div className="bg-Content">
                                                     <div className="content-box">
-                                                    <h3>Target cognition</h3>
+                                                    <h3>ตั้งสมมติฐาน</h3>
                                                         <div className="bg-input-ex">
                                                             <div className="thought-box">
                                                             <label className="thought-label">ความคิดเชิงลบ:</label>
@@ -561,7 +556,7 @@ const handleSelectChange = (values: (number | undefined)[], setSelectEmotion: Re
                                                         </div>
                                                     </div>
                                                     <div className="content-box">
-                                                    <h3>Experiment</h3>
+                                                    <h3>การวางแผนและปฏิบัติ</h3>
                                                         <div className="bg-input">
                                                             <textarea
                                                                 value={editContent.Experiment || ''}
@@ -571,7 +566,7 @@ const handleSelectChange = (values: (number | undefined)[], setSelectEmotion: Re
                                                         </div>
                                                     </div>
                                                     <div className="content-box">
-                                                    <h3>Outcome & learning</h3>
+                                                    <h3>การประเมินผล</h3>
                                                         <div className="bg-input">
                                                             <textarea
                                                                 value={editContent.Outcome || ''}
@@ -581,7 +576,7 @@ const handleSelectChange = (values: (number | undefined)[], setSelectEmotion: Re
                                                         </div>
                                                     </div>
                                                     <div className="content-box">
-                                                    <h3>What next?</h3>
+                                                    <h3>บทเรียนที่ได้</h3>
                                                         <div className="bg-input-ex">
                                                             <div className="thought-box">
                                                             <label className="thought-label">ความเชื่อเดิม:</label>

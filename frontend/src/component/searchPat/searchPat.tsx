@@ -2,30 +2,50 @@ import React, { useState, useEffect } from 'react';
 import './stylePat.css';
 import { ImSearch } from "react-icons/im";
 import { FaRegCalendarAlt } from "react-icons/fa";
+import { DiaryPatInterface } from '../../interfaces/diary/IDiary';
+import { GetDiaryByPatientID } from '../../services/https/diary';
 
-function SearchPat() {
-    const initialBooks = [
-        { image: 'https://i.pinimg.com/736x/ae/b3/0b/aeb30b5e52ee5578af71b98312c67055.jpg', name: 'Syket', date: '9/07/2024', statusBook: 'lock' },
-        { image: 'https://i.pinimg.com/564x/41/89/54/418954fe97bd1e8d2822a2d39c128c76.jpg', name: 'Sakib', date: '10/07/2024', statusBook: 'lock' },
-        { image: 'https://i.pinimg.com/564x/38/48/75/384875edb620674b886be2ccb3c90032.jpg', name: 'Jamy', date: '11/07/2024', statusBook: 'lock' },
-        { image: 'https://i.pinimg.com/564x/fe/81/c8/fe81c87f8a738e9bef039e2d4f300641.jpg', name: 'Hanif', date: '12/07/2024', statusBook: 'lock' },
-    ];
+interface DiaryID {
+    patID: number | undefined;
+}
 
-    const [books, setBooks] = useState(initialBooks);
+function SearchPat({ patID }: DiaryID) {
+    const [diary, setDiary] = useState<DiaryPatInterface[]>([]); // Set initial state as an empty array
     const [searchTerm, setSearchTerm] = useState('');
-    const [results, setResults] = useState([]);
+    const [filteredDiary, setFilteredDiary] = useState<DiaryPatInterface[]>([]); // For storing filtered data
+
+    const fetchDiaryByPatientID = async () => {
+        if (patID) {
+            try {
+                const res = await GetDiaryByPatientID(Number(patID)); // Call API with the patient ID
+                if (res) {
+                    setDiary(res); // Save response to diary state
+                    console.log("fetchDiaryByPatientID", res)
+                }
+                console.log('Diary:', res); // Log the received data
+            } catch (error) {
+                console.error('Error fetching diary:', error); // Log error
+            }
+        }
+    };
 
     useEffect(() => {
-        const filteredBooks = initialBooks.filter(book => 
-            book.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            book.date.includes(searchTerm) ||
-            book.statusBook.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-        setBooks(filteredBooks);
-    }, [searchTerm]);
+        fetchDiaryByPatientID(); // Fetch diary on component mount
+    }, [patID]);
 
-    const handleSearch = (e: any) => {
-        setSearchTerm(e.target.value);
+    useEffect(() => {
+        const filteredBooks = diary.filter(diaryItem => {
+            const nameMatch = diaryItem.Name && diaryItem.Name.toLowerCase().includes(searchTerm.toLowerCase());
+            const startMatch = diaryItem.Start && diaryItem.Start.includes(searchTerm);
+            const isPublicMatch = diaryItem.IsPublic !== undefined && String(diaryItem.IsPublic).toLowerCase().includes(searchTerm.toLowerCase());
+
+            return nameMatch || startMatch || isPublicMatch;
+        });
+        setFilteredDiary(filteredBooks); // Update filteredDiary state with filtered results
+    }, [searchTerm, diary]); // Trigger filtering whenever searchTerm or diary changes
+
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(e.target.value); // Update search term on input change
     };
 
     return (
@@ -44,20 +64,20 @@ function SearchPat() {
             </div>
 
             <div className="body-search">
-                {books.length === 0 ? (
+                {filteredDiary.length === 0 ? (
                     <div className="notFound">
                         ไม่พบหนังสือของคุณ
                     </div>
                 ) : (
-                    books.map((book, index) => (
+                    filteredDiary.map((diaryItem, index) => (
                         <div className='item' key={index}>
                             <div className='image-content'>
-                                <img className='image' src={book.image} alt="" />
+                                <img className='image' src={diaryItem.Picture} alt="" />
                             </div>
                             <div className="content">
-                                <h3>{book.name}</h3>
-                                <p><i><FaRegCalendarAlt /></i>{book.date}</p>
-                                <p>สถานะ: {book.statusBook}</p>
+                                <h3>{diaryItem.Name}</h3>
+                                <p><i><FaRegCalendarAlt /></i>{diaryItem.Start}</p>
+                                <p>สถานะ: {diaryItem.IsPublic ? 'สาธารณะ' : 'ส่วนตัว'}</p>
                             </div>
                             <div className="btn-book">
                                 <button>Edit</button>

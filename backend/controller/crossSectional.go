@@ -9,22 +9,27 @@ import (
 	"github.com/n6teen/Project-Thesis/entity"
 )
 
-
 func CreateCrossSectional(c *gin.Context) {
-    // var cross entity.CrossSectional
     var input struct {
         Situation       string   `json:"Situation"`
         Thought         string   `json:"Thought"`
         Behavior        string   `json:"Behavior"`
         BodilySensation string   `json:"BodilySensation"`
-        TextEmotions    string    `json:"TextEmotions"`
+        TextEmotions    string   `json:"TextEmotions"`
         Date            string   `json:"Date"`
         DiaryID         uint     `json:"DiaryID"`
-        EmotionIDs      []uint   `json:"EmotionID"` 
+        EmotionIDs      []uint   `json:"EmotionID"`
     }
 
     if err := c.ShouldBindJSON(&input); err != nil {
         c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
+
+    // Check if there is already a CrossSectional entry for the same DiaryID and Date
+    var existingCross entity.CrossSectional
+    if err := entity.DB().Where("diary_id = ? AND date = ?", input.DiaryID, input.Date).First(&existingCross).Error; err == nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "วันนี้เพิ่มข้อมูลไปแล้ว ไม่สามารถเพิ่มได้อีก"})
         return
     }
 
@@ -42,7 +47,7 @@ func CreateCrossSectional(c *gin.Context) {
         TextEmotions:    input.TextEmotions,
         Date:            input.Date,
         DiaryID:         &input.DiaryID,
-        Emotion:         emotions, 
+        Emotion:         emotions,
     }
 
     if err := entity.DB().Create(&cross).Error; err != nil {
@@ -52,6 +57,7 @@ func CreateCrossSectional(c *gin.Context) {
 
     c.JSON(http.StatusOK, gin.H{"data": cross})
 }
+
 
 func GetCrossSectionalByDiaryID(c *gin.Context) {
     var crosses []entity.CrossSectional // เก็บข้อมูล CrossSectional หลายแถว

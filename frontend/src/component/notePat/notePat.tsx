@@ -5,6 +5,7 @@ import { DeleteNotePatientByID, GetNotesByPatientID, UpdateNotePatient } from '.
 import { NotePatInterface } from '../../interfaces/notePat/INotePat';
 import { ImBin } from "react-icons/im";
 import { BiSolidEditAlt } from "react-icons/bi";
+import { motion } from "framer-motion";  // Import framer-motion
 
 function NotePat() {
     const [notePatients, setNotePatients] = useState<NotePatInterface[]>([]);
@@ -29,48 +30,49 @@ function NotePat() {
 
     const handleNoteClick = (index: number) => {
         const note = notePatients[index];
+        if (!note?.ID) {
+            messageApi.error('ไม่พบ ID ของโน้ต');
+            return;
+        }
         setSelectedNote(prev => (prev && prev.ID === note.ID ? null : note)); // Ensure selectedNote has ID
     };
 
-    
     const handleEdit = (note: NotePatInterface) => {
         console.log('Selected note for editing:', note); // ตรวจสอบข้อมูลโน้ต
         if (!note?.ID) {
             messageApi.error('ไม่พบ ID ของโน้ต');
             return;
         }
-    
-        setSelectedNote(note); // note นี้จะมี ID
+
+        setSelectedNote(note); // Set the selected note to be edited
         form.setFieldsValue({
             Title: note.Title,
             Content: note.Content,
         });
-        setIsEditModalVisible(true); // เปิด Modal
+        setIsEditModalVisible(true); // Open the modal
     };
-    
-    
+
     const handleEditSubmit = async () => {
-        console.log('Selected Note ID:', selectedNote?.ID); // ตรวจสอบว่า ID มีค่าหรือไม่
+        console.log('Selected Note before submitting:', selectedNote); // ตรวจสอบค่า selectedNote ก่อนการส่งข้อมูล
+
         if (!selectedNote?.ID) {
             messageApi.error('ไม่สามารถแก้ไขได้: ไม่พบ ID ของโน้ต');
             return;
         }
-    
+
         const values = form.getFieldsValue();
-    
+
         // Combine selectedNote (which includes ID) with form values
         const updatedNote = {
             ...selectedNote,  // selectedNote already contains the ID
             ...values,        // form values (Title, Content)
         };
-    
-        // Log the updated note to ensure the ID is included
+
         console.log('Payload to API:', updatedNote);
-    
+
         try {
             const res = await UpdateNotePatient(updatedNote);
-    
-            // Handle API response
+
             if (res.status) {
                 messageApi.success("แก้ไขข้อมูลสำเร็จ");
                 await fetchNotePatientData(); // Refresh the note data
@@ -83,7 +85,6 @@ function NotePat() {
             messageApi.error('เกิดข้อผิดพลาดในการแก้ไขโน้ต');
         }
     };
-    
 
     const handleDelete = async (noteId: number | undefined) => {
         Modal.confirm({
@@ -122,10 +123,13 @@ function NotePat() {
                     </div>
                 ) : (
                     notePatients.map((note, index) => (
-                        <div 
-                            key={index} 
+                        <motion.div
+                            key={index}
                             className='note'
                             onClick={() => handleNoteClick(index)}
+                            initial={{ opacity: 0, y: 30 }}  // Animation starts with opacity 0 and a slight downward position
+                            animate={{ opacity: 1, y: 0 }}   // Animates to full opacity and original position
+                            transition={{ delay: index * 0.1, duration: 0.5 }}  // Staggered delay for each note
                         >
                             <div className="content">
                                 <div className="head">
@@ -142,7 +146,7 @@ function NotePat() {
                                     <Button onClick={() => handleDelete(note.ID)}><ImBin /></Button>
                                 </div>
                             )}
-                        </div>
+                        </motion.div>
                     ))
                 )}
 

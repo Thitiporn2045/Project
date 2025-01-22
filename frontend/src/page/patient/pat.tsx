@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import NavbarPat from '../../component/navbarPat/navbarPat'
-import SearchPat from '../../component/searchPat/searchPat'
 import NotePat from '../../component/notePat/notePat';
-import NotificationPat from '../../component/notificationPat/notificationPat';
 import './stylePat.css'
-
-import { ImSearch } from "react-icons/im";
+import thTH from 'antd/lib/locale/th_TH';
 import { FaBell } from "react-icons/fa";
 import { GetPatientById } from '../../services/https/patient';
 import { PatientInterface } from '../../interfaces/patient/IPatient';
 import { ConnectionRequestInterface } from '../../interfaces/connectionRequest/IConnectionRequest';
 import { AcceptConnectionRequest, GetConnectionPatientById, ListConnectionPatientById, RejectConnectionRequest } from '../../services/https/connectionRequest';
-import { Avatar, Badge, Button, List, message } from 'antd';
+import { Avatar, Badge, Button, ConfigProvider, List, message } from 'antd';
 import { CreateNotePat, GetNotesByPatientID } from '../../services/https/notePat/notePat';
 import BookPat from '../../component/bookPat/bookPat';
 
 function Pat() {
     const [messageApi, contextHolder] = message.useMessage();
     const patID = localStorage.getItem('patientID') 
+    const numericPatID = patID ? Number(patID) : undefined; // แปลงเป็น number หรือ undefined ถ้าไม่มีค่า
     const [patient, setPatient] = useState<PatientInterface>();
     const [connectedPsy, setConnectedPsy] = useState<ConnectionRequestInterface>();
     const [patConnection, setPatConnection] = useState<ConnectionRequestInterface[]>([]); //Pat
@@ -155,6 +153,15 @@ function toggle() {
 
 
     return (
+    <ConfigProvider
+    locale={thTH}
+    theme={{
+        token: {
+        colorPrimary: '#9BA5F6', // Example of primary color customization
+        fontFamily:'Noto Sans Thai, sans-serif'
+        },
+    }}
+    >
         <div className='Pat'>
             {contextHolder}
             <div id='blur'>
@@ -167,36 +174,14 @@ function toggle() {
                             <header>
                                 <h1>Hello, {patient?.Firstname} {patient?.Lastname} 👋</h1>
                                 <div className='search-bar'>
-                                    <div className="labelSearch">
-                                        <input
-                                            className='searchBook'
-                                            type="text"
-                                            placeholder="ค้นหาหนังสือของคุณ"
-                                            onClick={toggle}
-                                        />
-                                        <i className="searchIcon"><ImSearch /></i>
-                                    </div>
+                                <div className="labelSearch">
+                                <p className="scrolling-text">สวัสดี​คุณ {patient?.Firstname} {patient?.Lastname} 👋 <span className="wide-space"></span> วันนี้อย่าลืมบันทึกไดอารี่นะ!!!!</p>
+                                </div>
                                     <div className='warm'>
                                         <div className="bg-warm content">
                                         <Badge count={countNoti} overflowCount={99}>
                                             <i><FaBell /></i>
                                         </Badge>
-                                            {/* <i><FaBell /></i>
-                                            <div className="num content">3</div> */}
-                                            {/* <div className="box">
-                                                <div className="heading content">
-                                                    <p><i><FaBell /></i>3</p>
-                                                </div>
-                                                <div className="content-box">
-                                                    <div className='text'>
-                                                        <p>วันนี้วันที่ 30/07/2024</p>
-                                                        <p>อย่าลืมเขียนบันทึกน้าา~~</p>
-                                                    </div>
-                                                    <div className='bg-icon'>
-                                                        <i><LuAlarmClock/></i>
-                                                    </div>
-                                                </div>
-                                            </div> */}
                                         </div>
                                     </div>
                                 </div>
@@ -209,7 +194,7 @@ function toggle() {
                                 </div>
                                 <div className='content2'>
                                     <div className='header'>
-                                        <h2>Note Board</h2>
+                                        <h2>กำหนดการ</h2>
                                         <button 
                                             className="btn-add-co2" 
                                             onClick={addNotePat}>เพิ่มโน้ต</button>
@@ -222,13 +207,13 @@ function toggle() {
                                 </div>
                                 <div className='content3'>
                                     <div className='header'>
-                                        <h2>My Book</h2>
+                                        <h2>ไดอารี่ของฉัน</h2>
                                         <a 
-                                            className="btn-add-co3" href='/MainSheet'>Show</a>
+                                            className="btn-add-co3" href='/MainSheet'>เพิ่มเติม</a>
                                     </div>
                                     <div className='book-board'>
                                         <div className="content">
-                                            {/* <BookPat limit={4} /> */}
+                                            <BookPat limit={5} />
                                         </div>
                                     </div>
                                 </div>
@@ -265,80 +250,93 @@ function toggle() {
                                     {countNoti > 0 ? (
                                         <div className="notification-item">
                                             <List
-                                                className="Add-Patient-List"
-                                                style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem' }}
-                                                itemLayout="horizontal"
-                                                dataSource={patConnection}
-                                                renderItem={(item) =>
-                                                    item.Status === 'pending' ? (
-                                                        <div
-                                                            style={{
-                                                                width: '100%',
-                                                                display: 'flex',
-                                                                flexDirection: 'row',
-                                                                alignItems: 'center',
-                                                                justifyContent: 'space-between',
-                                                            }}
-                                                        >
-                                                            <List.Item.Meta
-                                                                style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}
-                                                                avatar={<Avatar src={item.Psychologist?.Picture} style={{ width: '60px', height: '60px', borderRadius: '10%' }} />}
-                                                                title={
-                                                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                                                        <span style={{ fontWeight: 'bold', fontSize: '1rem' }}>
-                                                                            {`${item.Psychologist?.FirstName} ${item.Psychologist?.LastName}`}
-                                                                        </span>
-                                                                        <div style={{ display: 'flex', justifyContent: 'end', gap: '10px', marginTop: '0.5rem' }}>
-                                                                            <Button
-                                                                                style={{
-                                                                                    backgroundColor: '#f0f0f0',
-                                                                                    color: '#595959',
-                                                                                    borderRadius: '4px',
-                                                                                    padding: '0 25px',
-                                                                                    fontSize: '.7rem',
-                                                                                    border: 'none',
-                                                                                }}
-                                                                                onClick={() => rejectConnectionRequest(Number(item.ID))}
-                                                                            >
-                                                                                ปฎิเสธ
-                                                                            </Button>
-                                                                            <Button
-                                                                                style={{
-                                                                                    backgroundColor: '#BABDF6',
-                                                                                    color: '#fff',
-                                                                                    borderRadius: '4px',
-                                                                                    padding: '0 25px',
-                                                                                    fontSize: '.7rem',
-                                                                                    border: 'none',
-                                                                                }}
-                                                                                onClick={() => acceptConnectionRequest(Number(item.ID))}
-                                                                            >
-                                                                                ยอมรับ
-                                                                            </Button>
-                                                                        </div>
-                                                                    </div>
-                                                                }
-                                                            />
-                                                        </div>
-                                                    ) : null
-                                                }
+                                            className="Add-Patient-List"
+                                            style={{
+                                                width: '100%',
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                gap: '1rem',
+                                            }}
+                                            itemLayout="horizontal"
+                                            dataSource={patConnection}
+                                            renderItem={(item) =>
+                                                item.Status === 'pending' ? (
+                                                <div
+                                                    style={{
+                                                    width: '100%',
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    alignItems: 'center',
+                                                    gap: '0.5rem',
+                                                    }}
+                                                >
+                                                    <Avatar
+                                                    src={item.Psychologist?.Picture}
+                                                    style={{
+                                                        width: '80px',
+                                                        height: '80px',
+                                                        borderRadius: '15%',
+                                                        marginBottom: '0.5rem',
+                                                    }}
+                                                    />
+                                                    <span
+                                                    style={{
+                                                        fontWeight: 'bold',
+                                                        fontSize: '1rem',
+                                                        textAlign: 'center',
+                                                    }}
+                                                    >
+                                                    {`${item.Psychologist?.FirstName} ${item.Psychologist?.LastName}`}
+                                                    </span>
+                                                    <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        justifyContent: 'center',
+                                                        gap: '10px',
+                                                        marginTop: '0.5rem',
+                                                    }}
+                                                    >
+                                                    <Button
+                                                        style={{
+                                                        backgroundColor: '#f0f0f0',
+                                                        color: '#595959',
+                                                        borderRadius: '4px',
+                                                        padding: '0 22px',
+                                                        fontSize: '1rem',
+                                                        border: 'none',
+                                                        }}
+                                                        onClick={() => rejectConnectionRequest(Number(item.ID))}
+                                                    >
+                                                        ปฎิเสธ
+                                                    </Button>
+                                                    <Button
+                                                        style={{
+                                                        backgroundColor: '#BABDF6',
+                                                        color: '#fff',
+                                                        borderRadius: '4px',
+                                                        padding: '0 22px',
+                                                        fontSize: '1rem',
+                                                        border: 'none',
+                                                        }}
+                                                        onClick={() => acceptConnectionRequest(Number(item.ID))}
+                                                    >
+                                                        ยอมรับ
+                                                    </Button>
+                                                    </div>
+                                                </div>
+                                                ) : null
+                                            }
                                             />
                                         </div>
-                                    ) : null}
-                                    <NotificationPat numDays={5} />
+                                        ) : null}
+                                    
+                                    {/* <NotificationPat numDays={5} /> */}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div id='popup'>
-                    <div className='compo-search'>
-                        <SearchPat></SearchPat>
-                        <a href="#" className='btn-close' onClick={toggle}>Close</a>
-                    </div>
             </div>
 
             <div id='popupNote'>
@@ -371,6 +369,7 @@ function toggle() {
                 </div>
             </div>
         </div>
+        </ConfigProvider>
     )
 }
 

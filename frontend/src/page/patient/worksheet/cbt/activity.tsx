@@ -14,6 +14,7 @@ import { ListCommentByDiaryId } from '../../../../services/https/psychologist/co
 import { CommentInterface } from '../../../../interfaces/psychologist/IComment';
 import { CreateActivityDiary, GetActivityDiaryByDiaryID, UpdateActivityDiary } from '../../../../services/https/cbt/activityDiary/activityDiary';
 import moment from 'moment';
+import thTH from 'antd/lib/locale/th_TH';
 
 const Activity: React.FC = () => {
     dayjs.locale('th'); // ตั้งค่า locale เป็นภาษาไทย
@@ -390,16 +391,11 @@ const handleNavigateToSummary = () => {
 
 return (
     <ConfigProvider
+    locale={thTH}
     theme={{
-        components: {
-        Calendar: {
-        },
-        Button:{
-        }
-        },
-
         token: {
         colorPrimary: '#9BA5F6', // Example of primary color customization
+        fontFamily:'Noto Sans Thai, sans-serif'
         },
     }}
     >
@@ -427,23 +423,9 @@ return (
                             <div style={{ display: 'flex', justifyContent: 'space-between', padding: 10 }}>
                                 <div className='titleCalender'>{diary?.Name}</div>
                                 <div>
-                                    <Select
-                                        value={current.month()}
-                                        onChange={(month) => {
-                                            const newValue = current.clone().month(month);
-                                            onChange(newValue);
-                                        }}
-                                        style={{ width: 100 }}
-                                    >
-                                        {Array.from({ length: 12 }, (_, i) => (
-                                            <Select.Option key={i} value={i}>
-                                                {dayjs().month(i).format('MMMM')}  {/* แสดงชื่อเดือนเป็นภาษาไทย */}
-                                            </Select.Option>
-                                        ))}
-                                    </Select>
-
                                     <Tooltip title="สรุปข้อมูล">
                                         <Button
+                                            className='TooltipSummary'
                                             type="primary"
                                             shape="circle"
                                             icon={<AiFillSignal />}
