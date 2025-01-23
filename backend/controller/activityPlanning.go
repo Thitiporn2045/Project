@@ -124,6 +124,8 @@ func UpdateActivityPlanning(c *gin.Context) {
     c.JSON(http.StatusOK, gin.H{"data": planning})
 }
 
+//====================================== Psy ====================================================
+
 func GetPlanningEmotionsByDateTimeAndDiaryID(c *gin.Context) {
 	// รับ DiaryID และ Date จาก Query
 	diaryID := c.DefaultQuery("id", "")
@@ -489,6 +491,7 @@ func GetAllPlanningEmotionsByDiaryID(c *gin.Context) {
 
 }
 //=============== Psy ===========================================================================
+
 func GetActivityPlanningByDiaryIDForPsy(c *gin.Context) {
     var planning []entity.ActivityPlanning
 
@@ -512,27 +515,21 @@ func GetActivityPlanningByDiaryIDForPsy(c *gin.Context) {
         return
     }
 
-    result := make(map[string][]map[string]string)
+    var response []gin.H
     for _, p := range planning {
-        timeOfDay := p.TimeOfDay.Name // เช่น "เช้า", "กลางวัน", "เย็น"
-
-        // เพิ่มข้อมูลกิจกรรมในรูปแบบ JSON
-        entry := map[string]string{
-            "Date":     p.Date, 
-            "Time":     p.Time,     
-            "Activity": p.Activity,                
-            "Emotion":  p.Emotion.Name, 
-            "Emoticon": p.Emotion.Emoticon,
-            "ColorCode": p.Emotion.ColorCode,
+        entry := gin.H{
+            "ID":                p.ID, 
+            "Date":              p.Date,
+            "Time":              p.Time,
+            "Activity":          p.Activity,
+            "Emotion":           p.Emotion.Name,
+            "Emoticon":          p.Emotion.Emoticon,
+            "ColorCode":         p.Emotion.ColorCode,
             "TimeOfDayEmoticon": p.TimeOfDay.Emoticon,
-            "TimeOfDayName": p.TimeOfDay.Name,
-
+            "TimeOfDayName":     p.TimeOfDay.Name,
         }
 
-        // เพิ่ม entry ไปในกลุ่มของ timeOfDay
-        result[timeOfDay] = append(result[timeOfDay], entry)
+        response = append(response, entry)
     }
-
-    // ส่งข้อมูลกลับในรูปแบบ JSON
-    c.JSON(http.StatusOK, result)
+    c.JSON(http.StatusOK, gin.H{"data": response})
 }
