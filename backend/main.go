@@ -108,6 +108,7 @@ func main() {
 			r.DELETE("/typeOfPatient/:id",controller.DeleteTypeOfPatient)
 
 			r.GET("/diaries/psy/:id",controller.ListPublicDiariesByPatientType)
+			r.GET("/diary/psy/:id",controller.ListPublicDiariesByPatientId)
 			r.GET("/crossSectional/psy/:id",controller.GetCrossSectionalByDiaryIDForPsy)
 			r.GET("/activity/psy/:id",controller.GetActivityPlanningByDiaryIDForPsy)
 

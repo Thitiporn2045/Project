@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { TypeOfPatientInterface } from '../../../interfaces/psychologist/ITypeOfPatient';
-import { CreateTypeOfPatient, ListTypeOfPatient,ListConnectedPatientByType } from '../../../services/https/psychologist/typeOfPatient';
+import { CreateTypeOfPatient, ListTypeOfPatient,ListConnectedPatientByType,} from '../../../services/https/psychologist/typeOfPatient';
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, ConfigProvider, Divider, Input, Modal, Select, Space,Form, message } from 'antd';
+import { Button, ConfigProvider, Divider, Input, Modal, Select, Space,Form, message, List, Card, Empty } from 'antd';
 import thTH from 'antd/lib/locale/th_TH';
 import { LuUserMinus2 } from "react-icons/lu";
 import { FiEdit3 } from "react-icons/fi";
@@ -14,6 +14,10 @@ import { UpdatePatient } from '../../../services/https/patient';
 import AddPat from '../addPatient/AddPat';
 import { DisconnectPatient } from '../../../services/https/connectionRequest';
 import { CiSearch } from 'react-icons/ci';
+import { FaFileLines } from 'react-icons/fa6';
+import { DiaryInterface, DiaryPatInterface } from '../../../interfaces/diary/IDiary';
+import { ListPublicDiariesByPatientId } from '../../../services/https/diary';
+import { useNavigate } from 'react-router-dom';
 
 
 function PatTypeSelect() {
@@ -32,6 +36,8 @@ function PatTypeSelect() {
   const [selectedPatient, setSelectedPatient] = useState<PatientInterface>();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [isDiaryModalVisible, setIsDiaryModalVisible] = useState(false);
+
 
   const [originalSymptoms, setOriginalSymptoms] = useState<string | undefined>(''); //Original เอาไว้ทำ disable ปุ่มบันทึก เทียบกับค่า edited
   const [originalType, setOriginalType] = useState<number | undefined>();
@@ -65,6 +71,9 @@ const listPatients = async () => {
     listPatients();
     
   }, []);
+
+//=========================================================================
+
 //===========================Search and filter==========================
   useEffect(() => {
     // Fetch data and set pat array here, then run the filter
@@ -104,7 +113,7 @@ const listPatients = async () => {
     }
   };
 
-  //======================== Select หมวดหมู่ ============
+  //======================== Select หมวดหมู่ =============================
   const handleAddType = async(values: TypeOfPatientInterface) => {
     values.PsyID = Number(psyID);
     let res = await CreateTypeOfPatient(values);
@@ -208,6 +217,51 @@ const listPatients = async () => {
     setIsDeleteModalVisible(false);
   };
   //===========================================================================
+  //========================Modal List Diary===================================
+  const [diary, setDiary] = useState<DiaryPatInterface[]>([]);
+  const listPublicDiariesByPatientId = async (pat:PatientInterface) => {
+    setSelectedPatient(pat);
+    let res = await ListPublicDiariesByPatientId(Number(pat.ID));
+    if(res){
+      setDiary(res);
+      setIsDiaryModalVisible(true);
+    }  
+  }
+
+  const handleCloseDiaryModal = () => {
+    setIsDiaryModalVisible(false); 
+  };
+
+  //navigate
+  const navigate = useNavigate();
+  const navigateToDiaryPage = (diary:DiaryPatInterface) => {
+    
+  
+    let routePath = '';
+    switch (diary.WorksheetType?.Name) {
+      case 'Activity Planning':
+        routePath = '/PsyWorksheet/PsyCommentActivitiesPlanning';
+        break;
+      case 'Activity Diary':
+        routePath = '/PsyWorksheet/PsyCommentActivitiesDiaries';
+        break;
+      case 'Behavioral Experiment':
+        routePath = '/PsyWorksheet/PsyCommentBehavioralExperiment';
+        break;
+      case 'Cross Sectional':
+        routePath = '/PsyWorksheet/PsyCommentCrossSectional';
+        break;
+      default:
+        console.error('Unknown worksheet type');
+        return;
+    }
+  
+    localStorage.setItem('diaryID',String(diary.ID))
+    navigate(`${routePath}`);
+  };
+
+  //===========================================================================
+
   const [animatedIndexes, setAnimatedIndexes] = useState<number[]>([]);
 
   useEffect(() => {
@@ -369,15 +423,23 @@ const listPatients = async () => {
                   </div>
 
                   <div style={{position:'relative',display:'flex', flexDirection:'row', alignItems:'center',gap:'1rem',right:'1rem'}}>
+                    <Button
+                      icon={<FaFileLines/>}
+                      style={{color:'#2C9F99',fontSize:'24px',width:'40px',height:'40px',alignItems:'center',justifyContent:'center',display:'flex',border:'none'}}
+                      onClick={()=>listPublicDiariesByPatientId(pat)}
+                    />
+                      
                     <Button 
                       icon={<FiEdit3/>} 
                       style={{color:'#2C9F99',fontSize:'24px',width:'40px',height:'40px',alignItems:'center',justifyContent:'center',display:'flex',border:'none'}}
-                      onClick={()=>showEditModal(pat)}/>
+                      onClick={()=>showEditModal(pat)}
+                    />
                     
                     <Button 
                     icon={<LuUserMinus2/>} 
                     style={{color:'#EE5D6A',fontSize:'24px',width:'40px',height:'40px',alignItems:'center',justifyContent:'center',display:'flex',border:'none'}}
-                    onClick={()=>showDeleteModal(pat)}/>
+                    onClick={()=>showDeleteModal(pat)}
+                  />
                     
                   </div>
                 </div>
@@ -475,6 +537,71 @@ const listPatients = async () => {
               <p>คุณต้องการลบผู้ป่วย <b>{selectedPatient?.Firstname} {selectedPatient?.Lastname}</b> หรือไม่?</p>
             </Modal>
           )}
+
+          <Modal
+            title={`รายการไดอารี่ของคุณ ${selectedPatient?.Firstname || ''} ${selectedPatient?.Lastname || ''}`}
+            open={isDiaryModalVisible}
+            onCancel={handleCloseDiaryModal}
+            footer={null}
+            width={980}
+          >
+            {diary.length === 0? 
+              <div style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
+                <Empty description='ไม่มีการแชร์ไดอารี่' style={{height:350,display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column'}}/>
+                
+              </div>
+              :
+              <div
+                style={{
+                  maxHeight: '800px', // Restrict modal height
+                  overflowY: 'auto', // Enable vertical scrolling
+                  padding: '10px',
+                }}
+              >
+              
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row', 
+                    flexWrap: 'nowrap', 
+                    gap: '16px', 
+                    justifyContent: 'flex-start', 
+                  }}
+                >
+                
+                  {diary.map((item) => (
+                    <Card
+                      key={item.ID}
+                      hoverable
+                      style={{
+                        width: 200,
+                        height: 350,
+                        flexShrink: 0, // Prevent cards from shrinking
+                      }}
+                      cover={
+                        <img
+                          alt="Diary Cover"
+                          src={item.Picture || 'https://via.placeholder.com/180x200'}
+                          style={{
+                            width: '100%',
+                            height: 250,
+                            objectFit: 'cover',
+                          }}
+                        />
+                      }
+                      onClick={()=>navigateToDiaryPage(item)}
+                    >
+                      <Card.Meta
+                        title={item.Name}
+                        description={item.WorksheetType?.Name}
+                      />
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            }
+            
+          </Modal>
         </div>
     </ConfigProvider>
   );

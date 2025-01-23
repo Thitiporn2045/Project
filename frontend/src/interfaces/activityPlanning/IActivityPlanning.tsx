@@ -19,6 +19,7 @@ export interface ActivityPlanningInterface{
 }
 
 export interface ActivityPlanningInterfaceForPsy{
+    ID?: number;
     Date?: string;
     Time?: string;     
     Activity?: string;                
@@ -28,3 +29,4 @@ export interface ActivityPlanningInterfaceForPsy{
     TimeOfDayEmoticon?: string;
     TimeOfDayName?: string;
 }
+
