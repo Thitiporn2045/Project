@@ -24,6 +24,28 @@ export async function ListPublicDiariesByPatientType(id:number) {
     
 }
 
+export async function ListPublicDiariesByPatientId(id:Number) {
+  const requestOptions = {
+      method:"GET",
+      header:{
+          "Content-Type": "application/json",
+      },
+  };
+
+  let res = await fetch(`${apiUrl}/diary/psy/${id}`, requestOptions)
+  .then((response) => response.json())
+  .then((res) => {
+    if (res.data) {
+      return res.data;
+    } else {
+      return false;
+    }
+  });
+
+return res;
+  
+}
+
 
 export async function CreateDiaryPat(data: DiaryPatInterface) {
   const requestOptions = {

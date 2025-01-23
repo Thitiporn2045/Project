@@ -8,7 +8,7 @@ import (
 )
 
 
-func ListPublicDiariesByPatientType(c *gin.Context) {
+func ListPublicDiariesByPatientType(c *gin.Context) { //psy
     psyID := c.Param("id")
     var diaries []entity.Diary
 
@@ -67,6 +67,21 @@ func ListPublicDiariesByPatientType(c *gin.Context) {
     }
 
     c.JSON(http.StatusOK, gin.H{"data": result})
+}
+
+func ListPublicDiariesByPatientId(c *gin.Context){ //psy
+    patID := c.Param("id")
+    var diaries []entity.Diary
+
+    if err := entity.DB().Preload("Patient").Preload("WorksheetType").Raw("SELECT * FROM diaries WHERE pat_id = ? AND is_public = ?",patID,true).Find(&diaries).Error;
+    err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+    c.JSON(http.StatusOK, gin.H{"data": diaries})
+
+
 }
 
 func CreateDiaryPat(c *gin.Context) {
