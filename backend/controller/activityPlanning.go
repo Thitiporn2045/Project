@@ -124,6 +124,8 @@ func UpdateActivityPlanning(c *gin.Context) {
     c.JSON(http.StatusOK, gin.H{"data": planning})
 }
 
+//====================================== Psy ====================================================
+
 func GetPlanningEmotionsByDateTimeAndDiaryID(c *gin.Context) {
 	// รับ DiaryID และ Date จาก Query
 	diaryID := c.DefaultQuery("id", "")
