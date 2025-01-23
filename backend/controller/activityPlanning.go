@@ -490,8 +490,7 @@ func GetAllPlanningEmotionsByDiaryID(c *gin.Context) {
     })
 
 }
-//=============== Psy ===========================================================================
-
+//====================================== Psy ====================================================
 func GetActivityPlanningByDiaryIDForPsy(c *gin.Context) {
     var planning []entity.ActivityPlanning
 
