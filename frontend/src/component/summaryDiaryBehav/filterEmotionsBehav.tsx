@@ -271,10 +271,14 @@ const createChartOption = () => {
           width: '95%'
         }}
       >
-        <div className='title'>{getGraphTitle()}</div>
+        <div>
+          <div className='title'>{getGraphTitle()}</div>
+          <div className='dateText'> {date}</div>
+        </div>
         <div
           style={{
             display: 'flex',
+            marginTop: '-24px',
             gap: '.4rem',
           }}
         >

@@ -40,7 +40,7 @@
     background: var(--color-backgroun-secondary2);
     border: none;
     border-radius: var(--border-radius-3);
-    margin-right: 20px;
+    margin-right: 40px;
 }
 
 .mainSheet .labelSearch input {
@@ -88,7 +88,7 @@
         justify-content: space-between;
         width: calc(100% -60px);
         height: 70px;
-        margin-left: 15px;
+        margin-left: 35px;
         font-family: "Poppins", sans-serif;
         font-family:'Noto Sans Thai',sans-serif;
     }
@@ -396,7 +396,6 @@
     background-color: var(--color-backgroun-secondary4);
 }
 
-
 .mainSheet .Loading-Data{
     background: url('../../../../assets/noData.gif');
     background-size: cover;
@@ -404,6 +403,18 @@
     margin-top: -150px;
     width: 340px;
     height: 210px; 
+    border: 5px solid transparent ; 
+    border-radius: 10px;
+    opacity: 0.5;
+
+}
+
+.mainSheet .Loading-Data-Search{
+    background: url('../../../../assets/noData.gif');
+    background-size: cover;
+    background-position: center;
+    width: 140px;
+    height: 80px; 
     border: 5px solid transparent ; 
     border-radius: 10px;
     opacity: 0.5;
@@ -492,13 +503,18 @@
     align-items: center;
     justify-content: space-between;
 
-    .button Button{
-        width: 2.3rem;
-        height: 2.3rem;
-        color: var(--color-font1);
-        font-size: 1.3rem;
-        font-weight: 700;
-        background-color: var(--color-backgroun-secondary3);
+    .button{
+
+        display: flex;
+        gap: 1rem;
+        Button{
+            width: 2.3rem;
+            height: 2.3rem;
+            color: var(--color-font1);
+            font-size: 1.3rem;
+            font-weight: 700;
+            background-color: var(--color-backgroun-secondary3);
+        }
     }
 
     h2{

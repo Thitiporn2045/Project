@@ -9,21 +9,26 @@ import (
 	"github.com/n6teen/Project-Thesis/entity"
 )
 
-
 func CreateBehavioralExp(c *gin.Context) {
-    // var behavioral entity.BehavioralExp
     var input struct {
         ThoughtToTest       string   `json:"ThoughtToTest"`
         Experiment          string   `json:"Experiment"`
-        Outcome        	    string   `json:"Outcome"`
+        Outcome             string   `json:"Outcome"`
         NewThought          string   `json:"NewThought"`
         Date                string   `json:"Date"`
         DiaryID             uint     `json:"DiaryID"`
-        EmotionIDs          []uint   `json:"EmotionID"` 
+        EmotionIDs          []uint   `json:"EmotionID"`
     }
 
     if err := c.ShouldBindJSON(&input); err != nil {
         c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
+
+    // Check if there is already a BehavioralExp entry for the same DiaryID and Date
+    var existingBehavioral entity.BehavioralExp
+    if err := entity.DB().Where("diary_id = ? AND date = ?", input.DiaryID, input.Date).First(&existingBehavioral).Error; err == nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "วันนี้เพิ่มข้อมูลไปแล้ว ไม่สามารถเพิ่มได้อีก"})
         return
     }
 
@@ -40,7 +45,7 @@ func CreateBehavioralExp(c *gin.Context) {
         NewThought:          input.NewThought,
         Date:                input.Date,
         DiaryID:             &input.DiaryID,
-        Emotion:             emotions, 
+        Emotion:             emotions,
     }
 
     if err := entity.DB().Create(&behavioral).Error; err != nil {

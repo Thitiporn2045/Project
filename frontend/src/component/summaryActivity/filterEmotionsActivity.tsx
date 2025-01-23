@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import * as echarts from 'echarts';
-import { GetEmotionsHaveDateByDiaryID, GetMonthEmotionsByDiaryID, GetWeekEmotionsByDiaryID } from '../../services/https/cbt/crossSectional/crossSectional';
 import dayjs from 'dayjs';
 import 'dayjs/locale/th'; 
 import './summary.css';
 import { EmtionInterface } from '../../interfaces/emotion/IEmotion';
+import { GetActivityDiaryEmotionsByDateAndDiaryID, GetActivityDiaryEmotionsByWeekAndDiaryID, GetMonthlyActivityDiarEmotionsByDiaryID } from '../../services/https/cbt/activityDiary/activityDiary';
 dayjs.locale('th');
 
 interface EmotionByWeek {
@@ -32,7 +32,7 @@ interface ChartDataItem {
   percentage?: string;
 }
 
-function FilterEmotions({ diaryID, date }: DiaryID) {
+function FilterEmotionsActivity({ diaryID, date }: DiaryID) {
   const [allMoodByWeek, setAllMoodByWeek] = useState<{ [key: string]: EmotionByWeek[] }>({});
   const [allMoodByMonth, setAllMoodByMonth] = useState<{ [key: string]: EmotionByWeek[] }>({});
   const [emotionPatients, setEmotionPatients] = useState<EmtionInterface[]>([]);
@@ -56,7 +56,7 @@ function FilterEmotions({ diaryID, date }: DiaryID) {
   const fetchFilterWeekEmotionsByDiary = async () => {
     if (!diaryID || !date) return;
     try {
-      const res = await GetWeekEmotionsByDiaryID(diaryID, date);
+      const res = await GetActivityDiaryEmotionsByWeekAndDiaryID(diaryID, date);
       setAllMoodByWeek(res || {});
     } catch (error) {
       console.error('Error fetching diary:', error);
@@ -67,7 +67,7 @@ function FilterEmotions({ diaryID, date }: DiaryID) {
   const fetchFilterMonthEmotionsByDiary = async () => {
     if (!diaryID || !date) return;
     try {
-      const res = await GetMonthEmotionsByDiaryID(diaryID, date);
+      const res = await GetMonthlyActivityDiarEmotionsByDiaryID(diaryID, date);
       setAllMoodByMonth(res || {});
     } catch (error) {
       console.error('Error fetching diary:', error);
@@ -78,22 +78,10 @@ function FilterEmotions({ diaryID, date }: DiaryID) {
   const fetchEmotionPatientData = async () => {
     if (!diaryID || !date) return;
     try {
-      const res = await GetEmotionsHaveDateByDiaryID(diaryID, date);
-      if (res) {
-        const transformedEmotions = res.map((emotion: any) => ({
-          ID: emotion.emotion_id,
-          Name: emotion.emotion_name,
-          Emoticon: emotion.emoticon,
-          ColorCode: emotion.color_code,
-          PatID: emotion.PatID,
-          Patient: emotion.Patient,
-        }));
-        setEmotionPatients(transformedEmotions);
-      } else {
-        setEmotionPatients([]);
-      }
+      const res = await GetActivityDiaryEmotionsByDateAndDiaryID(diaryID, date);
+      setEmotionPatients(res || {});
     } catch (error) {
-      console.error("Error fetching emotions:", error);
+      console.error('Error fetching diary:', error);
       setEmotionPatients([]);
     }
   };
@@ -306,4 +294,4 @@ const createChartOption = () => {
   );
 }
 
-export default FilterEmotions;
+export default FilterEmotionsActivity;

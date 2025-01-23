@@ -1,45 +1,112 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import { DiaryPatInterface } from "../../interfaces/diary/IDiary";
+import { useEffect, useState } from "react";
+import { message } from "antd";
+import { GetDiaryByPatientID } from "../../services/https/diary";
+import dayjs from "dayjs";
 import './stylePat.css';
-import { GrEdit } from "react-icons/gr";
-import { FaRegCalendarAlt, FaUnlockAlt } from "react-icons/fa";
-
-const Books = [
-    { image: 'https://i.pinimg.com/736x/ae/b3/0b/aeb30b5e52ee5578af71b98312c67055.jpg', name: 'Syket', typeBook: 3, startDay: '25/08/2024', endDay: '30/08/2024', numberDay: 5, statusBook: <FaUnlockAlt />, type: 1 },
-    { image: 'https://i.pinimg.com/564x/41/89/54/418954fe97bd1e8d2822a2d39c128c76.jpg', name: 'Sakib', typeBook: 3, startDay: '25/09/2024', endDay: '30/09/2024', numberDay: 5, statusBook: <FaUnlockAlt />, type: 1 },
-    { image: 'https://i.pinimg.com/564x/38/48/75/384875edb620674b886be2ccb3c90032.jpg', name: 'Jamy', typeBook: 3, startDay: '25/10/2024', endDay: '30/10/2024', numberDay: 5, statusBook: <FaUnlockAlt />, type: 0 },
-    { image: 'https://i.pinimg.com/564x/fe/81/c8/fe81c87f8a738e9bef039e2d4f300641.jpg', name: 'Hanif', typeBook: 3, startDay: '25/11/2024', endDay: '30/11/2024', numberDay: 5, statusBook: <FaUnlockAlt />, type: 0 },
-    { image: 'https://i.pinimg.com/736x/ae/b3/0b/aeb30b5e52ee5578af71b98312c67055.jpg', name: 'Syket', typeBook: 3, startDay: '25/12/2024', endDay: '30/12/2024', numberDay: 5, statusBook: <FaUnlockAlt />, type: 1 },
-];
+import { motion } from "framer-motion";
 
 interface BookPatProps {
     limit: number;
 }
 
-function BookPat({ limit }: BookPatProps){
+function BookPat({ limit }: BookPatProps) {
+    const patID = localStorage.getItem('patientID');
+    const [diary, setDiary] = useState<DiaryPatInterface[]>([]);
+    const [messageApi, contextHolder] = message.useMessage();
+
+    // Function to shuffle the diary array
+    const shuffleArray = (array: DiaryPatInterface[]) => {
+        let shuffledArray = [...array];
+        for (let i = shuffledArray.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]]; // Swap elements
+        }
+        return shuffledArray;
+    };
+
+    const fetchDiaryByPatientID = async () => {
+        const res = await GetDiaryByPatientID(Number(patID));
+        if (res) {
+            setDiary(shuffleArray(res)); // Shuffle after fetching
+            console.log("Shuffled diaries:", res);
+        }
+    };
+
+    useEffect(() => {
+        fetchDiaryByPatientID();
+    }, []);
+
     const navigate = useNavigate();
+
+const navigateToDiaryPage = (diary: DiaryPatInterface) => {
+        const currentDate = dayjs();
+        const startDate = dayjs(diary.Start, 'DD-MM-YYYY');
+        const endDate = dayjs(diary.End, 'DD-MM-YYYY');
+        
+        // Check if it's not a Planning or Activity WorksheetTypeID
+        if (![1, 2].includes(Number(diary.WorksheetTypeID))) {
+            if (currentDate.isBefore(startDate) || currentDate.isAfter(endDate)) {
+                if (!currentDate.isSame(startDate, 'day') && !currentDate.isSame(endDate, 'day')) {
+                    messageApi.error('ไม่สามารถเข้าถึงไดอารี่ เนื่องจากอยู่นอกช่วงเวลาที่กำหนด');
+                    return;
+                }
+            }
+        }
     
+        let routePath = '';
+        switch (diary.WorksheetTypeID) {
+            case 1:
+                routePath = '/Planning';
+                break;
+            case 2:
+                routePath = '/Activity';
+                break;
+            case 3:
+                routePath = '/Behavioural';
+                break;
+            case 4:
+                routePath = '/CrossSectional';
+                break;
+            default:
+                console.error('Unknown worksheet type');
+                return;
+        }
+    
+        navigate(`${routePath}?id=${diary.ID}`);
+    };    
+
     return (
         <div className='bookPat'>
-            {Books.map((book, index) => (
-                <div key={index} className='book-item'>
-                    <div className="img-book">
-                        <img src={book.image} alt={book.name} />
-                    </div>
-                    <div className="head">
-                        <h3>{book.name}</h3>
-                        <button className="btn-edit" style={{backgroundColor:  book.type === 1 ? '#9BA5F6' : '#E9B5EF'}}>
-                            <GrEdit />
-                        </button>
-                    </div>
-                    <div className="content">
-                        <p><FaRegCalendarAlt/> {book.startDay}</p>
-                        <p> {book.statusBook}</p>
-                    </div>
+            {contextHolder}
+            {diary.length > 0 ? (
+                diary.slice(0, limit).map((diary, index) => (
+                    <motion.div
+                        key={diary.ID}
+                        className="diary-card"
+                        onClick={() => navigateToDiaryPage(diary)}
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.2, duration: 0.5 }}
+                    >
+                        <img 
+                            className='coverBook'
+                            src={diary.Picture} 
+                            alt={diary.Name}
+                        />
+                        <div className='contentBook'>
+                            <h4>{diary.Name}</h4>
+                        </div>
+                    </motion.div>
+                ))
+            ) : (
+                <div className="empty-diary-message">
+                    ยังไม่มีไดอารี่ในหมวดหมู่นี้
                 </div>
-            ))}
+            )}
         </div>
-    )
+    );
 }
 
 export default BookPat;

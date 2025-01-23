@@ -330,16 +330,8 @@ const handleSelectChange = (values: (number | undefined)[], setSelectEmotion: Re
                     <div className="content">
                         <div className="head">
                             <div className="onTitle">
-                                <h2 className="title">Situation to Trigger</h2>
+                                <h2 className="title">สถานการณ์ของวันนี้</h2>
                                 <div className='button'>
-                                    <Tooltip title="แก้ไข">
-                                    <Button
-                                        type="primary"
-                                        shape="circle"
-                                        icon={<BiSolidEditAlt />}
-                                        onClick={() => selectedDate && handleEditClick(selectedDate)} // กดเพื่อแก้ไขวันที่ที่เลือก
-                                    />                                    
-                                    </Tooltip>
                                     <Tooltip title="สรุปข้อมูล">
                                         <Button
                                             type="primary"
@@ -347,6 +339,14 @@ const handleSelectChange = (values: (number | undefined)[], setSelectEmotion: Re
                                             icon={<AiFillSignal />}
                                             onClick={handleNavigateToSummary} // ใช้ชื่อฟังก์ชันใหม่
                                         />
+                                    </Tooltip>
+                                    <Tooltip title="แก้ไข">
+                                    <Button
+                                        type="primary"
+                                        shape="circle"
+                                        icon={<BiSolidEditAlt />}
+                                        onClick={() => selectedDate && handleEditClick(selectedDate)} // กดเพื่อแก้ไขวันที่ที่เลือก
+                                    />                                    
                                     </Tooltip>
                                 </div>
                             </div>
@@ -359,25 +359,25 @@ const handleSelectChange = (values: (number | undefined)[], setSelectEmotion: Re
                         <div className="lower-content">
                             <div className="bg-Content">
                                 <div className="content-box">
-                                    <h3>Thoughts</h3>
+                                    <h3>ความคิด</h3>
                                     <div className="bg-input">
                                         <textarea className="content-input" value={Thought || ''} />
                                     </div>
                                 </div>
                                 <div className="content-box">
-                                    <h3>Behavior</h3>
+                                    <h3>พฤติกรรม</h3>
                                     <div className="bg-input">
                                         <textarea className="content-input" value={Behavior || ''} />
                                     </div>
                                 </div>
                                 <div className="content-box">
-                                    <h3>Bodily Sensations</h3>
+                                    <h3>ความรู้สึกทางร่างกาย</h3>
                                     <div className="bg-input">
                                         <textarea className="content-input" value={BodilySensation || ''} />
                                     </div>
                                 </div>
                                 <div className="content-box">
-                                    <h3>Emotions</h3>
+                                    <h3>อารมณ์</h3>
                                     <div className="bg-input">
                                         <textarea className="content-input" value={TextEmotions || ''} />
                                     </div>
@@ -438,7 +438,7 @@ const handleSelectChange = (values: (number | undefined)[], setSelectEmotion: Re
                                         <div className='content'>
                                             <div className="head">
                                             <div className="onTitle">
-                                                <h2 className="title">Situation to Trigger</h2>
+                                                <h2 className="title">สถานการณ์ของวันนี้</h2>
                                                 <div className="showEmo">
                                                     {emotionPatients && emotionPatients.length > 0 ? (
                                                         emotionPatients.map((emotion) => (
@@ -490,7 +490,7 @@ const handleSelectChange = (values: (number | undefined)[], setSelectEmotion: Re
                                             <div className="lower-content Edit">
                                                 <div className="bg-Content">
                                                     <div className="content-box">
-                                                    <h3>Thoughts</h3>
+                                                    <h3>ความคิด</h3>
                                                         <div className="bg-input">
                                                             <textarea
                                                                 value={editContent.Thought || ''}
@@ -500,7 +500,7 @@ const handleSelectChange = (values: (number | undefined)[], setSelectEmotion: Re
                                                         </div>
                                                     </div>
                                                     <div className="content-box">
-                                                    <h3>Behavior</h3>
+                                                    <h3>พฤติกรรม</h3>
                                                         <div className="bg-input">
                                                             <textarea
                                                                 value={editContent.Behavior || ''}
@@ -510,7 +510,7 @@ const handleSelectChange = (values: (number | undefined)[], setSelectEmotion: Re
                                                         </div>
                                                     </div>
                                                     <div className="content-box">
-                                                    <h3>Bodily Sensations</h3>
+                                                    <h3>ความรู้สึกทางร่างกาย</h3>
                                                         <div className="bg-input">
                                                             <textarea
                                                                 value={editContent.BodilySensation || ''}
@@ -520,7 +520,7 @@ const handleSelectChange = (values: (number | undefined)[], setSelectEmotion: Re
                                                         </div>
                                                     </div>
                                                     <div className="content-box">
-                                                    <h3>Emotions</h3>
+                                                    <h3>อารมณ์</h3>
                                                         <div className="bg-input">
                                                             <textarea
                                                                 value={editContent.TextEmotions || ''}

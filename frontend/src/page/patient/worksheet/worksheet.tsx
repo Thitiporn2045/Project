@@ -11,6 +11,11 @@ import { DiaryPatInterface } from '../../../interfaces/diary/IDiary';
 import { CreateDiaryPat } from '../../../services/https/diary';
 import { Button, Drawer, message } from 'antd';
 import dayjs from 'dayjs';
+import sheetActivity from '../../../assets/sheet1.png'
+import sheetBeHav from  '../../../assets/sheet2.png'
+import sheetCross from  '../../../assets/sheet3.png'
+import sheetPlanning from '../../../assets/sheet4.png'
+import { motion } from "framer-motion";  // Import framer-motion
 
     // global.d.ts หรือ index.d.ts
     declare var require: {
@@ -133,7 +138,7 @@ function Worksheets() {
 
     const calculateDuration = (start: Date, end: Date) => {
         const diffTime = Math.abs(end.getTime() - start.getTime());
-        setDuration(Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+        setDuration(Math.ceil(diffTime / (1000 * 60 * 60 * 24)+1));
     };
 
     const handleThumbnailClick = (worksheet: WorksheetTypeInterface) => {
@@ -155,6 +160,196 @@ function Worksheets() {
         };
     }, [showDatePicker]);
 
+    const getWorksheetContent = () => {
+        switch (selectedWorksheet?.ID) {
+            case 1:
+                return (
+                    <div className='index1'>
+                            <p>Activities Planning เป็นแบบฝึกหัดที่มักใช้ในกระบวนการบำบัดโดยเฉพาะใน Cognitive Behavioral Therapy (CBT) เพื่อช่วยให้ผู้ป่วยสามารถวางแผนและจัดการกิจกรรมในแต่ละวัน โดยการแบ่งกิจกรรมออกเป็นช่วงเวลาเช้า กลางวัน และเย็น เพื่อให้ผู้ป่วยสามารถติดตามและจัดการกิจกรรมที่ทำได้อย่างมีประสิทธิภาพมากขึ้น</p>
+                    <ul>
+                        <li>ช่วยให้ผู้ป่วยสามารถวางแผนการทำกิจกรรมในแต่ละวันได้ดีขึ้น และสามารถจัดการกับกิจกรรมต่างๆ ได้อย่างมีระบบ</li>
+                        <li>การวางแผนกิจกรรมให้มีความชัดเจนช่วยเพิ่มความรู้สึกมีเป้าหมายในชีวิต และทำให้รู้สึกมีการควบคุมมากขึ้น</li>
+                        <li>การบันทึกกิจกรรมและอารมณ์ที่เกิดขึ้นในแต่ละช่วงเวลา ช่วยให้ผู้ป่วยสามารถสังเกตว่าแต่ละกิจกรรมส่งผลต่ออารมณ์อย่างไร ซึ่งช่วยในการปรับปรุงพฤติกรรมในอนาคต</li>
+                    </ul>
+                    <p>เช้า (Morning)</p>
+                    <ul>
+                        <li>กิจกรรม: ตื่นนอน ออกกำลังกาย ทานอาหารเช้า</li>
+                        <li>ความรู้สึก: รู้สึกสดชื่น</li>
+                    </ul>
+                    <p>กลางวัน (Afternoon)</p>
+                    <ul>
+                        <li>กิจกรรม: ทำงานหรือเรียน</li>
+                        <li>ความรู้สึก: เครียดจากการทำงาน</li>
+                    </ul>
+                    <p>เย็น (Evening)</p>
+                    <ul>
+                        <li>กิจกรรม: ทานอาหารเย็น พักผ่อน ดูหนัง</li>
+                        <li>ความรู้สึก: ผ่อนคลาย</li>
+                    </ul>
+                    <p>การบันทึกข้อมูลในแต่ละส่วนจะช่วยให้คุณมองเห็นภาพรวมของสถานการณ์และพัฒนาวิธีการรับมือกับปัญหาได้ดีขึ้น</p>
+                    </div>
+                );
+            case 2:
+                return (
+                    <div className='index2'>
+                    <p>Activities Diary หรือ บันทึกกิจกรรม เป็นเครื่องมือที่ใช้ในกระบวนการบำบัดทางจิตเวช เช่น CBT (Cognitive Behavioral Therapy) เพื่อช่วยให้ผู้ป่วยสามารถติดตามและบันทึกกิจกรรมที่ทำในแต่ละวัน โดยมักจะบันทึกในรูปแบบรายชั่วโมง เพื่อให้สามารถประเมินได้ว่าแต่ละกิจกรรมที่ทำส่งผลต่ออารมณ์และความรู้สึกอย่างไร และอาจช่วยในการระบุพฤติกรรมหรือกิจกรรมที่มีผลดีหรือผลเสียต่อจิตใจของผู้ป่วย</p>
+                    <p>การบันทึกข้อมูลในแต่ละส่วนจะช่วยให้คุณมองเห็นภาพรวมของสถานการณ์และพัฒนาวิธีการรับมือกับปัญหาได้ดีขึ้น</p>
+                    <table className="schedule-table">
+                        <thead>
+                            <tr>
+                            <th>เวลา</th>
+                            <th>กิจกรรม</th>
+                            <th>รู้สึกอย่างไร</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                            <td>8:00-9:00</td>
+                            <td>ออกกำลังกาย</td>
+                            <td>รู้สึกดี</td>
+                            </tr>
+                            <tr>
+                            <td>9:00-10:00</td>
+                            <td>ทำการบ้าน</td>
+                            <td>เครียด</td>
+                            </tr>
+                            <tr>
+                            <td>10:00-11:00</td>
+                            <td>พักผ่อนดูทีวี</td>
+                            <td>ผ่อนคลาย</td>
+                            </tr>
+                            <tr>
+                            <td>11:00-12:00</td>
+                            <td>ทานอาหารกลางวัน</td>
+                            <td>สนุกสนาน</td>
+                            </tr>
+                        </tbody>
+                        </table>
+                    </div>
+                );
+            case 3:
+                return (
+                    <div className='index3'>
+                        <p>Behavioral Experiment เป็นหนึ่งในเทคนิคที่ใช้ใน Cognitive Behavioral Therapy (CBT) เพื่อช่วยให้ผู้เข้ารับการบำบัดสำรวจและทดสอบความคิดหรือความเชื่อที่ไม่สมเหตุสมผลผ่านการลงมือปฏิบัติจริงในชีวิตประจำวัน โดยเน้นการเปลี่ยนแปลงมุมมองความคิดที่เป็นอุปสรรคต่อการดำเนินชีวิต เช่น ความคิดที่ก่อให้เกิดความวิตกกังวล ความกลัว หรือความซึมเศร้า</p>
+                    <ul>
+                        <li>ช่วยให้ผู้ป่วยมองเห็นหลักฐานในชีวิตจริง แทนที่จะยึดติดกับความเชื่อหรือความคิดที่ไม่มีเหตุผล</li>
+                        <li>เสริมสร้างความมั่นใจผ่านการเผชิญหน้ากับสถานการณ์ที่เคยกลัว</li>
+                        <li>ลดการหลีกเลี่ยงและเพิ่มพฤติกรรมเชิงบวกในชีวิต</li>
+                    </ul>
+                    <p>การบันทึกข้อมูลในแต่ละส่วนจะช่วยให้คุณมองเห็นภาพรวมของสถานการณ์และพัฒนาวิธีการรับมือกับปัญหาได้ดีขึ้น</p>
+                    <div className="situation-header">ตัวอย่าง: ทุกคนในที่ทำงานจะมองว่าฉันโง่ถ้าฉันพูดในที่ประชุม</div>
+                        <table className="situation-table">
+                        <tr>
+                            <th>ตั้งสมมติฐาน</th>
+                            <td>
+                            <ul className="situation-list">
+                                <li>ความคิดเชิงลบ: ถ้าฉันพูดในที่ประชุม คนจะหัวเราะหรือวิจารณ์ฉัน</li>
+                                <li>ความคิดทางเลือก: อาจไม่มีใครวิจารณ์ฉัน และบางคนอาจเห็นว่าความเห็นของฉันมีค่า</li>
+                            </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>การวางแผนและปฏิบัติ</th>
+                            <td>
+                            <ul className="situation-list">
+                                <li>ทดลองพูดในที่ประชุมสั้น ๆ เช่น แสดงความเห็นในหัวข้อที่ตัวเองมั่นใจ และสังเกตปฏิกิริยาของคนรอบตัว</li>
+                            </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>การประเมินผล</th>
+                            <td>
+                            <ul className="situation-list">
+                                <li>สอบถามผู้เข้าร่วมประชุมบางคน หรือสังเกตปฏิกิริยา เช่น ไม่มีใครหัวเราะ หรือบางคนอาจพยักหน้าเห็นด้วย</li>
+                            </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>บทเรียนที่ได้</th>
+                            <td>
+                            <ul className="situation-list">
+                                <li>ความเชื่อเดิม: “คนจะหัวเราะฉัน”  ซึ่งไม่จริง</li>
+                                <li>ความคิดใหม่: "การพูดในที่ประชุมอาจไม่เลวร้ายอย่างที่คิด และบางคนสนใจในสิ่งที่ฉันพูด"</li>
+                            </ul>
+                            </td>
+                        </tr>
+                        </table>
+                    </div>
+                );
+            case 4:
+                return (
+                    <div className='index4'>
+                        <p>Cross Sectional Worksheet เป็นแบบฝึกหัดที่ถูกออกแบบมาเพื่อช่วยให้คุณเข้าใจความสัมพันธ์ระหว่างความคิด อารมณ์ พฤติกรรม และความรู้สึกทางร่างกายที่เกิดขึ้นในสถานการณ์ต่าง ๆ</p>
+                        <ul>
+                            <li>ความคิด (Thoughts): สิ่งที่คุณคิดในขณะนั้น</li>
+                            <li>อารมณ์ (Emotions): ความรู้สึกที่เกิดขึ้น เช่น ดีใจ เสียใจ หรือโกรธ</li>
+                            <li>พฤติกรรม (Behaviors): การกระทำที่เกิดขึ้นหลังจากที่คุณมีความคิดหรือความรู้สึก</li>
+                            <li>ความรู้สึกทางร่างกาย (Bodily Sensations): อาการทางกายที่เกิดขึ้น เช่น ใจสั่น เหงื่อออก หรือปวดหัว</li>
+                        </ul>
+                        <p>การบันทึกข้อมูลในแต่ละส่วนจะช่วยให้คุณมองเห็นภาพรวมของสถานการณ์และพัฒนาวิธีการรับมือกับปัญหาได้ดีขึ้น</p>
+                        <div className="situation-header">ตัวอย่างสถานการณ์: การสอบไม่ผ่าน</div>
+                        <table className="situation-table">
+                        <tr>
+                            <th>ความคิด</th>
+                            <td>
+                            <ul className="situation-list">
+                                <li>ฉันไม่มีความสามารถ</li>
+                                <li>อนาคตของฉันต้องล้มเหลวแน่ ๆ</li>
+                            </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>พฤติกรรม</th>
+                            <td>
+                            <ul className="situation-list">
+                                <li>เลิกอ่านหนังสือเพราะรู้สึกหมดกำลังใจ</li>
+                                <li>หลีกเลี่ยงการเจอเพื่อนเพื่อไม่ให้ใครถามเรื่องผลสอบ</li>
+                            </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>ความรู้สึกทางร่างกาย</th>
+                            <td>
+                            <ul className="situation-list">
+                                <li>แน่นหน้าอก</li>
+                                <li>ปวดหัว</li>
+                                <li>ไม่มีแรง</li>
+                            </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>อารมณ์</th>
+                            <td>
+                            <ul className="situation-list">
+                                <li>เสียใจ</li>
+                                <li>หวาดกลัว</li>
+                                <li>ผิดหวัง</li>
+                            </ul>
+                            </td>
+                        </tr>
+                        </table>
+                    </div>
+                );
+            default:
+                return null;
+        }
+    };
+
+    const getWorksheetContentImg = (): string | undefined => {
+        switch (selectedWorksheet?.ID) {
+            case 1:
+                return sheetPlanning;
+            case 2:
+                return sheetActivity;
+            case 3:
+                return sheetBeHav;
+            case 4:
+                return sheetCross;
+            default:
+                return undefined; // Changed from `null` to `undefined`
+        }
+    };      
+
     return (
         <div className={`worksheets ${showDatePicker ? 'show-blur-background' : ''}`}>
             {contextHolder}
@@ -164,37 +359,63 @@ function Worksheets() {
                 </div>
                 <div className="main-background">
                     <div className="bg-content">
-                        <div className="content-img">
-                            {selectedWorksheet && (
-                                <img 
-                                    src={selectedWorksheet.Picture} 
-                                    alt={selectedWorksheet.Name}
-                                    style={{ opacity: 1, transition: 'opacity 0.5s' }}
-                                />
-                            )}
-                        </div>
-                        <div className="content-text">
-                            {selectedWorksheet && (
-                                <>
-                                    <h2>{selectedWorksheet.Name}</h2>
-                                    <p>{selectedWorksheet.Description}</p>
-                                    <button className="btn" onClick={() => setShowDatePicker(true)}>
-                                        <span>เริ่มสร้าง</span>
-                                    </button>
-                                </>
-                            )}
-                        </div>
+                    <motion.div 
+                        className="content-img"
+                        initial={{ opacity: 0, y: 50 }}  // Start off-screen and transparent
+                        animate={{ opacity: 1, y: 0 }}    // Fade in and move to the normal position
+                        transition={{ duration: 0.5 }}    // Smooth transition for 0.5s
+                    >
+                        {selectedWorksheet && (
+                            <>
+                                {getWorksheetContentImg() ? ( 
+                                    <img 
+                                        className='ImgSheet'
+                                        src={getWorksheetContentImg()} 
+                                        alt={selectedWorksheet.Name}
+                                        style={{ opacity: 1, transition: 'opacity 0.5s' }}
+                                    />
+                                ) : (
+                                    <p>กำลังโหลดเนื้อหาของแบบฝึกหัด...</p>
+                                )}
+                            </>
+                        )}
+                    </motion.div>
+                    <motion.div 
+                        className="content-text"
+                        initial={{ opacity: 0, y: 50 }}  // Start off-screen and transparent
+                        animate={{ opacity: 1, y: 0 }}    // Fade in and move to the normal position
+                        transition={{ duration: 0.5 }}    // Smooth transition for 0.5s
+                    >
+                        {selectedWorksheet && (
+                            <>
+                                {getWorksheetContent() ? ( 
+                                    <div>
+                                        <h2>{selectedWorksheet.Name}</h2>
+                                        <p>{getWorksheetContent()}</p>  {/* แสดงเนื้อหาที่ดึงมา */}
+                                        <button className="btn" onClick={() => setShowDatePicker(true)}>
+                                            <span>เริ่มสร้าง</span>
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <p>กำลังโหลดเนื้อหาของแบบฝึกหัด...</p>
+                                )}
+                            </>
+                        )}
+                    </motion.div>
                     </div>
                     <div className="thumbnail">
                         {worksheets.map((item) => (
-                            <div 
+                            <motion.div 
                                 key={item.ID}
                                 className={`thumbnail-item ${selectedWorksheet?.ID === item.ID ? 'active' : ''}`}
                                 onClick={() => handleThumbnailClick(item)}
                                 style={{ cursor: 'pointer' }}
+                                initial={{ opacity: 0, y: 50 }}  // Start above and transparent
+                                animate={{ opacity: 1, y: 0 }}    // Fade in and move to normal position
+                                transition={{ duration: 0.3 }}    // Duration for the animation
                             >
                                 {item.NumberType}
-                            </div>
+                            </motion.div>
                         ))}
                     </div>
                 </div>
@@ -250,6 +471,7 @@ function Worksheets() {
                                 <div className="input-group">
                                     <label>วันเริ่มต้น</label>
                                     <DatePicker
+                                        calendarClassName="custom-calendar"
                                         selected={diaryStart}
                                         onChange={(date: Date | null) => {
                                             if (date) setDiaryStart(date);
@@ -258,11 +480,13 @@ function Worksheets() {
                                         startDate={diaryStart}
                                         endDate={diaryEnd}
                                         dateFormat="dd/MM/yyyy"
+                                        minDate={new Date()} // ไม่อนุญาตให้เลือกวันที่ย้อนหลัง
                                     />
                                 </div>
                                 <div className="input-group">
                                     <label>วันสิ้นสุด</label>
                                     <DatePicker
+                                        calendarClassName="custom-calendar"
                                         selected={diaryEnd}
                                         onChange={(date: Date | null) => {
                                             if (date) {

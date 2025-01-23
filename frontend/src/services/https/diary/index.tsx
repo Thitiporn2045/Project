@@ -142,3 +142,23 @@ export async function ToggleDiaryIsPublic(id: number) {
 
   return res;
 }
+
+
+export async function DeleteDiary(id: Number | undefined) {
+    const requestOptions = {
+    method: "DELETE",
+    };
+
+    let res = await fetch(`${apiUrl}/pat/del/Diary/${id}`, requestOptions)
+    .then((response) => response.json())
+    .then((res) => {
+        if (res.data) {
+        return { status: true, message: res.data };
+        } 
+        else {
+        return { status: false, message: res.error };
+        }
+    });
+
+    return res;
+}

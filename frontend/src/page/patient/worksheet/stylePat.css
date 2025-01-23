@@ -1,83 +1,84 @@
 .worksheets {
-    margin: 0;
-    padding: 0;
-    width: 100vw;
-    height: 100vh;
-    box-sizing: border-box;
-    font-family: 'Noto Sans Thai', sans-serif;
+margin: 0;
+padding: 0;
+width: 100vw;
+height: 100vh;
+box-sizing: border-box;
+font-family: 'Noto Sans Thai', sans-serif;
 }
 
 .worksheets .main-body {
-    width: 100%;
-    height: 100%;
-    display: grid;
-    grid-template-columns: 3.2rem auto;
-    background: var(--color-backgroun-secondary2);
+width: 100%;
+height: 100%;
+display: grid;
+grid-template-columns: 3.2rem auto;
+    background: linear-gradient(141deg, #ffffff 0%, #edf0ff 100%);
 }
 
 .worksheets .main-body .sidebar {
-    width: 100%;
-    height: 100%;
-    background: var(--color-backgroun-main1);
-    z-index: 1;
+width: 100%;
+height: 100%;
+background: var(--color-backgroun-main1);
+z-index: 1;
 }
 
 .worksheets .main-body .main-background {
-    width: 100%;
-    height: 100%;
-    display: grid;
-    grid-template-rows: auto 7rem;
-    gap: 10px;
+width: 100%;
+height: 100%;
+display: grid;
+grid-template-rows: auto 7rem;
+gap: 10px;
 }
 
 .worksheets .bg-content {
-    margin-left: 10px;
-    width: 100%;
-    height: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    background-color: var(--color-backgroun-secondary2);
-    border-radius: var(--border-radius-3);
+margin-left: 10px;
+width: 100%;
+height: 100%;
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 20px;
+border-radius: var(--border-radius-3);
 }
 
 .worksheets .bg-content .content-img {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+width: 100%;
+height: 100%;
+display: flex;
+justify-content: center;
+align-items: center;
 }
 
 .worksheets .bg-content .content-img img {
-    max-width: 100%;
+    max-width: 85%;
     max-height: 100%;
+    object-fit: cover;
     border-radius: var(--border-radius-3);
-    object-fit: contain;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
 .worksheets .bg-content .content-text {
-    margin-top: 40px;
-    width: 80%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    padding: 0 2rem;
-    border-radius: 10px;
+margin-top: 40px;
+width: 80%;
+height: 80vh;
+display: flex;
+flex-direction: column;
+padding: 0 2rem;
+border-radius: 10px;
+overflow-x: auto;
 }
 
 .worksheets .bg-content .content-text h2 {
-    font-size: 2.5rem;
-    font-weight: 800;
-    margin-bottom: 1rem;
-    color: var(--color-font1);
+font-size: 2.5rem;
+font-weight: 800;
+margin-bottom: 1rem;
+color: var(--color-font1);
 }
 
 .worksheets .bg-content .content-text p {
-    font-size: 1rem;
-    margin-bottom: 1rem;
-    color: #444; /* Darker text color for better readability */
-    line-height: 1.5;
+font-size: 1rem;
+margin-bottom: 1rem;
+color: #444; /* Darker text color for better readability */
+line-height: 1.5;
 }
 
 .worksheets .bg-content .content-text h2::after {
@@ -90,6 +91,7 @@
 }
 
 .worksheets .btn {
+    width: 100%;
     display: inline-block;
     font-size: 1rem;
     font-weight: 600;
@@ -101,6 +103,8 @@
     text-decoration: none;
     border-radius: var(--border-radius-1);
     margin-top: 1rem;
+    font-family: 'Noto Sans Thai', sans-serif;
+
 }
 
 .worksheets .btn:hover{
@@ -110,161 +114,161 @@
 }
 
 .worksheets .thumbnail {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    background: var(--color-backgroun-secondary4);
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+display: flex;
+justify-content: center;
+align-items: center;
+gap: 1rem;
+background: var(--color-backgroun-secondary4);
+box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
 }
 
 .worksheets .thumbnail-item {
-    cursor: pointer;
-    font-weight: 700;
-    color: var(--color-backgroun-secondary2);
-    padding: 0.5rem 1rem;
-    background-color: var(--color-backgroun-secondary1);
-    border-radius: 50%;
-    box-shadow: var(--box-shadow2), var(--box-shadow-2);
+cursor: pointer;
+font-weight: 700;
+color: var(--color-backgroun-secondary2);
+padding: 0.5rem 1rem;
+background-color: var(--color-backgroun-secondary1);
+border-radius: 50%;
+box-shadow: var(--box-shadow2), var(--box-shadow-2);
 }
 
 .worksheets .thumbnail-item:hover{
-    background: var(--color-backgroun-secondary2);
-    color: var(--color-backgroun-main1);
-    transform: scale(1.05);
-    transition: .5s;
+background: var(--color-backgroun-secondary2);
+color: var(--color-backgroun-main1);
+transform: scale(1.05);
+transition: .5s;
 }
 
 .worksheets .thumbnail-item.active {
-    box-shadow: none;
-    background-color: var(--color-backgroun-main1);
-    color: white;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(255, 255, 255, 0.35) 0px -2px 6px 0px inset;
+box-shadow: none;
+background-color: var(--color-backgroun-main1);
+color: white;
+box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(255, 255, 255, 0.35) 0px -2px 6px 0px inset;
 }
 
 /* DatePicker Styles */
 .worksheets .date-picker-popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    width: 600px;
-    padding: 50px 40px ;
-    transform: translate(-50%, -50%);
-    background-color: var(--color-popup-main);
-    border-radius: var(--border-radius-3);
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
-    z-index: 1000;
-    font-family: 'Noto Sans Thai', sans-serif;
+position: fixed;
+top: 50%;
+left: 50%;
+width: 600px;
+padding: 50px 40px ;
+transform: translate(-50%, -50%);
+background-color: var(--color-popup-main);
+border-radius: var(--border-radius-3);
+box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
+z-index: 1000;
+font-family: 'Noto Sans Thai', sans-serif;
 }
 
 .worksheets .bg-popup::before{
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.387); /* สีดำโปร่งแสง */
-    z-index: 1; /* ทำให้เลเยอร์อยู่ข้างหลัง */
-    pointer-events: none; /* ป้องกันการโต้ตอบกับเลเยอร์นี้ */
+content: "";
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.387); /* สีดำโปร่งแสง */
+z-index: 1; /* ทำให้เลเยอร์อยู่ข้างหลัง */
+pointer-events: none; /* ป้องกันการโต้ตอบกับเลเยอร์นี้ */
 }
 
 .worksheets .date-picker-popup .title {
-    text-align: center;
-    color: var(--color-backgroun-main1);
-    font-size: 2rem;
-    font-weight: 800;
+text-align: center;
+color: var(--color-backgroun-main1);
+font-size: 2rem;
+font-weight: 800;
 }
 
 .worksheets .date-picker-popup .date-picker-content {
-    display: flex;
-    justify-content: space-between;
+display: flex;
+justify-content: space-between;
 }
 
 .worksheets .date-picker-popup .left-column,
 .worksheets .date-picker-popup .right-column {
-    width: 48%;
+width: 48%;
 }
 
 .worksheets .date-picker-popup .right-column {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
 }
 
 .worksheets .date-picker-popup label {
-    display: block;
-    margin-bottom: 5px;
-    color: var(--color-font1);
-    font-weight: 700;
+display: block;
+margin-bottom: 5px;
+color: var(--color-font1);
+font-weight: 700;
 }
 
 .worksheets .date-picker-popup input[type="text"],
 .worksheets .date-picker-popup select,
 .worksheets .react-datepicker__input-container input {
-    width: 100%;
-    max-width: 260px; /* Adjust this value as needed */
-    padding: 10px;
-    border: 1px solid #e0e0e0;
-    border-radius: var(--border-radius-2);
-    font-size: 0.95rem;
-    border: none;
-    color: var(--color-font1);
-    box-sizing: border-box; /* Ensures padding is included in width */
+width: 100%;
+max-width: 260px; /* Adjust this value as needed */
+padding: 10px;
+border: 1px solid #e0e0e0;
+border-radius: var(--border-radius-2);
+font-size: 0.95rem;
+border: none;
+color: var(--color-font1);
+box-sizing: border-box; /* Ensures padding is included in width */
 }
 
 .worksheets .date-picker-popup .input-group {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    margin-bottom: 5px;
+display: flex;
+flex-direction: column;
+align-items: stretch;
+margin-bottom: 5px;
 }
 
 .worksheets .date-picker-popup .input-group label {
-    margin-bottom: 5px;
+margin-bottom: 5px;
 }
 
 .worksheets .date-picker-popup .right-column {
-    display: flex;
-    flex-direction: column;
-    gap: 15px; /* Adds consistent spacing between input groups */
+display: flex;
+flex-direction: column;
+gap: 15px; /* Adds consistent spacing between input groups */
 }
 
 .worksheets .date-picker-popup .btn-submit {
-    margin: 0 30px;
-    margin-top: 40px;
-    width: 90%;
-    padding: 12px;
-    background-color: var(--color-backgroun-main1);
-    color: white;
-    border: none;
-    border-radius: var(--border-radius-2);
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: 800;
-    transition: background-color 0.3s;
+margin: 0 30px;
+margin-top: 40px;
+width: 90%;
+padding: 12px;
+background-color: var(--color-backgroun-main1);
+color: white;
+border: none;
+border-radius: var(--border-radius-2);
+cursor: pointer;
+font-size: 1rem;
+font-weight: 800;
+transition: background-color 0.3s;
 }
 
 .worksheets .date-picker-popup .btn-submit:hover {
-    background-color: var(--color-secondary1);
+background-color: var(--color-secondary1);
 }
 
 .worksheets .book-item {
-    background-color: var(--color-backgroun-secondary2);
-    margin-left: 30px;
-    width: 60%;
-    height: 87%;
-    padding: 20px;
-    border-radius: var(--border-radius-2);
-    text-align: center;
+background-color: var(--color-backgroun-secondary2);
+margin-left: 30px;
+width: 60%;
+height: 87%;
+padding: 20px;
+border-radius: var(--border-radius-2);
+text-align: center;
 }
 
 .worksheets .book-item .img-book {
-    width: 100%;
-    height: 200px;
-    margin-bottom: 15px;
-    overflow: hidden;
-    border-radius: var(--border-radius-2);
+width: 100%;
+height: 200px;
+margin-bottom: 15px;
+overflow: hidden;
+border-radius: var(--border-radius-2);
 }
 
 .worksheets .book-item .img-book img {
@@ -283,25 +287,147 @@
 }
 
 .worksheets p.text{
-    font-size: .7rem;
-    color: var(--color-font2);
+font-size: .7rem;
+color: var(--color-font2);
 }
 
-.ant-drawer .ant-drawer-title {
-    flex: 1;
-    margin: 0;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 1.5;
-    font-family: 'Noto Sans Thai', sans-serif;
-    color: var(--color-font1);
+.worksheets .ant-drawer .ant-drawer-title {
+flex: 1;
+margin: 0;
+font-weight: 600;
+font-size: 16px;
+line-height: 1.5;
+font-family: 'Noto Sans Thai', sans-serif;
+color: var(--color-font1);
 }
 
-.ant-drawer .ant-drawer-body {
+.worksheets .ant-drawer .ant-drawer-body {
     flex: 1;
     min-width: 0;
     min-height: 0;
     padding: 24px;
     overflow: auto;
     background-color: var(--color-backgroun-secondary4);
+}
+
+.worksheets .situation-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.worksheets .situation-header {
+    background-color: #ececfd9e;
+    color: var(--color-font1);
+    padding: 16px;
+    text-align: left;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.worksheets .situation-table th {
+    color: var(--color-font1);
+    padding: 16px;
+    text-align: center;
+    width: 30%;
+    border: 2px solid #CBCFEF; 
+    font-size: 1rem;
+    font-weight: 600;
+    background-color: #ffffff32; /* gray-800 */
+}
+
+.worksheets .situation-table td {
+    color: #444;
+    padding: 16px;
+    border: 2px solid #CBCFEF; 
+}
+
+.worksheets .situation-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.worksheets .situation-list li {
+    margin-bottom: 8px;
+}
+
+.worksheets .situation-list li:before {
+    content: "- ";
+}
+
+.worksheets .schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: white;
+}
+
+.worksheets .schedule-table th {
+    background-color: #f3f3fe75; /* purple-900 */
+    color: var(--color-font1);
+    padding: 12px;
+    text-align: center;
+    border: 2px solid #CBCFEF; 
+}
+
+.worksheets .schedule-table td {
+    padding: 12px;
+    text-align: center;
+    border: 2px solid #CBCFEF; 
+    color: #444;
+}
+
+.worksheets .schedule-table tr:nth-child(even) {
+    background-color: #f8f8ff; /* gray-800 */
+}
+
+.worksheets .schedule-table tr:nth-child(odd) {
+    background-color: #ffffff75; /* gray-800 */
+}
+
+.custom-calendar .react-datepicker__day--selected {
+    background-color: #9BA5F6; /* สีพื้นหลังของวันที่ถูกเลือก */
+    color: white; /* สีข้อความของวันที่ถูกเลือก */
+    border-radius: 50%; /* ปรับเป็นวงกลม */
+    transition: .5s;
+}
+
+.custom-calendar .react-datepicker__day--selected:hover {
+    background-color: #C1C4F8; /* สีเมื่อ hover บนวันที่เลือก */
+    color: white;
+    border-radius: 50%; /* ปรับเป็นวงกลม */
+    transition: .5s;
+
+}
+
+.custom-calendar .react-datepicker__day--keyboard-selected {
+    background-color: #EAD7F8; /* สีของวันที่เลือกผ่านคีย์บอร์ด */
+    color: black;
+    transition: .5s;
+
+}
+
+.react-datepicker__day--in-selecting-range, .react-datepicker__day--in-range{
+    background-color: #C1C4F8; /* สีของวันที่เลือกผ่านคีย์บอร์ด */
+    transition: .5s;
+
+}
+
+.react-datepicker__day--in-selecting-range, .react-datepicker__day--in-range:hover{
+    background-color: #d5d7ff; /* สีของวันที่เลือกผ่านคีย์บอร์ด */
+    transition: .5s;
+
+}
+
+.react-datepicker__day--in-selecting-range:not(
+    .react-datepicker__day--in-range, 
+    .react-datepicker__month-text--in-range, 
+    .react-datepicker__quarter-text--in-range, 
+    .react-datepicker__year-text--in-range
+) {
+    background-color: #c1c4f895; /* สีพื้นหลังวันที่ในช่วงเลือก */
+    color: #ffffff; /* สีข้อความ (ถ้าต้องการเปลี่ยน) */
+    transition: .5s;
+
+
 }

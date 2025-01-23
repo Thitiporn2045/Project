@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import NavbarPat from '../../../../component/navbarPat/navbarPat';
 import { ImBin, ImSearch } from 'react-icons/im';
 import './styleSheetPat.css';
-import SearchPat from '../../../../component/searchPat/searchPat';
+import { motion } from 'framer-motion'; // Import motion
 import { useNavigate } from 'react-router-dom';
 import { DiaryPatInterface } from '../../../../interfaces/diary/IDiary';
-import { Drawer, Form, message } from 'antd';
-import { GetDiaryByPatientID, UpdateDiaryPat } from '../../../../services/https/diary';
+import { Drawer, Form, message, Modal } from 'antd';
+import { DeleteDiary, GetDiaryByPatientID, UpdateDiaryPat } from '../../../../services/https/diary';
 import { RiEdit2Fill } from "react-icons/ri";
 import DatePicker from 'react-datepicker';
 import dayjs from 'dayjs';
@@ -22,6 +22,7 @@ declare var require: {
 
 function MainSheet() {
     const patID = localStorage.getItem('patientID');
+    const numericPatID = patID ? Number(patID) : undefined; // แปลงเป็น number หรือ undefined ถ้าไม่มีค่า
     const [diarys, setDiarys] = useState<DiaryPatInterface[]>([]); // Default to empty array
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm();
@@ -40,18 +41,22 @@ function MainSheet() {
         fetchDiaryByPatientID();
     }, []);
 
-    // Function to navigate based on the WorksheetTypeID
+    const [searchQuery, setSearchQuery] = useState('');
+
     const navigateToDiaryPage = (diary: DiaryPatInterface) => {
         const currentDate = dayjs();
         const startDate = dayjs(diary.Start, 'DD-MM-YYYY');
         const endDate = dayjs(diary.End, 'DD-MM-YYYY');
-    
-        if (currentDate.isBefore(startDate) || currentDate.isAfter(endDate)) {
-            if (!currentDate.isSame(startDate, 'day') && !currentDate.isSame(endDate, 'day')) {
-                messageApi.error('ไม่สามารถเข้าถึงไดอารี่ เนื่องจากอยู่นอกช่วงเวลาที่กำหนด');
-                return;
+        
+        // Check if it's not a Planning or Activity WorksheetTypeID
+        if (![1, 2].includes(Number(diary.WorksheetTypeID))) {
+            if (currentDate.isBefore(startDate) || currentDate.isAfter(endDate)) {
+                if (!currentDate.isSame(startDate, 'day') && !currentDate.isSame(endDate, 'day')) {
+                    messageApi.error('ไม่สามารถเข้าถึงไดอารี่ เนื่องจากอยู่นอกช่วงเวลาที่กำหนด');
+                    return;
+                }
             }
-        }        
+        }
     
         let routePath = '';
         switch (diary.WorksheetTypeID) {
@@ -71,9 +76,20 @@ function MainSheet() {
                 console.error('Unknown worksheet type');
                 return;
         }
-        navigate(`${routePath}?id=${diary.ID}`);
-    };
     
+        navigate(`${routePath}?id=${diary.ID}`);
+    };    
+    
+    // Animation variants
+    const fadeInVariants = {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { duration: 0.5 } },
+    };
+
+    const scaleUpVariants = {
+        hidden: { scale: 0.8 },
+        visible: { scale: 1, transition: { duration: 0.3 } },
+    };
 
     // Toggle popup visibility
     function toggle() {
@@ -222,23 +238,48 @@ const toggleIsPublic = async (diary: DiaryPatInterface) => {
     }
 };
 
-    
+const handleDeleteDiary = async (diaryId: number | undefined) => {
+    Modal.confirm({
+        title: 'ต้องการลบไดอารี่เล่มนี้หรือไม่?',
+        onOk: async () => {
+            try {
+                await DeleteDiary(diaryId); // ส่ง ID ไปที่ API สำหรับลบ
+                messageApi.success('ลบไดอารี่สำเร็จ');
+                // กรองไดอารี่ที่ไม่มี ID ตรงกับที่ถูกลบ
+                setDiarys(prevDiarys => prevDiarys.filter(diary => diary.ID !== diaryId));                
+            } catch (error) {
+                messageApi.error('ลบไดอารี่ไม่สำเร็จ');
+            }
+        },
+        okText: 'ยืนยัน',
+        cancelText: 'ยกเลิก',
+    });
+};  
 
     const DiaryCategory = ({ title, diaries }: { title: string; diaries: DiaryPatInterface[] }) => {
         const [hoveredDiaryID, setHoveredDiaryID] = useState<number | null>(null);
     
         return (
+            <motion.div
+                className="diary-category"
+                variants={fadeInVariants}
+                initial="hidden"
+                animate="visible"
+            >
             <div className="diary-category">
-                <h3>{title}</h3>
+            <motion.h3>{title}</motion.h3>
                 <div className="diary-grid">
                 {diaries.length > 0 ? (
                     diaries.map((diary) => (
-                        <div
-                            key={diary.ID}
-                            className="diary-card"
-                            onMouseEnter={() => setHoveredDiaryID(diary.ID ?? 0)}
-                            onMouseLeave={() => setHoveredDiaryID(null)}
-                            onClick={() => navigateToDiaryPage(diary)}
+                        <motion.div
+                                key={diary.ID}
+                                className="diary-card"
+                                variants={scaleUpVariants}
+                                initial="hidden"
+                                animate="visible"
+                                onMouseEnter={() => setHoveredDiaryID(diary.ID ?? 0)}
+                                onMouseLeave={() => setHoveredDiaryID(null)}
+                                onClick={() => navigateToDiaryPage(diary)}
                         >
                             <img 
                                 className='coverBook'
@@ -292,27 +333,39 @@ const toggleIsPublic = async (diary: DiaryPatInterface) => {
                                     >
                                         <FaComment />
                                     </button>
-                                    <button onClick={(e) => {
-                                        e.stopPropagation();
-                                    }}>
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleDeleteDiary(diary.ID); // เรียกใช้ฟังก์ชันลบเมื่อคลิก
+                                        }}
+                                    >
                                         <ImBin />
                                     </button>
                                 </div>
                             )}
-                        </div>
+                        </motion.div>
                     ))
                 ) : (
                     <div className="empty-diary-message">
-                        ยังไม่มีไดอารี่ในหมวดหมู่นี้
+                        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
+                            <div className="Loading-Data-Search"></div>
+                            <div className='text'>ไม่มีไดอารี่ของประเภทนี้...</div>
+                        </div>
                     </div>
                 )}
                 </div>
             </div>
+            </motion.div>
         );
     };
     
     return (
-        <div className='mainSheet'>
+        <motion.div
+            className='mainSheet'
+            variants={fadeInVariants}
+            initial="hidden"
+            animate="visible"
+        >
             {contextHolder} {/* Make sure this line is present */}
             <div className="befor-main">
                 <div className='main-body'>
@@ -323,22 +376,33 @@ const toggleIsPublic = async (diary: DiaryPatInterface) => {
                         <div className="main-content">
                             <div className='bg-content'>
                                 <div className="header">
-                                    <div className='on'>
+                                    <motion.div
+                                            className='on'
+                                            variants={scaleUpVariants}
+                                            initial="hidden"
+                                            animate="visible"
+                                        >
                                         <h2>My Book</h2>
-                                    </div>
+                                    </motion.div>
                                     <div className="labelSearch">
                                         <input
                                             className='searchBook'
                                             type="text"
                                             placeholder="ค้นหาหนังสือของคุณ"
-                                            onClick={toggle}
+                                            value={searchQuery}
+                                            onChange={(e) => setSearchQuery(e.target.value)} // อัปเดตค่าคำค้นหา
                                         />
                                         <i className="searchIcon"><ImSearch /></i>
                                     </div>                                   
                                 </div>
                                 
                                 {/* Display categorized diary entries */}
-                                <div className="diary-categories">
+                                <motion.div
+                                    className="diary-categories"
+                                    variants={fadeInVariants}
+                                    initial="hidden"
+                                    animate="visible"
+                                >
                                 {[
                                     { title: "Planning Diary", diaries: categorizeDiaries().planning },
                                     { title: "Activity Diary", diaries: categorizeDiaries().activity },
@@ -350,7 +414,9 @@ const toggleIsPublic = async (diary: DiaryPatInterface) => {
                                         <DiaryCategory 
                                             key={category.title}
                                             title={category.title} 
-                                            diaries={category.diaries}
+                                            diaries={category.diaries.filter(diary =>
+                                                diary.Name?.toLowerCase().includes(searchQuery.toLowerCase())
+                                            )}
                                         />
                                 ))}
 
@@ -365,17 +431,16 @@ const toggleIsPublic = async (diary: DiaryPatInterface) => {
                                         <div className='text'>ไม่มีข้อมูล...</div>
                                     </div>
                                 )}
-                                </div>
+                                </motion.div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
             {/* Popup for Search */}
             <div id='popup'>
                 <div className='compo-search'>
-                    <SearchPat />
+                    {/* <SearchPat patID={numericPatID} /> */}
                     <a href="#" className='btn-close' onClick={toggle}>Close</a>
                 </div>
             </div>
@@ -417,6 +482,7 @@ const toggleIsPublic = async (diary: DiaryPatInterface) => {
                             <div className="input-group">
                                 <label>วันเริ่มต้น</label>
                                 <DatePicker
+                                    calendarClassName="custom-calendar"
                                     selected={diaryStart ? dayjs(diaryStart, 'DD-MM-YYYY').toDate() : undefined}
                                     onChange={(date: Date | null) => {
                                         if (date) {
@@ -427,12 +493,14 @@ const toggleIsPublic = async (diary: DiaryPatInterface) => {
                                     startDate={diaryStart ? dayjs(diaryStart, 'DD-MM-YYYY').toDate() : undefined}  // Convert diaryStart to Date if it's a string
                                     endDate={diaryEnd ? dayjs(diaryEnd, 'DD-MM-YYYY').toDate() : undefined}
                                     dateFormat="dd/MM/yyyy"
+                                    minDate={new Date()} // ไม่อนุญาตให้เลือกวันที่ย้อนหลัง
                                 />
                             
                             </div>
                             <div className="input-group">
                             <label>วันสิ้นสุด</label>
                             <DatePicker
+                                calendarClassName="custom-calendar"
                                 selected={diaryEnd ? dayjs(diaryEnd, 'DD-MM-YYYY').toDate() : undefined}
                                 onChange={(date: Date | null) => {
                                     setDiaryEnd(dayjs(date ?? new Date()).format('DD-MM-YYYY'));
@@ -478,11 +546,9 @@ const toggleIsPublic = async (diary: DiaryPatInterface) => {
                         />
                     ))}
                 </div>
-            </Drawer>
-            
-        </div>
+            </Drawer>          
+        </motion.div>
     );
 }
 
 export default MainSheet;
-

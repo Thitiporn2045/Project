@@ -153,12 +153,12 @@ const CrossSectional: React.FC = () => {
                   <div className="content">
                     <div className='head'>
                       <div className='onTitle'>
-                        <h2 className="title">Situation to Trigger</h2>
+                        <h2 className="title">สถานการณ์ของวันนี้</h2>
                       </div>
                       <div className='lowerInput'>
                         <Input 
                           className='mainTitle' 
-                          placeholder="เหตุการณ์หรือสิ่งที่กระตุ้น..." 
+                          placeholder="ตัวอย่าง:/ ทะเลาะกับสมาชิกในครอบครัว" 
                           value={situation} 
                           onChange={(e) => setSituation(e.target.value)} 
                         />
@@ -167,44 +167,44 @@ const CrossSectional: React.FC = () => {
                     <div className="lower-content">
                       <div className="bg-Content">
                         <div className='content-box'>
-                          <h3>Thoughts</h3>
+                          <h3>ความคิด</h3>
                           <div className="bg-input">
                           <textarea 
                             className='content-input' 
-                            placeholder="ความคิด..." 
+                            placeholder="ตัวอย่าง:/ -เขาไม่รักฉันแล้ว      - ฉันไม่มีค่าในสายตาของครอบครัว" 
                             value={thought} 
                             onChange={(e) => setThought(e.target.value)} 
                           />
                           </div>
                         </div>
                         <div className='content-box'>
-                          <h3>Behavior</h3>
+                          <h3>พฤติกรรม</h3>
                           <div className="bg-input">
                           <textarea 
                               className='content-input' 
-                              placeholder="พฤติกรรม..." 
+                              placeholder="ตัวอย่าง:/ -เดินออกจากห้องโดยไม่พูดอะไร                       - ปฏิเสธที่จะร่วมรับประทานอาหารร่วมกัน" 
                               value={behavior} 
                               onChange={(e) => setBehavior(e.target.value)} 
                             />
                           </div>
                         </div>
                         <div className='content-box'>
-                          <h3>Bodily Sensations</h3>
+                          <h3>ความรู้สึกทางร่างกาย</h3>
                           <div className="bg-input">
                           <textarea 
                             className='content-input' 
-                            placeholder="พฤติกรรมผลกระทบที่ควบคุมไม่ได้..." 
+                            placeholder="ตัวอย่าง:/ -หายใจเร็ว                        - ท้องไส้ปั่นป่วน                         - รู้สึกเจ็บหน้าอก " 
                             value={bodilySensation} 
                             onChange={(e) => setBodilySensation(e.target.value)} 
                           />
                           </div>
                         </div>
                         <div className='content-box'>
-                          <h3>Emotions</h3>
+                          <h3>อารมณ์</h3>
                           <div className="bg-input">
                             <textarea 
                               className='content-input' 
-                              placeholder="อารมณ์..."
+                              placeholder="ตัวอย่าง:/ -เศร้า                         - โกรธ                                   - รู้สึกโดดเดี่ยว "
                               value={textEmotions}
                               onChange={(e) => setTextEmotions(e.target.value)}
                             />

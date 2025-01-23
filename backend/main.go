@@ -46,7 +46,20 @@ func main() {
 			r.GET("/pat/get/Behavioral/Emotion/Month/ByDiary", controller.GetMonthEmotionsBehavioralExpByDiaryID)
 			r.GET("/pat/get/Behavioral/Date/Emotion/ByDiary", controller.GetEmotionsBehavioralExpHaveDateByDiaryID)
 			r.GET("/pat/get/ActivityDiary/ByDiary", controller.GetActivityDiaryByDiaryID)
+			r.GET("/pat/get/ActivityDiary/Date/ByDiary", controller.GetActivityDiaryEmotionsByDateAndDiaryID)
+			r.GET("/pat/get/ActivityDiary/DateTime/ByDiary", controller.GetActivityDiaryEmotionsByDateTimeAndDiaryID)
+			r.GET("/pat/get/ActivityDiary/Week/ByDiary", controller.GetActivityDiaryEmotionsByWeekAndDiaryID)
+			r.GET("/pat/get/ActivityDiary/WeekTime/ByDiary", controller.GetWeeklyActivityDiarEmotionsByDiaryID)
+			r.GET("/pat/get/ActivityDiary/Month/ByDiary", controller.GetMonthlyActivityDiarEmotionsByDiaryID)
+			r.GET("/pat/get/ActivityDiary/All/ByDiary", controller.GetAllActivityDiarEmotionsByDiaryID)
 			r.GET("/pat/get/ActivityPlanning/ByDiary", controller.GetActivityPlanningByDiaryID)
+			r.GET("/pat/get/ActivityPlanning/Date/ByDiary", controller.GetPlanningEmotionsByDateAndDiaryID)
+			r.GET("/pat/get/ActivityPlanning/DateTime/ByDiary", controller.GetPlanningEmotionsByDateTimeAndDiaryID)
+			r.GET("/pat/get/ActivityPlanning/Week/ByDiary", controller.GetPlanningEmotionsByWeekAndDiaryID)
+			r.GET("/pat/get/ActivityPlanning/Month/ByDiary", controller.GetPlanningEmotionsByMonthAndDiaryID)
+			r.GET("/pat/get/ActivityPlanning/All/ByDiary", controller.GetAllPlanningEmotionsByDiaryID)
+
+			
 			r.GET("/pat/get/TimeOfDay", controller.ListTimeOfDays)
 			r.GET("/pat/get/CrossSectional/WritingDates", controller.GetDiaryWritingDates)
 
@@ -74,6 +87,7 @@ func main() {
 			r.DELETE("/patients/:id", controller.DeletePatient)
 			r.DELETE("/pat/delNote/:id", controller.DeleteNotePat)
 			r.DELETE("/pat/del/Emotion/:id", controller.DeleteEmotion)
+			r.DELETE("/pat/del/Diary/:id", controller.DeleteDiary)
 
 
 			//Psychologist Routes
