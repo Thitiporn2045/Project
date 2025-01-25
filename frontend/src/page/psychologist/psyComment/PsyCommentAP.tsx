@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import './psyComment.css'
 import AntD from '../../../component/psychologist/sideBar/AntD'
 import PsyCommentMain from './PsyCommentMain'
-import { ConfigProvider, Table, TableColumnsType } from "antd";
+import { Button, ConfigProvider, Table, TableColumnsType } from "antd";
 import thTH from 'antd/lib/locale/th_TH';
 import { ActivityPlanningInterfaceForPsy } from '../../../interfaces/activityPlanning/IActivityPlanning';
 import { DiaryPatInterface } from '../../../interfaces/diary/IDiary';
@@ -11,6 +11,7 @@ import { calculateAge } from '../../calculateAge';
 import userEmpty from "../../../assets/userEmty.jpg"
 import { GetActivityPlanningByDiaryIDForPsy } from '../../../services/https/cbt/activityPlanning/activityPlanning';
 import dayjs from 'dayjs';
+import SummaryBtn from '../../../component/psychologist/summaryBtn/SummaryBtn';
 
 interface DayActivities {
   เช้า: ActivityPlanningInterfaceForPsy[];
@@ -22,6 +23,7 @@ function PsyCommentAP() {
   const [diary, setDiary] = useState<DiaryPatInterface>();
   const [activityPlanning, setActivityPlanning] = useState<ActivityPlanningInterfaceForPsy[]>([]);
   const diaryID = localStorage.getItem('diaryID');
+  const diaryType = localStorage.getItem('diaryType');
 
   const getDiaryByID = async () =>{
     let res = await GetDiaryByDiaryID(Number(diaryID));
@@ -103,42 +105,50 @@ function PsyCommentAP() {
       <div className="Content">
            {/* Pat info card*/}
            <div className='Patient-card-info'>
-            <div className="Patient-card-info-left">
-              <div className="Patient-picture"
-                style={{
-                width: '100px',
-                height: '95px',
-                borderRadius: '10px',
-                backgroundImage: `url(${(diary?.Patient?.Picture !== '' ? diary?.Patient?.Picture : userEmpty)})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                margin: '0.5rem'}}>
+          <div className="Patient-card-info-left">
+            <div className="Patient-picture"
+              style={{
+              width: '80px',
+              height: '80px',
+              borderRadius: '50%',
+              backgroundImage: `url(${(diary?.Patient?.Picture !== '' ? diary?.Patient?.Picture : userEmpty)})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              }}>
 
-              </div>
-              <div className='Patient-name-age-gender-id'>
-                <div>
-                  <div>เลขประจำตัวประชาชน {diary?.Patient?.IdNumber}</div>
-                  <div>ชื่อ-สกุล: {diary?.Patient?.Firstname} {diary?.Patient?.Lastname}</div>
-                  <div>เพศ: {diary?.Patient?.gender}</div>
-                  <div>อายุ: {calculateAge(String(diary?.Patient?.Dob))} ปี</div>
-                </div>
-              </div>
-              
             </div>
-            <div className="Patient-card-info-right">
-              <div className="Patient-email-tel-symtom-dob">
-                <div style={{display:'flex', flexDirection:'column', gap: '1rem'}}>
-                  <div>อาการที่รักษา: {diary?.Patient?.Symtoms !== '' ? diary?.Patient?.Symtoms:'ไม่ระบุ' }</div> 
-                  <div>วันเดือนปีเกิด: {diary?.Patient?.Dob}</div>
-                </div>
-                <div style={{display:'flex', flexDirection:'column', gap: '1rem'}}>
-                  <div>อีเมล: {diary?.Patient?.Email}</div> 
-                  <div>เบอร์โทรศัพท์: {diary?.Patient?.Tel}</div>
+            <div className='Patient-name-age-gender-id'>
+              <div style={{display:'flex',flexDirection:'row',alignItems:'center',width:'100%',height:'32px',}}>
+                <div style={{fontSize:22}}>
+                  <b>คุณ{diary?.Patient?.Firstname} {diary?.Patient?.Lastname}</b>
+                  
                 </div>
                 
               </div>
+                
+              <div style={{display:'flex',flexDirection:'column',}}>
+                {/* ข้อมูลผู้ป่วย */}
+
+                <div className="info-row">
+                  <div className="info-item1"><b>เลขประจำตัวประชาชน:</b> {diary?.Patient?.IdNumber}</div>
+                  <div className="info-item"><b>เพศ:</b> {diary?.Patient?.gender}</div>
+                  <div className="info-item"><b>วันเกิด:</b> {diary?.Patient?.Dob} ({calculateAge(String(diary?.Patient?.Dob))} ปี)</div>
+                </div>
+
+                <div className="info-row">
+                  <div className="info-item1"><b>อาการที่รักษา:</b> {diary?.Patient?.Symtoms !== '' ? diary?.Patient?.Symtoms : 'ไม่ระบุ'}</div>
+                  <div className="info-item"><b>อีเมล:</b> {diary?.Patient?.Email}</div>
+                  <div className="info-item"><b>เบอร์โทรศัพท์:</b> {diary?.Patient?.Tel}</div>
+                </div>
+
+                
+                
+                
+              </div>
             </div>
+            <SummaryBtn ID={Number(diaryID)} WorksheetType={String(diaryType)}/>
           </div>
+        </div>
           
 
           {/* ตาราง */}
