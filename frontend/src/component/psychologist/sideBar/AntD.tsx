@@ -4,7 +4,7 @@ import { FaBars, FaSignOutAlt } from 'react-icons/fa';
 import type { MenuProps } from 'antd';
 import { Button, Menu } from 'antd';
 import { ConfigProvider} from 'antd';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './Ant.css';
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -19,6 +19,12 @@ const items: MenuItem[] =[
 function AntD() {
     const [collapsed, setCollapsed] = useState(true);
     const location = useLocation();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        localStorage.clear(); // Clear all localStorage
+        navigate('/login/psychologist'); // Navigate to login page
+      };
 
 
     const toggleCollapsed = () =>{
@@ -99,6 +105,7 @@ function AntD() {
                 <Button
                     type="primary"
                     // Function to handle logout
+                    onClick={handleLogout}
                     style={{
                         position: 'absolute',
                         bottom: '20px',

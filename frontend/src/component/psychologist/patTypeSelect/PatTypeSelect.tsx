@@ -256,7 +256,9 @@ const listPatients = async () => {
         return;
     }
   
-    localStorage.setItem('diaryID',String(diary.ID))
+    localStorage.setItem('diaryID',String(diary.ID));
+    localStorage.setItem('diaryType',diary.WorksheetType.Name);
+
     navigate(`${routePath}`);
   };
 

@@ -30,49 +30,59 @@
     .Patient-card-info{
         width: 98%;
         height: 15%;
+        min-height: 100px;
         background: #ffffff;
         border-radius: 15px;
         margin-top: 10px;
         display: flex;
         flex-direction: row;
+        align-items: center;
         box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.03);
 
         .Patient-card-info-left{
-            width: 45%;
+            width: 100%;
             height: 100%;
-            background-color: #85c7c4;
+            background-color: #ffffff;
             border-radius: 15px;
             display: flex;
             flex-direction: row;
             align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
 
             .Patient-name-age-gender-id{
-                height: 85%;
-                display: flex;
-                flex-direction: row;
-                justify-content: center;
-                /* background-color: #c785c4; */
-                margin: 0.5rem;
-            }
-        }
-        .Patient-card-info-right{
-            width: 45%;
-            height: 100%;
-            display: flex;
-            flex-direction: row;
-            /* background:#e9eb96; */
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-
-            .Patient-email-tel-symtom-dob{
+                width: 75%;
                 height: 100%;
                 display: flex;
-                flex-direction: row;
-                align-items: center;
-                gap: 2rem;
+                flex-direction: column;
+                justify-content: center;
+                /* background-color: #c785c4; */
+
+                .info-row {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    gap: 1rem; 
+                    flex-shrink: 0; 
+                    font-size: small;
+                    color: darkgrey;
+                    min-width: 350px;
+                }
+                  
+                .info-item {
+                    width: 25%; 
+                    text-align: left;
+                    /* background: #727272b0; */
+                }
+                .info-item1 {
+                    width: 35%; 
+                    text-align: left; 
+                    
+                    /* background: #85c7c4; */
+                }
             }
         }
+        
     }
     .Records-select{
         width: 98%;
@@ -300,49 +310,59 @@
     .Patient-card-info{
         width: 98%;
         height: 15%;
+        min-height: 100px;
         background: #ffffff;
         border-radius: 15px;
         margin-top: 10px;
         display: flex;
         flex-direction: row;
+        align-items: center;
         box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.03);
 
         .Patient-card-info-left{
-            width: 45%;
+            width: 100%;
             height: 100%;
-            background-color: #85c7c4;
+            background-color: #ffffff;
             border-radius: 15px;
             display: flex;
             flex-direction: row;
             align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
 
             .Patient-name-age-gender-id{
-                height: 85%;
-                display: flex;
-                flex-direction: row;
-                justify-content: center;
-                /* background-color: #c785c4; */
-                margin: 0.5rem;
-            }
-        }
-        .Patient-card-info-right{
-            width: 45%;
-            height: 100%;
-            display: flex;
-            flex-direction: row;
-            /* background:#e9eb96; */
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-
-            .Patient-email-tel-symtom-dob{
+                width: 75%;
                 height: 100%;
                 display: flex;
-                flex-direction: row;
-                align-items: center;
-                gap: 2rem;
+                flex-direction: column;
+                justify-content: center;
+                /* background-color: #c785c4; */
+
+                .info-row {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    gap: 1rem; 
+                    flex-shrink: 0; 
+                    font-size: small;
+                    color: darkgrey;
+                    min-width: 350px;
+                }
+                  
+                .info-item {
+                    width: 25%; 
+                    text-align: left;
+                    /* background: #727272b0; */
+                }
+                .info-item1 {
+                    width: 35%; 
+                    text-align: left; 
+                    
+                    /* background: #85c7c4; */
+                }
             }
         }
+        
     }
 
     .Records-select{
@@ -430,49 +450,59 @@
     .Patient-card-info{
         width: 98%;
         height: 15%;
+        min-height: 100px;
         background: #ffffff;
         border-radius: 15px;
         margin-top: 10px;
         display: flex;
         flex-direction: row;
+        align-items: center;
         box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.03);
 
         .Patient-card-info-left{
-            width: 45%;
+            width: 100%;
             height: 100%;
-            background-color: #85c7c4;
+            background-color: #ffffff;
             border-radius: 15px;
             display: flex;
             flex-direction: row;
             align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
 
             .Patient-name-age-gender-id{
-                height: 85%;
-                display: flex;
-                flex-direction: row;
-                justify-content: center;
-                /* background-color: #c785c4; */
-                margin: 0.5rem;
-            }
-        }
-        .Patient-card-info-right{
-            width: 45%;
-            height: 100%;
-            display: flex;
-            flex-direction: row;
-            /* background:#e9eb96; */
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-
-            .Patient-email-tel-symtom-dob{
+                width: 75%;
                 height: 100%;
                 display: flex;
-                flex-direction: row;
-                align-items: center;
-                gap: 2rem;
+                flex-direction: column;
+                justify-content: center;
+                /* background-color: #c785c4; */
+
+                .info-row {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    gap: 1rem; 
+                    flex-shrink: 0; 
+                    font-size: small;
+                    color: darkgrey;
+                    min-width: 350px;
+                }
+                  
+                .info-item {
+                    width: 25%; 
+                    text-align: left;
+                    /* background: #727272b0; */
+                }
+                .info-item1 {
+                    width: 35%; 
+                    text-align: left; 
+                    
+                    /* background: #85c7c4; */
+                }
             }
         }
+        
     }
 
     .Record-info{
@@ -604,49 +634,59 @@
     .Patient-card-info{
         width: 98%;
         height: 15%;
+        min-height: 100px;
         background: #ffffff;
         border-radius: 15px;
         margin-top: 10px;
         display: flex;
         flex-direction: row;
+        align-items: center;
         box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.03);
 
         .Patient-card-info-left{
-            width: 45%;
+            width: 100%;
             height: 100%;
-            background-color: #85c7c4;
+            background-color: #ffffff;
             border-radius: 15px;
             display: flex;
             flex-direction: row;
             align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
 
             .Patient-name-age-gender-id{
-                height: 85%;
-                display: flex;
-                flex-direction: row;
-                justify-content: center;
-                /* background-color: #c785c4; */
-                margin: 0.5rem;
-            }
-        }
-        .Patient-card-info-right{
-            width: 45%;
-            height: 100%;
-            display: flex;
-            flex-direction: row;
-            /* background:#e9eb96; */
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-
-            .Patient-email-tel-symtom-dob{
+                width: 75%;
                 height: 100%;
                 display: flex;
-                flex-direction: row;
-                align-items: center;
-                gap: 2rem;
+                flex-direction: column;
+                justify-content: center;
+                /* background-color: #c785c4; */
+
+                .info-row {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    gap: 1rem; 
+                    flex-shrink: 0; 
+                    font-size: small;
+                    color: darkgrey;
+                    min-width: 350px;
+                }
+                  
+                .info-item {
+                    width: 25%; 
+                    text-align: left;
+                    /* background: #727272b0; */
+                }
+                .info-item1 {
+                    width: 35%; 
+                    text-align: left; 
+                    
+                    /* background: #85c7c4; */
+                }
             }
         }
+        
     }
 
     .Record-info{

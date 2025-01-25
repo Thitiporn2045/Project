@@ -3,7 +3,7 @@ import AntD from '../../../component/psychologist/sideBar/AntD'
 import PsyCommentMain from './PsyCommentMain'
 import './psyComment.css'
 import thTH from 'antd/lib/locale/th_TH';
-import { ConfigProvider } from 'antd'
+import { Button, ConfigProvider } from 'antd'
 import userEmpty from "../../../assets/userEmty.jpg"
 import { DiaryPatInterface } from '../../../interfaces/diary/IDiary';
 import { GetDiaryByDiaryID } from '../../../services/https/diary';
@@ -12,6 +12,7 @@ import DiaryDateSelector from '../../../component/psychologist/dateSelect/DiaryD
 import { BehavioralExpInterface } from '../../../interfaces/behavioralExp/IBehavioralExp';
 import { GetBehavioralExpByDiaryID, GetEmotionsBehavioralExpHaveDateByDiaryID } from '../../../services/https/cbt/behavioralExp/behavioralExp';
 import { EmtionInterface } from '../../../interfaces/emotion/IEmotion';
+import SummaryBtn from '../../../component/psychologist/summaryBtn/SummaryBtn';
 
 function PsyCommentBE() {
   const [diary, setDiary] = useState<DiaryPatInterface>();
@@ -20,6 +21,8 @@ function PsyCommentBE() {
   const [emotion, setEmotion] = useState<EmtionInterface[]>([]);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const diaryID = localStorage.getItem('diaryID');
+  const diaryType = localStorage.getItem('diaryType');
+
 
   const getDiaryByID = async () => {
     let res = await  GetDiaryByDiaryID(Number(diaryID));
@@ -109,38 +112,46 @@ function PsyCommentBE() {
           <div className="Patient-card-info-left">
             <div className="Patient-picture"
               style={{
-              width: '100px',
-              height: '95px',
-              borderRadius: '10px',
+              width: '80px',
+              height: '80px',
+              borderRadius: '50%',
               backgroundImage: `url(${(diary?.Patient?.Picture !== '' ? diary?.Patient?.Picture : userEmpty)})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
-              margin: '0.5rem'}}>
+              }}>
 
             </div>
             <div className='Patient-name-age-gender-id'>
-              <div>
-                <div>เลขประจำตัวประชาชน {diary?.Patient?.IdNumber}</div>
-                <div>ชื่อ-สกุล: {diary?.Patient?.Firstname} {diary?.Patient?.Lastname}</div>
-                <div>เพศ: {diary?.Patient?.gender}</div>
-                <div>อายุ: {calculateAge(String(diary?.Patient?.Dob))} ปี</div>
+              <div style={{display:'flex',flexDirection:'row',alignItems:'center',width:'100%',height:'32px',}}>
+                <div style={{fontSize:22}}>
+                  <b>คุณ{diary?.Patient?.Firstname} {diary?.Patient?.Lastname}</b>
+                  
+                </div>
+                
+              </div>
+                
+              <div style={{display:'flex',flexDirection:'column',}}>
+                {/* ข้อมูลผู้ป่วย */}
+
+                <div className="info-row">
+                  <div className="info-item1"><b>เลขประจำตัวประชาชน:</b> {diary?.Patient?.IdNumber}</div>
+                  <div className="info-item"><b>เพศ:</b> {diary?.Patient?.gender}</div>
+                  <div className="info-item"><b>วันเกิด:</b> {diary?.Patient?.Dob} ({calculateAge(String(diary?.Patient?.Dob))} ปี)</div>
+                </div>
+
+                <div className="info-row">
+                  <div className="info-item1"><b>อาการที่รักษา:</b> {diary?.Patient?.Symtoms !== '' ? diary?.Patient?.Symtoms : 'ไม่ระบุ'}</div>
+                  <div className="info-item"><b>อีเมล:</b> {diary?.Patient?.Email}</div>
+                  <div className="info-item"><b>เบอร์โทรศัพท์:</b> {diary?.Patient?.Tel}</div>
+                </div>
+
+                
+                
+                
               </div>
             </div>
-            
-          </div>
-          <div className="Patient-card-info-right">
-            <div className="Patient-email-tel-symtom-dob">
-              <div style={{display:'flex', flexDirection:'column', gap: '1rem'}}>
-                <div>อาการที่รักษา: {diary?.Patient?.Symtoms !== '' ? diary?.Patient?.Symtoms:'ไม่ระบุ' }</div> 
-                <div>วันเดือนปีเกิด: {diary?.Patient?.Dob}</div>
-              </div>
-              <div style={{display:'flex', flexDirection:'column', gap: '1rem'}}>
-                <div>อีเมล: {diary?.Patient?.Email}</div> 
-                <div>เบอร์โทรศัพท์: {diary?.Patient?.Tel}</div>
-              </div>
-              
+            <SummaryBtn ID={Number(diaryID)} WorksheetType={String(diaryType)}/>
             </div>
-          </div>
         </div>
 
         {/* Date Selector*/}

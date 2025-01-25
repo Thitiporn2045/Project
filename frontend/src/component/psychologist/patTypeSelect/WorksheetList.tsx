@@ -136,7 +136,9 @@ const navigateToDiaryPage = (diary:DiaryInterface) => {
       return;
   }
 
-  localStorage.setItem('diaryID',String(diary.ID))
+  localStorage.setItem('diaryID',String(diary.ID));
+  localStorage.setItem('diaryType',diary.WorksheetType);
+
   navigate(`${routePath}`);
 };
 

@@ -365,6 +365,7 @@ export default function PsyHomePage(){
       
 
       <div className='Carendar'>
+        <PsyCalendar/>
         
       </div>
 
