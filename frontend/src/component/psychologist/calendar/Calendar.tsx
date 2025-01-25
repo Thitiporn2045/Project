@@ -38,6 +38,16 @@ const Planner = [
     'startTime':'14:00',
     'title':'นัดพบผู้ป่วย'
   },
+  {
+    'id':6,
+    'startTime':'11:30',
+    'title':'ส่งผลการตรวจ'
+  },
+  {
+    'id':8,
+    'startTime':'11:30',
+    'title':'ส่งผลการตรวจ'
+  },
   
 ]
 
@@ -93,7 +103,7 @@ function PsyCalendar() {
 
 
   const wrapperStyle: React.CSSProperties = {
-    width: 350,
+    width: 300,
     height:300,
     border: `1px solid ${token.colorBorderSecondary}`,
     borderRadius: token.borderRadiusLG,
@@ -117,67 +127,75 @@ function PsyCalendar() {
                 colorText:'#585858'
             }
         }}>
+        <div style={{display:'flex',flexDirection:'column',gap:'1rem',width:'100%',height:'80%',alignItems:'center'}}>
       
-        <div className='Calendar-contianer' style={wrapperStyle}>
-            <Calendar 
-            fullscreen={false} 
-            onPanelChange={onPanelChange} 
-            onSelect={onSelect}
-            />
-            
-            <Modal
-            title="กิจกรรมใหม่"
-            visible={isModalVisible}
-            onOk={handleOk}
-            onCancel={handleCancel}
-            >
-            <Form
-                form={form}
-                layout="vertical"
-                initialValues={{ date: selectedDate }}
-            >
-                <Form.Item
-                name="date"
-                label="วันที่"
-                >
-                <DatePicker disabled defaultValue={selectedDate} format="DD MMMM YYYY" />
-                </Form.Item>
-                <Form.Item
-                name="startTime"
-                label="เวลาเริ่ม"
-                >
-                <TimePicker format="HH:mm" minuteStep={15} />
-                </Form.Item>
-                <Form.Item
-                name="endTime"
-                label="เวลาสิ้นสุด"
-                >
-                <TimePicker format="HH:mm" minuteStep={15} />
-                </Form.Item>
-                <Form.Item
-                name="title"
-                label="หัวข้อกิจกรรม"
-                rules={[{ required: true, message: 'กรุณาระบุหัวข้อกิจกรรม' }]}
-                >
-                <Input />
-                </Form.Item>
-            </Form>
-            </Modal>
-        </div> 
-        <b style={{position:'absolute',marginTop:18,marginLeft:9,fontSize:18,color:'#B9B9B9' }}>{selectedDate.format('DD MMMM YYYY')}</b>
-        <Button type="primary" onClick={showModal} style={{ marginTop: 16 ,left:230,}}>
-          <b style={{fontSize:20}}>+</b>กิจกรรมใหม่
-        </Button>
+          <div style={{width:'100%',height:'55%',display:'flex',alignItems:'center',justifyContent:'center'}}>
+            <div className='Calendar-contianer' style={wrapperStyle}>
+                <Calendar 
+                fullscreen={false} 
+                onPanelChange={onPanelChange} 
+                onSelect={onSelect}
+                />
+            </div>
+          </div>    
+              <Modal
+              title="กิจกรรมใหม่"
+              visible={isModalVisible}
+              onOk={handleOk}
+              onCancel={handleCancel}
+              >
+              <Form
+                  form={form}
+                  layout="vertical"
+                  initialValues={{ date: selectedDate }}
+              >
+                  <Form.Item
+                  name="date"
+                  label="วันที่"
+                  >
+                  <DatePicker disabled defaultValue={selectedDate} format="DD MMMM YYYY" />
+                  </Form.Item>
+                  <Form.Item
+                  name="startTime"
+                  label="เวลาเริ่ม"
+                  >
+                  <TimePicker format="HH:mm" minuteStep={15} />
+                  </Form.Item>
+                  <Form.Item
+                  name="endTime"
+                  label="เวลาสิ้นสุด"
+                  >
+                  <TimePicker format="HH:mm" minuteStep={15} />
+                  </Form.Item>
+                  <Form.Item
+                  name="title"
+                  label="หัวข้อกิจกรรม"
+                  rules={[{ required: true, message: 'กรุณาระบุหัวข้อกิจกรรม' }]}
+                  >
+                  <Input />
+                  </Form.Item>
+              </Form>
+              </Modal>
 
-        <div className='plannerDetail' style={{position:'relative',width:'94%',height:'30%',marginLeft:'3%',top:'4%',display:'flex',gap:'1rem',flexDirection:'column',overflow:'auto'}}>
-          {Planner.map((Planner)=>(
-            <a key={Planner.id}>
-              <span className='startTime' style={{color:'#B9B9B9'}}><b>{Planner.startTime}</b></span>&nbsp;&nbsp;&nbsp;&nbsp;<span style={{color:'#585858'}}>{Planner.title}</span>
-              <div className='line' style={{width:'90%',height:'1%',background:'#f3f3f3',position:'relative'}}></div>
-            </a>
-            
+          <div style={{display:'flex',flexDirection:'column',width:'90%',flexGrow:1,gap:'0.5rem',}}>
+            <div style={{display:'flex',flexDirection:'row',justifyContent:"space-between",alignItems:'center'}}>
+              <b style={{fontSize:18,color:'#B9B9B9' }}>{selectedDate.format('DD MMMM YYYY')}</b>
+              <Button type="primary" onClick={showModal} style={{}}>
+                <b style={{fontSize:20}}>+</b>กิจกรรมใหม่
+              </Button>
+            </div>
 
-          ))}
+            <div className='plannerDetail' style={{position:'relative',width:'100%',height:'90%',maxHeight:'220px',display:'flex',gap:'1rem',flexDirection:'column',overflow:'auto'}}>
+              {Planner.map((Planner)=>(
+                <a key={Planner.id}>
+                  <span className='startTime' style={{color:'#B9B9B9'}}><b>{Planner.startTime}</b></span>&nbsp;&nbsp;&nbsp;&nbsp;<span style={{color:'#585858'}}>{Planner.title}</span>
+                  <div className='line' style={{width:'90%',height:'1%',background:'#f3f3f3',position:'relative'}}></div>
+                </a>
+                
+
+              ))}
+            </div>
+          </div>
         </div>
     </ConfigProvider>
   );

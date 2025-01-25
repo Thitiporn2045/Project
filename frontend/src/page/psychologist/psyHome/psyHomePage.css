@@ -33,7 +33,11 @@
     flex-grow: 1;    
     height: 100%;
     /* border: solid 0.5px; */
-    background: #dadada;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .Patient-list .Psy-Loading-Data{

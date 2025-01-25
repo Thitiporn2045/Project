@@ -34,7 +34,8 @@ function PsyPatient() {
       </div>
 
       <div className='Carendar'>
-        
+        <PsyCalendar/>
+
       </div>
         {/* <div className="SideBar"><AntD/></div>
         <div className="Main-area">

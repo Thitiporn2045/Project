@@ -33,6 +33,11 @@ import SheetBehav from './page/patient/worksheet/totalSheet/sheetBehav';
 import SummaryBehav from './page/patient/summary/summaryBehav';
 import SummaryActivity from './page/patient/summary/summaryActivity';
 import SummaryPlanning from './page/patient/summary/summaryPlanning';
+import PsySummaryDiary from './page/psychologist/psySummaryDiary/PsySummaryDiaryAD';
+import PsySummaryDiaryAD from './page/psychologist/psySummaryDiary/PsySummaryDiaryAD';
+import PsySummaryDiaryAP from './page/psychologist/psySummaryDiary/PsySummaryDiaryAP';
+import PsySummaryDiaryBE from './page/psychologist/psySummaryDiary/PsySummaryDiaryBE';
+import PsySummaryDiaryCS from './page/psychologist/psySummaryDiary/PsySummaryDiaryCS';
 
 export default function App() {
 
@@ -58,6 +63,13 @@ export default function App() {
         <Route path='/PsyWorksheet/PsyCommentActivitiesPlanning' element={<PsyCommentAP/>}/>
         <Route path='/PsyWorksheet/PsyCommentBehavioralExperiment' element={<PsyCommentBE/>}/>
         <Route path='/PsyWorksheet/PsyCommentCrossSectional' element={<PsyCommentCS/>}/>
+        <Route path='/PsyWorksheet/DashboardSummaryAD' element={<PsySummaryDiaryAD/>}/>
+        <Route path='/PsyWorksheet/DashboardSummaryAP' element={<PsySummaryDiaryAP/>}/>
+        <Route path='/PsyWorksheet/DashboardSummaryBE' element={<PsySummaryDiaryBE/>}/>
+        <Route path='/PsyWorksheet/DashboardSummaryCS' element={<PsySummaryDiaryCS/>}/>
+
+
+
 
         <Route path='/PsyAccount' element={<PsyAccount/>}/>
         {/* ========================================================================= */}
