@@ -139,6 +139,7 @@ const listPatients = async () => {
                 <div style={{position:'relative',width:'100%'}}> 
                     <Steps current={currentStep}>
                         <Step title="ข้อมูลส่วนตัว" />
+                        <Step title="ข้อมูลการรับยา" />
                         <Step title="เบอร์โทรศัพท์และอีเมล"/>
                         <Step title="รหัสผ่าน" />
                         <Step title="สำเร็จ"/>
@@ -201,7 +202,10 @@ const listPatients = async () => {
                         </div>
                         
                     )}
-                    {currentStep === 1 && (
+                     {currentStep == 1 &&(
+                        <div style={{width:'100%',display:'flex',justifyContent:'center'}}></div> //รับยา
+                    )}
+                    {currentStep === 2 && (
                         <div>
                             <Form.Item
                                 name="Email"
@@ -223,7 +227,7 @@ const listPatients = async () => {
                         </div>
                     )}
 
-                    {currentStep == 2 &&(
+                    {currentStep == 3 &&(
                         <div>
                             <Form.Item
                                 name="Password"
@@ -253,25 +257,25 @@ const listPatients = async () => {
 
                         </div>
                     )}
-
-                    {currentStep == 3 &&(
+                  
+                    {currentStep == 4 &&(
                         <div style={{width:'100%',display:'flex',justifyContent:'center'}}><h2>ลงทะเบียนสำเร็จแล้ว!<b/><a href='/login/patient'>เข้าสู่ระบบ</a></h2></div>
                     )}
                     
                     <div className="steps-action" style={{display:'flex',flexDirection:'row',justifyContent:'center',gap:'2rem',marginTop:'1rem'}}>
                     
-                        {currentStep > 0 && currentStep != 3 && (
+                        {currentStep > 0 && currentStep != 4 && (
                             <Button onClick={prev}>
                                 ย้อนกลับ
                             </Button>
-                        )} {currentStep < 2 && (
+                        )} {currentStep < 3 && (
                             <div>
                             <Button type="primary" onClick={next}>
                                 ถัดไป
                             </Button>
                             </div>
                         )}
-                        {currentStep === 2 && (
+                        {currentStep === 3 && (
                             
                             <Button type="primary" htmlType="submit">
                                 ลงทะเบียน

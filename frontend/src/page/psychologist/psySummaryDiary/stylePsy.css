@@ -35,7 +35,7 @@
     --box-shadow1: #dcdcf3 1px 1px 10px 0px inset;
     --box-shadow-1: rgb(255, 255, 255) -2px -2px 10px 1px inset;
 }
-.summary{
+.summary-psy{
     margin: 0;
     padding: 0;
     width: 100vw;
@@ -44,14 +44,14 @@
     font-family: 'Noto Sans Thai', sans-serif;
 }
 
-.summary .befor-main{
+.summary-psy .befor-main{
     margin: 0;
     padding: 0;
     width: 100vw;
     height: 100vh;
 }
 
-.summary .main-body{
+.summary-psy .main-body{
     width: 100%;
     height: 100%;
     display: grid;
@@ -60,22 +60,21 @@
     background: linear-gradient(141deg, #ffffff 0%, #edf0ff 100%);
 }
 
-.summary .main-body .sidebar {
+.summary-psy .main-body .sidebar {
     width: 100%;
     height: 100%;
-    background: var(--color-backgroun-main1);
     z-index: 1;
 }
 
 /* ------------  main-background   ------------------- */
 
-.summary .main-body .main-background{
+.summary-psy .main-body .main-background{
     width: 100%;
     height: 100%;
 }
 
 
-.summary .main-body .main-background .main-content{
+.summary-psy .main-body .main-background .main-content{
     position: relative;
     margin-top: 20px;
     width: 100%;
@@ -86,7 +85,7 @@
     overflow-y: auto;
 }
 
-.summary .main-body .main-background .main-content .contentMain{
+.summary-psy .main-body .main-background .main-content .contentMain{
     width: calc(100% - 20px);
     height: calc(100% - 20px);
     margin: 10px;
@@ -167,13 +166,14 @@
 
 /* ------------  main-bg-right   ------------------- */
 
-.summary .main-body .main-bg-right{
+.summary-psy .main-body .main-bg-right{
     width: 100%;
     height: 100%;
+    background: #2c9f99;
 }
 
 
-.summary .main-body .main-bg-right .main-content{
+.summary-psy .main-body .main-bg-right .main-content{
     position: relative;
     margin-top: 20px;
     width: 100%;
@@ -185,7 +185,7 @@
 
 /* ------------  content1   ------------------- */
 
-.summary .main-body .main-bg-right .main-content .content1{
+.summary-psy .main-body .main-bg-right .main-content .content1{
     width: 100%;
     height: 100%;
     display: grid;
@@ -202,7 +202,7 @@
     }
 }
 
-.summary .main-body .main-bg-right .main-content .content1 .profile .content{
+.summary-psy .main-body .main-bg-right .main-content .content1 .profile .content{
     width: 100%;
     .boxContent1{
         margin-top: -10px;
@@ -224,7 +224,7 @@
 
 }
 
-.summary .book-showcase {
+.summary-psy .book-showcase {
     /* background: linear-gradient(90deg, #ffffff, #eee); */
     margin-top: -20px;
     margin-left: 20px;
@@ -236,7 +236,7 @@
 }
 
 /* Adjust the font size if necessary */
-.summary .book-showcase {
+.summary-psy .book-showcase {
     font-size: .5rem;
 }
 
@@ -250,11 +250,11 @@
     height: 100vh;
 } */
 
-.summary .wrapper {
+.summary-psy .wrapper {
     perspective: 1000px;
 }
 
-.summary .book {
+.summary-psy .book {
     transform-style: preserve-3d;
     width: 27.0625em;
     height: 40.5em;
@@ -262,27 +262,27 @@
     position: relative;
 }
 
-.summary .book > div {
+.summary-psy .book > div {
     position: absolute;
     height: 40.5em;
 }
 
-.summary .front {
+.summary-psy .front {
     width: 27.0625em;
     transform: translate3d(0, 0, 2.1875em);
 }
 
-.summary .back {
+.summary-psy .back {
     width: 27.0625em;
     transform: rotateY(180deg) translate3d(0, 0, 2.1875em); /* Fixed spacing in rotateY */
 }
 
-.summary .side {
+.summary-psy .side {
     width: 4.375em;
     transform: rotateY(-90deg) translate3d(0, 0, 2.1875em); /* Fixed spacing in rotateY */
 }
 
-.summary .book-title {
+.summary-psy .book-title {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -297,14 +297,14 @@
     letter-spacing: .5px; 
 }
 
-.summary .pages {
+.summary-psy .pages {
     width: 4.375em;
     background: #ccc;
     transform: rotateY(90deg) translate3d(0, 0, 24.9em);
     transform-origin: bottom;
 }
 
-.summary .book .shadow {
+.summary-psy .book .shadow {
     width: 27.0625em;
     height: 4.375em;
     background: radial-gradient(rgba(0, 0, 0, 0.4), transparent);
@@ -312,18 +312,18 @@
     transform-origin: bottom;
 }
 
-.summary .front, .back {
+.summary-psy .front, .back {
     background-size: cover;
     pointer-events: none; /* Prevent default image dragging */
 }
 
 
-.summary .main-body .main-bg-right .main-content .mainBox{
+.summary-psy .main-body .main-bg-right .main-content .mainBox{
     margin: 10px 15px;
     width: 25vw;
 }
 
-.summary .main-body .main-bg-right .main-content .mainBox .box1{
+.summary-psy .main-body .main-bg-right .main-content .mainBox .box1{
     width: 100%;
     height: calc(100% - 20px);
     margin: 0 10px 10px 10px;
@@ -332,7 +332,7 @@
     font-family:'Noto Sans Thai',sans-serif;
 }
 
-.summary .shoedate{
+.summary-psy .shoedate{
     width: 100%;
     text-align: center;
     min-height: 35px;
@@ -341,14 +341,14 @@
     /* background-color: #DADDFA; */
 }
 
-.summary .shoedate p{
+.summary-psy .shoedate p{
     text-align: center;
     font-size: 1.2rem;
     font-weight: 600;
     color: var(--color-font1);
 }
 
-.summary .date-range {
+.summary-psy .date-range {
     display: flex;
     justify-content: space-evenly;
     gap: 2rem;
@@ -359,7 +359,7 @@
 }
 
 
-.summary .day {
+.summary-psy .day {
     flex: 0 0 auto;
     padding: 10px;
     width: 30px;
@@ -374,11 +374,11 @@
     transition: all 0.3s ease;
 }
 
-.summary .day:hover{
+.summary-psy .day:hover{
     animation: wobble 0.7s ease-in-out infinite;  
 }
 
-.summary .bg-input-ex{
+.summary-psy .bg-input-ex{
     margin-left: 15px;
     display: grid;
     grid-template-rows: repeat(2, 1fr);
@@ -388,7 +388,7 @@
     background-color: var(--color-backgroun-secondary2);
 }
 
-.summary .thought-box{
+.summary-psy .thought-box{
     margin: 10px;
     width: calc(100% -10px);
     height: 100%;
@@ -407,18 +407,18 @@
     }
 }
 
-.summary .thought-label{
+.summary-psy .thought-label{
     font-size: 1rem;
     font-weight: 600;
     color: var(--color-font2);
 }
 
-.summary .thought-textarea::placeholder{
+.summary-psy .thought-textarea::placeholder{
     font-size: 1rem;
     color: #a9a9b2;
 }
 
-.summary .content-input::placeholder{
+.summary-psy .content-input::placeholder{
     font-size: 1rem;
     color: #a9a9b2;
 }
@@ -440,14 +440,14 @@
 }
 
 
-.summary .day.selected {
-    background-color: var(--color-backgroun-main2);
+.summary-psy .day.selected {
+    background-color: #2c9f99;
 }
 
 
 /* ------------  box2   ------------------- */
 
-.summary .main-body .main-bg-right .main-content .mainBox .box2{
+.summary-psy .main-body .main-bg-right .main-content .mainBox .box2{
     width: 100%;
     margin-top: 20px;
     border-radius: var(--border-radius-2);
@@ -502,7 +502,7 @@
     inherits: false;
 }
 
-.summary .circular_progress {
+.summary-psy .circular_progress {
     position: relative;
     width: 7rem;
     height: 7rem;
@@ -514,11 +514,11 @@
     animation: progressAnim 2s forwards;
 }
 
-.summary .circular_progress.no {
+.summary-psy .circular_progress.no {
     position: relative;
     width: 7rem;
     height: 7rem;
-    background: conic-gradient(var(--clr) calc(var(--progress) * 3.6deg), #9BA5F6 0deg);
+    background: conic-gradient(var(--clr) calc(var(--progress) * 3.6deg), #edf0ff 0deg);
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -526,7 +526,7 @@
     animation: progressAnim 2s forwards;
 }
 
-.summary .circular_progress::before { 
+.summary-psy .circular_progress::before { 
     content: '';
     position: absolute;
     top: 50%; 
@@ -538,7 +538,7 @@
     transform: translate(-50%, -50%);
 }
 
-.summary .circular_progress .totalDay { 
+.summary-psy .circular_progress .totalDay { 
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -546,7 +546,7 @@
     z-index: 1;
 }
 
-.summary .circular_progress .totalDay p{
+.summary-psy .circular_progress .totalDay p{
     margin: 0;
     margin-top: 20px;
     font-size: 1.3rem;
@@ -554,14 +554,14 @@
     font-weight: 600;
 }
 
-.summary .circular_progress .totalDay span{
+.summary-psy .circular_progress .totalDay span{
     margin: 0;
     font-size: .8rem;
     color: #e1e4f5;
     font-weight: 600;
 }
 
-.summary .labelDay{
+.summary-psy .labelDay{
     margin-top: 10px;
 
     .text-muted{
@@ -580,7 +580,7 @@
     }
 }
 
-.summary .Loading-Data-Self-Summary{
+.summary-psy .Loading-Data-Self-Summary{
     background: url('../../../assets/noData.gif');
     background-size: cover;
     background-position: center;

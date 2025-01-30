@@ -7,6 +7,7 @@ import { PatientInterface } from '../../../interfaces/patient/IPatient';
 import { ConnectionRequestInterface } from '../../../interfaces/connectionRequest/IConnectionRequest';
 import { CancelConnectionRequest, GetConnectionRequestById, SendConnectionRequest } from '../../../services/https/connectionRequest';
 import { ListPatients } from '../../../services/https/patient';
+import userEmpty from '../../../assets/userEmty.jpg'
 
 
 
@@ -151,7 +152,7 @@ const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {//psy
                         <div style={{width:'100%',minHeight:'70px',maxHeight:'70px',display:'flex',flexDirection:'row',alignItems:'center',border:'none',justifyContent:'space-between'}}>
                             <List.Item.Meta
                                 style={{display:'flex',flexDirection:'row',alignItems:'center',gap:'0.5rem'}}
-                                avatar={<Avatar src={item.Picture} style={{ borderRadius: '10px', width: '50px', height: '50px' }} />}
+                                avatar={<Avatar src={item.Picture === ''? userEmpty:item.Picture} style={{ borderRadius: '10px', width: '50px', height: '50px' }} />}
                                 title={`${item.Firstname} ${item.Lastname}`}
                             />
                             {patientConnection?.Status === 'pending' ? 
