@@ -216,7 +216,7 @@ function Profile() {
                                             <label className="label-wrapper"><p>{patient?.IsTakeMedicine}</p></label>
                                         </div>
                                         <div className="row">
-                                            <strong>นักจิตวิทยาของคุณ:</strong>
+                                            <strong>นักจิตของคุณ:</strong>
                                             <label className="label-wrapper"><p>{connectedPsy?.Psychologist?.FirstName} {connectedPsy?.Psychologist?.LastName}</p></label>
                                         </div>
                                     </div>
