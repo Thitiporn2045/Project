@@ -4,7 +4,7 @@ import NavbarPat from '../../../component/navbarPat/navbarPat';
 import './stylePat.css';
 import { PatientInterface } from '../../../interfaces/patient/IPatient';
 import { ConnectionRequestInterface } from '../../../interfaces/connectionRequest/IConnectionRequest';
-import { Button, Form, Input, message } from 'antd';
+import { Button, Form, Input, message, Radio } from 'antd';
 import { GetConnectionPatientById } from '../../../services/https/connectionRequest';
 import { CheckPasswordPatient, GetPatientById, UpdatePasswordPatient, UpdatePatient } from '../../../services/https/patient';
 import userEmpty from '../../../assets/userEmty.jpg';
@@ -213,10 +213,10 @@ function Profile() {
                                         </div>
                                         <div className="row">
                                             <strong>สถานะ:</strong>
-                                            <label className="label-wrapper"><p>{userLogin.drug}</p></label>
+                                            <label className="label-wrapper"><p>{patient?.IsTakeMedicine}</p></label>
                                         </div>
                                         <div className="row">
-                                            <strong>นักจิตของคุณ:</strong>
+                                            <strong>นักจิตวิทยาของคุณ:</strong>
                                             <label className="label-wrapper"><p>{connectedPsy?.Psychologist?.FirstName} {connectedPsy?.Psychologist?.LastName}</p></label>
                                         </div>
                                     </div>
@@ -332,12 +332,17 @@ function Profile() {
                                     </Form.Item>
                                 </div>
                                 <div className="row">
-                                    <strong>สถานะ:</strong>
-                                    {/* <input 
-                                        className="label-wrapper"
-                                        value={patient?.IsTakeMedicine}
-                                        onChange={(e) => handleInputChange(String(patient?.IsTakeMedicine), e.target.value)}
-                                        ></input> */}
+                                    <strong>สถานะการรับยา:</strong>
+                                    <Form.Item
+                                        name="IsTakeMedicine"
+                                        rules={[{ required: true, message: 'กรุณาเลือกสถานะ !' }]}
+                                        initialValue={patient?.IsTakeMedicine} // ตั้งค่าเริ่มต้นจากข้อมูลเดิม
+                                    >
+                                        <Radio.Group>
+                                            <Radio value="อยู่ในระหว่างรับยา">อยู่ในระหว่างรับยา</Radio>
+                                            <Radio value="ไม่ได้รับยา">ไม่ได้รับยา</Radio>
+                                        </Radio.Group>
+                                    </Form.Item>
                                 </div>
                                 <button 
                                     type="button"

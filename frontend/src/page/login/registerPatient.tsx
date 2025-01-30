@@ -4,7 +4,7 @@ import thTH from 'antd/lib/locale/th_TH';
 import { PatientInterface } from '../../interfaces/patient/IPatient';
 import { GenderInterface } from '../../interfaces/patient/IGender';
 import { CreatePatient,ListGender, ListPatients } from '../../services/https/patient';
-import { Button, Form, Input, ConfigProvider, Steps, message, DatePicker, Select } from 'antd';
+import { Button, Form, Input, ConfigProvider, Steps, message, DatePicker, Select, Radio } from 'antd';
 import TestCompo from '../../component/psychologist/testCompo';
 
 function RegisterPatient() {
@@ -86,6 +86,7 @@ const listPatients = async () => {
             Tel: allValues.Tel,
             Email: allValues.Email,
             Password: allValues.Password,
+            IsTakeMedicine: allValues.IsTakeMedicine,
         };
 
         const res = await CreatePatient(patientData);
@@ -203,7 +204,27 @@ const listPatients = async () => {
                         
                     )}
                      {currentStep == 1 &&(
-                        <div style={{width:'100%',display:'flex',justifyContent:'center'}}></div> //รับยา
+                        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+
+                            <Form.Item
+                                name="IsTakeMedicine"
+                                label="คุณอยู่ในระหว่างรับยารักษาจากจิตแพทย์หรือไม่?"
+                                rules={[{ required: true, message: 'กรุณาเลือกข้อมูล' }]}
+                            >
+                                <Radio.Group>
+                                    <Radio value="อยู่ในระหว่างรับยา">อยู่ในระหว่างรับยา</Radio>
+                                    <Radio value="ไม่ได้รับยา">ไม่ได้รับยา</Radio>
+                                </Radio.Group>
+                            </Form.Item>
+                            
+                            <Form.Item>
+                                <div style={{ background: '#f6f6f6', padding: '10px', borderRadius: '8px', color: '#c0c0c0' }}>
+                                    <b>ทำไมเราถึงถามข้อมูลนี้?</b><br/>
+                                    ข้อมูลเกี่ยวกับการรับยาจะช่วยให้นักจิตวิทยาเข้าใจแนวทางการรักษาของคุณได้ดียิ่งขึ้น  
+                                    เพื่อให้สามารถแนะนำแนวทางการบำบัดที่เหมาะสม ควบคู่ไปกับการใช้ยาได้อย่างมีประสิทธิภาพ
+                                </div>
+                            </Form.Item>
+                        </div> //รับยา
                     )}
                     {currentStep === 2 && (
                         <div>
@@ -232,7 +253,13 @@ const listPatients = async () => {
                             <Form.Item
                                 name="Password"
                                 label="รหัสผ่าน"
-                                rules={[{ required: true, message: 'กรุณากรอกรหัสผ่าน!' }]}
+                                rules={[
+                                    { required: true, message: 'กรุณากรอกรหัสผ่าน!' },
+                                    {
+                                        min: 8,
+                                        message: 'รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร',
+                                    },
+                                ]}
                             >
                                 <Input.Password />
                             </Form.Item>
