@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'; 
 import NavbarPat from '../../../component/navbarPat/navbarPat'; 
-import './stylePat.css';
+import './stylePsy.css';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { GetDiaryByDiaryID } from '../../../services/https/diary';
 import { DiaryPatInterface } from '../../../interfaces/diary/IDiary';
@@ -12,6 +12,8 @@ import MostCommon from '../../../component/summaryDiary/mostCommon';
 import FilterEmotions from '../../../component/summaryDiary/filterEmotions';
 import { CommentInterface } from '../../../interfaces/psychologist/IComment';
 import { ListCommentByDiaryId } from '../../../services/https/psychologist/comment';
+import userEmty from '../../../assets/userEmty.jpg'
+import AntD from '../../../component/psychologist/sideBar/AntD';
 
 function PsySummaryDiaryCS() {
   const diaryID = localStorage.getItem('diaryID');
@@ -160,11 +162,11 @@ function PsySummaryDiaryCS() {
   };
 
   return (
-      <div className='summary'>
+      <div className='summary-psy'>
           <div className="befor-main">
               <div className='main-body'>
                   <div className='sidebar'>
-                      <NavbarPat />
+                      <AntD />
                   </div>
 
                   <div className="main-background">
@@ -176,7 +178,7 @@ function PsySummaryDiaryCS() {
                                       <div className="typeBook">{diary?.WorksheetType?.Name}</div>
                                   </div>
                                   <div className="boxContent2">
-                                      <div className="picture">
+                                      {/* <div className="picture">
                                           <div className="bdImg">
                                               <img 
                                                   onClick={handleImageClick}
@@ -185,7 +187,7 @@ function PsySummaryDiaryCS() {
                                                   alt="" 
                                               />
                                           </div>
-                                      </div>
+                                      </div> */}
                                   </div>
                               </header>
                               <div className="showBook">
@@ -256,7 +258,7 @@ function PsySummaryDiaryCS() {
                                                   className="circular_progress"
                                                   style={
                                                       {
-                                                          '--clr': '#9BA5F6',
+                                                          '--clr': '#2c9f99',
                                                           '--value': numberOfDays ? (datesWithData.length / numberOfDays) * 100 : 0
                                                       } as React.CSSProperties
                                                   }
@@ -277,7 +279,7 @@ function PsySummaryDiaryCS() {
                                                   className="circular_progress no"
                                                   style={
                                                       {
-                                                          '--clr': '#edf0ff',
+                                                          '--clr': '#2c9f99',
                                                           '--value': numberOfDays ? ((numberOfDays - datesWithData.length) / numberOfDays) * 100 : 0
                                                       } as React.CSSProperties
                                                   }
@@ -310,7 +312,7 @@ function PsySummaryDiaryCS() {
                                                       </div>
                                                       {/* Avatar at the bottom */}
                                                       <div className="comment-avatar">
-                                                          <img src={comment.Psychologist?.Picture} alt="Avatar" />
+                                                          <img src={comment.Psychologist?.Picture === ''? String({userEmty}):comment.Psychologist?.Picture} alt="Avatar" />
                                                       </div>
                                                       </div>
                                                   ))

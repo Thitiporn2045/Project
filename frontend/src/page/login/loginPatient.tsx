@@ -17,6 +17,7 @@ function LoginPatient() {
             messageApi.open({
                 type: "success",
                 content: "ยินดีต้อนรับ",
+                duration:4000
             });
 
             localStorage.setItem('token', res.message.token);
@@ -26,7 +27,7 @@ function LoginPatient() {
                 function(){
                     navigate("/Pat")
                 },
-                500
+                4000
             );
         }else{
             messageApi.open({

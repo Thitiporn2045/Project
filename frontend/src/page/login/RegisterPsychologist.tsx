@@ -130,7 +130,7 @@ return(
 <div className="registerPsychologist">
   <div className="register-container">
       <div style={{position:'relative',}}><h1 style={{marginTop:'0%'}}>ลงทะเบียน</h1></div>
-      <div style={{position:'relative',width:'100%'}}> 
+      <div style={{position:'relative',width:'90%'}}> 
           <Steps current={currentStep}>
               <Step title="ข้อมูลส่วนตัว" />
               <Step title="อีเมลและรหัสผ่าน"/>

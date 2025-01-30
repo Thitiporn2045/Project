@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'; 
 import NavbarPat from '../../../component/navbarPat/navbarPat'; 
-import './stylePat.css';
+import './stylePsy.css';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { GetDiaryByDiaryID } from '../../../services/https/diary';
 import { DiaryPatInterface } from '../../../interfaces/diary/IDiary';
@@ -163,7 +163,7 @@ function PsySummaryDiaryAP() {
       };
 
       return (
-        <div className='summary'>
+        <div className='summary-psy'>
             <div className="befor-main">
                 <div className='main-body'>
                     <div className='sidebar'>
@@ -179,7 +179,7 @@ function PsySummaryDiaryAP() {
                                         <div className="typeBook">{diary?.WorksheetType?.Name}</div>
                                     </div>
                                     <div className="boxContent2">
-                                        <div className="picture">
+                                        {/* <div className="picture">
                                             <div className="bdImg">
                                                 <img 
                                                     onClick={handleImageClick}
@@ -188,7 +188,7 @@ function PsySummaryDiaryAP() {
                                                     alt="" 
                                                 />
                                             </div>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </header>
                                 <div className="showBook">
@@ -280,7 +280,7 @@ function PsySummaryDiaryAP() {
                                                     className="circular_progress no"
                                                     style={
                                                         {
-                                                            '--clr': '#edf0ff',
+                                                            '--clr': '#2c9f99',
                                                             '--value': numberOfDays ? ((numberOfDays - datesWithData.length) / numberOfDays) * 100 : 0
                                                         } as React.CSSProperties
                                                     }

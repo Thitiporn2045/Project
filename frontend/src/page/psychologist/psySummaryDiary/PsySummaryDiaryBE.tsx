@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'; 
 import NavbarPat from '../../../component/navbarPat/navbarPat'; 
-import './stylePat.css';
+import './stylePsy.css';
 import { useNavigate,  } from 'react-router-dom';
 import { GetDiaryByDiaryID } from '../../../services/https/diary';
 import { DiaryPatInterface } from '../../../interfaces/diary/IDiary';
@@ -161,7 +161,7 @@ function PsySummaryDiaryBE() {
   };
 
   return (
-    <div className='summary'>
+    <div className='summary-psy'>
         <div className="befor-main">
             <div className='main-body'>
                 <div className='sidebar'>
