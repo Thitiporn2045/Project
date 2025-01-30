@@ -6,6 +6,7 @@ import { EmtionInterface } from '../../interfaces/emotion/IEmotion'; // นำ�
 import { RiEdit2Fill } from 'react-icons/ri';
 import { ImBin } from 'react-icons/im';
 import NavbarPat from '../navbarPat/navbarPat';
+import thTH from 'antd/lib/locale/th_TH';
 
 
 type AddEmotion = {
@@ -126,7 +127,6 @@ const EmotionalWeb = () => { // คอมโพเนนต์หลักที
 
     const handleAddEmotion = async () => {
         if (selectedEmotion && newEmotionLabel.trim()) {
-            // เพิ่ม `.trim()` เพื่อป้องกันชื่ออารมณ์ว่าง
             const newEmotion = {
                 Emoticon: selectedEmotion.Emoticon,
                 ColorCode: selectedEmotion.ColorCode,
@@ -138,14 +138,16 @@ const EmotionalWeb = () => { // คอมโพเนนต์หลักที
                 console.log('New Emotion:', newEmotion);
                 const response = await CreateDiaryPat(newEmotion);
                 console.log('API Response:', response);
-
-                if (response) {
+    
+                if (response.status === false) {
+                    messageApi.error(response.message || 'ไม่สามารถเพิ่มอารมณ์ได้');
+                } else {
                     messageApi.success('อารมณ์ถูกเพิ่มเรียบร้อย');
                     fetchEmotionPatientData(); // รีเฟรชข้อมูลอารมณ์ของผู้ป่วย
-                } else {
-                    messageApi.error('ไม่สามารถเพิ่มอารมณ์ได้');
                 }
                 setIsModalOpen(false);
+                setNewEmotionLabel('');
+                setSelectedEmotion(null);
             } catch (error) {
                 console.error('Error adding emotion:', error);
                 messageApi.error('เกิดข้อผิดพลาดในการเพิ่มอารมณ์');
@@ -153,7 +155,7 @@ const EmotionalWeb = () => { // คอมโพเนนต์หลักที
         } else {
             messageApi.warning('กรุณาเลือกอารมณ์และตั้งชื่อ');
         }
-    };    
+    };        
     
     const handleEditEmotion = async () => {
         if (selectedEmotionEdit && newEmotionLabel) {
@@ -211,9 +213,11 @@ const EmotionalWeb = () => { // คอมโพเนนต์หลักที
 
     return (
         <ConfigProvider
+            locale={thTH}
             theme={{
                 token: {
-                    colorPrimary: '#9BA5F6',
+                colorPrimary: '#9BA5F6', // Example of primary color customization
+                fontFamily:'Noto Sans Thai, sans-serif'
                 },
             }}
         >

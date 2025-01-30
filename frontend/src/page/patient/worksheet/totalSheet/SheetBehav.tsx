@@ -420,7 +420,7 @@ const handleSelectChange = (values: (number | undefined)[], setSelectEmotion: Re
                                     <h3>บทเรียนที่ได้</h3>
                                     <div className="bg-input-ex">
                                         <div className="thought-box">
-                                            <label className="thought-label">ความคิดเชิงลบ:</label>
+                                            <label className="thought-label">ความเชื่อเดิม:</label>
                                             <textarea
                                                 className="thought-textarea"
                                                 value={oldBelief || ''}
@@ -428,7 +428,7 @@ const handleSelectChange = (values: (number | undefined)[], setSelectEmotion: Re
                                             />
                                         </div>
                                         <div className="thought-box">
-                                            <label className="thought-label">ความคิดทางเลือก:</label>
+                                            <label className="thought-label">ความคิดใหม่:</label>
                                             <textarea
                                                 className="thought-textarea"
                                                 value={newBelief || ''}

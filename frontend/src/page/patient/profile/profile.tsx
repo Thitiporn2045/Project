@@ -4,10 +4,12 @@ import NavbarPat from '../../../component/navbarPat/navbarPat';
 import './stylePat.css';
 import { PatientInterface } from '../../../interfaces/patient/IPatient';
 import { ConnectionRequestInterface } from '../../../interfaces/connectionRequest/IConnectionRequest';
-import { Button, Form, Input, message } from 'antd';
+import { Button, ConfigProvider, Form, Input, message, Select } from 'antd';
 import { GetConnectionPatientById } from '../../../services/https/connectionRequest';
-import { CheckPasswordPatient, GetPatientById, UpdatePasswordPatient, UpdatePatient } from '../../../services/https/patient';
+import { CheckPasswordPatient, DeletePatientByID, GetPatientById, UpdatePasswordPatient, UpdatePatient } from '../../../services/https/patient';
 import userEmpty from '../../../assets/userEmty.jpg';
+import { useNavigate } from 'react-router-dom';
+import thTH from 'antd/lib/locale/th_TH';
 
 const userLogin = {
     imge: 'https://i.pinimg.com/474x/0f/44/6f/0f446fc154c16b2dd85413d50bc9c170.jpg',
@@ -100,6 +102,7 @@ function Profile() {
             setTimeout(() => {
             form.resetFields(); 
             }, 1000);
+            
         } else {
             messageApi.error(res.message || "เกิดข้อผิดพลาด");
         }
@@ -124,6 +127,8 @@ function Profile() {
                 type: "success",
                 content: "แก้ไขข้อมูลสำเร็จ",
             });
+            
+            
 
             await fetchPatientData();
 
@@ -137,7 +142,41 @@ function Profile() {
     
     //===========================================================
     
-    
+    const reasons = [
+        { id: '1', label: 'ต้องการหยุดการให้บริการ' },
+        { id: '2', label: 'พบปัญหาทางเทคนิค' },
+        { id: '3', label: 'ไม่พอใจในบริการ' },
+        { id: '4', label: 'เหตุผลอื่นๆ' }
+    ];
+
+    const [reason, setReason] = useState('');
+    const [password, setPassword] = useState('');
+
+    const navigate = useNavigate();
+    const handleDeleteAccount = async (values: { reason: string; password: string }) => {        
+        const checkValues:PatientInterface = {
+        ID: Number(patID),
+        Password: values.password
+        }
+        const isPasswordMatch = await CheckPasswordPatient(checkValues);
+        
+        if(!isPasswordMatch.status){
+        messageApi.error(isPasswordMatch.message)
+        }
+        else{
+        let res = await DeletePatientByID(Number(patID));
+        if (res.status) {
+            messageApi.success("ลบบัญชีผู้ใช้แล้ว");
+            setTimeout(() => {
+            navigate("/"); 
+            }, 3000);
+        } 
+        else {
+            messageApi.error(res.message || "เกิดข้อผิดพลาด");
+        }
+        }
+    }
+
     const [isOpen, setIsOpen] = useState(false);
     const [activeContent, setActiveContent] = useState('profile');
     
@@ -333,11 +372,12 @@ function Profile() {
                                 </div>
                                 <div className="row">
                                     <strong>สถานะ:</strong>
-                                    {/* <input 
-                                        className="label-wrapper"
-                                        value={patient?.IsTakeMedicine}
-                                        onChange={(e) => handleInputChange(String(patient?.IsTakeMedicine), e.target.value)}
-                                        ></input> */}
+                                    <input 
+                                        className="label-wrapperStatus"
+                                        value="ไม่ได้กินยา"
+                                        // onChange={(e) => handleInputChange(String(patient?.IsTakeMedicine), e.target.value)}
+                                        ></input>
+                                    {/* <label className="label-wrapperStatus" htmlFor="">ไม่ได้กินยา</label> */}
                                 </div>
                                 <button 
                                     type="button"
@@ -346,9 +386,9 @@ function Profile() {
                                 >
                                     บันทึกการเปลี่ยนแปลง
                                 </button>
-                                <div className='nextPage'>
+                                {/* <div className='nextPage'>
                                     <a href="#passwordPat">รหัสผ่าน</a>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>
@@ -425,16 +465,85 @@ function Profile() {
     );
 
     const DeleteAccount = () => (
-        <motion.div
-            key="deleteAccount"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+        <ConfigProvider
+            locale={thTH}
+            theme={{
+            components:{
+                Message:{
+                }
+            },
+            token:{
+                colorPrimary: '#9BA5F6',
+                colorText:'#585858',
+                fontFamily:'Noto Sans Thai, sans-serif'
+            }
+            }}>
+        <div
+            className='deleteAccount'
         >
-            <div>
-                <h2>ลบบัญชีผู้ใช้</h2>
-            </div>
-        </motion.div>
+            <Form form={form} onFinish={handleDeleteAccount}>                
+            <div
+                className="delAccount-container"
+                style={{
+                    position: 'relative',
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '1rem',
+                }}
+                >
+                <span style={{ fontSize: '20px', fontWeight: 'bold' }}>
+                    ลบบัญชีผู้ใช้
+                </span>
+                    <div style={{display:'flex',flexDirection:'column',}}>
+                    <div style={{display:'flex',flexDirection:'column'}}>
+                        โปรดแจ้งเหตุผลให้เราทราบเพื่อการปรับปรุงที่ดีขึ้น
+                        <Form.Item
+                        name="reason"
+                        rules={[{ required: true, message: 'กรุณาเลือกเหตุผล' }]}
+                        >
+                        <Select
+                        id="reason" 
+                        onChange={(value) => setReason(value)} 
+                        placeholder="เลือกเหตุผล"
+                        >
+                        {reasons.map((reason) => (
+                            <Select.Option key={reason.id} value={reason.id}>
+                            {reason.label}
+                            </Select.Option>
+                        ))}
+                        </Select>
+                        </Form.Item>
+                    </div>
+                    <div>
+                        รหัสผ่าน
+                        <Form.Item
+                        name="password"
+                        rules={[{ required: true, message: 'กรุณากรอกรหัสผ่าน' }]}
+                        >
+                        <Input.Password
+                        id="password" 
+                        value={password} 
+                        onChange={(e) => setPassword(e.target.value)} 
+                        />
+                        </Form.Item>
+                    </div>
+                    <div style={{display:'flex',justifyContent:'end'}}>
+                        <Form.Item>
+                        <Button 
+                        type="primary" 
+                        danger 
+                        htmlType="submit">
+                            ลบบัญชีผู้ใช้
+                        </Button>
+                        </Form.Item>
+                    </div>
+                    </div>              
+                </div>
+            </Form>
+        </div>
+    </ConfigProvider>
     );
 
     return (

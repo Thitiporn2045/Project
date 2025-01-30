@@ -5,7 +5,7 @@ import { DeleteNotePatientByID, GetNotesByPatientID, UpdateNotePatient } from '.
 import { NotePatInterface } from '../../interfaces/notePat/INotePat';
 import { ImBin } from "react-icons/im";
 import { BiSolidEditAlt } from "react-icons/bi";
-import { motion } from "framer-motion";  // Import framer-motion
+import { motion } from "framer-motion";
 
 function NotePat() {
     const [notePatients, setNotePatients] = useState<NotePatInterface[]>([]);
@@ -17,76 +17,85 @@ function NotePat() {
     const patID = localStorage.getItem('patientID');
 
     const fetchNotePatientData = async () => {
-        const res = await GetNotesByPatientID(Number(patID));
-        if (res) {
-            setNotePatients(res);
+        try {
+            const res = await GetNotesByPatientID(Number(patID));
+            if (res) {
+                setNotePatients(res);
+            }
+        } catch (error) {
+            messageApi.error('ไม่สามารถดึงข้อมูลโน้ตได้');
+            console.error('Error fetching notes:', error);
         }
-        console.log('res', res);
     };
 
     useEffect(() => {
         fetchNotePatientData();
     }, []);
 
-    const handleNoteClick = (index: number) => {
-        const note = notePatients[index];
-        if (!note?.ID) {
-            messageApi.error('ไม่พบ ID ของโน้ต');
-            return;
-        }
-        setSelectedNote(prev => (prev && prev.ID === note.ID ? null : note)); // Ensure selectedNote has ID
+    const handleNoteClick = (note: NotePatInterface) => {
+        setSelectedNote(prev => (prev && prev.ID === note.ID ? null : note));
     };
 
-    const handleEdit = (note: NotePatInterface) => {
-        console.log('Selected note for editing:', note); // ตรวจสอบข้อมูลโน้ต
+    const handleEdit = (note: NotePatInterface, e: React.MouseEvent) => {
+        e.stopPropagation(); // ป้องกันการ trigger event ของ parent
+        
         if (!note?.ID) {
             messageApi.error('ไม่พบ ID ของโน้ต');
             return;
         }
 
-        setSelectedNote(note); // Set the selected note to be edited
+        setSelectedNote(note);
         form.setFieldsValue({
             Title: note.Title,
             Content: note.Content,
         });
-        setIsEditModalVisible(true); // Open the modal
+        setIsEditModalVisible(true);
     };
 
     const handleEditSubmit = async () => {
-        console.log('Selected Note before submitting:', selectedNote); // ตรวจสอบค่า selectedNote ก่อนการส่งข้อมูล
-
-        if (!selectedNote?.ID) {
-            messageApi.error('ไม่สามารถแก้ไขได้: ไม่พบ ID ของโน้ต');
-            return;
-        }
-
-        const values = form.getFieldsValue();
-
-        // Combine selectedNote (which includes ID) with form values
-        const updatedNote = {
-            ...selectedNote,  // selectedNote already contains the ID
-            ...values,        // form values (Title, Content)
-        };
-
-        console.log('Payload to API:', updatedNote);
-
         try {
+            if (!selectedNote?.ID) {
+                messageApi.error('ไม่สามารถแก้ไขได้: ไม่พบ ID ของโน้ต');
+                return;
+            }
+
+            const values = await form.validateFields();
+            
+            const updatedNote: NotePatInterface = {
+                ID: selectedNote.ID,
+                PatID: Number(patID),
+                Title: values.Title,
+                Content: values.Content,
+            };
+
             const res = await UpdateNotePatient(updatedNote);
 
             if (res.status) {
                 messageApi.success("แก้ไขข้อมูลสำเร็จ");
-                await fetchNotePatientData(); // Refresh the note data
-                setIsEditModalVisible(false); // ปิด Modal
+                await fetchNotePatientData();
+                setIsEditModalVisible(false);
+                form.resetFields();
             } else {
-                messageApi.error(res.message);
+                messageApi.error(res.message || 'เกิดข้อผิดพลาดในการแก้ไขโน้ต');
             }
         } catch (error) {
+            if (error instanceof Error) {
+                messageApi.error(error.message);
+            } else {
+                messageApi.error('เกิดข้อผิดพลาดในการแก้ไขโน้ต');
+            }
             console.error('Error updating note:', error);
-            messageApi.error('เกิดข้อผิดพลาดในการแก้ไขโน้ต');
         }
     };
 
-    const handleDelete = async (noteId: number | undefined) => {
+    const handleDelete = async (noteId: number | undefined, e: React.MouseEvent) => {
+        e.stopPropagation(); // ป้องกันการ trigger event ของ parent
+        
+        if (!noteId) {
+            messageApi.error('ไม่พบ ID ของโน้ต');
+            return;
+        }
+
         Modal.confirm({
             title: 'ต้องการลบโน้ตนี้หรือไม่?',
             onOk: async () => {
@@ -94,12 +103,12 @@ function NotePat() {
                     await DeleteNotePatientByID(noteId);
                     messageApi.success('ลบโน้ตนี้สำเร็จ');
                     setNotePatients(prevNotes => prevNotes.filter(n => n.ID !== noteId));
-                    // If the deleted note was selected, clear the selection
                     if (selectedNote?.ID === noteId) {
                         setSelectedNote(null);
                     }
                 } catch (error) {
                     messageApi.error('ลบโน้ตไม่สำเร็จ');
+                    console.error('Error deleting note:', error);
                 }
             },
             okText: 'ยืนยัน',
@@ -124,12 +133,12 @@ function NotePat() {
                 ) : (
                     notePatients.map((note, index) => (
                         <motion.div
-                            key={index}
+                            key={note.ID || index}
                             className='note'
-                            onClick={() => handleNoteClick(index)}
-                            initial={{ opacity: 0, y: 30 }}  // Animation starts with opacity 0 and a slight downward position
-                            animate={{ opacity: 1, y: 0 }}   // Animates to full opacity and original position
-                            transition={{ delay: index * 0.1, duration: 0.5 }}  // Staggered delay for each note
+                            onClick={() => handleNoteClick(note)}
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.1, duration: 0.5 }}
                         >
                             <div className="content">
                                 <div className="head">
@@ -142,8 +151,8 @@ function NotePat() {
                             </div>
                             {selectedNote?.ID === note.ID && (
                                 <div className="actions">
-                                    <Button onClick={() => handleEdit(note)}><BiSolidEditAlt/></Button>
-                                    <Button onClick={() => handleDelete(note.ID)}><ImBin /></Button>
+                                    <Button onClick={(e) => handleEdit(note, e)}><BiSolidEditAlt/></Button>
+                                    <Button onClick={(e) => handleDelete(note.ID, e)}><ImBin /></Button>
                                 </div>
                             )}
                         </motion.div>
@@ -154,9 +163,12 @@ function NotePat() {
 
                 <Modal
                     title="แก้ไขโน้ต"
-                    visible={isEditModalVisible}
-                    onOk={handleEditSubmit} // เมื่อคลิกบันทึก
-                    onCancel={() => setIsEditModalVisible(false)} // เมื่อคลิกยกเลิก
+                    open={isEditModalVisible}
+                    onOk={handleEditSubmit}
+                    onCancel={() => {
+                        setIsEditModalVisible(false);
+                        form.resetFields();
+                    }}
                     okText="บันทึก"
                     cancelText="ยกเลิก"
                 >

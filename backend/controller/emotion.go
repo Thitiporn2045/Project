@@ -1,16 +1,34 @@
 package controller
-import(
+
+import (
 	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/n6teen/Project-Thesis/entity"
+	"gorm.io/gorm"
 )
 
 func CreateEmotion(c *gin.Context) {
     var emotion entity.Emotion
 
-    // Bind JSON data to emotion struct
+    // ผูกข้อมูล JSON เข้ากับ struct emotion
     if err := c.ShouldBindJSON(&emotion); err != nil {
         c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
+
+    // ตรวจสอบว่าอารมณ์นี้มีชื่อเดียวกันใน PatID เดียวกันหรือยัง
+    var existingEmotion entity.Emotion
+    result := entity.DB().Where("name = ? AND pat_id = ?", emotion.Name, emotion.PatID).First(&existingEmotion)
+    if result.Error == nil {
+        // ถ้าพบอิโมจิที่ชื่อเดียวกันใน PatID เดียวกัน
+        c.JSON(http.StatusConflict, gin.H{"error": "มีชื่ออิโมจินี้อยู่แล้ว"})
+        return
+    }
+
+    if result.Error != gorm.ErrRecordNotFound {
+        // ถ้าเกิดข้อผิดพลาดอื่นๆ ที่ไม่ใช่ record not found
+        c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
         return
     }
 
@@ -22,6 +40,7 @@ func CreateEmotion(c *gin.Context) {
 
     c.JSON(http.StatusOK, gin.H{"data": emotion})
 }
+
 
 
 func GetEmotionByPatientID(c *gin.Context) {

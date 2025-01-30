@@ -328,7 +328,14 @@ function toggle() {
                                             }
                                             />
                                         </div>
-                                        ) : null}
+                                        ) : (
+                                            <>
+                                            <div style={{width:'100%',height:'100%',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column'}}>
+                                                <div className="Loading-Data"></div>
+                                                <div className='text'>ไม่มีการแจ้งเตือนใหม่...</div>
+                                            </div>
+                                            </>
+                                        )}
                                     
                                     {/* <NotificationPat numDays={5} /> */}
                                     </div>

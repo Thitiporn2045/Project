@@ -101,6 +101,16 @@ const CrossSectional: React.FC = () => {
   };
   
   const handleSave = async () => {
+    if (!situation || !thought || !behavior || !bodilySensation || !textEmotions || selectEmotion.length === 0) {
+      messageApi.error("กรุณากรอกข้อมูลให้ครบถ้วน");
+      return;
+    }
+
+    if (selectEmotion.length < 2) { // ถ้าต้องการบังคับ 3 อัน ให้เปลี่ยนเป็น `< 3`
+      messageApi.error("กรุณาเลือกอารมณ์อย่างน้อย 2 อัน");
+      return;
+    }
+  
     const emotionIDs = selectEmotion.map(emotion => emotion.value);
     const currentDate = dayjs().format('DD-MM-YYYY');
     const data: CrossSectionalInterface = {
@@ -113,7 +123,7 @@ const CrossSectional: React.FC = () => {
       EmotionID: emotionIDs,
       Date: currentDate,
     };
-    // แสดงข้อมูลใน console.log ก่อนการบันทึก
+  
     console.log('ข้อมูลที่บันทึก:', data);
   
     try {
@@ -122,7 +132,7 @@ const CrossSectional: React.FC = () => {
         messageApi.success("บันทึกข้อมูลสำเร็จ");
         setTimeout(() => {
           navigate('/mainSheet');
-        }, 2000); // 2000 ms = 2 วินาที
+        }, 2000);
       } else {
         messageApi.error(response.message || "เกิดข้อผิดพลาดในการบันทึกข้อมูล");
       }
@@ -130,8 +140,8 @@ const CrossSectional: React.FC = () => {
       messageApi.error("ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้");
       console.error(error);
     }
-  };  
-
+  };
+  
   return (
     <ConfigProvider
       theme={{
@@ -157,6 +167,7 @@ const CrossSectional: React.FC = () => {
                       </div>
                       <div className='lowerInput'>
                         <Input 
+                          required
                           className='mainTitle' 
                           placeholder="ตัวอย่าง:/ ทะเลาะกับสมาชิกในครอบครัว" 
                           value={situation} 
@@ -170,6 +181,7 @@ const CrossSectional: React.FC = () => {
                           <h3>ความคิด</h3>
                           <div className="bg-input">
                           <textarea 
+                            required
                             className='content-input' 
                             placeholder="ตัวอย่าง:/ -เขาไม่รักฉันแล้ว      - ฉันไม่มีค่าในสายตาของครอบครัว" 
                             value={thought} 
@@ -181,6 +193,7 @@ const CrossSectional: React.FC = () => {
                           <h3>พฤติกรรม</h3>
                           <div className="bg-input">
                           <textarea 
+                              required
                               className='content-input' 
                               placeholder="ตัวอย่าง:/ -เดินออกจากห้องโดยไม่พูดอะไร                       - ปฏิเสธที่จะร่วมรับประทานอาหารร่วมกัน" 
                               value={behavior} 
@@ -191,7 +204,8 @@ const CrossSectional: React.FC = () => {
                         <div className='content-box'>
                           <h3>ความรู้สึกทางร่างกาย</h3>
                           <div className="bg-input">
-                          <textarea 
+                          <textarea
+                            required
                             className='content-input' 
                             placeholder="ตัวอย่าง:/ -หายใจเร็ว                        - ท้องไส้ปั่นป่วน                         - รู้สึกเจ็บหน้าอก " 
                             value={bodilySensation} 
@@ -203,6 +217,7 @@ const CrossSectional: React.FC = () => {
                           <h3>อารมณ์</h3>
                           <div className="bg-input">
                             <textarea 
+                              required
                               className='content-input' 
                               placeholder="ตัวอย่าง:/ -เศร้า                         - โกรธ                                   - รู้สึกโดดเดี่ยว "
                               value={textEmotions}
@@ -285,7 +300,12 @@ const CrossSectional: React.FC = () => {
                     />
 
                     </div>
-                      <button className="btn-submit" onClick={handleSave}>บันทึก</button>
+                    <button 
+                      className="btn-submit" 
+                      onClick={handleSave}
+                    >
+                      บันทึก
+                    </button>
               </header>
             </div>
           </div>

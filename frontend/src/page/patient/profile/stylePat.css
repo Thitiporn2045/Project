@@ -539,6 +539,21 @@
 
 }
 
+.edit-profile .label-wrapperStatus {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    width: 48%;
+    padding: 2px 0;
+    padding-left: 10px;
+    background-color: var(--color-backgroun-secondary4);
+    border-radius: var(--border-radius-1);
+    border: none;
+    font-family: 'Noto Sans Thai', sans-serif;
+
+}
+
 .edit-profile .content1 .profile-image-section {
     margin-bottom: 20px;
 }
@@ -651,7 +666,7 @@
 }
 
 .password .save-btn {
-    width: 100%;
+    width: 95%;
     margin-top: 20px;
     background-color: var(--color-backgroun-main1);
     color: white;
@@ -660,6 +675,7 @@
     margin-bottom: 130px;
     border: none;
     border-radius: var(--border-radius-1);
+    font-family: 'Noto Sans Thai', sans-serif;
 } 
 
 .password .save-btn:hover{
@@ -669,4 +685,12 @@
     color: var(--color-backgroun-secondary2);
     text-shadow: 0 0 10px var(--color-backgroun-main2), 0 0 40px var(--color-backgroun-main2), 0 0 80px var(--color-backgroun-main2);
     transition: .5s;
+}
+
+.deleteAccount{
+    display: block;
+    align-items: center;
+    justify-content: center;
+    width: 35%;
+    margin-top: -30%;
 }

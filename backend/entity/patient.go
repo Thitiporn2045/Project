@@ -15,7 +15,7 @@ type Patient struct{
 	Password string
 	Picture string
 	Symtoms string
-	IsTakeMedicine bool
+	IsTakeMedicine string
 	IdNumber string `gorm:"uniqueIndex"`
 	
 	TypeID uint 

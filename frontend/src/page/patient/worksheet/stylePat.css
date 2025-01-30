@@ -284,6 +284,7 @@ border-radius: var(--border-radius-2);
     border-radius: var(--border-radius-2);
     font-size: 14px;
     color: var(--color-font1);
+    background-color: #f6f3ff8b;
 }
 
 .worksheets p.text{
@@ -430,4 +431,15 @@ color: var(--color-font1);
     transition: .5s;
 
 
+}
+
+/* สำหรับปุ่มที่ไม่สามารถกดได้ */
+.worksheets .btn-submit:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;  /* ทำให้ปุ่มดูจางลงเมื่อถูกปิดใช้งาน */
+}
+
+/* สำหรับปุ่มที่สามารถกดได้ */
+.worksheets .btn-submit {
+    cursor: pointer;  /* แสดงเคอร์เซอร์เป็นมือเมื่อสามารถคลิกได้ */
 }

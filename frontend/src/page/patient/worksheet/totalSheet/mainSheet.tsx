@@ -326,7 +326,11 @@ const handleDeleteDiary = async (diaryId: number | undefined) => {
                                                 navigate(`/SheetCross?id=${diary.ID}`); // เปลี่ยนหน้าไปยัง SheetCross พร้อมส่งไอดี
                                             } else if (diary.WorksheetType?.Name === "Behavioral Experiment") {
                                                 navigate(`/SheetBehav?id=${diary.ID}`); // เปลี่ยนหน้าไปยัง SheetBehav พร้อมส่งไอดี
-                                            } else {
+                                            } else if (diary.WorksheetType?.Name === "Activity Diary") {
+                                                navigate(`/Activity?id=${diary.ID}`); // เปลี่ยนหน้าไปยัง SheetBehav พร้อมส่งไอดี
+                                            } else if (diary.WorksheetType?.Name === "Activity Planning") {
+                                                navigate(`/Planning?id=${diary.ID}`); // เปลี่ยนหน้าไปยัง SheetBehav พร้อมส่งไอดี
+                                            }else {
                                                 messageApi.error('ไม่รองรับประเภทไดอารี่นี้'); // แจ้งเตือนหากเป็นประเภทอื่น
                                             }
                                         }}

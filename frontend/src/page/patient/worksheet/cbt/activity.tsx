@@ -320,7 +320,6 @@ const getContentForDay = (date: Date | null) => {
 const handleEditEvent = (event: ActivityDiaryInterface) => {
     setEditingEvent(event); // ตั้งค่าข้อมูลกิจกรรมที่ต้องการแก้ไข
     form.setFieldsValue({
-        emotion: event.EmotionID, // ค่าอารมณ์เดิม
         description: event.Activity, // กิจกรรมเดิม
     });
     setIsModalOpenEdit(true); // เปิด Modal
@@ -335,7 +334,7 @@ const handleSubmitEdit = async () => {
         // สร้างข้อมูลที่ต้องการส่งไปยัง API
         const updatedEvent: ActivityDiaryInterface = {
             ...editingEvent,  // ข้อมูลเดิม
-            EmotionID: Number(emotionID), // แปลง emotionID เป็น string
+            // EmotionID: Number(emotionID),
             Activity: values.description, // กิจกรรมที่ถูกแก้ไข
         };
         console.log("Emotion Patients:", emotionPatients);
@@ -542,23 +541,6 @@ return (
             cancelText="ยกเลิก"
         >
             <Form form={form} layout="vertical">
-                {/* อารมณ์ */}
-                <Form.Item
-                    name="emotion"
-                    label="เลือกอารมณ์ของคุณ"
-                    rules={[{ required: true, message: 'กรุณาเลือกอารมณ์ของคุณ!' }]}
-                >
-                    <Select
-                        value={emotionID} 
-                        onChange={(value) => setEmotionID(value)}
-                    >
-                        {emotionPatients.map(opt => (
-                            <Select.Option key={opt.ID} value={opt.ID}>
-                                {opt.Emoticon} {opt.Name}
-                            </Select.Option>
-                        ))}
-                    </Select>
-                </Form.Item>
 
                 {/* คำอธิบายกิจกรรม */}
                 <Form.Item

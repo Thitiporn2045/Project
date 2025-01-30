@@ -58,3 +58,22 @@
 .bookPat .diary-card .text-sm p {
     margin-bottom: 0.25rem;
 }
+
+
+.bookPat .Loading-Data{
+    background: url('../../assets/noData.gif');
+    background-size: cover;
+    background-position: center;
+    width: 240px;
+    height: 110px; 
+    margin-top: 30px;
+    border: 5px solid transparent ; 
+    border-radius: 10px;
+    opacity: 0.5;
+
+}
+
+.bookPat .text{
+    color: var(--color-font2);
+    font-family: 'Noto Sans Thai', sans-serif;
+}

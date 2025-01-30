@@ -97,6 +97,13 @@ func UpdateActivityDiary(c *gin.Context) {
 		return
 	}
 
+	// ตรวจสอบว่า ActivityDiary ถูกสร้างในวันปัจจุบันหรือไม่
+	today := time.Now().Format("02-01-2006") // Format for comparing dates
+	if activity.Date != today {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Cannot update ActivityDiary for a different day"})
+		return
+	}
+
 	// ตรวจสอบว่า EmotionID มีอยู่ในฐานข้อมูลหรือไม่
 	var emotion entity.Emotion
 	if err := entity.DB().First(&emotion, input.EmotionID).Error; err != nil {

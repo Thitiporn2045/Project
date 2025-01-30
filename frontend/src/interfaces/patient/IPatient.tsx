@@ -12,7 +12,7 @@ export interface PatientInterface{
 	Password?: string;
 	Picture?: string;
 	Symtoms?: string;
-	IsTakeMedicine?: boolean;
+	IsTakeMedicine?: string;
 	IdNumber?: string;
 
 

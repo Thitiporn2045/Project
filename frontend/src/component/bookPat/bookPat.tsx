@@ -102,7 +102,10 @@ const navigateToDiaryPage = (diary: DiaryPatInterface) => {
                 ))
             ) : (
                 <div className="empty-diary-message">
-                    ยังไม่มีไดอารี่ในหมวดหมู่นี้
+                    <div style={{width:'100%',height:'100%',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column'}}>
+                        <div className="Loading-Data"></div>
+                        <div className='text'>ไม่มีข้อมูล...</div>
+                    </div>
                 </div>
             )}
         </div>

@@ -114,8 +114,8 @@ return (
         alignItems: 'center',
         background: '#ffffff',  // ลองปรับสีพื้นหลังให้เหมาะสม
         border: '1px solid #EBF1F5',  // สีขอบอ่อน
-        width: '25.7vw',
-        height: '28.5vh',
+        width: '30.7vw',
+        height: '30.5vh',
         borderRadius: '15px',
         padding: '20px', // เพิ่ม padding
         boxShadow: 'rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px',

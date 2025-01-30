@@ -5,7 +5,7 @@ import(
 
 type Emotion struct{
 	gorm.Model
-	Name string `gorm:"uniqueIndex"`
+	Name string
 	Emoticon string
 	ColorCode string
 	PatID    uint     
@@ -15,4 +15,6 @@ type Emotion struct{
 	CrossSectionals []CrossSectional `gorm:"many2many:cross_sectional_emotions;"`	
 	BehavioralExp []BehavioralExp `gorm:"many2many:behavioral_exp_emotions"`
 	Patient  Patient  `gorm:"foreignKey:PatID"` // Correct foreign key reference
+	
 }
+

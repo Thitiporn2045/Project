@@ -105,10 +105,21 @@ const BehavioralExp: React.FC = () => {
   };
   
   const handleSave = async () => {
+    // ตรวจสอบว่าได้กรอกข้อมูลครบทุกช่องหรือไม่
+    if (!negativeThought || !alternativeThought || !experiment || !outcome || !oldBelief || !newBelief || selectEmotion.length === 0) {
+      messageApi.error("กรุณากรอกข้อมูลให้ครบถ้วน");
+      return; // หยุดการทำงานของฟังก์ชัน
+  }
+
+  if (selectEmotion.length < 2) { // ถ้าต้องการบังคับ 3 อัน ให้เปลี่ยนเป็น `< 3`
+    messageApi.error("กรุณาเลือกอารมณ์อย่างน้อย 2 อัน");
+    return;
+  }
+
     const emotionIDs = selectEmotion.map(emotion => emotion.value);
     const currentDate = dayjs().format('DD-MM-YYYY');
     const thoughtToTest = negativeThought +"#$"+ alternativeThought;
-    const newThought = outcome +"#$"+ oldBelief;
+    const newThought = oldBelief +"#$"+ newBelief;
 
     const data: BehavioralExpInterface = {
       ThoughtToTest: thoughtToTest,
@@ -170,6 +181,7 @@ const BehavioralExp: React.FC = () => {
                             <div className="thought-box">
                               <label className="thought-label">ความคิดเชิงลบ:</label>
                               <textarea
+                                required
                                 className="thought-textarea"
                                 placeholder="ตัวอย่าง:/	ความคิดเชิงลบ: ถ้าฉันพูดในที่ประชุม คนจะหัวเราะหรือวิจารณ์ฉัน"
                                 value={negativeThought} 

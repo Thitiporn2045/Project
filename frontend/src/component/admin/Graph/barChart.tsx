@@ -75,8 +75,8 @@ return(
     <div
     style={{ 
         background: '#ffffff',
-        width: '40vw',
-        height: '28.5vh',
+        width: '55vw',
+        height: '30.5vh',
         borderRadius: '15px',
         padding: '20px', // เพิ่ม padding
         border: '1px solid #EBF1F5',

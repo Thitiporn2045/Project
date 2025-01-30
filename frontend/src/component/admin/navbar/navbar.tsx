@@ -77,8 +77,8 @@ return (
                     data-name="outline"
                 >
                     <a href="/">
-                        <i><FaSignOutAlt /></i>
-                        <span className="link-name" >ออกจากระบบ</span>
+                        {/* <i><FaSignOutAlt /></i> */}
+                        <span className="link-name" ></span>
                     </a>
                 </li>
             </ul>

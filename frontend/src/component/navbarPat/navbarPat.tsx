@@ -14,6 +14,7 @@ function NavbarPat() {
     const location = useLocation();
     const navigate = useNavigate(); // Use useNavigate instead of useHistory
     const [delayedPath, setDelayedPath] = useState('');
+    const [collapsed, setCollapsed] = useState(true);
 
     useEffect(() => {
         const currentPath = location.pathname;
@@ -43,6 +44,16 @@ function NavbarPat() {
 
     const handleToggle = () => {
         setSidebarActive(!sidebarActive);
+    };
+
+    const handleLogout = () => {
+        localStorage.clear(); // Clear all localStorage
+        navigate('/login/patient'); // Navigate to login page
+    };
+
+
+    const toggleCollapsed = () =>{
+        setCollapsed(!collapsed);
     };
 
     const handleNavigation = (path: string) => {
@@ -106,9 +117,9 @@ function NavbarPat() {
                         className={`list-item ${activeItem === 'outline' ? 'active' : ''}`}
                         data-name="outline"
                     >
-                        <a href="#" onClick={() => handleNavigation('/')}>
+                        <a href="#" onClick={() => handleLogout()}>
                             <i><FaSignOutAlt /></i>
-                            <span className="link-name" >ออกจากระบบ</span>
+                            <span className="link-name" >{!collapsed && 'ออกจากระบบ'}</span>
                         </a>
                     </li>
                 </ul>

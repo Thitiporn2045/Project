@@ -101,6 +101,7 @@ function Worksheets() {
             messageApi.error("กรุณาเลือกภาพ");
             return;
         }
+        
 
         // แปลงภาพที่เลือกให้เป็น Base64
         const base64Image = await convertImageToBase64(diaryPicture);

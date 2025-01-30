@@ -163,3 +163,8 @@
     color: var(--color-font2);
     font-family: 'Noto Sans Thai', sans-serif;
 }
+
+.notePat .ant-btn-variant-solid {
+    color: #fff;
+    background: #9ba5f6;
+}
