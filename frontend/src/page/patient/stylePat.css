@@ -217,6 +217,12 @@
     font-family:'Noto Sans Thai',sans-serif !important;
 }
 
+.Pat .notification-count{
+    font-family:'Noto Sans Thai',sans-serif !important;
+    color: var(--color-backgroun-main1);
+}
+
+
 .Pat .main-body .main-background .main-content .content2 .header .btn-add-co2:hover{
     background: var(--color-secondary1);
     transform: scale(1.05);

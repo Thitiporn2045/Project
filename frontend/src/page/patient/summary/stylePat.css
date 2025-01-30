@@ -187,6 +187,7 @@
 
 .summary .main-body .main-bg-right .main-content .content1{
     width: 100%;
+    min-height: 96vh;
     height: 100%;
     display: grid;
     grid-template-rows: 10rem auto;
@@ -319,7 +320,8 @@
 
 
 .summary .main-body .main-bg-right .main-content .mainBox{
-    margin: 10px 15px;
+    margin-top: 10px;
+    margin: 0 15px;
     width: 25vw;
 }
 
@@ -453,7 +455,7 @@
     border-radius: var(--border-radius-2);
     font-family:'Noto Sans Thai',sans-serif;
     display: grid;
-    grid-template-rows: auto 39vh auto;
+    grid-template-rows: auto 41vh auto;
     /* background: var(--color-backgroun-secondary4); */
 
     .boxContent1{
