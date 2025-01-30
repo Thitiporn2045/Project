@@ -104,6 +104,26 @@ export async function GetDiaryByDiaryID(id: Number | undefined) {
   return res;
 }
 
+export async function CountDiariesByWorksheetType() {
+  const requestOptions = {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  };
+
+  let res = await fetch(`${apiUrl}/pat/Diary/Count`, requestOptions)
+    .then((response) => response.json())
+    .then((res) => {
+      if (res) {
+        return res;
+      } else {
+        return false;
+      }
+    });
+
+  return res;
+}
+
+
 export async function UpdateDiaryPat(data: DiaryPatInterface) {
   const requestOptions = {
   method: "PATCH",

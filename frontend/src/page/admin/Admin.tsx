@@ -160,7 +160,7 @@ function Admin() {
               </div>
             </div>
             <div className='graph'>
-              <BarChart data={cbtData} />
+              <BarChart />
               <DonutGraph users={user} psychologists={psychologists} patients={patients} />
             </div>
             <div className="list">

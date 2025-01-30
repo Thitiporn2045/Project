@@ -313,14 +313,6 @@
     margin: 10px 0;
 }
 
-.rowPsy{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 80%;
-    margin: 0px 38px;
-}
-
 .profilePat .main-body .main-background .content2 .previwe .content3 .label-wrapper {
     display: flex;
     align-items: center;
@@ -685,6 +677,21 @@
     color: var(--color-backgroun-secondary2);
     text-shadow: 0 0 10px var(--color-backgroun-main2), 0 0 40px var(--color-backgroun-main2), 0 0 80px var(--color-backgroun-main2);
     transition: .5s;
+}
+
+.edit-profile .ant-radio-group {
+    box-sizing: border-box;
+    margin-left: 5rem;
+    padding: 0;
+    color: rgba(0, 0, 0, 0.88);
+    line-height: 1.5714285714285714;
+    list-style: none;
+    display: inline-block;
+
+    span{
+        font-family: 'Noto Sans Thai', sans-serif;
+        font-size: 1rem;
+    }
 }
 
 .deleteAccount{

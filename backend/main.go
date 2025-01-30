@@ -31,6 +31,8 @@ func main() {
 			r.GET("/pat/getNote/:id", controller.GetNotesByPatientID)
 			r.GET("/pat/workSheetType", controller.ListWorkSheetType)
 			r.GET("/pat/getDiary/:id", controller.GetDiaryByPatientID)
+			r.GET("/pat/Diary/Count", controller.CountDiariesByWorksheetType)
+
 			r.GET("/pat/getDiary/ByDiary", controller.GetDiaryByDiaryID)
 			r.GET("/pat/get/Emotion/:id", controller.GetEmotionByPatientID)
 			r.GET("/pat/get/CrossSectional/ByDiary", controller.GetCrossSectionalByDiaryID)

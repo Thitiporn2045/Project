@@ -201,3 +201,23 @@ func DeleteDiary(c *gin.Context) {
 
     c.JSON(http.StatusOK, gin.H{"data": diaries})
 }
+
+func CountDiariesByWorksheetType(c *gin.Context) {
+	var results []struct {
+		WorksheetTypeID uint  `json:"worksheet_type_id"`
+		Count           int64 `json:"count"`
+	}
+
+	// ใช้ GROUP BY เพื่อรวม Diary ตาม WorksheetTypeID และนับจำนวน
+	if err := entity.DB().
+		Table("diaries").
+		Select("worksheet_type_id, COUNT(*) as count").
+		Where("worksheet_type_id IS NOT NULL").
+		Group("worksheet_type_id").
+		Find(&results).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, results)
+}

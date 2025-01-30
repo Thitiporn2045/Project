@@ -284,6 +284,19 @@ function Profile() {
     );
 
     const EditProfile = () => (
+        <ConfigProvider
+            locale={thTH}
+            theme={{
+            components:{
+                Message:{
+                }
+            },
+            token:{
+                colorPrimary: '#9BA5F6',
+                colorText:'#585858',
+                fontFamily:'Noto Sans Thai, sans-serif'
+            }
+            }}>
         <Form form={form} onFinish={onFinishEditer}>
         <div className="edit-profile">
                 <div className="imgBox">
@@ -399,9 +412,23 @@ function Profile() {
                 </div>
             </div>
             </Form>
+        </ConfigProvider>
     );
 
     const EditPassword = () =>(
+        <ConfigProvider
+            locale={thTH}
+            theme={{
+            components:{
+                Message:{
+                }
+            },
+            token:{
+                colorPrimary: '#9BA5F6',
+                colorText:'#585858',
+                fontFamily:'Noto Sans Thai, sans-serif'
+            }
+            }}>
         <div id='passwordPat' className="password">
         <Form form={form} onFinish={handleSubmit}>
         <h2>เปลี่ยนรหัสผ่าน</h2>
@@ -466,88 +493,73 @@ function Profile() {
             >บันทึกการเปลี่ยนแปลง</button>
         </Form>
     </div>
+    </ConfigProvider>
     );
 
     const DeleteAccount = () => (
         <ConfigProvider
             locale={thTH}
             theme={{
-            components:{
-                Message:{
+                components: { Message: {} },
+                token: {
+                    colorPrimary: '#9BA5F6',
+                    colorText: '#585858',
+                    fontFamily: 'Noto Sans Thai, sans-serif'
                 }
-            },
-            token:{
-                colorPrimary: '#9BA5F6',
-                colorText:'#585858',
-                fontFamily:'Noto Sans Thai, sans-serif'
-            }
             }}>
-        <div
-            className='deleteAccount'
-        >
-            <Form form={form} onFinish={handleDeleteAccount}>                
-            <div
-                className="delAccount-container"
-                style={{
-                    position: 'relative',
-                    width: '100%',
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '1rem',
-                }}
-                >
-                <span style={{ fontSize: '20px', fontWeight: 'bold' }}>
-                    ลบบัญชีผู้ใช้
-                </span>
-                    <div style={{display:'flex',flexDirection:'column',}}>
-                    <div style={{display:'flex',flexDirection:'column'}}>
-                        โปรดแจ้งเหตุผลให้เราทราบเพื่อการปรับปรุงที่ดีขึ้น
-                        <Form.Item
-                        name="reason"
-                        rules={[{ required: true, message: 'กรุณาเลือกเหตุผล' }]}
-                        >
-                        <Select
-                        id="reason" 
-                        onChange={(value) => setReason(value)} 
-                        placeholder="เลือกเหตุผล"
-                        >
-                        {reasons.map((reason) => (
-                            <Select.Option key={reason.id} value={reason.id}>
-                            {reason.label}
-                            </Select.Option>
-                        ))}
-                        </Select>
-                        </Form.Item>
-                    </div>
-                    <div>
-                        รหัสผ่าน
-                        <Form.Item
-                        name="password"
-                        rules={[{ required: true, message: 'กรุณากรอกรหัสผ่าน' }]}
-                        >
-                        <Input.Password
-                        id="password" 
-                        value={password} 
-                        onChange={(e) => setPassword(e.target.value)} 
-                        />
-                        </Form.Item>
-                    </div>
-                    <div style={{display:'flex',justifyContent:'end'}}>
-                        <Form.Item>
-                        <Button 
-                        type="primary" 
-                        danger 
-                        htmlType="submit">
+            <div className='deleteAccount'>
+                <Form form={form} onFinish={handleDeleteAccount}>                
+                    <div
+                        className="delAccount-container"
+                        style={{
+                            position: 'relative',
+                            width: '100%',
+                            height: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '1rem',
+                        }}
+                    >
+                        <span style={{ fontSize: '20px', fontWeight: 'bold' }}>
                             ลบบัญชีผู้ใช้
-                        </Button>
-                        </Form.Item>
+                        </span>
+                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                            <div>
+                                โปรดแจ้งเหตุผลให้เราทราบเพื่อการปรับปรุงที่ดีขึ้น
+                                <Form.Item
+                                    name="reason"
+                                    rules={[{ required: true, message: 'กรุณาเลือกเหตุผล' }]}
+                                >
+                                    <Select placeholder="เลือกเหตุผล">
+                                        {reasons.map((reason) => (
+                                            <Select.Option key={reason.id} value={reason.id}>
+                                                {reason.label}
+                                            </Select.Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            </div>
+                            <div>
+                                รหัสผ่าน
+                                <Form.Item
+                                    name="password"
+                                    rules={[{ required: true, message: 'กรุณากรอกรหัสผ่าน' }]}
+                                >
+                                    <Input.Password placeholder="กรอกรหัสผ่าน" />
+                                </Form.Item>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'end' }}>
+                                <Form.Item>
+                                    <Button type="primary" danger htmlType="submit">
+                                        ลบบัญชีผู้ใช้
+                                    </Button>
+                                </Form.Item>
+                            </div>
+                        </div>              
                     </div>
-                    </div>              
-                </div>
-            </Form>
-        </div>
-    </ConfigProvider>
+                </Form>
+            </div>
+        </ConfigProvider>
     );
 
     return (
