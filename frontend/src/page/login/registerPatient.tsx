@@ -87,6 +87,7 @@ const listPatients = async () => {
             Email: allValues.Email,
             Password: allValues.Password,
             IsTakeMedicine: allValues.IsTakeMedicine,
+            IdNumber: allValues.IdNumber,
         };
 
         const res = await CreatePatient(patientData);
