@@ -182,3 +182,49 @@ export async function DeleteDiary(id: Number | undefined) {
 
     return res;
 }
+
+export async function CountDiariesByWorksheetTypeAndPatID(id: number) {
+  const requestOptions = {
+      method: "GET",
+      headers: {
+          "Content-Type": "application/json",
+      },
+  };
+
+  try {
+      const response = await fetch(`${apiUrl}/pat/Diary/Count/ByPat/${id}`, requestOptions);
+      const res = await response.json();
+
+      console.log("Raw API Response:", res); // ตรวจสอบค่าที่ API คืนมา
+
+      if (Array.isArray(res)) { // ✅ ตรวจสอบว่า res เป็นอาร์เรย์
+          return res;
+      } else {
+          console.warn("Unexpected API response format:", res);
+          return []; // 🔥 ป้องกัน React พัง
+      }
+  } catch (error) {
+      console.error("Error fetching diary count:", error);
+      return [];
+  }
+}
+
+
+export async function GetNotPrivateDiaryCount(id: number) {
+  const requestOptions = {
+      method: "GET",
+      headers: {
+          "Content-Type": "application/json",
+      },
+  };
+
+  let res = await fetch(`${apiUrl}/pat/Diary/Count/NotPrivate/ByPat/${id}`, requestOptions)
+      .then((response) => response.text()) // รับค่าเป็น text เพราะ API ส่งแค่ตัวเลข
+      .then((res) => {
+          const count = parseInt(res, 10);
+          return isNaN(count) ? 0 : count; // ถ้าแปลงไม่ได้ให้ return 0
+      })
+      .catch(() => 0); // ถ้ามี error ให้ return 0
+
+  return res;
+}

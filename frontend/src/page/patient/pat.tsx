@@ -11,6 +11,13 @@ import { AcceptConnectionRequest, GetConnectionPatientById, ListConnectionPatien
 import { Avatar, Badge, Button, ConfigProvider, List, message } from 'antd';
 import { CreateNotePat, GetNotesByPatientID } from '../../services/https/notePat/notePat';
 import BookPat from '../../component/bookPat/bookPat';
+import { CountDiariesByWorksheetTypeAndPatID, GetNotPrivateDiaryCount } from '../../services/https/diary';
+
+
+interface DiaryItem {
+    worksheet_type_id: number;
+    count: number;
+}
 
 function Pat() {
     const [messageApi, contextHolder] = message.useMessage();
@@ -19,7 +26,14 @@ function Pat() {
     const [patient, setPatient] = useState<PatientInterface>();
     const [connectedPsy, setConnectedPsy] = useState<ConnectionRequestInterface>();
     const [patConnection, setPatConnection] = useState<ConnectionRequestInterface[]>([]); //Pat
+    const [counNotPrivat, setCounNotPrivat] = useState(0);
     const [countNoti, setCountNoti] = useState(0); //pat
+    // State สำหรับเก็บ count ของแต่ละ worksheet_type_id
+    const [countType1, setCountType1] = useState(0);
+    const [countType2, setCountType2] = useState(0);
+    const [countType3, setCountType3] = useState(0);
+    const [countType4, setCountType4] = useState(0);
+    
 
 const getPatientById = async () => {
     let res = await GetPatientById(Number(patID));
@@ -28,10 +42,53 @@ const getPatientById = async () => {
     }
 }
 
+const getNotPrivateDiaryCount = async () => {
+    let res = await GetNotPrivateDiaryCount(Number(patID));
+    if(res){
+        setCounNotPrivat(res);
+    }
+}
+//==================================================================
+const fetchCountDiariesByWorksheetTypeAndPatID = async () => { 
+    try {
+        const res = await CountDiariesByWorksheetTypeAndPatID(Number(patID));
+        console.log("API Response:", res); // ตรวจสอบข้อมูลที่ได้จาก API
+        
+        if (!res || !Array.isArray(res)) {
+            console.error("Error: Response is not an array", res);
+            return;
+        }
+
+        res.forEach((item: DiaryItem) => {
+            switch (item.worksheet_type_id) {
+                case 1:
+                    setCountType1(item.count);
+                    break;
+                case 2:
+                    setCountType2(item.count);
+                    break;
+                case 3:
+                    setCountType3(item.count);
+                    break;
+                case 4:
+                    setCountType4(item.count);
+                    break;
+                default:
+                    break;
+            }
+        });
+    } catch (error) {
+        console.error("fetchCountDiariesByWorksheetTypeAndPatID error:", error);
+    }
+}
+
+
 useEffect(() => {
     getPatientById();
     getConnectionRequest();
-    listPatientConnection();//pat
+    listPatientConnection();
+    fetchCountDiariesByWorksheetTypeAndPatID();
+    getNotPrivateDiaryCount();
 }, [
     // console.log(connectedPsy)
 ]);
@@ -231,17 +288,38 @@ function toggle() {
                                                     <h2 className="name">{patient?.Firstname} {patient?.Lastname}</h2>
                                                     <div className='border'></div>
                                                 </div>
-                                                <div className="info">
+                                                {/* <div className="info">
                                                     <p><strong>วันเกิด:</strong> {patient?.Dob ? formatDateString(patient.Dob) : ""}</p>
                                                     <p><strong>เบอร์โทรศัพท์:</strong> {patient?.Tel}</p>
                                                     <p><strong>อีเมล:</strong> {patient?.Email}</p>
                                                     <p><strong>นักจิตของคุณ:</strong> {connectedPsy?.Psychologist?.FirstName} {connectedPsy?.Psychologist?.LastName}</p>
-                                                </div>
+                                                </div> */}
                                             </div>
                                         </div>
                                 </div>
                                 <div className='content2'>
-                                    <div className='box'>
+                                    <div className='box1'>
+                                        <div className='containerCount'>
+                                            <p>จำนวนไดอารี่ที่แชร์ {counNotPrivat} </p>
+                                        
+                                        </div>
+                                    </div>
+                                    <div className='box2'>
+                                        <div 
+                                            className="notification-count"
+                                            style={{
+                                                marginBottom: '.5rem'
+                                            }}
+                                        >ไดอารี่ทั้งหมด: {countType1+countType2+countType3+countType4}</div>
+                                        <div className="container">
+                                            <div>Activity Planning {countType1} เล่ม</div>
+                                            <div>Activity Diary {countType2} เล่ม</div>
+                                            <div>Behavioral Experiment {countType3} เล่ม</div>
+                                            <div>Cross Sectional {countType4} เล่ม</div>
+                                        </div>
+                                        <div className='photo'>
+                                        <img src={require('../../assets/photo.png')} alt="" />
+                                        </div>
                                     </div>
                                 </div>
                                 <div className='content3'>

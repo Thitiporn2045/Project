@@ -221,3 +221,55 @@ func CountDiariesByWorksheetType(c *gin.Context) {
 
 	c.JSON(http.StatusOK, results)
 }
+
+func CountDiariesByWorksheetTypeAndPatID(c *gin.Context) {
+	var results []struct {
+		WorksheetTypeID uint  `json:"worksheet_type_id"`
+		Count           int64 `json:"count"`
+	}
+
+	// รับค่า patID จาก URL query หรือ params
+    patID := c.Param("id")
+	// หรือถ้าส่งมาเป็น query string ใช้ c.Query("patID")
+
+	if patID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "patID is required"})
+		return
+	}
+
+	// ใช้ GROUP BY เพื่อรวม Diary ตาม WorksheetTypeID และนับจำนวน โดยกรองตาม patID
+	if err := entity.DB().
+		Table("diaries").
+		Select("worksheet_type_id, COUNT(*) as count").
+		Where("worksheet_type_id IS NOT NULL AND pat_id = ?", patID).
+		Group("worksheet_type_id").
+		Find(&results).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, results)
+}
+
+func GetNotPrivateDiaryCount(c *gin.Context) {
+	patID := c.Param("id") // รับ patID จากพารามิเตอร์ URL
+	if patID == "" {
+		c.String(http.StatusBadRequest, "0") // ถ้าไม่มี patID ให้ส่ง 0 กลับไป
+		return
+	}
+
+	var count int64
+
+	// นับจำนวน diaries ที่ is_public = 0 สำหรับ patID นี้
+	err := entity.DB().
+		Table("diaries").
+		Where("is_public = ? AND pat_id = ?", 1, patID).
+		Count(&count).Error
+
+	if err != nil {
+		c.String(http.StatusInternalServerError, "0") // ถ้ามี error ให้ส่ง 0 กลับไป
+		return
+	}
+
+	c.String(http.StatusOK, "%d", count) // ส่งตัวเลข count กลับไปเป็น response
+}
