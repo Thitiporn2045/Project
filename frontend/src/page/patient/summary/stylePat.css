@@ -79,7 +79,7 @@
     position: relative;
     margin-top: 20px;
     width: 100%;
-    height: calc(100% - 50px); /* ลบความสูงของ header */
+    height: calc(100% - 25px); /* ลบความสูงของ header */
     margin-inline: auto;
     /* background: var(--color-backgroun-secondary2); */
     border-radius: var(--border-radius-3);

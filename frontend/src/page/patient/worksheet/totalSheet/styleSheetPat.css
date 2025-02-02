@@ -14,7 +14,7 @@
     height: 100%;
     display: grid;
     grid-template-columns: 3.2rem auto;
-    background: var(--color-backgroun-secondary1);
+    background: linear-gradient(141deg, #ffffff 0%, #edf0ff 100%);
 }
 
 .mainSheet .main-body .sidebar {

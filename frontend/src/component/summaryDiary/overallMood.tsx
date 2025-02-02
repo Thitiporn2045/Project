@@ -63,10 +63,12 @@ function OverallMood({ diaryID }: DiaryID) {
                 title: {
                     text: 'กราฟแสดงแนวโน้มอารมณ์ของไดอารี่เล่มนี้',
                     left: 'center',
-                    top: '0',
+                    top: '20',
+                    bottom: '20',
                     textStyle: {
                         fontSize: 18,
                         fontWeight: 'bold',
+                        color: '#333f60',
                     },
                 },
                 textStyle: {
