@@ -370,7 +370,27 @@ const EmotionalWeb = () => { // คอมโพเนนต์หลักที
                 onOk={handleAddEmotion}
                 onCancel={() => setIsModalOpen(false)}
             >
+                <div
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        marginBottom: '.5rem'
+                    }}
+                >
+                    <img 
+                        src={require('../../assets/Emotion.png')}
+                        alt="" 
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover'
+                        }}
+                    />
+                </div>
                 <Input
+                    style={{
+                        marginBottom: '.5rem'
+                    }}
                     className='nameEmotionInput'
                     placeholder="ใส่ชื่ออารมณ์..."
                     value={newEmotionLabel}
