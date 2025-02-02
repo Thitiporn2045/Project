@@ -717,6 +717,7 @@
           .custom-table {
             width: max-content; /* ตารางปรับตามขนาดเนื้อหา */
             border-collapse:collapse; 
+            width: 100%;
             min-width: 120px;
             background: #ffffff;
             color: #585858;
