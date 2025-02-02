@@ -306,7 +306,7 @@ useEffect(() => {
                   }}
                 >
                   {item.diaries.map((item2) => (
-                    <div className='each-diary' onClick={() => navigateToDiaryPage(item2)} style={{position:'relative',width:'15%',minWidth:160,height:'100%',display:'flex',flexDirection:'column',flexShrink:0,cursor:'pointer',margin:'0.5rem'}}>
+                    <div className='each-diary' onClick={() => navigateToDiaryPage(item2)} style={{position:'relative',width:'15%',minWidth:'180px',maxHeight:'350px',height:'100%',display:'flex',flexDirection:'column',flexShrink:0,cursor:'pointer',margin:'0.5rem'}}>
                       <div style={{
                         position:'relative',
                         width:'100%',height:'80%',minWidth:160,
