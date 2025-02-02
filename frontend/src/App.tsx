@@ -67,10 +67,7 @@ export default function App() {
         <Route path='/PsyWorksheet/DashboardSummaryAP' element={<PsySummaryDiaryAP/>}/>
         <Route path='/PsyWorksheet/DashboardSummaryBE' element={<PsySummaryDiaryBE/>}/>
         <Route path='/PsyWorksheet/DashboardSummaryCS' element={<PsySummaryDiaryCS/>}/>
-
-
-
-
+        
         <Route path='/PsyAccount' element={<PsyAccount/>}/>
         {/* ========================================================================= */}
         <Route path="/Pat" element={<Pat />} />

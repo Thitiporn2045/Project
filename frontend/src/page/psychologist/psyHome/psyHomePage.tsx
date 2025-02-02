@@ -11,6 +11,7 @@ import { PatienForDashboardInterface } from "../../../interfaces/patient/IPatien
 import { ListPatientsForDashboard } from "../../../services/https/patient";
 import userEmpty from "../../../assets/userEmty.jpg"
 import { Button } from "antd";
+import Profile from "../../../component/psychologist/Profile/Profile";
 
 
 export default function PsyHomePage(){
@@ -365,8 +366,9 @@ export default function PsyHomePage(){
       
 
       <div className='Carendar'>
+        <Profile/>
         <PsyCalendar/>
-        
+
       </div>
 
 

@@ -5,7 +5,6 @@ import AntD from '../../../component/psychologist/sideBar/AntD';
 import PsyCalendar from '../../../component/psychologist/calendar/Calendar';
 import Profile from '../../../component/psychologist/Profile/Profile';
 import WorksheetsList from '../../../component/psychologist/patTypeSelect/WorksheetList';
-import PatTypeSelect from '../../../component/psychologist/patTypeSelect/PatTypeSelect';
 
 interface User {
   name: string;
@@ -16,10 +15,7 @@ interface User {
 
 function PsyWorksheet() {
   
-  const [user, setUser] = useState<User>({
-    name: 'ศุภชลิตา พลนงค์',
-    profilePicture: 'https://via.placeholder.com/150', // Placeholder image URL
-  });
+  
 
   return (
     <div className="PsyWorksheetPage">
@@ -37,6 +33,7 @@ function PsyWorksheet() {
       </div>
 
       <div className='Carendar'>
+        <Profile/>
         <PsyCalendar/>
 
       </div>
