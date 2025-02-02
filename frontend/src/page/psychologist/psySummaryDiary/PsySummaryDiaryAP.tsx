@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'; 
 import NavbarPat from '../../../component/navbarPat/navbarPat'; 
 import './stylePsy.css';
-import { useNavigate, useSearchParams } from 'react-router-dom';
 import { GetDiaryByDiaryID } from '../../../services/https/diary';
 import { DiaryPatInterface } from '../../../interfaces/diary/IDiary';
 import dayjs from 'dayjs';
@@ -12,6 +11,7 @@ import DateEmotionBarPlanning from '../../../component/summaryPlanning/dateEmoti
 import FilterEmotionsPlanning from '../../../component/summaryPlanning/filterEmotionsPlanning';
 import { GetActivityPlanningByDiaryID } from '../../../services/https/cbt/activityPlanning/activityPlanning';
 import MostCommonPlanning from '../../../component/summaryPlanning/mostCommonPlanning';
+import AntD from '../../../component/psychologist/sideBar/AntD';
 
 
 
@@ -31,7 +31,6 @@ function PsySummaryDiaryAP() {
       const bookRef = useRef<HTMLDivElement>(null);
       const [prev, setPrev] = useState(0);
       const [isDragging, setIsDragging] = useState(false);  // State สำหรับตรวจสอบการลาก
-      const navigate = useNavigate();
       
       const fetchDiaryByDiary = async () => {
           if (!diaryID) return;
@@ -156,18 +155,13 @@ function PsySummaryDiaryAP() {
       useEffect(() => {
           rotateBookAutomatically();
       }, [isDragging]); // หมุนต่อเนื่องจนกว่าผู้ใช้จะหยุดลาก
-      
-      const handleImageClick = () => {
-          // นำทางไปยังหน้าอื่น
-          navigate('/Profile'); // เปลี่ยน '/target-page' เป็นเส้นทางที่คุณต้องการ
-      };
 
-      return (
+    return (
         <div className='summary-psy'>
             <div className="befor-main">
                 <div className='main-body'>
                     <div className='sidebar'>
-                        <NavbarPat />
+                        <AntD />
                     </div>
 
                     <div className="main-background">
@@ -259,7 +253,7 @@ function PsySummaryDiaryAP() {
                                                     className="circular_progress"
                                                     style={
                                                         {
-                                                            '--clr': '#9BA5F6',
+                                                            '--clr':'#2c9f99',
                                                             '--value': numberOfDays ? (datesWithData.length / numberOfDays) * 100 : 0
                                                         } as React.CSSProperties
                                                     }
