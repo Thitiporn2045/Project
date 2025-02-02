@@ -300,7 +300,7 @@ function toggle() {
                                 <div className='content2'>
                                     <div className='box1'>
                                         <div className='containerCount'>
-                                            <p>จำนวนไดอารี่ที่แชร์ {counNotPrivat} </p>
+                                            <p>จำนวนไดอารี่ที่แชร์ {counNotPrivat} เล่ม</p>
                                         
                                         </div>
                                     </div>

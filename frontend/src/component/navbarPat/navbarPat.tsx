@@ -28,6 +28,8 @@ function NavbarPat() {
             setActiveItem('mainSheet');
         } else if (currentPath === '/Profile') {
             setActiveItem('profile');
+        } else if (currentPath === '/Emotional') {
+            setActiveItem('emotion');
         } else if (currentPath === '/EditProfile') {
             setActiveItem('editProfile');
         }
@@ -101,7 +103,7 @@ function NavbarPat() {
                     >
                         <a href="#" onClick={() => handleNavigation('/Emotional')}>
                             <i><RiEmotionFill /></i>
-                            <span className="link-name" >อารมณ์</span>
+                            <span className="link-name">อารมณ์</span>
                         </a>
                     </li>
                     <li
