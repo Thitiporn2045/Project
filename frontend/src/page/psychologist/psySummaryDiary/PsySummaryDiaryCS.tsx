@@ -116,8 +116,10 @@ function PsySummaryDiaryCS() {
 
   
   const formatDate = (date: Date) => {
-      return `${date.getDate()} ${date.toLocaleString('default', { weekday: 'short' })}`;
-  };
+    return {
+        day: date.getDate(),
+        weekday: date.toLocaleString('default', { weekday: 'short' }),
+      };  };
 
   const onDateClick = (date: any) => {
       setSelectedDate(date);
@@ -177,8 +179,8 @@ function PsySummaryDiaryCS() {
                                       <div className='titleName'>{diary?.Name}</div>
                                       <div className="typeBook">{diary?.WorksheetType?.Name}</div>
                                   </div>
-                                  <div className="boxContent2">
-                                      {/* <div className="picture">
+                                  {/* <div className="boxContent2">
+                                      <div className="picture">
                                           <div className="bdImg">
                                               <img 
                                                   onClick={handleImageClick}
@@ -187,8 +189,8 @@ function PsySummaryDiaryCS() {
                                                   alt="" 
                                               />
                                           </div>
-                                      </div> */}
-                                  </div>
+                                      </div>
+                                  </div> */}
                               </header>
                               <div className="showBook">
                                   <section className="book-showcase">
@@ -196,12 +198,7 @@ function PsySummaryDiaryCS() {
                                           <div 
                                               ref={bookRef}
                                               className="book"
-                                              style={{
-                                                  width: '27.0625em',
-                                                  height: '40.5em',
-                                                  transformOrigin: '13.53125em 4.375em',
-                                                  position: 'relative',
-                                          }}
+                                              
                                           >
                                               <div className="front" style={{ backgroundImage: `url(${diary?.Picture})`, backgroundPosition: 'center', backgroundSize: 'cover' }}></div>
                                               <div className="side" style={{ backgroundImage: `url(${diary?.Picture})` }}>
@@ -228,32 +225,32 @@ function PsySummaryDiaryCS() {
                       <div className="main-content">
                           <div className='content1'>
                               <div className='mainBox'>
-                                  <div className="box1">
-                                      <div className="shoedate">
-                                          <p>เลือกวันที่</p>
+                                   <div className="box1">
+                                     <div className="shoedate">
+                                           <div>เลือกวันที่</div>
                                       </div>
                                       <div className="date-range">
-                                          {dateRange.map((date, index) => (
-                                              <div
-                                                  key={index}
-                                                  id={`day-${date.toDateString()}`}
-                                                  className={`day ${selectedDate && date.toDateString() === selectedDate.toDateString() ? 'selected' : ''}`}
-                                                  onClick={() => onDateClick(date)}
-                                              >
-                                                  {formatDate(date)}
-                                              </div>
-                                          ))}
+                                      {dateRange.map((date, index) => {
+                                            const { day, weekday } = formatDate(date);
+                                            return (
+                                            <div
+                                                key={index}
+                                                id={`day-${date.toDateString()}`}
+                                                className={`day ${selectedDate && date.toDateString() === selectedDate.toDateString() ? 'selected' : ''}`}
+                                                onClick={() => onDateClick(date)}
+                                            >
+                                                <span className="date-number">{day}</span>
+                                                <span className="weekday">{weekday}</span>
+                                            </div>
+                                            );
+                                        })}
                                       </div>
-                                  </div>
+                                  </div> 
                           
                                   <div className='box2'>
-                                      <div className="boxContent1">
-                                          <div className="container">
-                                              {/* <div className="numberDay">
-                                                  {numberOfDays && <p>{numberOfDays}</p>}
-                                                  <small className="text-muted">วันทั้งหมด</small>
-                                              </div> */}
-                                              {/* วงกลมแสดง % ของวันที่เข้าทำบันทึก */}
+                                       <div className="boxContent1">
+                                         <div className="container">
+                                             
                                               <div
                                                   className="circular_progress"
                                                   style={
@@ -274,7 +271,6 @@ function PsySummaryDiaryCS() {
 
                                           </div>
                                           <div className="container">
-                                              {/* วงกลมแสดง % ของวันที่ไม่ได้เข้าทำบันทึก */}
                                               <div
                                                   className="circular_progress no"
                                                   style={
@@ -295,7 +291,7 @@ function PsySummaryDiaryCS() {
                                           </div>
                                       </div>
 
-                                      <div className='boxContent2'>
+                                     <div className='boxContent2'>
                                           <div className="contentComment">
                                               <div className="day-comments">
                                               {comments && comments.length > 0 ? (
@@ -310,7 +306,6 @@ function PsySummaryDiaryCS() {
                                                           </div>
                                                           <div className="comment-text">{comment.Comment}</div>
                                                       </div>
-                                                      {/* Avatar at the bottom */}
                                                       <div className="comment-avatar">
                                                           <img src={comment.Psychologist?.Picture === ''? String({userEmty}):comment.Psychologist?.Picture} alt="Avatar" />
                                                       </div>
@@ -335,13 +330,13 @@ function PsySummaryDiaryCS() {
                                           </div>
                                       </div>
 
-                                      <div className="boxContent3">
+                                       <div className="boxContent3">
                                           <div className='titleEmoticon'>
                                               อารมณ์ที่พบบ่อย
                                           </div>
                                           <MostCommon diaryID={numericDiaryID}/>
                                       </div>
-                                  </div>
+                                  </div> 
                               </div>
                           </div>
                       </div>
