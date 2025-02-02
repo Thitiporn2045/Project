@@ -108,6 +108,7 @@ function PsyCalendar() {
     border: `1px solid ${token.colorBorderSecondary}`,
     borderRadius: token.borderRadiusLG,
     padding: 0,
+    position:'relative'
   };
 
   return (
@@ -123,13 +124,13 @@ function PsyCalendar() {
             },
 
             token:{
-                colorPrimary: '#63C592',
+                colorPrimary: '#2c9f99',
                 colorText:'#585858'
             }
         }}>
-        <div style={{display:'flex',flexDirection:'column',gap:'1rem',width:'100%',height:'80%',alignItems:'center'}}>
+        <div style={{display:'flex',flexDirection:'column',gap:'0.5rem',width:'100%',height:'90%',alignItems:'center',}}>
       
-          <div style={{width:'100%',height:'55%',display:'flex',alignItems:'center',justifyContent:'center'}}>
+          <div style={{width:'100%',height:'50%',display:'flex',justifyContent:'center'}}>
             <div className='Calendar-contianer' style={wrapperStyle}>
                 <Calendar 
                 fullscreen={false} 
