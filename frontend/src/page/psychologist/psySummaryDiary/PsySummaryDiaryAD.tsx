@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'; 
 import NavbarPat from '../../../component/navbarPat/navbarPat'; 
 import './stylePsy.css';
-import { useNavigate,} from 'react-router-dom';
 import { GetDiaryByDiaryID } from '../../../services/https/diary';
 import { DiaryPatInterface } from '../../../interfaces/diary/IDiary';
 import dayjs from 'dayjs';
@@ -16,24 +15,21 @@ import AntD from '../../../component/psychologist/sideBar/AntD';
 
 function PsySummaryDiaryAD() {
   const diaryID = localStorage.getItem('diaryID');
-  const diaryType = localStorage.getItem('diaryType')
-  const numericDiaryID = diaryID ? Number(diaryID) : undefined;
-  const [diary, setDiary] = useState<DiaryPatInterface | null>(null);
-
-  const [dateRange, setDateRange] = useState<Date[]>([]);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
-  const [numberOfDays, setNumberOfDays] = useState<number | null>(null);  // Add this state for numberOfDays
-  const [crossSectional, setCrossSectional] = useState<CrossSectionalInterface[]>([]); // ใช้ array ว่างแทน null
-  const [datesWithData, setDatesWithData] = useState<string[]>([]); // สถานะเก็บวันที่ที่ไม่มีข้อมูล
-  const [comments, setComments] = useState<CommentInterface[]>([]); // ตั้งค่าประเภทของ emotionPatients เป็น EmtionInterface[]
+      const numericDiaryID = diaryID ? Number(diaryID) : undefined;
+      const [diary, setDiary] = useState<DiaryPatInterface | null>(null);
   
-  const bookRef = useRef<HTMLDivElement>(null);
-  const [prev, setPrev] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);  // State สำหรับตรวจสอบการลาก
-  const navigate = useNavigate();
-
-
-  const fetchDiaryByDiary = async () => {
+      const [dateRange, setDateRange] = useState<Date[]>([]);
+      const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+      const [numberOfDays, setNumberOfDays] = useState<number | null>(null);  // Add this state for numberOfDays
+      const [crossSectional, setCrossSectional] = useState<CrossSectionalInterface[]>([]); // ใช้ array ว่างแทน null
+      const [datesWithData, setDatesWithData] = useState<string[]>([]); // สถานะเก็บวันที่ที่ไม่มีข้อมูล
+      const [comments, setComments] = useState<CommentInterface[]>([]); // ตั้งค่าประเภทของ emotionPatients เป็น EmtionInterface[]
+      
+      const bookRef = useRef<HTMLDivElement>(null);
+      const [prev, setPrev] = useState(0);
+      const [isDragging, setIsDragging] = useState(false);  // State สำหรับตรวจสอบการลาก
+      
+      const fetchDiaryByDiary = async () => {
           if (!diaryID) return;
       
           try {
@@ -156,11 +152,6 @@ function PsySummaryDiaryAD() {
       useEffect(() => {
           rotateBookAutomatically();
       }, [isDragging]); // หมุนต่อเนื่องจนกว่าผู้ใช้จะหยุดลาก
-      
-      const handleImageClick = () => {
-          // นำทางไปยังหน้าอื่น
-          navigate('/Profile'); // เปลี่ยน '/target-page' เป็นเส้นทางที่คุณต้องการ
-      };
 
       return (
         <div className='summary-psy'>
