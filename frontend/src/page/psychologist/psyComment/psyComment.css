@@ -535,6 +535,7 @@
             height: 98%;
             border-collapse:collapse; 
             min-width: 120px;
+            max-width: 1024px;
             background: #ffffff;
             color: #585858;
             font-size: 10px;

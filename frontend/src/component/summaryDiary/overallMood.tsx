@@ -60,6 +60,15 @@ function OverallMood({ diaryID }: DiaryID) {
                         return `${emojis[index]} ${dataAxis[index]}: ${data[index]} ครั้ง`;
                     }
                 },
+                title: {
+                    text: 'กราฟแสดงแนวโน้มอารมณ์ของไดอารี่เล่มนี้',
+                    left: 'center',
+                    top: '0',
+                    textStyle: {
+                        fontSize: 18,
+                        fontWeight: 'bold',
+                    },
+                },
                 textStyle: {
                     fontFamily: 'Noto Sans Thai', // กำหนดฟอนต์สำหรับข้อความทั้งหมดในกราฟ
                 },

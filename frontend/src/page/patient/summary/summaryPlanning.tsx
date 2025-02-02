@@ -278,7 +278,7 @@ const SummaryPlanning: React.FC = () => {
                                                     className="circular_progress no"
                                                     style={
                                                         {
-                                                            '--clr': '#edf0ff',
+                                                            '--clr': '#9BA5F6',
                                                             '--value': numberOfDays ? ((numberOfDays - datesWithData.length) / numberOfDays) * 100 : 0
                                                         } as React.CSSProperties
                                                     }

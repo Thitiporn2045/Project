@@ -516,18 +516,6 @@
     animation: progressAnim 2s forwards;
 }
 
-.summary .circular_progress.no {
-    position: relative;
-    width: 7rem;
-    height: 7rem;
-    background: conic-gradient(var(--clr) calc(var(--progress) * 3.6deg), #9BA5F6 0deg);
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    animation: progressAnim 2s forwards;
-}
-
 .summary .circular_progress::before { 
     content: '';
     position: absolute;
