@@ -12,7 +12,7 @@ type CrossSectional struct{
 	TextEmotions string
 	Date string
 
-	DiaryID *uint
+	DiaryID *uint `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	Diary Diary `gorm:"foreignKey:DiaryID"`
 
 	Emotion   []Emotion `gorm:"many2many:cross_sectional_emotions;"` 

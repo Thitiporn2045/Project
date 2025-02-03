@@ -9,7 +9,7 @@ type ActivityDiary struct{
 	Time string
 	Activity string
 
-	DiaryID *uint
+	DiaryID *uint `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	Diary Diary `gorm:"foreignKey:DiaryID"`
 
 	EmotionID *uint

@@ -11,7 +11,7 @@ type Diary struct{
 	Start string
 	End string
 
-	PatID *uint
+	PatID *uint `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	Patient Patient `gorm:"foreignKey:PatID"`
 	
 	WorksheetTypeID *uint

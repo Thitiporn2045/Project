@@ -8,7 +8,7 @@ type Emotion struct{
 	Name string
 	Emoticon string
 	ColorCode string
-	PatID    uint     
+	PatID    uint `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`    
 
 	ActivityDiary []ActivityDiary `gorm:"foreignKey:EmotionID"`
 	ActivityPlanning []ActivityPlanning `gorm:"foreignKey:EmotionID"`

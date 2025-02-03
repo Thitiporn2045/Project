@@ -7,10 +7,10 @@ type Comment struct{
 	gorm.Model
 	Comment string
 
-	PsyID *uint
+	PsyID *uint `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	Psychologist Psychologist `gorm:"foreignKey:PsyID"`
 
-	DiaryID *uint
+	DiaryID *uint `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	Diary Diary `gorm:"foreignKey:PsyID"`
 
 

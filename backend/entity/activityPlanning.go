@@ -12,7 +12,7 @@ type ActivityPlanning struct{
 	TimeOfDayID *uint
 	TimeOfDay TimeOfDay `gorm:"foreignKey:TimeOfDayID"`
 
-	DiaryID *uint
+	DiaryID *uint `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	Diary Diary `gorm:"foreignKey:DiaryID"`
 
 	EmotionID *uint

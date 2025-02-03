@@ -11,7 +11,7 @@ type BehavioralExp struct{
 	NewThought string
 	Date string
 
-	DiaryID *uint
+	DiaryID *uint `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	Diary Diary `gorm:"foreignKey:DiaryID"`
 
 	Emotion   []Emotion `gorm:"many2many:behavioral_exp_emotions;"` 

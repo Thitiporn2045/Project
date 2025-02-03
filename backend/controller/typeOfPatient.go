@@ -37,16 +37,36 @@ func CreateTypeofPatient (c *gin.Context) {
     c.JSON(http.StatusOK, gin.H{"data": "เพิ่มหมวดหมู่สำเร็จ!"})
 }
 
-func DeleteTypeOfPatient (c *gin.Context) {
+func DeleteTypeOfPatient(c *gin.Context) {
+    id := c.Param("id")
 
-	id := c.Param("id")
+    // Start a transaction to ensure both the update and delete happen atomically
+    tx := entity.DB().Begin()
+    if tx.Error != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Transaction failed to start"})
+        return
+    }
 
-	if tx := entity.DB().Exec("DELETE FROM type_of_patients WHERE id = ?", id); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "type not found"})
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{"data": id})
+    // Update patients who have this type_id to NULL
+    if err := tx.Exec("UPDATE patients SET type_id = NULL WHERE type_id = ?", id).Error; err != nil {
+        tx.Rollback()
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update patients"})
+        return
+    }
+
+    // Delete the type_of_patient
+    if tx.Exec("DELETE FROM type_of_patients WHERE id = ?", id).RowsAffected == 0 {
+        tx.Rollback()
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Type not found"})
+        return
+    }
+
+    // Commit the transaction if everything is successful
+    tx.Commit()
+
+    c.JSON(http.StatusOK, gin.H{"data": id})
 }
+
 
 func UpdateTypeOfPatient (c *gin.Context) {
 	var typeOfPatient entity.TypeOfPatient

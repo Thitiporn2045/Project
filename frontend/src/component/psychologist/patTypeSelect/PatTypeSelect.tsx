@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { TypeOfPatientInterface } from '../../../interfaces/psychologist/ITypeOfPatient';
-import { CreateTypeOfPatient, ListTypeOfPatient,ListConnectedPatientByType,} from '../../../services/https/psychologist/typeOfPatient';
-import { PlusOutlined } from '@ant-design/icons';
+import { CreateTypeOfPatient, ListTypeOfPatient,ListConnectedPatientByType, DeleteTypeOfPatient,} from '../../../services/https/psychologist/typeOfPatient';
+import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, ConfigProvider, Divider, Input, Modal, Select, Space,Form, message, List, Card, Empty } from 'antd';
 import thTH from 'antd/lib/locale/th_TH';
 import { LuUserMinus2 } from "react-icons/lu";
@@ -88,7 +88,7 @@ const listPatients = async () => {
     if (selectedType !== 'ทั้งหมด') {
       filtered = filtered.filter(patient =>
         selectedType === 'ที่ยังไม่ระบุ'
-          ? (patient.TypeID === null || patient.TypeID === undefined || patient.TypeID === 0)
+          ? (patient.TypeID === null || patient.TypeID === undefined || patient.TypeID === 0 || patient.TypeOfPatient?.Name === 'ที่ยังไม่ระบุ')
           : patient.TypeOfPatient?.Name === selectedType
       );
     }
@@ -129,10 +129,23 @@ const listPatients = async () => {
     }
    
   }
+
+
+    const handleDeleteType = async (id: number) => {
+      const res = await DeleteTypeOfPatient(id);
+      if (res.status) {
+        messageApi.success('ลบสำเร็จ!');
+        listTypeOfPatient();
+        setSelectedType('ทั้งหมด');
+        await listPatients();
+      } else {
+        messageApi.error('การลบล้มเหลว');
+      }
+    };
   //=================================================
 
   //======================Modal User Info============
-  const filteredItems = items.filter(item => item.Name !== 'ทั้งหมด' && item.Name !== 'ที่ยังไม่ระบุ'); //ไม่เอาไปแสดงใน select ของModal
+  const filteredItems = items.filter(item => item.Name !== 'ทั้งหมด'); //ไม่เอาไปแสดงใน select ของModal
   const showEditModal = (patients: PatientInterface) => {
     setSelectedPatient(patients);
 
@@ -323,8 +336,24 @@ const listPatients = async () => {
                 </Space>
               </>
               )}
-              options={items.map((item) => ({ label: item.Name, value: item.Name }))}
-            />
+              >
+                {items.map((item) => (
+            <Select.Option key={item.ID} value={item.Name}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span>{item.Name}</span>
+                {item.Name !== 'ทั้งหมด' && item.Name !== 'ที่ยังไม่ระบุ' &&
+                <Button
+                  type="text"
+                  onClick={() => handleDeleteType(Number(item.ID))}
+                  style={{ color: '#f5222d',textAlign:'center' }}
+                >
+                  {<DeleteOutlined />} 
+                </Button>}
+              </div>
+            </Select.Option>
+          ))}
+              </Select>
+            
             <div style={{display:'flex',flexGrow:1,justifyContent:'center'}}>
             <Input
               placeholder="ค้นหาผู้ป่วยตามชื่อหรือเลขบัตรประชาชน"
