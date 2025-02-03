@@ -1,68 +1,49 @@
 import React, { useEffect, useState } from 'react';
-import { ConfigProvider, Calendar, theme, Button, Modal, Form, Input, DatePicker, TimePicker } from 'antd';
+import { ConfigProvider, Calendar, theme, Button, Modal, Form, Input, DatePicker, TimePicker, message } from 'antd';
 import thTH from 'antd/lib/locale/th_TH';
 import type { CalendarProps } from 'antd';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import 'dayjs/locale/th';
 import './Calendar.css'
+import { WorkScheduleInterface } from '../../../interfaces/psychologist/IWorkSchedule';
+import { CreateWorkSchedule, DeleteWorkSchedule, ListWorkSchedule } from '../../../services/https/psychologist/workschedule';
 dayjs.locale('th'); // Set the locale to Thai
 
 const onPanelChange = (value: Dayjs, mode: CalendarProps<Dayjs>['mode']) => {
   console.log('Panel Change:', value.format('DD MMMM YYYY'), mode);
 };
 
-const Planner = [
-  {
-    'id':1,
-    'startTime':'09:00',
-    'title':'ประชุม'
-  },
-  {
-    'id':2,
-    'startTime':'10:30',
-    'title':'นัดพบผู้ป่วย'
-  },
-  {
-    'id':3,
-    'startTime':'11:30',
-    'title':'ส่งผลการตรวจ'
-  },
-  {
-    'id':4,
-    'startTime':'13:00',
-    'title':'นัดพบผู้ป่วย'
-  },
-  {
-    'id':5,
-    'startTime':'14:00',
-    'title':'นัดพบผู้ป่วย'
-  },
-  {
-    'id':6,
-    'startTime':'11:30',
-    'title':'ส่งผลการตรวจ'
-  },
-  {
-    'id':8,
-    'startTime':'11:30',
-    'title':'ส่งผลการตรวจ'
-  },
-  
-]
-
 
 function PsyCalendar() {
+  const [messageApi, contextHolder] = message.useMessage();
   const { token } = theme.useToken();
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [workSchedule, setWorkSchedule] = useState<WorkScheduleInterface[]>([]);
+  const psyID = localStorage.getItem('psychologistID') 
+
   const [form] = Form.useForm();
  
+  const listWorkSchedule = async () => {
+    if (psyID) {
+      const res = await ListWorkSchedule(Number(psyID), String(selectedDate.format('DD-MM-YYYY')));
+      if (res) {
+        setWorkSchedule(res);
+      }else{
+        setWorkSchedule([]);
+      }
+    }
+  };
+
+  useEffect(() => {
+    listWorkSchedule();
+  }, [selectedDate]);
   
 
   const onSelect = (value: Dayjs) => {
     setSelectedDate(value);
-    console.log('Selected Date:', value.format('DD-MMMM-YYYY'));
+    listWorkSchedule();
   };
 
   const showModal = () => {
@@ -74,33 +55,45 @@ function PsyCalendar() {
     form.resetFields();
   };
 
-  const handleOk = () => {
-    form
-      .validateFields()
-      .then((values) => {
-        const date = values.date.format('DD MMMM YYYY');
-        const startTime = values.startTime ? values.startTime.format('HH:mm น.') : '';
-        const endTime = values.endTime ? values.endTime.format('HH:mm น.') : '';
+  const handleOk = async() => {
+    const values = await form.validateFields();
+    const workScheduleData: WorkScheduleInterface = {
+      Topic: values.Title,
+      Date: values.Date?.format('DD-MM-YYYY'),
+      StartTime: values.StartTime?.format('HH:mm'),
+      EndTime: values.EndTime?.format('HH:mm'),
+      PsyID: Number(psyID),
+    };
 
-        form.resetFields();
+    const res = await CreateWorkSchedule(workScheduleData);
+      if (res.status) {
+        messageApi.success('เพิ่มตารางงานสำเร็จ!');
+        await listWorkSchedule(); 
         setIsModalVisible(false);
-        console.log('Event Details:', values);
-        alert(`Event Added:\nDate: ${date}\nStart Time: ${startTime}\nEnd Time: ${endTime}\nTitle: ${values.title}\nDescription: ${values.description}`);
-        // API ลงดาต้าเบส
-      })
-      .catch((info) => {
-        console.log('Validate Failed:', info);
-      });
+        form.resetFields();
+      } else {
+        messageApi.error(res.message || 'การเพิ่มตารางงานล้มเหลว');
+      }
   };
+
   useEffect(() => {
     if (isModalVisible) {
       form.setFieldsValue({ 
-        date: selectedDate, 
-        startTime: selectedDate,
-        endTime: selectedDate, });
+        Date: selectedDate, 
+        StartTime: selectedDate,
+        EndTime: selectedDate, });
     }
   }, [selectedDate, isModalVisible]);
 
+  const handleDelete = async (id: number) => {
+    const res = await DeleteWorkSchedule(id);
+    if (res.status) {
+      messageApi.success('ลบตารางงานสำเร็จ!');
+      await listWorkSchedule();
+    } else {
+      messageApi.error('การลบล้มเหลว');
+    }
+  };
 
   const wrapperStyle: React.CSSProperties = {
     width: 300,
@@ -128,6 +121,7 @@ function PsyCalendar() {
                 colorText:'#585858'
             }
         }}>
+        {contextHolder}
         <div style={{display:'flex',flexDirection:'column',gap:'0.5rem',width:'100%',height:'90%',alignItems:'center',}}>
       
           <div style={{width:'100%',height:'50%',display:'flex',justifyContent:'center'}}>
@@ -151,29 +145,29 @@ function PsyCalendar() {
                   initialValues={{ date: selectedDate }}
               >
                   <Form.Item
-                  name="date"
+                  name="Date"
                   label="วันที่"
                   >
                   <DatePicker disabled defaultValue={selectedDate} format="DD MMMM YYYY" />
                   </Form.Item>
                   <Form.Item
-                  name="startTime"
+                  name="StartTime"
                   label="เวลาเริ่ม"
                   >
                   <TimePicker format="HH:mm" minuteStep={15} />
                   </Form.Item>
                   <Form.Item
-                  name="endTime"
+                  name="EndTime"
                   label="เวลาสิ้นสุด"
                   >
                   <TimePicker format="HH:mm" minuteStep={15} />
                   </Form.Item>
                   <Form.Item
-                  name="title"
+                  name="Title"
                   label="หัวข้อกิจกรรม"
                   rules={[{ required: true, message: 'กรุณาระบุหัวข้อกิจกรรม' }]}
                   >
-                  <Input />
+                  <Input showCount maxLength={30} />
                   </Form.Item>
               </Form>
               </Modal>
@@ -187,14 +181,25 @@ function PsyCalendar() {
             </div>
 
             <div className='plannerDetail' style={{position:'relative',width:'100%',height:'90%',maxHeight:'220px',display:'flex',gap:'1rem',flexDirection:'column',overflow:'auto'}}>
-              {Planner.map((Planner)=>(
-                <a key={Planner.id}>
-                  <span className='startTime' style={{color:'#B9B9B9'}}><b>{Planner.startTime}</b></span>&nbsp;&nbsp;&nbsp;&nbsp;<span style={{color:'#585858'}}>{Planner.title}</span>
-                  <div className='line' style={{width:'90%',height:'1%',background:'#f3f3f3',position:'relative'}}></div>
-                </a>
-                
-
-              ))}
+              {workSchedule.length > 0 ? (
+              workSchedule.map((schedule) => (
+                <div key={schedule.PsyID} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid #f3f3f3' ,alignItems:'center'}}>
+                  <div>
+                    <span style={{ color: '#B9B9B9', fontWeight: 'bold',fontSize:14 }}>{schedule.StartTime}-{schedule.EndTime}</span> &nbsp;&nbsp;&nbsp;
+                    <span style={{ color: '#585858',fontSize:14 }}>{schedule.Topic}</span>
+                  </div>
+                  <Button 
+                    type="text" 
+                    danger 
+                    onClick={() => handleDelete(Number(schedule.ID))}
+                  >
+                    ลบ
+                  </Button>
+                </div>
+              ))
+            ) : (
+              <p style={{ textAlign: 'center', color: '#B9B9B9' }}>ไม่มีข้อมูล</p>
+            )}
             </div>
           </div>
         </div>

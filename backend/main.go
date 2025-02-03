@@ -125,6 +125,10 @@ func main() {
 			r.PATCH("/quickReply",controller.UpdateQuickReply)
 			r.DELETE("/quickReply/:id",controller.DeleteQuickReply)
 
+			r.GET("/workSchedules/:id",controller.ListWorkSchedule)
+			r.POST("/workSchedule",controller.CreateWorkSchedule)
+			r.DELETE("/workSchedule/:id",controller.DeleteWorkschedule)
+
 
 			//Connection Request Routes
 			r.POST("/connection/send",controller.SendConnectionRequest)
