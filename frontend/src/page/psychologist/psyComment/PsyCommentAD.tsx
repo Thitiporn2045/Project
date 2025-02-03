@@ -172,13 +172,14 @@ function PsyCommentAD() {
 
                   <div className="info-row">
                     <div className="info-item1"><b>เลขประจำตัวประชาชน:</b> {diary?.Patient?.IdNumber}</div>
-                    <div className="info-item"><b>เพศ:</b> {diary?.Patient?.gender}</div>
+                    <div className="info-item"><b>เพศ:</b> {diary?.Patient?.Gender?.Gender}</div>
                     <div className="info-item"><b>วันเกิด:</b> {diary?.Patient?.Dob} ({calculateAge(String(diary?.Patient?.Dob))} ปี)</div>
                   </div>
 
                   <div className="info-row">
-                    <div className="info-item1"><b>อาการที่รักษา:</b> {diary?.Patient?.Symtoms !== '' ? diary?.Patient?.Symtoms : 'ไม่ระบุ'}</div>
-                    <div className="info-item"><b>อีเมล:</b> {diary?.Patient?.Email}</div>
+                    <div className="info-item1"><b>อีเมล:</b> {diary?.Patient?.Email}</div>
+                    <div className="info-item"><b>อาการที่รักษา:</b> {diary?.Patient?.Symtoms !== '' ? diary?.Patient?.Symtoms : 'ไม่ระบุ'}</div>
+                    
                     <div className="info-item"><b>เบอร์โทรศัพท์:</b> {diary?.Patient?.Tel}</div>
                   </div>
 

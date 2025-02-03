@@ -31,6 +31,7 @@ function PsyCommentAP() {
     if(res){
       setDiary(res);
     }
+    console.log(res)
   }
 
   const listActivityPlanning = async () => {
@@ -38,7 +39,6 @@ function PsyCommentAP() {
     if(res){
       setActivityPlanning(res);
     }
-    console.log(activityPlanning)
   }
 
   useEffect(()=>{
@@ -131,7 +131,7 @@ function PsyCommentAP() {
 
                 <div className="info-row">
                   <div className="info-item1"><b>เลขประจำตัวประชาชน:</b> {diary?.Patient?.IdNumber}</div>
-                  <div className="info-item"><b>เพศ:</b> {diary?.Patient?.gender}</div>
+                  <div className="info-item"><b>เพศ:</b> {diary?.Patient?.Gender?.Gender}</div>
                   <div className="info-item"><b>วันเกิด:</b> {diary?.Patient?.Dob} ({calculateAge(String(diary?.Patient?.Dob))} ปี)</div>
                 </div>
 

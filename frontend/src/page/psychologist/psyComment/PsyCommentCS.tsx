@@ -103,8 +103,9 @@ function PsyCommentCS() {
                   </div>
 
                   <div className="info-row">
-                    <div className="info-item1"><b>อาการที่รักษา:</b> {crossSectional?.Patient?.Symtoms !== '' ? crossSectional?.Patient?.Symtoms : 'ไม่ระบุ'}</div>
-                    <div className="info-item"><b>อีเมล:</b> {crossSectional?.Patient?.Email}</div>
+                    <div className="info-item1"><b>อีเมล:</b> {crossSectional?.Patient?.Email}</div>
+                    <div className="info-item"><b>อาการที่รักษา:</b> {crossSectional?.Patient?.Symtoms !== '' ? crossSectional?.Patient?.Symtoms : 'ไม่ระบุ'}</div>
+                    
                     <div className="info-item"><b>เบอร์โทรศัพท์:</b> {crossSectional?.Patient?.Tel}</div>
                   </div>
 
