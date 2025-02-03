@@ -180,7 +180,7 @@ function PsyCalendar() {
               </Button>
             </div>
 
-            <div className='plannerDetail' style={{position:'relative',width:'100%',height:'90%',maxHeight:'220px',display:'flex',gap:'1rem',flexDirection:'column',overflow:'auto'}}>
+            <div className='plannerDetail' style={{position:'relative',width:'100%',height:'95%',maxHeight:'250px',display:'flex',flexDirection:'column',overflow:'auto'}}>
               {workSchedule.length > 0 ? (
               workSchedule.map((schedule) => (
                 <div key={schedule.PsyID} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid #f3f3f3' ,alignItems:'center'}}>
