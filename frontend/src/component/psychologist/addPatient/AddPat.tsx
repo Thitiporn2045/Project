@@ -29,14 +29,19 @@ function AddPat() {
 }
 //=======================================================================
 
-const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {//psy
-  const value = event.target.value.toLowerCase();
+const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const value = event.target.value.trim(); // ตัด space bar ออกจากต้นและท้าย
   setSearchTerm(value);
-  const filtered = pat.filter(pat =>
-    `${pat.Firstname} ${pat.Lastname}`.toLowerCase().includes(value) ||
-    pat.IdNumber?.toLowerCase().includes(value)
-  );
-  setFilteredPatients(filtered);
+
+  if (value.length > 1) { // ต้องพิมพ์มากกว่า 2 ตัวอักษรขึ้นไป
+    const filtered = pat.filter(pat =>
+      `${pat.Firstname} ${pat.Lastname}`.toLowerCase().includes(value.toLowerCase()) ||
+      pat.IdNumber?.includes(value) // ค้นหาด้วยเลขบัตรประชาชน
+    );
+    setFilteredPatients(filtered);
+  } else {
+    setFilteredPatients([]); // ถ้าน้อยกว่า 3 ตัวอักษร ไม่แสดงผลลัพธ์
+  }
 };
 
 //=======================================================================
