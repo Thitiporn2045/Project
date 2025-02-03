@@ -53,9 +53,8 @@ const listPatients = async () => {
   let res = await ListConnectedPatientByType(Number(psyID));
   if(res){
     setPat(res);
-    setTimeout(() => {
-      setLoading(false);
-    },1000)
+    setLoading(false);
+    
   }
 }
 //=========================================================================

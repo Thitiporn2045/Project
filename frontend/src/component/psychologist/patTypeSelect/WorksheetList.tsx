@@ -38,11 +38,10 @@ const listDiaries = async () => {
   let res = await ListPublicDiariesByPatientType(Number(psyID));
   if(res){
     setDiaries(res);
-    
-  }
-  setTimeout(() => {
     setLoading(false);
-  },1000)
+  }
+    
+
 
 }
 //=========================================================================
